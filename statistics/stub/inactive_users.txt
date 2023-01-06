@@ -1,0 +1,18 @@
+{{إحصاء}}
+<div style="background: #E5E4E2; padding: 0.5em; font-family: Traditional Arabic; font-size: 130%;  -moz-border-radius: 0.3em; border-radius: 0.3em;">
+<center>
+
+تعرض هذه الصفحة قائمة المستخدمين غير النشطين.<br/>
+
+المستخدم غير النشط هو الذي ليس لديه [[خاص:مساهمات|مساهمة]] خلال سنة كاملة.<ref>لم يتم التوافق على أن المستخدم غير النشط هو الذي لم يقوم بأي مساهمة خلال سنة وإنما هذا العدد هو عدد فرضي لعدم النشاط.</ref><br/>
+
+'''قام BOT_USER_NAME بتحديث هذه القائمة في :  BOT_TIME_NOW (ت ع م) '''
+</div>
+<center>
+<div style="background: #E5E4E2; padding: 0.5em;   -moz-border-radius: 0.3em; border-radius: 0.3em;">
+BOT_TABLE_BODY
+</center>
+</div>
+[[تصنيف:إحصاءات ويكيبيديا]] [[تصنيف:ويكيبيديا قائمة الويكيبيديين حسب عدد التعديلات]]
+</div>
+

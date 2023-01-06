@@ -1,0 +1,17 @@
+{{إحصاء}}
+<div style="background: #E5E4E2; padding: 0.5em; font-family: Traditional Arabic; font-size: 130%; -moz-border-radius: 0.3em; border-radius: 0.3em;">
+<center>
+
+تعرض هذه الصفحة قائمة الـ500 [[ويكيبيديا:ويكيبيديون|ويكيبيدي]] الأوائل حسب عدد التعديلات (بدون احتساب [[ويكيبيديا:بوت|البوتات]]).
+
+انظر أيضا: [[ويكيبيديا:قائمة الويكيبيديين حسب عدد التعديلات (متضمنة البوتات)|قائمة الويكيبيديين حسب عدد التعديلات (متضمنة البوتات)]]
+
+'''قام BOT_USER_NAME بتحديث هذه القائمة في :  BOT_TIME_NOW (ت ع م) '''
+</div>
+<center>
+<div style="background: #E5E4E2; padding: 0.5em; -moz-border-radius: 0.3em; border-radius: 0.3em;">
+BOT_TABLE_BODY
+</center>
+</div>
+[[تصنيف:إحصاءات ويكيبيديا]] [[تصنيف:ويكيبيديا قائمة الويكيبيديين حسب عدد التعديلات]]
+</div>
