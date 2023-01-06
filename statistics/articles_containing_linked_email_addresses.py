@@ -12,7 +12,7 @@ WHERE
 LIMIT
     1000;"""
 file_path = 'stub/articles_containing_linked_email_addresses.txt'
-page_name = "ويكيبيديا:إحصاءات/مقالات بها وصلات بريد الكتروني"
+page_name = "ويكيبيديا:إحصاءات/مقالات بها وصلات بريد إلكتروني"
 
 # Create an instance of the ArticleTables class
 tables = ArticleTables()
