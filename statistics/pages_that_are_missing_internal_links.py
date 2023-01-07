@@ -22,7 +22,7 @@ def username(row, result, index):
 
 
 def page_title(row, result, index):
-    username = str(row['ll_user_name'], 'utf-8')
+    username = str(row['ll_page_title'], 'utf-8')
     name = username
     return "[[" + username + "|" + name + "]]"
 
