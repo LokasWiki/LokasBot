@@ -38,7 +38,7 @@ def user_registration(row, result,index):
 columns = [
     ("الرقم", None, index),
     ("المستخدم", None, username),
-    ("تاريخ اخر مساهمة", None, user_registration),
+    ("تاريخ آخر مساهمة", None, user_registration),
     ("الصلاحية", None, user_groups),
 ]
 
