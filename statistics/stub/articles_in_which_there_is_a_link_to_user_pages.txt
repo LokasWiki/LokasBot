@@ -11,5 +11,4 @@ BOT_TABLE_BODY
 </center>
 </div>
 [[تصنيف:إحصاءات ويكيبيديا]]
-</div>
 
