@@ -1,5 +1,5 @@
 # خطوات تثبيت البوت علي الجهاز المحلي
-## تثبيت اطار العمل والمكتبات الاساسيه والباثون 
+## تثبيت إطار العمل والمكتبات الأساسية والباثون 
 https://www.mediawiki.org/wiki/Manual:Pywikibot/Installation#Install_Python
 ## تثبيت mediawiki
 ```
@@ -39,7 +39,7 @@ volumes:
         images:
         db:
 ```
- او تنزيل النسحه وتبيتها يدوي من [هنا](https://www.mediawiki.org/wiki/Download)
+ أو تنزيل النسخة وتثبيتها يدويا من [هنا](https://www.mediawiki.org/wiki/Download)
  
  ## الاتصال بقاعده البيانات 
 ```
