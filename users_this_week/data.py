@@ -1,3 +1,14 @@
+"""
+list_page_sub_pages is a list of dictionaries representing data for creating a subpage for a week's worth of activity for a particular activity on a wiki. Each dictionary in the list has the following keys:
+
+"competition_page": a string representing the title of the main page for the week's worth of activity.
+"title_of_page": a string representing the title of the subpage for the activity.
+"summary": a string representing the summary to be used when saving the subpage.
+"activity": a string representing the activity being recorded on the subpage (e.g. "articles", "article reviews").
+"team": a string representing the top performers for the activity (e.g. "top 5 article creators").
+"template_stub": a string representing the stub of a template to be used when sending a notification to a user.
+"query": a string representing a SQL query to be used to retrieve data for the subpage.
+"""
 list_page_sub_pages = [
     {
         "competition_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER",
