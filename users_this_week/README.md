@@ -1,35 +1,6 @@
 # about task
- This repository contains code for generating leaderboard pages on a MediaWiki instance. The code is written in Python and makes use of the Pywikibot library.
+الكود المسئول عن تحديث ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا
 
-The code consists of three main classes:
-
-- **Base**: This class contains the shared logic for all other classes. It sets up the connection to the MediaWiki instance and defines the logic for calculating the start and end dates for the current week.
-
-- **SubPage**: This class generates the leaderboard sub-pages for each activity (e.g. "articles created", "articles reviewed"). It takes a dictionary as input, containing the following keys:
-
-  -  **competition_page**:  صفحة المسابقة attribute in template  
-		- ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا/الأسبوع ال1 2023/جدد
-		- ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا/الأسبوع ال1 2023
-		- ...
-  -  title_of_page: The title of the sub-page  to be generated
-		- ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا/الأسبوع ال1 2023/جدد
-		- مستخدمو الأسبوع الأكثر نشاطا/الأسبوع ال1 2023/مراجعة المقالات
-		- مستخدمو الأسبوع الأكثر نشاطا/الأسبوع ال1 2023/جدد
-  -  summary: The edit summary to be used when saving the page
-
-  -  team: The name of the team being ranked (e.g. "top 5 article creators")
-		-  أكثر 5 مستخدمين مراجعة للمقالات
-		- الإداريون الذين أجروا أكبر عدد من الأعمال الإدارية
-  -  activity: The activity being ranked (e.g. "أفعال إدارية")
-  
-  -  query: The SQL query to be used to retrieve the rankings data from the database
-
-- MainPage: This class generates the main leaderboard page for the current week. It takes the following arguments:
-
-  - title_of_page: The name of the main leaderboard page
-  - summary: The edit summary to be used when saving the page
-  - stub: The name of the file containing the stub for the main leaderboard page
-- The code also includes a TableGenerator class, which is used by the SubPage class to generate the table of rankings data to be included on the sub-pages.
 # sql queries
 ## المستخدمون الـ5 الأوائل في إنشاء المقالات 
 
@@ -256,3 +227,44 @@ LIMIT 10;
 مثال 
 
 إذا كان هناك مستخدم قام بالتسجيل يوم ١٥ ديسمبر ٢٠٢١ وتم تشغيل الاستعلام يوم ١ يناير ٢٠٢٢ فإن هذا المستخدم يدخل ضمن نطاق الاستعلام ويدخل أي مستخدم قام بإنشاء الحساب ضمن الفترة التي تبدأ من ١ يناير ٢٠٢٢ وحتى ٢ ديسمبر ٢٠٢١
+
+
+# about code
+
+The code consists of three main classes:
+
+- **Base**: This class contains the shared logic for all other classes. It sets up the connection to the MediaWiki instance and defines the logic for calculating the start and end dates for the current week.
+
+- **SubPage**: This class generates the leaderboard sub-pages for each activity (e.g. "articles created", "articles reviewed"). It takes a dictionary as input, containing the following keys:
+
+  -  **competition_page**:  صفحة المسابقة attribute in template  
+		- ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا/الأسبوع ال1 2023/جدد
+		- ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا/الأسبوع ال1 2023
+		- ...
+  -  title_of_page: The title of the sub-page  to be generated
+		- ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا/الأسبوع ال1 2023/جدد
+		- مستخدمو الأسبوع الأكثر نشاطا/الأسبوع ال1 2023/مراجعة المقالات
+		- مستخدمو الأسبوع الأكثر نشاطا/الأسبوع ال1 2023/جدد
+  -  summary: The edit summary to be used when saving the page
+
+  -  team: The name of the team being ranked (e.g. "top 5 article creators")
+		-  أكثر 5 مستخدمين مراجعة للمقالات
+		- الإداريون الذين أجروا أكبر عدد من الأعمال الإدارية
+  -  activity: The activity being ranked (e.g. "أفعال إدارية")
+  
+  -  query: The SQL query to be used to retrieve the rankings data from the database
+
+- MainPage: This class generates the main leaderboard page for the current week. It takes the following arguments:
+
+  - title_of_page: The name of the main leaderboard page
+  - summary: The edit summary to be used when saving the page
+  - stub: The name of the file containing the stub for the main leaderboard page
+- The code also includes a TableGenerator class, which is used by the SubPage class to generate the table of rankings data to be included on the sub-pages.
+
+
+
+# تشغيل البوت 
+- يتم تشغيل ملف daily.py كل يوم في أي ساعة أنت تحددها لأنه تلقائي يجلب إحصائيات أمس بغض النظر عن وقت تشغيل البوت حتى يقوم بتحديث صفحة ويكيبيديا: مستخدمو الأسبوع الأكثر نشاطا والصفحات المرتبطة
+- 
+- يتم تشغيل ملف week.py كل يوم اثنين في أي ساعة أنت تحددها لأنه تلقائي يجلب إحصائيات أمس بغض النظر عن وقت تشغيل البوت حتى يقوم بتوزيع الأوسمة الخص ب الأسبوع الفائت
+يمكن تعديل أي نص أو تعديل الاستعلام أو محتوي الصفحات من خلال ملف data. py دون التعديل علي نواه البوت
