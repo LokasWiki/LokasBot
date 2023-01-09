@@ -1,22 +1,27 @@
-
+# about task
  This repository contains code for generating leaderboard pages on a MediaWiki instance. The code is written in Python and makes use of the Pywikibot library.
 
 The code consists of three main classes:
 
-- Base: This class contains the shared logic for all other classes. It sets up the connection to the MediaWiki instance and defines the logic for calculating the start and end dates for the current week.
+- **Base**: This class contains the shared logic for all other classes. It sets up the connection to the MediaWiki instance and defines the logic for calculating the start and end dates for the current week.
 
-- SubPage: This class generates the leaderboard sub-pages for each activity (e.g. "articles created", "articles reviewed"). It takes a dictionary as input, containing the following keys:
+- **SubPage**: This class generates the leaderboard sub-pages for each activity (e.g. "articles created", "articles reviewed"). It takes a dictionary as input, containing the following keys:
 
-  -  competition_page: The name of the main leaderboard page for the current week
-
-  -  title_of_page: The name of the sub-page to be generated
-
+  -  **competition_page**:  صفحة المسابقة attribute in template  
+		- ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا/الأسبوع ال1 2023/جدد
+		- ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا/الأسبوع ال1 2023
+		- ...
+  -  title_of_page: The title of the sub-page  to be generated
+		- ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا/الأسبوع ال1 2023/جدد
+		- مستخدمو الأسبوع الأكثر نشاطا/الأسبوع ال1 2023/مراجعة المقالات
+		- مستخدمو الأسبوع الأكثر نشاطا/الأسبوع ال1 2023/جدد
   -  summary: The edit summary to be used when saving the page
 
   -  team: The name of the team being ranked (e.g. "top 5 article creators")
-
-  -  activity: The activity being ranked (e.g. "articles created")
-
+		-  أكثر 5 مستخدمين مراجعة للمقالات
+		- الإداريون الذين أجروا أكبر عدد من الأعمال الإدارية
+  -  activity: The activity being ranked (e.g. "أفعال إدارية")
+  
   -  query: The SQL query to be used to retrieve the rankings data from the database
 
 - MainPage: This class generates the main leaderboard page for the current week. It takes the following arguments:
@@ -25,16 +30,7 @@ The code consists of three main classes:
   - summary: The edit summary to be used when saving the page
   - stub: The name of the file containing the stub for the main leaderboard page
 - The code also includes a TableGenerator class, which is used by the SubPage class to generate the table of rankings data to be included on the sub-pages.
-
-## To use the code, you will need to:
-
-* Clone this repository
-* Install the required dependencies (Pywikibot and MySQL connector)
-* Set up a user-config.py file in the root of the repository, as described in the Pywikibot documentation
-* Edit the list_page_sub_pages variable in the data.py file to include the sub-pages you want to generate. Each sub-page should be represented as a dictionary with the keys described above.
-* Run the daily.py script to generate the main leaderboard page and all sub-pages.
-* You may also need to modify the Base class to specify the correct database connection details and the correct MediaWiki instance to connect to.
-
+# sql queries
 ## المستخدمون الـ5 الأوائل في إنشاء المقالات 
 
 ~~~~sql
@@ -61,6 +57,7 @@ and pl_namespace = 2)
     ORDER BY score DESC,name
     LIMIT 10;
 ~~~~
+هذا الاستعلام يقوم بحساب عدد الصفحات التي تم إنشاؤها بواسطة كل مستخدم في نطاق المقالات فقط ويقوم باستبعاد الصفحات التي تكون عبارة عن تحويلة وأيضا يتأكد أنها في المستوى الأول من المقالات ثم يقوم باستبعاد الحسابات التي تملك صلاحية البوت أو الحسابات التي يحتوي الاسم الخاص بها علي كلمة بوت أو bot وأيضا يقوم باستبعاد الحسابات الجماعية الموجودة في (ويكيبيديا: مستخدمو الأسبوع الأكثر نشاطا/ حسابات جماعية) ثم يقوم بترتيب المستخدمين حسب الاعلي من حيث عدد المقالات ويأخذ أول عشرة مستخدمين فقط
 
 ## أكثر 5 مستخدمين مراجعة للمقالات
 ~~~~sql
@@ -89,7 +86,7 @@ having COUNT(*) > 1
 ORDER BY score DESC,name
 LIMIT 10;
 ~~~~
-
+هذا الاستعلام يقوم بحساب عدد المراجعات التي تمت بواسطة المستخدمين علي الصفحات الجديدة  في نطاق المقالات فقط  ثم يقوم باستبعاد الحسابات التي تملك صلاحية البوت أو الحسابات التي يحتوي الاسم الخاص بها علي كلمة بوت أو bot وأيضا يقوم باستبعاد الحسابات الجماعية الموجودة في (ويكيبيديا: مستخدمو الأسبوع الأكثر نشاطا/ حسابات جماعية) ثم يقوم بترتيب المستخدمين حسب الاعلي من حيث عدد المراجعات ويأخذ أول عشرة مستخدمين فقط
         
         
         
@@ -111,7 +108,30 @@ LIMIT 10;
 ~~~~
 
         
+       
+هذا الاستعلام يقوم بحساب عدد الأعمال الإدارية التي تمت بواسطة المستخدمين  والتي تشمل (المنع والحماية والحذف والتغير الصلاحيات)ثم يقوم باستبعاد الحسابات التي تملك صلاحية البوت أو الحسابات التي يحتوي الاسم الخاص بها علي كلمة بوت أو bot وأيضا يقوم باستبعاد الحسابات الجماعية الموجودة في (ويكيبيديا: مستخدمو الأسبوع الأكثر نشاطا/ حسابات جماعية) ثم يقوم بترتيب المستخدمين حسب الاعلي من حيث عدد الأعمال الإدارية ويأخذ أول عشرة مستخدمين فقط
         
+- سجل الصلاحيات ويشمل
+	- فعل المنح نفسه (تغيير يدوي)
+	- تغيير أوتوماتيكي
+	- منع الترقية التلقائية
+	- استرجاع الترقية التلقائية
+- سجل الحماية ويشمل
+	- فعل الحماية نفسه
+	- رفع الحماية
+	- تعديل الحماية
+	- نقل الحماية
+- سجل الحذف ويشمل
+	- حذف الصفحات
+	- إعادة الكتابة فوق التحويلة
+	- استرجاع الصفحات
+	- حذف السجلات
+	- حذف المراجعات
+- سجل المنع ويشمل
+	- فعل المنع نفسه
+	- رفع المنع
+	- تعديل المنع
+
         
 ## المستخدمون الـ 5 الأوائل في إضافة نصوص
 ~~~~sql
@@ -145,7 +165,7 @@ ORDER BY score DESC,name
 LIMIT 10;
 ~~~~
 
-        
+هذا الاستعلام يقوم بحساب حجم إضافة نصوص التي تمت إضافتها بواسطة كل مستخدم في نطاق المقالات فقط ويقوم باستبعاد التعديلات التي يحتوي جزءا من وصف التعديل الخاص بها علي كلمات مثل (رجوع أو استرجاع) ويجب أن يمتلك المستخدم صلاحية المراجع التلقائي أو المحرر فقط ثم يقوم باستبعاد الحسابات التي تملك صلاحية البوت أو الحسابات التي يحتوي الاسم الخاص بها علي كلمة بوت أو bot وأيضا يقوم باستبعاد الحسابات الجماعية الموجودة في (ويكيبيديا: مستخدمو الأسبوع الأكثر نشاطا/ حسابات جماعية) ثم يقوم بترتيب المستخدمين حسب الاعلي من حيث حجم إضافة نصوص ويأخذ أول عشرة مستخدمين فقط
         
 
 ## أكثر 5 مستخدمين مراجعة للتعديلات
@@ -170,7 +190,8 @@ and pl_namespace = 2)
 	LIMIT 10;
 ~~~~
 
-        
+هذا الاستعلام يقوم بحساب عدد مراجعات التعديلات الجديدة التي تمت بواسطة المستخدمين علي الصفحات في نطاق المقالات فقط  ثم يقوم باستبعاد الحسابات التي تملك صلاحية البوت أو الحسابات التي يحتوي الاسم الخاص بها علي كلمة بوت أو bot وأيضا يقوم باستبعاد الحسابات الجماعية الموجودة في (ويكيبيديا: مستخدمو الأسبوع الأكثر نشاطا/ حسابات جماعية) ثم يقوم بترتيب المستخدمين حسب الاعلي من حيث عدد المراجعات ويأخذ أول عشرة مستخدمين فقط
+                
         
         
 ## المستخدمون الـ5 الأوائل بعدد التعديلات
@@ -197,6 +218,14 @@ ORDER BY score DESC,name
 LIMIT 10;
 ~~~~
         
+
+هذا الاستعلام يقوم بحساب عدد  التعديلات  التي تمت بواسطة المستخدمين في جميع النطاقات ثم يقوم باستبعاد الحسابات التي تملك صلاحية البوت أو الحسابات التي يحتوي الاسم الخاص بها علي كلمة بوت أو bot وأيضا يقوم باستبعاد الحسابات الجماعية الموجودة في (ويكيبيديا: مستخدمو الأسبوع الأكثر نشاطا/ حسابات جماعية) ثم يقوم 
+ويقوم باستبعاد التعديلات التي يحتوي الوصف الخاص بها علي هذه الجمل 
+[[ميدياويكي:Gadget-Cat-a-lot|تعديل تصنيفات]]
+[[Project:أوب|أوب]]
+[[ويكيبيديا:أوب|أوب]]
+بترتيب المستخدمين حسب الاعلي من حيث عدد التعديلات ويأخذ أول عشرة مستخدمين فقط
+                
         
         
 ## أنشط 5 مستخدمين بين المستخدمين الواعدين
@@ -220,3 +249,10 @@ GROUP BY actor_name
 ORDER BY score DESC,name
 LIMIT 10;
 ~~~~
+يقوم هذا الاستعلام بحسب عدد التعديلات في نطاق المقالات فقط للمستخدمين الذين لا يملكون صلاحية محرر أو بوت أو مراجع تلقائي
+ويظهر فقط المستخدمين الذي قام باشناء الحساب قبل فترة أقصها شهرا من وقت تشغيل الاستعلام
+الاسم الخاص بها علي كلمة بوت أو bot وأيضا يقوم باستبعاد الحسابات الجماعية الموجودة في (ويكيبيديا: مستخدمو الأسبوع الأكثر نشاطا/ حسابات جماعية) ثم يقوم
+
+مثال 
+
+إذا كان هناك مستخدم قام بالتسجيل يوم ١٥ ديسمبر ٢٠٢١ وتم تشغيل الاستعلام يوم ١ يناير ٢٠٢٢ فإن هذا المستخدم يدخل ضمن نطاق الاستعلام ويدخل أي مستخدم قام بإنشاء الحساب ضمن الفترة التي تبدأ من ١ يناير ٢٠٢٢ وحتى ٢ ديسمبر ٢٠٢١
