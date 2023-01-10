@@ -4,11 +4,12 @@
 تعرض هذه الصفحة قائمة [[وب:ويكيبيديون|بالويكيبيديين]] بلا صلاحيات.
 
 '''قام BOT_USER_NAME بتحديث هذه القائمة في :  BOT_TIME_NOW (ت ع م) '''
-</div>
-<div style="background: #E5E4E2; padding: 0.5em;   -moz-border-radius: 0.3em; border-radius: 0.3em;">
-BOT_TABLE_BODY
 </center>
 </div>
+<center>
+<div style="background: #E5E4E2; padding: 0.5em;   -moz-border-radius: 0.3em; border-radius: 0.3em;">
+BOT_TABLE_BODY
+</div>
+</center>
 [[تصنيف:إحصاءات ويكيبيديا]]
 [[تصنيف:ويكيبيديا قائمة الويكيبيديين حسب عدد التعديلات]]
-
