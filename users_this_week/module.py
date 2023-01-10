@@ -355,7 +355,6 @@ class SendTemplate(Base):
                                                                                                         str(self.week)).replace(
                     "RANK", self.translator.translate_rank(str(rank - 1)))
 
-                content += "\n~~~~"
                 try:
                     topic = board.new_topic(title, content)
                 except Exception as error:
