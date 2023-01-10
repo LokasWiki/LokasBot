@@ -4,12 +4,12 @@
 تعرض هذه الصفحة قائمة [[وب:بوت|البوتات]] الغير نشطة.<br/>
 البوت الغير نشط هو الذي ليس لديه [[Special:Contributions|مساهمة]] خلال عام.<br/>
 '''قام BOT_USER_NAME بتحديث هذه القائمة في :  BOT_TIME_NOW (ت ع م) '''
+</center>
 </div>
 <center>
 <div style="background: #E5E4E2; padding: 0.5em;   -moz-border-radius: 0.3em; border-radius: 0.3em;">
 BOT_TABLE_BODY
-</center>
 </div>
+</center>
 [[تصنيف:إحصاءات ويكيبيديا]]
 [[تصنيف:ويكيبيديا قائمة الويكيبيديين حسب عدد التعديلات]]
-
