@@ -11,7 +11,7 @@ where pagelinks.pl_from_namespace = 0
   and page.page_is_redirect = 0
   and page.page_id not in (select templatelinks.tl_from  from templatelinks
                                                              join linktarget on linktarget.lt_id = templatelinks.tl_target_id
-                      where linktarget.lt_title in ("تطوير_مقالة") and templatelinks.tl_from_namespace = 0  )
+                      where linktarget.lt_title in (select pl_title from pagelinks where  pl_from = 9043549) and templatelinks.tl_from_namespace = 0  )
   and page.page_title not in (select pl_title from pagelinks where  pl_from = 9043549);"""
 file_path = 'stub/articles_in_which_there_is_a_link_to_user_pages.txt'
 page_name = "ويكيبيديا:إحصاءات/مقالات يوجد فيها وصلة إلى صفحات المستخدمين"
