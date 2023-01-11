@@ -3,7 +3,7 @@
 <center>
 تعرض هذه الصفحة قائمة [[وب:بوت|البوتات]] الغير نشطة.<br/>
 البوت الغير نشط هو الذي ليس لديه [[Special:Contributions|مساهمة]] خلال عام.<br/>
-'''قام BOT_USER_NAME بتحديث هذه القائمة في :  BOT_TIME_NOW (ت ع م) '''
+'''حَدَّث BOT_USER_NAME هذه القائمة في :  BOT_TIME_NOW (ت ع م) '''
 </center>
 </div>
 <center>

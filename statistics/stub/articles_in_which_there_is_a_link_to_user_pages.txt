@@ -3,7 +3,7 @@
 <center>
 مقالات يوجد فيها وصلة الي صفحات المستخدمين.
 
-'''قام BOT_USER_NAME بتحديث هذه القائمة في :  BOT_TIME_NOW (ت ع م) '''
+'''حَدَّث BOT_USER_NAME هذه القائمة في :  BOT_TIME_NOW (ت ع م) '''
 </center>
 </div>
 <center>
