@@ -206,9 +206,11 @@ FROM user
 INNER JOIN actor ON user_id = actor_user
 INNER JOIN revision ON rev_actor = actor_id
 INNER JOIN page ON page.page_id = revision.rev_page
+LEFT JOIN ipblocks ON actor_user = ipb_user
 WHERE rev_timestamp BETWEEN START_WEEK_DATE AND END_WEEK_DATE
 AND user_registration BETWEEN DATE_BEFORE_30_DAYS and START_WEEK_DATE
 AND page.page_namespace = 0
+AND ipb_user IS NULL
 AND ucase(actor_name) NOT LIKE ucase("%BOT") COLLATE utf8mb4_general_ci
 AND actor_name NOT LIKE "%بوت%" collate utf8mb4_general_ci
 and actor_name NOT IN (SELECT user_name FROM user_groups INNER JOIN user ON user_id = ug_user WHERE ug_group = 'editor' or 'autoreview' or 'bot')
@@ -228,7 +230,7 @@ LIMIT 10;
 
 إذا كان هناك مستخدم قام بالتسجيل يوم ١٥ ديسمبر ٢٠٢١ وتم تشغيل الاستعلام يوم ١ يناير ٢٠٢٢ فإن هذا المستخدم يدخل ضمن نطاق الاستعلام ويدخل أي مستخدم قام بإنشاء الحساب ضمن الفترة التي تبدأ من ١ يناير ٢٠٢٢ وحتى ٢ ديسمبر ٢٠٢١
 
-
+ملاحظة: لا يقوم هذا الاستعلام بعرض المستخدمين الممنوعين
 # about code
 
 The code consists of three main classes:
