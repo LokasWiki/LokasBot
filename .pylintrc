@@ -1,0 +1,52 @@
+[MASTER]
+
+# Use multiple processes to speed up Pylint.
+jobs=0
+
+
+[MESSAGES CONTROL]
+
+# Disable the message, report, category or checker with the given id.
+disable=duplicate-code
+
+
+[REPORTS]
+
+# Tells whether to display a full report or only the messages
+reports=yes
+
+
+[REFACTORING]
+
+# Maximum number of nested blocks for function / method body
+max-nested-blocks=10
+
+
+[BASIC]
+
+# Good variable names which should always be accepted, separated by a comma
+good-names=e,i,j,k,_
+
+
+[FORMAT]
+
+# Maximum number of characters on a single line.
+max-line-length=79
+
+
+[DESIGN]
+
+# Maximum number of arguments for function / method
+max-args=7
+
+# Maximum number of branch for function / method body
+max-branches=30
+
+# Maximum number of locals for function / method body
+max-locals=25
+
+# Maximum number of return / yield for function / method body
+max-returns=20
+
+# Maximum number of statements in function / method body
+max-statements=100
