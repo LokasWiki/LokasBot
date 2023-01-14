@@ -9,7 +9,7 @@ FROM actor
          join user on actor_user = user_id
          LEFT JOIN ipblocks ON actor_user = ipb_user
          LEFT JOIN user_groups ON actor_user = ug_user
-WHERE ipb_user IS NULL AND ug_user IS NULL 
+WHERE ipb_user IS NULL AND ug_user IS NULL
 and actor_name not in ("JarBot","جار_الله","صالح","وسام","جار الله","FShbib","بندر","حساب ملغى 123321","مصعب العبود")
 HAVING live_edits >= 400
        AND edits_last_month >= 10;"""

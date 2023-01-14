@@ -16,7 +16,7 @@ and ucase(actor_name) not like ucase("%BOT") COLLATE utf8mb4_general_ci
                          WHERE ug_group = "bot")
   and actor_id NOT IN ("2579643")
   and actor_user not in (137877)
- 
+
 GROUP BY actor_name
 ORDER BY score desc,actor_name
 limit 100"""

@@ -18,4 +18,4 @@
 #   command: $HOME/repos/jobs/users_this_week-weekly.sh
 #   schedule: '17 1 * * *'
 #   emails: onfailure
-#   <<: *defaults    
+#   <<: *defaults

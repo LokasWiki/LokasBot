@@ -107,7 +107,7 @@ class File:
 
     def get_file_content(self):
         # Open the file in read mode
-        with open(self.file_path, 'r') as file:
+        with open(self.file_path) as file:
             # Read the contents of the file
             self.contents = file.read()
 
