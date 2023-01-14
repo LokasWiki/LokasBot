@@ -1,0 +1,21 @@
+- &defaults
+  name: dummy-defaults-job
+  command: echo this is a dummy job to set defaults
+  emails: onfailure
+  image: tf-python39
+  no-filelog: true
+- name: statistics-daily
+  command: $HOME/repos/jobs/statistics-daily.sh
+  schedule: '0 5 * * *'
+  emails: onfailure
+  <<: *defaults
+- name: utw-daily
+  command: $HOME/repos/jobs/users_this_week-daily.sh
+  schedule: '0 1 * * *'
+  emails: onfailure
+  <<: *defaults
+# - name: utw-weekly
+#   command: $HOME/repos/jobs/users_this_week-weekly.sh
+#   schedule: '17 1 * * *'
+#   emails: onfailure
+#   <<: *defaults    
