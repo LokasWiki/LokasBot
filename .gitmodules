@@ -1,0 +1,4 @@
+[submodule "pywikibot"]
+	path = pywikibot
+	url = git@github.com:wikimedia/pywikibot
+	branch = stable
