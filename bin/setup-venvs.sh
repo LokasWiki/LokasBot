@@ -5,13 +5,13 @@ set -euo pipefail
 mkdir -p "$HOME/repos/.venvs"
 
 function setup-venv {
-    echo "Setting up $1"
-    rm -fdr "$HOME/repos/.venvs/$1"
-    python3 -m venv "$HOME/repos/.venvs/$1"
-    . "$HOME/repos/.venvs/$1/bin/activate"
+    echo "Setting up"
+    rm -fdr "$HOME/repos/.venvs/"
+    python3 -m venv "$HOME/repos/.venvs/"
+    . "$HOME/repos/.venvs/bin/activate"
     python3 -m pip install -U pip setuptools wheel
     # shellcheck disable=SC2086
-    python3 -m pip install $2
+    #python3 -m pip install $2
     deactivate
 }
 
