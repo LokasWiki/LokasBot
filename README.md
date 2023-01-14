@@ -46,3 +46,21 @@ volumes:
 ssh -N -L 4711:arwiki.analytics.db.svc.wikimedia.cloud:3306 yourusername@login.toolforge.org -i /home/username/.ssh/filename_id   -v
 ```
  
+
+
+# Toolforge setup
+
+Toolforge setup and job management
+
+## Clone and setup virtual environments
+
+
+``` bash
+rm -fdr $HOME/repos && git clone --recurse-submodules https://github.com/loka1/LokasBot.git $HOME/repos && toolforge-jobs run setup-venvs --command $HOME/repos/bin/setup-venvs --image tf-python39 --wait
+```
+
+## Load jobs
+
+``` bash
+toolforge-jobs load $HOME/repos/cronjobs.yaml
+```
