@@ -56,7 +56,7 @@ Toolforge setup and job management
 
 
 ``` bash
-rm -fdr $HOME/repos && git clone --recurse-submodules https://github.com/loka1/LokasBot.git $HOME/repos && toolforge-jobs run setup-venvs --command $HOME/repos/bin/setup-venvs --image tf-python39 --wait
+rm -fdr $HOME/repos && git clone --recurse-submodules https://github.com/loka1/LokasBot.git $HOME/repos && toolforge-jobs run setup-venvs --command $HOME/repos/bin/setup-venvs.sh --image tf-python39 --wait
 ```
 
 ## Load jobs
