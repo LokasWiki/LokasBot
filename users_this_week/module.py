@@ -411,7 +411,7 @@ class MainPage(Base):
         # Construct the file path
         file_path = os.path.join(self.script_dir, self.stub)
         # Open the file in read mode
-        with open(file_path, 'r') as file:
+        with open(file_path) as file:
             # Read the contents of the file
             self.text = file.read()
 

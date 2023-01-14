@@ -17,7 +17,7 @@ list_page_sub_pages = [
         "team": "المستخدمون الـ5 الأوائل في إنشاء المقالات",
         "activity": "مقالات",
         "template_stub":"{{وسام كاتب الأسبوع|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد إنشاء المقالات}}",
-        'query': """SELECT actor_name as name, COUNT(*) as score 
+        'query': """SELECT actor_name as name, COUNT(*) as score
     FROM revision r
     INNER JOIN actor ON r.rev_actor = actor.actor_id
     INNER JOIN page p on r.rev_page = p.page_id
@@ -121,7 +121,7 @@ AND parent.rev_timestamp BETWEEN START_WEEK_DATE AND END_WEEK_DATE
                          FROM user_groups
                                   INNER JOIN user ON user_id = ug_user
                          WHERE ug_group = "bot")
-and actor_name IN (SELECT user_name FROM user_groups INNER JOIN user ON user_id = ug_user WHERE ug_group = 'editor' or 'autoreview') 
+and actor_name IN (SELECT user_name FROM user_groups INNER JOIN user ON user_id = ug_user WHERE ug_group = 'editor' or 'autoreview')
 and actor_name not in (SELECT replace(pl_title,"_"," ")
 FROM pagelinks
 where pagelinks.pl_from = 7352181
@@ -146,7 +146,7 @@ LIMIT 10;"""
     and log_action = "approve"
     and log_namespace = 0
 
-    and actor_name Not IN (SELECT user_name FROM user_groups INNER JOIN user ON user_id = ug_user WHERE ug_group = 'bot') 
+    and actor_name Not IN (SELECT user_name FROM user_groups INNER JOIN user ON user_id = ug_user WHERE ug_group = 'bot')
      and ucase(actor_name) not like ucase("%BOT") COLLATE utf8mb4_general_ci
   and actor_name not like "%بوت%" collate utf8mb4_general_ci
 and actor_name not in (SELECT replace(pl_title,"_"," ")
@@ -171,9 +171,9 @@ FROM revision rev
 INNER JOIN actor on rev.rev_actor = actor_id
 INNER JOIN comment_revision on rev.rev_comment_id = comment_id
 JOIN page ON page_id = rev.rev_page
-AND comment_text NOT LIKE ucase ("%[[ميدياويكي:Gadget-Cat-a-lot|تعديل تصنيفات]]%") collate utf8mb4_general_ci 
-    AND comment_text NOT LIKE ucase ("%[[Project:أوب|أوب]]%") collate utf8mb4_general_ci 
-    AND comment_text NOT LIKE ucase ("%[[ويكيبيديا:أوب|أوب]]%") collate utf8mb4_general_ci 
+AND comment_text NOT LIKE ucase ("%[[ميدياويكي:Gadget-Cat-a-lot|تعديل تصنيفات]]%") collate utf8mb4_general_ci
+    AND comment_text NOT LIKE ucase ("%[[Project:أوب|أوب]]%") collate utf8mb4_general_ci
+    AND comment_text NOT LIKE ucase ("%[[ويكيبيديا:أوب|أوب]]%") collate utf8mb4_general_ci
 AND rev.rev_timestamp BETWEEN START_WEEK_DATE AND END_WEEK_DATE
 AND ucase(actor_name) NOT LIKE ucase("%BOT") COLLATE utf8mb4_general_ci
 AND actor_name NOT LIKE "%بوت%" collate utf8mb4_general_ci

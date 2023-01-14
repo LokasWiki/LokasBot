@@ -18,7 +18,7 @@ toolforge-jobs load $HOME/repos/cronjobs.yaml
 
 
 # خطوات تثبيت البوت علي الجهاز المحلي
-## تثبيت إطار العمل والمكتبات الأساسية والبايثون 
+## تثبيت إطار العمل والمكتبات الأساسية والبايثون
 https://www.mediawiki.org/wiki/Manual:Pywikibot/Installation#Install_Python
 ## تثبيت mediawiki
 ```
@@ -59,10 +59,9 @@ volumes:
         db:
 ```
  أو تنزيل النسخة وتثبيتها يدويا من [هنا](https://www.mediawiki.org/wiki/Download)
- 
- ## الاتصال بقاعدة البيانات 
+
+ ## الاتصال بقاعدة البيانات
 ```
 ssh -N -L 4711:arwiki.analytics.db.svc.wikimedia.cloud:3306 yourusername@login.toolforge.org -i /home/username/.ssh/filename_id   -v
 ```
- 
 
