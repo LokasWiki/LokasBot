@@ -1,3 +1,22 @@
+
+# Toolforge setup
+
+Toolforge setup and job management
+
+## Clone and setup virtual environments
+
+
+``` bash
+rm -fdr $HOME/repos && git clone --recurse-submodules https://github.com/loka1/LokasBot.git $HOME/repos && chmod ug+x $HOME/repos/bin/setup-venvs.sh && toolforge-jobs run setup-venvs --command $HOME/repos/bin/setup-venvs.sh --image tf-python39 --wait && chmod -R ug+x $HOME/repos/*
+```
+
+## Load jobs
+
+``` bash
+toolforge-jobs load $HOME/repos/cronjobs.yaml
+```
+
+
 # خطوات تثبيت البوت علي الجهاز المحلي
 ## تثبيت إطار العمل والمكتبات الأساسية والبايثون 
 https://www.mediawiki.org/wiki/Manual:Pywikibot/Installation#Install_Python
@@ -47,20 +66,3 @@ ssh -N -L 4711:arwiki.analytics.db.svc.wikimedia.cloud:3306 yourusername@login.t
 ```
  
 
-
-# Toolforge setup
-
-Toolforge setup and job management
-
-## Clone and setup virtual environments
-
-
-``` bash
-rm -fdr $HOME/repos && git clone --recurse-submodules https://github.com/loka1/LokasBot.git $HOME/repos && chmod ug+x $HOME/repos/bin/setup-venvs.sh && toolforge-jobs run setup-venvs --command $HOME/repos/bin/setup-venvs.sh --image tf-python39 --wait
-```
-
-## Load jobs
-
-``` bash
-toolforge-jobs load $HOME/repos/cronjobs.yaml
-```
