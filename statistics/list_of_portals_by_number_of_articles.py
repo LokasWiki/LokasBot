@@ -1,13 +1,13 @@
 from module import UpdatePage, ArticleTables,index
 
 # Set the parameters for the update
-query = """SELECT main.page_title as portal_name, COUNT(*) - 1 as sub_page_count, 
+query = """SELECT main.page_title as portal_name, COUNT(*) - 1 as sub_page_count,
     (SELECT COUNT(*) FROM pagelinks WHERE pl_title = main.page_title and pl_from_namespace = 0 and pl_namespace = 100) as links_count
 FROM page AS p
 INNER JOIN (
     SELECT page_title
-    FROM page 
-    WHERE page_namespace = 100 
+    FROM page
+    WHERE page_namespace = 100
     AND page_is_redirect = 0
 )AS main ON main.page_title = SUBSTRING_INDEX(p.page_title, '/', 1)
 WHERE p.page_namespace = 100
