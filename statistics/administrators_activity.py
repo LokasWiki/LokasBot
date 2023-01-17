@@ -62,7 +62,7 @@ def end_table():
 </div>
 </div>
 </div>"""
-    return "\n\n"+end + "\n\n"
+    return "\n\n" + end + "\n\n"
 
 
 def username(row, result, index):
@@ -72,32 +72,47 @@ def username(row, result, index):
 
 
 def total(row, result, index):
-    # get total action for every users
-    pass
+    number = 0
+    user_name = str(row['user_name'], 'utf-8')
+    del row['user_name']
+    number = sum(row.values())
+    # to avoid raising any errors
+    return number
 
 
 tables.add_table("delete_count_table",
-                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "delete_count"), ],start_table("حذف"),end_table())
+                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "delete_count"), ],
+                 start_table("حذف"), end_table())
 tables.add_table("restore_count_table",
-                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "restore_count"), ],start_table("استرجاع"),end_table())
+                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "restore_count"), ],
+                 start_table("استرجاع"), end_table())
 tables.add_table("revision_count_table",
-                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "revision_count"), ],start_table("إخفاء نسخة"),end_table())
+                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "revision_count"), ],
+                 start_table("إخفاء نسخة"), end_table())
 tables.add_table("event_count_table",
-                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "event_count"), ],start_table("  حذف النسخة المُعدله"),end_table())
+                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "event_count"), ],
+                 start_table("  حذف النسخة المُعدله"), end_table())
 tables.add_table("protect_count_table",
-                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "protect_count"), ],start_table("حماية"),end_table())
+                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "protect_count"), ],
+                 start_table("حماية"), end_table())
 tables.add_table("unprotect_count_table",
-                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "unprotect_count"), ],start_table("  إزالة الحماية"),end_table())
+                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "unprotect_count"), ],
+                 start_table("  إزالة الحماية"), end_table())
 tables.add_table("modify_count_table",
-                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "modify_count"), ],start_table("تغيير الحماية"),end_table())
+                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "modify_count"), ],
+                 start_table("تغيير الحماية"), end_table())
 tables.add_table("block_count_table",
-                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "block_count"), ],start_table("  رفع المنع"),end_table())
+                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "block_count"), ],
+                 start_table("  رفع المنع"), end_table())
 tables.add_table("unblock_count_table",
-                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "unblock_count"), ],start_table("  تغيير مدة المنع"),end_table())
+                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "unblock_count"), ],
+                 start_table("  تغيير مدة المنع"), end_table())
 tables.add_table("reblock_count_table",
-                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "reblock_count"), ],start_table("تغيير صلاحيات"),end_table())
+                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "reblock_count"), ],
+                 start_table("تغيير صلاحيات"), end_table())
 tables.add_table("rights_count_table",
-                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "rights_count"), ],start_table("حذف"),end_table())
+                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "rights_count"), ],
+                 start_table("حذف"), end_table())
 
 columns = [
     ("الرقم", None, index),
@@ -112,7 +127,7 @@ columns = [
     ("رفع المنع", "delete_count"),
     ("تغيير مدة المنع", "delete_count"),
     ("تغيير صلاحيات", "delete_count"),
-    ("المحموع", "delete_count"),
+    ("المحموع", None, total),
 
 ]
 
