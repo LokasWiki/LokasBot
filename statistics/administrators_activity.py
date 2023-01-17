@@ -66,7 +66,6 @@ def end_table():
     return "\n\n" + end + "\n\n"
 
 
-
 def start_main_table(word):
     start = """== WORD =="""
     return "\n\n" + start.replace("WORD", word) + "\n\n"
@@ -75,7 +74,6 @@ def start_main_table(word):
 def end_main_table():
     end = """ """
     return "\n\n" + end + "\n\n"
-
 
 
 def username(row, result, index):
@@ -91,6 +89,26 @@ def total(row, result, index):
     number = sum(row.values())
     # to avoid raising any errors
     return number
+
+
+def end_row_in_main(result):
+    print("test")
+    print(result)
+    text = """\n|- class="sortbottom"
+! colspan="2" | المجموع
+! style="text-align:left;" | 733906
+! style="text-align:left;" | 27255
+! style="text-align:left;" | 22632
+! style="text-align:left;" | 21378
+! style="text-align:left;" | 1490
+! style="text-align:left;" | 2234
+! style="text-align:left;" | 101948
+! style="text-align:left;" | 1114
+! style="text-align:left;" | 12135
+! style="text-align:left;" | 4905
+! style="text-align:left;" | 928997
+\n"""
+    return text
 
 
 tables.add_table("delete_count_table",
@@ -136,15 +154,15 @@ columns = [
     ("حماية", "protect_count"),
     ("إزالة الحماية", "unprotect_count"),
     ("تغيير الحماية", "modify_count"),
-    ("المنع", "delete_count"),
-    ("رفع المنع", "delete_count"),
-    ("تغيير مدة المنع", "delete_count"),
-    ("تغيير صلاحيات", "delete_count"),
+    ("المنع", "block_count"),
+    ("رفع المنع", "unblock_count"),
+    ("تغيير مدة المنع", "reblock_count"),
+    ("تغيير صلاحيات", "rights_count"),
     ("المحموع", None, total),
 
 ]
 
-tables.add_table("main_table", columns,start_main_table("الإحصاءات الكاملة"),end_main_table())
+tables.add_table("main_table", columns, start_main_table("الإحصاءات الكاملة"), end_main_table(), end_row_text=end_row_in_main)
 
 # Create an instance of the updater and update the page
 updater = UpdatePage(query, file_path, page_name, tables)

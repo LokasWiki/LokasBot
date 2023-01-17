@@ -117,6 +117,7 @@ class ArticleTable:
         self.columns = []
         self.header_text = ""
         self.footer_text = ""
+        self.add_end_row_to_table = None
 
     def add_column(self, name, value_index, clause=None):
         self.columns.append((name, value_index, clause))
@@ -127,9 +128,8 @@ class ArticleTable:
     def add_footer(self, text):
         self.footer_text = text
 
-    def build_table(self, result):
+    def build_table(self, result, end_row_in_table=None):
         # create the table header
-
         header = '{| class="wikitable sortable"\n'
         for column_name, _, _ in self.columns:
             header += f'!style="background-color:#808080" align="center"|{column_name}\n'
@@ -148,6 +148,8 @@ class ArticleTable:
                         cell_value = str(row[value_index])
                 body += f'|{cell_value}\n'
             body += '\n'
+        if end_row_in_table is not None:
+            body += end_row_in_table(result)
 
         # create the table footer
         footer = '|}\n'
@@ -176,7 +178,7 @@ class UpdatePage:
         content = self.file.contents
         table_body = ""
         for table in self.tables.tables:
-            table_body += table.build_table(self.database.result)
+            table_body += table.build_table(self.database.result,table.add_end_row_to_table)
 
         content = content.replace("BOT_TABLE_BODY", table_body)
         self.page.set_contents(content)
@@ -187,13 +189,16 @@ class ArticleTables:
     def __init__(self):
         self.tables = []
 
-    def add_table(self, name, columns, header_text=None, footer_text=None):
+    def add_table(self, name, columns, header_text=None, footer_text=None, end_row_text=None):
         table = ArticleTable()
         if header_text is not None:
             table.add_header(header_text)
 
         if footer_text is not None:
             table.add_footer(footer_text)
+
+        if end_row_text is not None:
+            table.add_end_row_to_table = end_row_text
 
         for column in columns:
             column_name = column[0]
