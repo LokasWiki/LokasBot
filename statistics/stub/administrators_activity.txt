@@ -1,0 +1,18 @@
+{{إحصاء}}
+<center>
+<div style="background: #E5E4E2; padding: 0.5em; font-family: Traditional Arabic; font-size: 130%; -moz-border-radius: 0.3em; border-radius: 0.3em;">
+'''تعرض هذه الصفحة قائمة الإحصاءات المتعلقة بنشاط الإداريين.'''
+
+'''قام BOT_USER_NAME بتحديث هذه القائمة في :  BOT_TIME_NOW (ت ع م) '''
+
+</div>
+</center>
+<center>
+<div style="background: #E5E4E2; padding: 0.5em; -moz-border-radius: 0.3em; border-radius: 0.3em;">
+__NOTOC__
+BOT_TABLE_BODY
+
+</div>
+</center>
+
+[[تصنيف:إحصاءات ويكيبيديا]]
