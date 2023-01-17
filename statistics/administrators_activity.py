@@ -54,7 +54,7 @@ def start_table(word):
   <div class="NavHead" style="font-size: 10pt;">&nbsp; WORD </div>
     <div class="NavContent">
 <div style="text-align: right;">"""
-    return start.replace("WORD", word)
+    return "\n\n" + start.replace("WORD", word) + "\n\n"
 
 
 def end_table():
@@ -62,7 +62,7 @@ def end_table():
 </div>
 </div>
 </div>"""
-    return end
+    return "\n\n"+end + "\n\n"
 
 
 def username(row, result, index):
