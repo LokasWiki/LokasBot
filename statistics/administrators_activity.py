@@ -66,6 +66,18 @@ def end_table():
     return "\n\n" + end + "\n\n"
 
 
+
+def start_main_table(word):
+    start = """== WORD =="""
+    return "\n\n" + start.replace("WORD", word) + "\n\n"
+
+
+def end_main_table():
+    end = """ """
+    return "\n\n" + end + "\n\n"
+
+
+
 def username(row, result, index):
     username = str(row['user_name'], 'utf-8')
     name = username.replace("__", "[LOKA]").replace("_", " ").replace("[LOKA]", "_")
@@ -104,16 +116,16 @@ tables.add_table("modify_count_table",
                  start_table("تغيير الحماية"), end_table())
 tables.add_table("block_count_table",
                  [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "block_count"), ],
-                 start_table("  رفع المنع"), end_table())
+                 start_table("  منع "), end_table())
 tables.add_table("unblock_count_table",
                  [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "unblock_count"), ],
-                 start_table("  تغيير مدة المنع"), end_table())
+                 start_table("    رفع المنع"), end_table())
 tables.add_table("reblock_count_table",
                  [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "reblock_count"), ],
-                 start_table("تغيير صلاحيات"), end_table())
+                 start_table("  تغيير مدة المنع"), end_table())
 tables.add_table("rights_count_table",
                  [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "rights_count"), ],
-                 start_table("حذف"), end_table())
+                 start_table("  تغيير صلاحيات"), end_table())
 
 columns = [
     ("الرقم", None, index),
@@ -132,7 +144,7 @@ columns = [
 
 ]
 
-tables.add_table("main_table", columns)
+tables.add_table("main_table", columns,start_main_table("الإحصاءات الكاملة"),end_main_table())
 
 # Create an instance of the updater and update the page
 updater = UpdatePage(query, file_path, page_name, tables)
