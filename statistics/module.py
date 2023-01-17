@@ -194,7 +194,7 @@ class ArticleTables:
 
         if footer_text is not None:
             table.add_footer(footer_text)
-            
+
         for column in columns:
             column_name = column[0]
             value_index = column[1]
