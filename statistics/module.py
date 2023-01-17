@@ -115,12 +115,21 @@ class File:
 class ArticleTable:
     def __init__(self):
         self.columns = []
+        self.header_text = ""
+        self.footer_text = ""
 
     def add_column(self, name, value_index, clause=None):
         self.columns.append((name, value_index, clause))
 
+    def add_header(self, text):
+        self.header_text = text
+
+    def add_footer(self, text):
+        self.footer_text = text
+
     def build_table(self, result):
         # create the table header
+
         header = '{| class="wikitable sortable"\n'
         for column_name, _, _ in self.columns:
             header += f'!style="background-color:#808080" align="center"|{column_name}\n'
@@ -144,7 +153,7 @@ class ArticleTable:
         footer = '|}\n'
 
         # return the full table
-        return header + body + footer
+        return self.header_text + header + body + footer + self.footer_text
 
 
 class UpdatePage:
@@ -178,8 +187,14 @@ class ArticleTables:
     def __init__(self):
         self.tables = []
 
-    def add_table(self, name, columns):
+    def add_table(self, name, columns, header_text=None, footer_text=None):
         table = ArticleTable()
+        if header_text is not None:
+            table.add_header(header_text)
+
+        if footer_text is not None:
+            table.add_footer(footer_text)
+            
         for column in columns:
             column_name = column[0]
             value_index = column[1]

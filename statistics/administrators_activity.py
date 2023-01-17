@@ -49,30 +49,39 @@ page_name = "ويكيبيديا:إحصاءات/نشاط الإداريين"
 tables = ArticleTables()
 
 
-
-def username(row, result,index):
+def username(row, result, index):
     username = str(row['user_name'], 'utf-8')
     name = username.replace("__", "[LOKA]").replace("_", " ").replace("[LOKA]", "_")
     return "[[مستخدم:" + username + "|" + name + "]]"
 
-def total(row, result,index):
+
+def total(row, result, index):
     # get total action for every users
     pass
 
-tables.add_table("delete_count_table", [  ("الرقم", None, index), ("المستخدم", None, username), ("العدد", "delete_count"),])
-tables.add_table("restore_count_table", [  ("الرقم", None, index), ("المستخدم", None, username), ("العدد", "restore_count"),])
-tables.add_table("revision_count_table", [  ("الرقم", None, index), ("المستخدم", None, username), ("العدد", "revision_count"),])
-tables.add_table("event_count_table", [  ("الرقم", None, index), ("المستخدم", None, username), ("العدد", "event_count"),])
-tables.add_table("protect_count_table", [  ("الرقم", None, index), ("المستخدم", None, username), ("العدد", "protect_count"),])
-tables.add_table("unprotect_count_table", [  ("الرقم", None, index), ("المستخدم", None, username), ("العدد", "unprotect_count"),])
-tables.add_table("modify_count_table", [  ("الرقم", None, index), ("المستخدم", None, username), ("العدد", "modify_count"),])
-tables.add_table("block_count_table", [  ("الرقم", None, index), ("المستخدم", None, username), ("العدد", "block_count"),])
-tables.add_table("unblock_count_table", [  ("الرقم", None, index), ("المستخدم", None, username), ("العدد", "unblock_count"),])
-tables.add_table("reblock_count_table", [  ("الرقم", None, index), ("المستخدم", None, username), ("العدد", "reblock_count"),])
-tables.add_table("rights_count_table", [  ("الرقم", None, index), ("المستخدم", None, username), ("العدد", "rights_count"),])
 
-
-
+tables.add_table("delete_count_table",
+                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "delete_count"), ])
+tables.add_table("restore_count_table",
+                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "restore_count"), ])
+tables.add_table("revision_count_table",
+                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "revision_count"), ])
+tables.add_table("event_count_table",
+                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "event_count"), ])
+tables.add_table("protect_count_table",
+                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "protect_count"), ])
+tables.add_table("unprotect_count_table",
+                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "unprotect_count"), ])
+tables.add_table("modify_count_table",
+                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "modify_count"), ])
+tables.add_table("block_count_table",
+                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "block_count"), ])
+tables.add_table("unblock_count_table",
+                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "unblock_count"), ])
+tables.add_table("reblock_count_table",
+                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "reblock_count"), ])
+tables.add_table("rights_count_table",
+                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "rights_count"), ])
 
 columns = [
     ("الرقم", None, index),
@@ -89,11 +98,9 @@ columns = [
     ("تغيير صلاحيات", "delete_count"),
     ("المحموع", "delete_count"),
 
-
 ]
 
-tables.add_table("main_table",columns)
-
+tables.add_table("main_table", columns)
 
 # Create an instance of the updater and update the page
 updater = UpdatePage(query, file_path, page_name, tables)
