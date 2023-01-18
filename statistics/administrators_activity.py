@@ -136,10 +136,10 @@ columns = [
     ("حماية", "protect_count"),
     ("إزالة الحماية", "unprotect_count"),
     ("تغيير الحماية", "modify_count"),
-    ("المنع", "delete_count"),
-    ("رفع المنع", "delete_count"),
-    ("تغيير مدة المنع", "delete_count"),
-    ("تغيير صلاحيات", "delete_count"),
+    ("المنع", "block_count"),
+    ("رفع المنع", "unblock_count"),
+    ("تغيير مدة المنع", "reblock_count"),
+    ("تغيير صلاحيات", "rights_count"),
     ("المحموع", None, total),
 
 ]
