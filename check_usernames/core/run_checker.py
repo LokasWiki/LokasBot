@@ -1,3 +1,4 @@
+import re
 from datetime import timedelta, datetime
 
 import pywikibot
@@ -32,6 +33,40 @@ class ListOfOffendingWordsPage:
         return text
 
 
+class RequestsScanner:
+    def __init__(self):
+        self._pattern = None
+        self._requests = []
+        self._have_requests = False
+
+    @property
+    def pattern(self):
+        return self._pattern
+
+    @pattern.setter
+    def pattern(self, value):
+        self._pattern = re.compile(value)
+
+    @property
+    def requests(self):
+        return self._requests
+
+    @property
+    def have_requests(self):
+        return self._have_requests
+
+    def scan(self, text):
+        matches = self._pattern.finditer(text)
+        self._requests = []
+        for match in matches:
+            request = match.groupdict()
+            self._requests.append(request)
+        if self._requests:
+            self._have_requests = True
+        else:
+            self._have_requests = False
+
+
 class NewUsersChecker:
     def __init__(self):
         self.site = Site()
@@ -41,6 +76,7 @@ class NewUsersChecker:
                                                          start=Timestamp._from_datetime(self.start_time),
                                                          end=Timestamp._from_datetime(self.end_time))
         self.users_list = [page.title() for page in self.gen]
+        self.list = []
 
     def check_blocked(self, limit=30):
         x = 0
@@ -48,19 +84,38 @@ class NewUsersChecker:
             x += 1
             if x >= limit:
                 break
-
             user_object = User(self.site, user)
-            if user_object.is_blocked():
-                print(f"{user} is blocked")
-            else:
-                print(f"{user} is not blocked")
+            if not user_object.is_blocked():
+               self.list.append(user)
 
 
 site = Site("ar", "wikipedia")
-
+list_of_offending_words_page_title  = "ويكيبيديا:إخطار الإداريين/أسماء مستخدمين للفحص/قائمة الكلمات المخالفة"
 list_of_offending_words_page = ListOfOffendingWordsPage(site)
-list_of_offending_words_page.title = "ويكيبيديا:إخطار الإداريين/أسماء مستخدمين للفحص/قائمة الكلمات المخالفة"
+list_of_offending_words_page.title = list_of_offending_words_page_title
 list_of_offending_words_page.load_page()
+
+
+scanner = RequestsScanner()
+
+scanner.pattern = r'\* "(?P<word>[^"]*)"'
+scanner.scan(list_of_offending_words_page.get_page_text())
+if scanner.have_requests:
+    wordList = scanner.requests
+    checker = NewUsersChecker()
+    checker.check_blocked()
+    usersList = checker.list
+    result = [match['word'] for match in wordList]
+    # phrases_regex = '|'.join(result)
+    # print(phrases_regex)
+    for user in usersList:
+        for phrases_regex in result:
+            matches = re.findall(phrases_regex, str(user))
+            if matches:
+                print(user,matches)
+                break
+else:
+    print(f"there is no words in page {list_of_offending_words_page_title}")
 
 #
 # # create an object of NewUsersChecker class
