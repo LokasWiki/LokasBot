@@ -78,47 +78,43 @@ class NewUsersChecker:
         self.users_list = [page.title() for page in self.gen]
         self.list = []
 
-    def check_blocked(self, limit=30):
-        x = 0
+    def check_blocked(self):
         for user in self.users_list:
-            x += 1
-            if x >= limit:
-                break
             user_object = User(self.site, user)
             if not user_object.is_blocked():
-               self.list.append(user)
+                self.list.append(user)
 
 
-site = Site("ar", "wikipedia")
-list_of_offending_words_page_title  = "ويكيبيديا:إخطار الإداريين/أسماء مستخدمين للفحص/قائمة الكلمات المخالفة"
-list_of_offending_words_page = ListOfOffendingWordsPage(site)
-list_of_offending_words_page.title = list_of_offending_words_page_title
-list_of_offending_words_page.load_page()
+class NewUsersCheckerPage:
+    def init(self):
+        self.site = Site("ar", "wikipedia")
+        self.list_of_offending_words_page_title = "ويكيبيديا:إخطار الإداريين/أسماء مستخدمين للفحص/قائمة الكلمات المخالفة"
+        self.list_of_offending_words_page = ListOfOffendingWordsPage(self.site)
+        self.list_of_offending_words_page.title = self.list_of_offending_words_page_title
+        self.list_of_offending_words_page.load_page()
+
+    def check_blocked(self):
+        scanner = RequestsScanner()
+        scanner.pattern = r'\* "(?P<word>[^"]*)"'
+        scanner.scan(self.list_of_offending_words_page.get_page_text())
+        if scanner.have_requests:
+            wordList = scanner.requests
+            checker = NewUsersChecker()
+            checker.check_blocked()
+            usersList = checker.list
+            result = [match['word'] for match in wordList]
+            for user in usersList:
+                match_found = False
+                for phrases_regex in result:
+                    if re.search(re.escape(phrases_regex), str(user)):
+                        match_found = True
+                        print(phrases_regex)
+                        break
+                if match_found:
+                    print(user)
+        else:
+            print(f"there is no words in page {self.list_of_offending_words_page_title}")
 
 
-scanner = RequestsScanner()
-
-scanner.pattern = r'\* "(?P<word>[^"]*)"'
-scanner.scan(list_of_offending_words_page.get_page_text())
-if scanner.have_requests:
-    wordList = scanner.requests
-    checker = NewUsersChecker()
-    checker.check_blocked()
-    usersList = checker.list
-    result = [match['word'] for match in wordList]
-    # phrases_regex = '|'.join(result)
-    # print(phrases_regex)
-    for user in usersList:
-        for phrases_regex in result:
-            matches = re.findall(phrases_regex, str(user))
-            if matches:
-                print(user,matches)
-                break
-else:
-    print(f"there is no words in page {list_of_offending_words_page_title}")
-
-#
-# # create an object of NewUsersChecker class
-# checker = NewUsersChecker()
-# # call the check_blocked method
-# checker.check_blocked()
+new_users_checker = NewUsersCheckerPage()
+new_users_checker.check_blocked()
