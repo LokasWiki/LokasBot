@@ -91,26 +91,6 @@ def total(row, result, index):
     return number
 
 
-def end_row_in_main(result):
-    print("test")
-    print(result)
-    text = """\n|- class="sortbottom"
-! colspan="2" | المجموع
-! style="text-align:left;" | 733906
-! style="text-align:left;" | 27255
-! style="text-align:left;" | 22632
-! style="text-align:left;" | 21378
-! style="text-align:left;" | 1490
-! style="text-align:left;" | 2234
-! style="text-align:left;" | 101948
-! style="text-align:left;" | 1114
-! style="text-align:left;" | 12135
-! style="text-align:left;" | 4905
-! style="text-align:left;" | 928997
-\n"""
-    return text
-
-
 tables.add_table("delete_count_table",
                  [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "delete_count"), ],
                  start_table("حذف"), end_table())
@@ -145,6 +125,30 @@ tables.add_table("rights_count_table",
                  [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "rights_count"), ],
                  start_table("  تغيير صلاحيات"), end_table())
 
+
+def end_row_in_main(result):
+    total = {'delete_count': 0, 'restore_count': 0, 'revision_count': 0,'event_count': 0, 'protect_count': 0, 'unprotect_count': 0,
+             'modify_count': 0, 'block_count': 0, 'unblock_count': 0, 'reblock_count': 0, 'rights_count': 0}
+    for row in result:
+        for key in total:
+            total[key] += row[key]
+
+    text = f"""\n|- class="sortbottom"
+    ! colspan="2" | المجموع
+    ! style="text-align:left;" | {total['delete_count']}
+    ! style="text-align:left;" | {total['restore_count']}
+    ! style="text-align:left;" | {total['revision_count']}
+    ! style="text-align:left;" | {total['protect_count']}
+    ! style="text-align:left;" | {total['unprotect_count']}
+    ! style="text-align:left;" | {total['modify_count']}
+    ! style="text-align:left;" | {total['block_count']}
+    ! style="text-align:left;" | {total['unblock_count']}
+    ! style="text-align:left;" | {total['reblock_count']}
+    ! style="text-align:left;" | {total['rights_count']}
+    ! style="text-align:left;" | {sum(total.values())}
+    \n"""
+    return text
+
 columns = [
     ("الرقم", None, index),
     ("المستخدم", None, username),
@@ -162,7 +166,8 @@ columns = [
 
 ]
 
-tables.add_table("main_table", columns, start_main_table("الإحصاءات الكاملة"), end_main_table(), end_row_text=end_row_in_main)
+tables.add_table("main_table", columns, start_main_table("الإحصاءات الكاملة"), end_main_table(),
+                 end_row_text=end_row_in_main)
 
 # Create an instance of the updater and update the page
 updater = UpdatePage(query, file_path, page_name, tables)
