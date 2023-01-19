@@ -163,7 +163,7 @@ columns = [
     ("رفع المنع", "unblock_count"),
     ("تغيير مدة المنع", "reblock_count"),
     ("تغيير صلاحيات", "rights_count"),
-    ("المحموع", None, total),
+    ("المجموع", None, total),
 
 ]
 
