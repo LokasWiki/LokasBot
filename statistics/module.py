@@ -118,6 +118,7 @@ class ArticleTable:
         self.header_text = ""
         self.footer_text = ""
         self.add_end_row_to_table = None
+        self.sort_column = None
 
     def add_column(self, name, value_index, clause=None):
         self.columns.append((name, value_index, clause))
@@ -128,7 +129,13 @@ class ArticleTable:
     def add_footer(self, text):
         self.footer_text = text
 
+    def set_sort_column(self, column_name):
+        self.sort_column = column_name
+
     def build_table(self, result, end_row_in_table=None):
+        if self.sort_column:
+            result = sorted(result, key=lambda x: x[self.sort_column], reverse=True)
+
         # create the table header
         header = '{| class="wikitable sortable"\n'
         for column_name, _, _ in self.columns:
@@ -189,7 +196,7 @@ class ArticleTables:
     def __init__(self):
         self.tables = []
 
-    def add_table(self, name, columns, header_text=None, footer_text=None, end_row_text=None):
+    def add_table(self, name, columns, header_text=None, footer_text=None, end_row_text=None,sort_column = None):
         table = ArticleTable()
         if header_text is not None:
             table.add_header(header_text)
@@ -199,6 +206,9 @@ class ArticleTables:
 
         if end_row_text is not None:
             table.add_end_row_to_table = end_row_text
+
+        if sort_column is not None:
+            table.set_sort_column(sort_column)
 
         for column in columns:
             column_name = column[0]

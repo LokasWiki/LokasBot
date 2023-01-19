@@ -37,10 +37,9 @@ query = """SELECT user_name,
        (select count(*) from logging
                                  inner join actor on actor_id = log_actor
         where actor_user = user_id and log_type = "rights" ) as "rights_count"
-
 FROM user
          JOIN user_groups ON user_id = ug_user
-WHERE ug_group = "sysop"
+WHERE ug_group = "sysop" and user_name not in ("مرشح الإساءة")
 ORDER BY user_name ASC , delete_count DESC, restore_count DESC, revision_count DESC, event_count DESC, protect_count DESC, unprotect_count DESC, modify_count DESC, block_count DESC, unblock_count DESC, reblock_count DESC, rights_count DESC;"""
 
 file_path = 'stub/administrators_activity.txt'
@@ -93,41 +92,42 @@ def total(row, result, index):
 
 tables.add_table("delete_count_table",
                  [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "delete_count"), ],
-                 start_table("حذف"), end_table())
+                 start_table("حذف"), end_table(), sort_column='delete_count')
 tables.add_table("restore_count_table",
                  [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "restore_count"), ],
-                 start_table("استرجاع"), end_table())
+                 start_table("استرجاع"), end_table(), sort_column="restore_count")
 tables.add_table("revision_count_table",
                  [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "revision_count"), ],
-                 start_table("إخفاء نسخة"), end_table())
+                 start_table("إخفاء نسخة"), end_table(), sort_column="revision_count")
 tables.add_table("event_count_table",
                  [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "event_count"), ],
-                 start_table("  حذف النسخة المُعدله"), end_table())
+                 start_table("  حذف النسخة المُعدله"), end_table(), sort_column="event_count")
 tables.add_table("protect_count_table",
                  [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "protect_count"), ],
-                 start_table("حماية"), end_table())
+                 start_table("حماية"), end_table(), sort_column="protect_count")
 tables.add_table("unprotect_count_table",
                  [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "unprotect_count"), ],
-                 start_table("  إزالة الحماية"), end_table())
+                 start_table("  إزالة الحماية"), end_table(), sort_column="unprotect_count")
 tables.add_table("modify_count_table",
                  [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "modify_count"), ],
-                 start_table("تغيير الحماية"), end_table())
+                 start_table("تغيير الحماية"), end_table(), sort_column="modify_count")
 tables.add_table("block_count_table",
                  [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "block_count"), ],
-                 start_table("  منع "), end_table())
+                 start_table("  منع "), end_table(), sort_column="block_count")
 tables.add_table("unblock_count_table",
                  [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "unblock_count"), ],
-                 start_table("    رفع المنع"), end_table())
+                 start_table("    رفع المنع"), end_table(), sort_column="unblock_count")
 tables.add_table("reblock_count_table",
                  [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "reblock_count"), ],
-                 start_table("  تغيير مدة المنع"), end_table())
+                 start_table("  تغيير مدة المنع"), end_table(), sort_column="reblock_count")
 tables.add_table("rights_count_table",
                  [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "rights_count"), ],
-                 start_table("  تغيير صلاحيات"), end_table())
+                 start_table("  تغيير صلاحيات"), end_table(), sort_column="rights_count")
 
 
 def end_row_in_main(result):
-    total = {'delete_count': 0, 'restore_count': 0, 'revision_count': 0,'event_count': 0, 'protect_count': 0, 'unprotect_count': 0,
+    total = {'delete_count': 0, 'restore_count': 0, 'revision_count': 0, 'event_count': 0, 'protect_count': 0,
+             'unprotect_count': 0,
              'modify_count': 0, 'block_count': 0, 'unblock_count': 0, 'reblock_count': 0, 'rights_count': 0}
     for row in result:
         for key in total:
@@ -148,6 +148,7 @@ def end_row_in_main(result):
     ! style="text-align:left;" | {sum(total.values())}
     \n"""
     return text
+
 
 columns = [
     ("الرقم", None, index),
