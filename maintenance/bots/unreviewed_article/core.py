@@ -35,7 +35,7 @@ class UnreviewedArticle:
         text = self.page.text
         template = re.compile(r"{{مقالة غير مراجعة(?:\|[^}]+)?}}")
         if not template.search(text):
-            newText = "{{مقالة غير مراجعة|تاريخ = {{safesubst:#وقت:F Y}}}}"
+            newText = "{{مقالة غير مراجعة|تاريخ = {{نسخ:شهر وسنة}}}}"
             newText += "\n"
             newText += text
             self._page.text = newText

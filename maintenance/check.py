@@ -6,7 +6,7 @@ import pywikibot
 
 from bots.unreviewed_article.core import UnreviewedArticle
 
-title =  "أحمد بن سلطان بن جاسم بن محمد آل ثاني"
+title =  "ابن حجر العسقلاني"
 site = pywikibot.Site("ar", "wikipedia")
 page = UnreviewedArticle(site)
 page.title = title
