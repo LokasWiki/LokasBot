@@ -9,7 +9,7 @@ import pywikibot
 
 site = pywikibot.Site()
 
-start = pywikibot.Timestamp.now() - datetime.timedelta(minutes=20)
+start = pywikibot.Timestamp.now() - datetime.timedelta(hours=6)
 end = pywikibot.Timestamp.now()
 
 
