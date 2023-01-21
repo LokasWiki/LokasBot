@@ -3,7 +3,28 @@ import re
 import pywikibot
 import requests
 
+"""
+The UnreviewedArticle class is a class that can be used to interact with a MediaWiki article.
+ An instance of this class is created with the following parameters:
 
+site: A pywikibot.Site object representing the site where the article is located
+The class contains the following properties:
+
+title: A string representing the title of the article
+page: A pywikibot.page.Page object representing the article
+The class contains the following methods:
+
+load_page(): loads the article's Page object and assigns it to the page property.
+ This method is called automatically when the page property is accessed if it is not already loaded.
+get_page_text(): returns the text of the article.
+add_template(): adds the {{مقالة غير مراجعة}} template to the article's text and saves the article.
+remove_template(): removes the {{مقالة غير مراجعة}} template from the article's text and saves the article.
+check(): checks if the article is flagged as reviewed or not, using the MediaWiki API.
+
+Please note that you should use this class with care, as it is making changes to the articles in the wiki.
+ It is always recommended to test it on a test wiki before using it on a production wiki.
+
+"""
 class UnreviewedArticle:
     def __init__(self, site):
         """
