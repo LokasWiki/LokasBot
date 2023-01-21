@@ -39,7 +39,8 @@ class UnreviewedArticle:
             newText += "\n"
             newText += text
             self._page.text = newText
-            self._page.save("بوت:صيانة V1.0، أضاف وسم مقالة غير مراجعة")
+            if self._page.exists() and (not self.page.isRedirectPage()):
+                self._page.save("بوت:صيانة V1.0، أضاف وسم مقالة غير مراجعة")
 
     def remove_template(self):
         text = self.page.text
@@ -47,7 +48,8 @@ class UnreviewedArticle:
         new_text = template.sub("", text)
         if new_text != text:
             self.page.text = new_text
-            self._page.save("بوت:صيانة V1.0، حذف وسم مقالة غير مراجعة")
+            if self._page.exists() and (not self.page.isRedirectPage()):
+                self._page.save("بوت:صيانة V1.0، حذف وسم مقالة غير مراجعة")
 
     def check(self):
         params = {
