@@ -1,3 +1,5 @@
+import re
+
 import pywikibot
 import requests
 
@@ -30,10 +32,22 @@ class UnreviewedArticle:
         return text
 
     def add_template(self):
-        print("start add template")
+        text = self.page.text
+        template = re.compile(r"{{مقالة غير مراجعة(?:\|[^}]+)?}}")
+        if not template.search(text):
+            newText = "{{مقالة غير مراجعة|تاريخ = {{safesubst:#وقت:F Y}}}}"
+            newText += "\n"
+            newText += text
+            self._page.text = newText
+            self._page.save("بوت:صيانة V1.0، أضاف وسم مقالة غير مراجعة")
 
     def remove_template(self):
-        print("start remove template")
+        text = self.page.text
+        template = re.compile(r"{{مقالة غير مراجعة(?:\|[^}]+)?}}")
+        new_text = template.sub("", text)
+        if new_text != text:
+            self.page.text = new_text
+            self._page.save("بوت:صيانة V1.0، حذف وسم مقالة غير مراجعة")
 
     def check(self):
         params = {
@@ -43,6 +57,7 @@ class UnreviewedArticle:
             "titles": self.page.title(),
             "formatversion": 2
         }
+
         request = pywikibot.data.api.Request(site=self.page.site, **params)
         data = request.submit()
         pages = data["query"]["pages"]
@@ -51,4 +66,3 @@ class UnreviewedArticle:
                 if page["flagged"]:
                     return True
         return False
-

@@ -11,7 +11,7 @@ site = pywikibot.Site("ar", "wikipedia")
 page = UnreviewedArticle(site)
 page.title = title
 page.load_page()
-if page.check() == False:
+if not page.check():
     page.add_template()
 else:
     page.remove_template()
