@@ -6,7 +6,7 @@ import datetime
 
 import pywikibot
 from pywikibot import pagegenerators
-
+import time
 from bots.unreviewed_article.core import UnreviewedArticle
 
 import pywikibot
@@ -29,8 +29,10 @@ gen = set(gen)
 gen = filter(lambda page: page.exists(), gen)
 
 for entry in gen:
+
     page1 = pywikibot.Page(site, entry.title())
     if not page1.isRedirectPage():
+        time.sleep(2)
         print(entry.title())
         try:
             title = entry.title()
