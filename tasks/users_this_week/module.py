@@ -261,6 +261,7 @@ class SubPage(Base):
     """
     SubPage class is used to create a subpage and save it on Wikipedia.
     """
+
     def __init__(self, input_dict):
         """
         Initializes a SubPage object with the provided input dictionary.
@@ -352,8 +353,8 @@ class SendTemplate(Base):
                 # Add a new section to the page
                 title = 'تهانينا'
                 content = self.input_dict['template_stub'].replace('YEAR_NUMBER', str(self.year)).replace("WEEK_NUMBER",
-                                                                                                        str(self.week)).replace(
-                    "RANK", self.translator.translate_rank(str(rank - 1)))
+                                                                                                          str(self.week)).replace(
+                    "RANK", self.translator.translate_rank(str(rank - 1))).replace("USER_NAME", name)
 
                 try:
                     topic = board.new_topic(title, content)
@@ -367,7 +368,7 @@ class SendTemplate(Base):
                 text += '\n\n== تهانينا ==\n\n'
                 text += self.input_dict['template_stub'].replace('YEAR_NUMBER', str(self.year)).replace("WEEK_NUMBER",
                                                                                                         str(self.week)).replace(
-                    "RANK", self.translator.translate_rank(str(rank - 1)))
+                    "RANK", self.translator.translate_rank(str(rank - 1))).replace("USER_NAME", name)
 
                 text += "\n~~~~"
                 try:
@@ -386,6 +387,7 @@ class MainPage(Base):
     MainPage is a class used to represent the main page of the Active Users of the Week competition.
     It provides methods to read the page text from a file and save the page to Wikipedia.
     """
+
     def __init__(self, title_of_page, summary, stub):
         """
         Initializes a MainPage instance with the given title, summary, and stub file.

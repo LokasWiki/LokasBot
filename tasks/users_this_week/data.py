@@ -16,7 +16,7 @@ list_page_sub_pages = [
         "summary": "update",
         "team": "المستخدمون الـ5 الأوائل في إنشاء المقالات",
         "activity": "مقالات",
-        "template_stub":"{{وسام كاتب الأسبوع|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد إنشاء المقالات}}",
+        "template_stub":"{{وسام كاتب الأسبوع|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد إنشاء المقالات|USER_NAME}}",
         'query': """SELECT actor_name as name, COUNT(*) as score
     FROM revision r
     INNER JOIN actor ON r.rev_actor = actor.actor_id
@@ -46,7 +46,7 @@ and pl_namespace = 2)
         "summary": "update",
         "activity": "مراجعة للمقالات",
         "team": "أكثر 5 مستخدمين مراجعة للمقالات",
-        "template_stub":"{{وسام مراجع مقالات الأسبوع|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد مراجعة المقالات}}",
+        "template_stub":"{{وسام مراجع مقالات الأسبوع|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد مراجعة المقالات|USER_NAME}}",
         'query': """select
   actor_name as name,
   COUNT(*) as score
@@ -79,7 +79,7 @@ LIMIT 10;"""
         "summary": "update",
         "activity": "أفعال إدارية",
         "team": "الإداريون الذين أجروا أكبر عدد من الأعمال الإدارية",
-        "template_stub": "{{وسام إداري الأسبوع|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد الأعمال الإدارية يدوياً}}",
+        "template_stub": "{{وسام إداري الأسبوع|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد الأعمال الإدارية يدويا|USER_NAMEً}}",
         'query': """select actor_name as name, COUNT(*) as score
 from logging
 INNER JOIN actor on logging.log_actor = actor_id
@@ -100,7 +100,7 @@ LIMIT 10;"""
         "title_of_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER/إضافة نصوص",
         "summary": "update",
         "team": "المستخدمون الـ 5 الأوائل في إضافة نصوص",
-        "template_stub":"{{وسام الأسبوع 2|WEEK_NUMBER YEAR_NUMBER|RANK|بإضافة النصوص}}",
+        "template_stub":"{{وسام الأسبوع 2|WEEK_NUMBER YEAR_NUMBER|RANK|بإضافة النصوص|USER_NAME}}",
         "activity": "إضافة نصوص",
         'query': """SELECT actor_name as name, SUM(CAST(rev.rev_len as signed)-CAST(parent.rev_len as signed)) AS score, COUNT(rev.rev_id) as edit_count
 FROM revision rev
@@ -138,7 +138,7 @@ LIMIT 10;"""
         "summary": "update",
         "activity": "مراجعة للتعديلات",
         "team": "أكثر 5 مستخدمين مراجعة للتعديلات",
-        "template_stub" : "{{وسام مراجع تعديلات الأسبوع|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد مراجعة التعديلات المعلقة}}",
+        "template_stub" : "{{وسام مراجع تعديلات الأسبوع|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد مراجعة التعديلات المعلقة|USER_NAME}}",
         'query': """select actor_name as name, COUNT(*) as score
     from logging
     INNER JOIN actor ON actor.actor_id = logging.log_actor
@@ -164,7 +164,7 @@ and pl_namespace = 2)
         "title_of_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER/تعديلات",
         "summary": "update",
         "team": "المستخدمون الـ5 الأوائل بعدد التعديلات",
-        "template_stub":"{{وسام الأسبوع 1|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد التعديلات هذا الأسبوع}}",
+        "template_stub":"{{وسام الأسبوع 1|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد التعديلات هذا الأسبوع|USER_NAME}}",
         "activity": "تعديلات",
         'query': """SELECT actor_name as name, COUNT(rev.rev_id) as score
 FROM revision rev
@@ -193,7 +193,7 @@ LIMIT 10;"""
         "summary": "update",
         "activity": "تعديلات",
         "team": "أنشط 5 مستخدمين بين المستخدمين الواعدين",
-        "template_stub":"{{وسام الأسبوع 3|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد التعديلات لحديثي التسجيل}}",
+        "template_stub":"{{وسام الأسبوع 3|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد التعديلات لحديثي التسجيل|USER_NAME}}",
         'query': """SELECT actor_name as name, COUNT(revision.rev_id) AS score
 FROM user
 INNER JOIN actor ON user_id = actor_user
