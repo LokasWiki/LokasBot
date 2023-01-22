@@ -22,3 +22,9 @@
   image: tf-python39
   emails: onfailure
   <<: *defaults
+- name: clear-sandbox
+  command: $HOME/repos/jobs/clear_sandbox.sh
+  schedule: '0 */12 * * *'
+  image: tf-python39
+  emails: onfailure
+  <<: *defaults
