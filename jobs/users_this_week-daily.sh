@@ -6,4 +6,4 @@
 export PYWIKIBOT_DIR="$HOME/repos"
 
 
-python3  "$HOME"/repos/users_this_week/daily.py
+python3  "$HOME"/repos/tasks/users_this_week/daily.py

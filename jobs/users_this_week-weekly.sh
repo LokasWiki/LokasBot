@@ -5,4 +5,4 @@ set -euo pipefail
 
 export PYWIKIBOT_DIR="$HOME/repos"
 
-python3 "$HOME"/repos/users_this_week/week.py
+python3 "$HOME"/repos/tasks/users_this_week/week.py
