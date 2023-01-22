@@ -1,7 +1,10 @@
 #!/bin/bash
 set -euo pipefail
 
-. "$HOME"/repos/.venvs/bin/activate
+
+. "$HOME"/repos/.venvs/lokas-bot-scripts/bin/activate
+
+export PYWIKIBOT_DIR="$HOME/repos"
 
 python3 "$HOME"/repos/statistics/articles_containing_linked_email_addresses.py
 python3 "$HOME"/repos/statistics/users_by_number_of_help_pages_creation_with_bot.py
@@ -30,4 +33,4 @@ python3 "$HOME"/repos/statistics/users_by_number_of_help_pages_creation.py
 python3 "$HOME"/repos/statistics/wikipedians_without_permission.py
 python3 "$HOME"/repos/statistics/activity_of_bureaucrats.py
 python3 "$HOME"/repos/statistics/list_of_wikipedians_by_number_of_revision_edits.py
-python3 "$HOME"/repos/statistics/activity_of_bureaucrats.py
+python3 "$HOME"/repos/statistics/administrators_activity.py
