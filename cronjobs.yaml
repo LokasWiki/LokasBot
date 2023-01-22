@@ -29,13 +29,13 @@
   emails: onfailure
   <<: *defaults
 - name: maintenance-10
-  command: $HOME/repos/jobs/clear_sandbox.sh
+  command: $HOME/repos/jobs/maintenance/maintenance.sh
   schedule: '*/10 * * * *'
   image: tf-python39
   emails: onfailure
   <<: *defaults
 - name: maintenance-120
-  command: $HOME/repos/jobs/clear_sandbox.sh
+  command: $HOME/repos/jobs/maintenance/maintenance-daily.sh
   schedule: '*/120 * * * * '
   image: tf-python39
   emails: onfailure
