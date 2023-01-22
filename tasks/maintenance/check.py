@@ -7,10 +7,15 @@ from bots.unreviewed_article.core import UnreviewedArticle
 
 import pywikibot
 
+import sys
+
 site = pywikibot.Site()
 
-start = pywikibot.Timestamp.now() - datetime.timedelta(minutes=20)
+time_before_start = int(sys.argv[1])
+
+start = pywikibot.Timestamp.now() - datetime.timedelta(minutes=time_before_start)
 end = pywikibot.Timestamp.now()
+
 
 
 gen = pagegenerators.RecentChangesPageGenerator(site=site, start=start, end=end, namespaces=[0],reverse=True)
