@@ -7,14 +7,23 @@
 - name: statistics-daily
   command: $HOME/repos/jobs/statistics-daily.sh
   schedule: '0 5 * * *'
+  image: tf-python39
   emails: onfailure
   <<: *defaults
 - name: utw-daily
   command: $HOME/repos/jobs/users_this_week-daily.sh
   schedule: '0 1 * * *'
+  image: tf-python39
   emails: onfailure
   <<: *defaults
-# - name: utw-weekly
+#- name: utw-weekly
+#  command: $HOME/repos/jobs/users_this_week-weekly.sh
+#  schedule: '0 1 * * *'
+#  image: tf-python39
+#  emails: onfailure
+#  <<: *defaults
+#
+#- name: utw-weekly
 #   command: $HOME/repos/jobs/users_this_week-weekly.sh
 #   schedule: '17 1 * * *'
 #   emails: onfailure
