@@ -16,8 +16,8 @@ rm -fdr $HOME/repos && git clone --recurse-submodules https://github.com/loka1/L
 toolforge-jobs load $HOME/repos/cronjobs.yaml
 ```
 
-## run job for one time 
-```` bash 
+## run job for one time
+```` bash
 toolforge-jobs run script --command $HOME/repos/jobs/statistics-daily --image tf-python39 --wait
 ````
 
