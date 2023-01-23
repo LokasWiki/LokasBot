@@ -1,5 +1,5 @@
 import datetime
-
+import itertools
 import pywikibot
 from pywikibot import pagegenerators
 import time
@@ -18,10 +18,13 @@ end = pywikibot.Timestamp.now()
 
 
 
-gen = pagegenerators.RecentChangesPageGenerator(site=site, start=start, end=end, namespaces=[0],reverse=True)
+gen1 = pagegenerators.RecentChangesPageGenerator(site=site, start=start, end=end, namespaces=[0],reverse=True)
+gen2 = pagegenerators.LogeventsPageGenerator(logtype="review",total=3000,site=site,start=start, end=end, namespace=0,reverse=True)
+
+merged_gen = itertools.chain(gen1,gen2)
 
 # To remove duplicate pages from the generator
-gen = set(gen)
+gen = set(merged_gen)
 
 # To remove deleted pages from the generator,
 gen = filter(lambda page: page.exists(), gen)

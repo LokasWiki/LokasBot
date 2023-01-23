@@ -34,15 +34,22 @@
   <<: *defaults
 - name: maintenance-10
   no-filelog: false
-  command: $HOME/repos/jobs/maintenance/maintenance.sh
+  command: $HOME/repos/jobs/maintenance.sh 20
   schedule: '*/10 * * * *'
   image: tf-python39
   emails: onfailure
   <<: *defaults
 - name: maintenance-120
   no-filelog: false
-  command: $HOME/repos/jobs/maintenance/maintenance-daily.sh
+  command: $HOME/repos/jobs/maintenance.sh 200
   schedule: '*/120 * * * * '
+  image: tf-python39
+  emails: onfailure
+  <<: *defaults
+- name: maintenance-daily
+  no-filelog: false
+  command: $HOME/repos/jobs/maintenance.sh 2040
+  schedule: '0 1 * * *'
   image: tf-python39
   emails: onfailure
   <<: *defaults
