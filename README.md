@@ -14,7 +14,7 @@ Toolforge setup and job management
     cp $HOME/user-password.py $HOME/repos
     ```
 - ### Load jobs
-    
+
     ``` bash
     toolforge-jobs load $HOME/repos/cronjobs.yaml
     ```
@@ -63,7 +63,7 @@ Toolforge setup and job management
                             MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
                     volumes:
                             - db:/var/lib/mysql
-    
+
     volumes:
             images:
             db:
