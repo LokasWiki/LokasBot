@@ -44,7 +44,14 @@ for p in list(cat_page.articles()):
     # check if user in not ip
     if not user.isAnonymous():
         user_talk_page = user.getUserTalkPage()
+
+        # get old prev_text
         prev_text = ""
+        for ut_revision in user_talk_page.revisions(endtime=delete_revision_timestamp,total=1, reverse=True):
+            revid = ut_revision['revid']
+            # get text of revision
+            prev_text = user_talk_page.getOldVersion(revid)
+
         # start to get all revisions of user talk page to check if user not get alert
         for ut_revision in user_talk_page.revisions(starttime=delete_revision_timestamp, reverse=True):
             # get revision id
