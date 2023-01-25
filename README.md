@@ -36,10 +36,9 @@ Toolforge setup and job management
 - ```` bash
   rm -fdr "$HOME/www/python"
   mkdir -p "$HOME/www/python/app"
-  cp -r $HOME/repos/LokasBot-web $HOME/www/python/app
+  cp -a $HOME/repos/LokasBot-web/. $HOME/www/python/app/
   chmod -R ug+x $HOME/www/python/app/bin/setup-venvs.sh
-  sh $HOME/www/python/app/bin/setup-venvs.sh
-  cd "$HOME/www/python/app"
+  .$HOME/www/python/app/bin/setup-venvs.sh
   exit
   ````
   
