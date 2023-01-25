@@ -14,10 +14,11 @@ conn = sqlite3.connect(database_path)
 cursor = conn.cursor()
 
 try:
-    cursor.execute("SELECT title FROM pages WHERE status=0 LIMIT 20")
+    cursor.execute("SELECT title FROM pages WHERE status=0 LIMIT 30")
     rows = cursor.fetchall()
     if rows:
         for row in rows:
+            time.sleep(2)
             title = row[0]
             print(title)
             try:
@@ -30,7 +31,6 @@ try:
                     page.add_template()
                 else:
                     page.remove_template()
-                time.sleep(2)
                 cursor.execute("DELETE FROM pages WHERE title = ?", (title,))
                 conn.commit()
             except Exception as e:

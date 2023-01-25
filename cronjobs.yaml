@@ -34,21 +34,34 @@
   <<: *defaults
 - name: maintenance-10
   no-filelog: false
-  command: $HOME/repos/jobs/maintenance.sh 20
+  command: $HOME/repos/jobs/maintenance_read.sh 20
   schedule: '*/10 * * * *'
+  image: tf-python39
+  emails: onfailure
+  <<: *defaults
+- name: maintenance-check-5
+  no-filelog: false
+  command: $HOME/repos/jobs/maintenance_check.sh
+  schedule: '*/7 * * * *'
   image: tf-python39
   emails: onfailure
   <<: *defaults
 - name: maintenance-120
   no-filelog: false
-  command: $HOME/repos/jobs/maintenance.sh 200
+  command: $HOME/repos/jobs/maintenance_read.sh 200
   schedule: '*/120 * * * * '
   image: tf-python39
   emails: onfailure
-  <<: *defaults
-- name: maintenance-daily
+- name: maintenance-6h
   no-filelog: false
-  command: $HOME/repos/jobs/maintenance.sh 2040
+  command: $HOME/repos/jobs/maintenance_read.sh 500
+  schedule: '0 */6 * * *'
+  image: tf-python39
+  emails: onfailure
+  <<: *defaults
+- name: maintenance-24h
+  no-filelog: false
+  command: $HOME/repos/jobs/maintenance_read.sh 2540
   schedule: '0 1 * * *'
   image: tf-python39
   emails: onfailure
