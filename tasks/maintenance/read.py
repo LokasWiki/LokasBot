@@ -30,12 +30,12 @@ gen = filter(lambda page: page.exists(), gen)
 
 # This will create a pages.db file in the home directory of the user running the script.
 home_path = os.path.expanduser("~")
-database_path = os.path.join(home_path, "pages.db")
+database_path = os.path.join(home_path, "maintenance.db")
 conn = sqlite3.connect(database_path)
 cursor = conn.cursor()
 
 # Create the table with a status column
-cursor.execute('''CREATE TABLE IF NOT EXISTS pages (title TEXT PRIMARY KEY, status INTEGER)''')
+cursor.execute('''CREATE TABLE IF NOT EXISTS pages (title TEXT PRIMARY KEY, status INTEGER, date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)''')
 
 for entry in gen:
     page1 = pywikibot.Page(site, entry.title())
@@ -50,5 +50,6 @@ for entry in gen:
             conn.commit()
         except sqlite3.Error as e:
             print(f"An error occurred while inserting the title {title} into the database: {e}")
+
 
 
