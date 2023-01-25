@@ -45,6 +45,7 @@ for entry in gen:
             title = entry.title()
             cursor.execute("SELECT * FROM pages WHERE title = ?", (title,))
             if cursor.fetchone() is None:
+                print("added : " + title)
                 cursor.execute("INSERT INTO pages (title, status) VALUES (?, 0)", (title,))
             conn.commit()
         except sqlite3.Error as e:

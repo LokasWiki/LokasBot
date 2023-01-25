@@ -13,6 +13,11 @@ database_path = os.path.join(home_path, "pages.db")
 conn = sqlite3.connect(database_path)
 cursor = conn.cursor()
 
+
+# Create the table with a status column
+cursor.execute('''CREATE TABLE IF NOT EXISTS pages (title TEXT PRIMARY KEY, status INTEGER)''')
+
+
 try:
     cursor.execute("SELECT title FROM pages WHERE status=0 LIMIT 30")
     rows = cursor.fetchall()
