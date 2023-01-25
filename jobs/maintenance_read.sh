@@ -5,5 +5,5 @@
 
 export PYWIKIBOT_DIR="$HOME/repos"
 
-
-python3  "$HOME"/repos/tasks/maintenance/check.py "$1"
+python3  "$HOME"/repos/tasks/maintenance/read.py "$1"
+python3  "$HOME"/repos/tasks/maintenance/check.py

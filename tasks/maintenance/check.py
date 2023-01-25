@@ -1,48 +1,41 @@
-import datetime
-import itertools
-import pywikibot
-from pywikibot import pagegenerators
+import os
 import time
-from bots.unreviewed_article.core import UnreviewedArticle
+import sqlite3
 
 import pywikibot
 
-import sys
+from bots.unreviewed_article.core import UnreviewedArticle
 
 site = pywikibot.Site()
 
-time_before_start = int(sys.argv[1])
+home_path = os.path.expanduser("~")
+database_path = os.path.join(home_path, "pages.db")
+conn = sqlite3.connect(database_path)
+cursor = conn.cursor()
 
-start = pywikibot.Timestamp.now() - datetime.timedelta(minutes=time_before_start)
-end = pywikibot.Timestamp.now()
-
-
-
-gen1 = pagegenerators.RecentChangesPageGenerator(site=site, start=start, end=end, namespaces=[0],reverse=True)
-gen2 = pagegenerators.LogeventsPageGenerator(logtype="review",total=3000,site=site,start=start, end=end, namespace=0,reverse=True)
-
-merged_gen = itertools.chain(gen1,gen2)
-
-# To remove duplicate pages from the generator
-gen = set(merged_gen)
-
-# To remove deleted pages from the generator,
-gen = filter(lambda page: page.exists(), gen)
-
-for entry in gen:
-
-    page1 = pywikibot.Page(site, entry.title())
-    if not page1.isRedirectPage():
-        time.sleep(2)
-        print(entry.title())
-        try:
-            title = entry.title()
-            page = UnreviewedArticle(site)
-            page.title = title
-            page.load_page()
-            if not page.check():
-                page.add_template()
-            else:
-                page.remove_template()
-        except Exception as e:
-            print(f"An error occurred while processing {entry.title()}: {e}")
+try:
+    cursor.execute("SELECT title FROM pages WHERE status=0 LIMIT 30")
+    rows = cursor.fetchall()
+    if rows:
+        for row in rows:
+            time.sleep(2)
+            title = row[0]
+            print(title)
+            try:
+                cursor.execute("UPDATE pages SET status = 1 WHERE title = ?", (title,))
+                conn.commit()
+                page = UnreviewedArticle(site)
+                page.title = title
+                page.load_page()
+                if not page.check():
+                    page.add_template()
+                else:
+                    page.remove_template()
+                cursor.execute("DELETE FROM pages WHERE title = ?", (title,))
+                conn.commit()
+            except Exception as e:
+                print(f"An error occurred while processing {title}: {e}")
+    else:
+        time.sleep(60)
+except sqlite3.Error as e:
+    print(f"An error occurred while interacting with the database: {e}")
