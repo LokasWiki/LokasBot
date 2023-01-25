@@ -2,3 +2,6 @@
 	path = pywikibot
 	url = https://github.com/wikimedia/pywikibot.git
 	branch = stable
+[submodule "LokasBot-web"]
+	path = LokasBot-web
+	url = https://github.com/loka1/LokasBot-web.git
