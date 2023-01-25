@@ -24,15 +24,15 @@ Toolforge setup and job management
     toolforge-jobs run script --command $HOME/repos/jobs/statistics-daily.sh --image tf-python39 --wait
     ````
 - ### run tool-bot on web
-  
+
 - ```` bash
   webservice --backend=kubernetes python3.9 stop
   ````
-  
+
 - ```` bash
   webservice --backend=kubernetes python3.9 shell
   ````
-  
+
 - ```` bash
   rm -fdr "$HOME/www/python"
   mkdir -p "$HOME/www/python/app"
@@ -41,7 +41,7 @@ Toolforge setup and job management
   .$HOME/www/python/app/bin/setup-venvs.sh
   exit
   ````
-  
+
 - ```` bash
   webservice --backend=kubernetes python3.9 start
   ````
