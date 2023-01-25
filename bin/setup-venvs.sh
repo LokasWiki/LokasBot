@@ -21,7 +21,5 @@ function setup-venv {
 
 setup-venv lokas-bot-scripts "-U -r $HOME/repos/requirements.txt"
 
-setup-venv lokas-bot-web "-U -r $HOME/repos/LokasBot-web/requirements.txt"
-
 setup-venv pwb "-e $HOME/repos/pywikibot[mwoauth,mwparserfromhell,mysql]"
 

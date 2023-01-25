@@ -23,7 +23,29 @@ Toolforge setup and job management
     ```` bash
     toolforge-jobs run script --command $HOME/repos/jobs/statistics-daily.sh --image tf-python39 --wait
     ````
-
+- ### run tool-bot on web
+  
+- ```` bash
+  webservice --backend=kubernetes python3.9 stop
+  ````
+  
+- ```` bash
+  webservice --backend=kubernetes python3.9 shell
+  ````
+  
+- ```` bash
+  rm -fdr "$HOME/www/python"
+  mkdir -p "$HOME/www/python/app"
+  cp -r $HOME/repos/LokasBot-web $HOME/www/python/app
+  chmod -R ug+x $HOME/www/python/app/bin/setup-venvs.sh
+  sh $HOME/www/python/app/bin/setup-venvs.sh
+  cd "$HOME/www/python/app"
+  exit
+  ````
+  
+- ```` bash
+  webservice --backend=kubernetes python3.9 start
+  ````
 <hr>
 
 # خطوات تثبيت البوت علي الجهاز المحلي
