@@ -35,7 +35,7 @@ conn = sqlite3.connect(database_path)
 cursor = conn.cursor()
 
 # Create the table with a status column
-cursor.execute('''CREATE TABLE IF NOT EXISTS pages (title TEXT PRIMARY KEY, status INTEGER, date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)''')
+cursor.execute('''CREATE TABLE IF NOT EXISTS pages (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, status INTEGER, date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)''')
 
 for entry in gen:
     page1 = pywikibot.Page(site, entry.title())
@@ -51,5 +51,6 @@ for entry in gen:
         except sqlite3.Error as e:
             print(f"An error occurred while inserting the title {title} into the database: {e}")
 
+conn.close()
 
 
