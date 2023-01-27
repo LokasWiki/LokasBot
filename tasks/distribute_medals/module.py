@@ -1,3 +1,6 @@
+import random
+import re
+
 import pywikibot
 import pymysql
 from pywikibot import config as _config
@@ -83,7 +86,8 @@ class Database(Base):
         Args:
             value (str): The new SQL query.
         """
-        self._query = str(value).replace("START_DATE", self.first_day_of_week_formatted).replace("END_DATE",  self.last_day_of_week_formatted)
+        self._query = str(value).replace("START_DATE", self.first_day_of_week_formatted).replace("END_DATE",
+                                                                                                 self.last_day_of_week_formatted)
 
     def get_content_from_database(self):
         """Executes the current SQL query and stores the result in the `result` attribute.
@@ -112,8 +116,70 @@ class Database(Base):
         self._connection = value
 
 
+class SignaturePage:
+    def __init__(self, site):
+        self._title = ""
+        self._page = None
+        self.site = site
+
+    @property
+    def title(self):
+        return self._title
+
+    @title.setter
+    def title(self, value):
+        self._title = value
+
+    @property
+    def page(self):
+        return self._page
+
+    def load_page(self):
+        self._page = pywikibot.Page(self.site, self.title)
+
+    def get_page_text(self):
+        if self._page is None:
+            self.load_page()
+        text = self._page.text
+        return text
+
+
+class SignatureScanner:
+    def __init__(self):
+        self._pattern = None
+        self._requests = []
+        self._have_requests = False
+
+    @property
+    def pattern(self):
+        return self._pattern
+
+    @pattern.setter
+    def pattern(self, value):
+        self._pattern = re.compile(value)
+
+    @property
+    def requests(self):
+        return self._requests
+
+    @property
+    def have_requests(self):
+        return self._have_requests
+
+    def scan(self, text):
+        matches = self._pattern.finditer(text)
+        self._requests = []
+        for match in matches:
+            request = match.groupdict()
+            self._requests.append(request)
+        if self._requests:
+            self._have_requests = True
+        else:
+            self._have_requests = False
+
+
 class SendTemplate(Base):
-    def __init__(self, input_dict):
+    def __init__(self, input_dict,signature_list):
         """
         Initialize a SendTemplate object with a dictionary of input parameters.
         :param input_dict: A dictionary of input parameters with keys:
@@ -123,10 +189,10 @@ class SendTemplate(Base):
         super().__init__()
 
         self.database = Database()
-        self.database.query = str(input_dict['query']).replace("NUMBER_COUNT",input_dict['number'])
+        self.database.query = str(input_dict['query']).replace("NUMBER_COUNT", input_dict['number'])
         self.database.get_content_from_database()
         self.input_dict = input_dict
-
+        self.signature_list = signature_list
     def send(self):
         """
         Send the template to the top 5 users in the database query results.
@@ -156,7 +222,7 @@ class SendTemplate(Base):
 
                 # Add a new section to the page
                 title = 'تهانينا'
-                content = self.input_dict['template_stub'].replace('NUMBER', str(self.input_dict['number']))
+                content = self.input_dict['template_stub'].replace('NUMBER', str(self.input_dict['number'])).replace("SIGNATURE",str(random.choice(self.signature_list)))
 
                 try:
                     topic = board.new_topic(title, content)
@@ -168,7 +234,7 @@ class SendTemplate(Base):
                 # Add a new section to the page
                 text = talk_page.text
                 text += '\n\n== تهانينا ==\n\n'
-                text += self.input_dict['template_stub'].replace('NUMBER', str(self.input_dict['number']))
+                text += self.input_dict['template_stub'].replace('NUMBER', str(self.input_dict['number'])).replace("SIGNATURE",str(random.choice(self.signature_list)))
 
                 text += "\n~~~~"
                 try:
@@ -180,4 +246,3 @@ class SendTemplate(Base):
                     talk_page.save("بوت:[[ويكيبيديا:توزيع أوسمة|توزيع أوسمة]]")
                 except Exception as error:
                     print(f'Error saving page: {error}')
-
