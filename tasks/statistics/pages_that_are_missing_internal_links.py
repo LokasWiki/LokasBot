@@ -28,8 +28,8 @@ def page_title(row, result, index):
 
 
 def page_history(row, result, index):
-    page_title = str(row['ll_user_name'], 'utf-8')
-    return f'[https://ar.wikipedia.org/w/index.php?title={page_title}&action=history تاريخ]'
+    page_title = str(row['ll_page_title'], 'utf-8')
+    return f"[https://ar.wikipedia.org/w/index.php?title={page_title}&action=history تاريخ]"
 
 
 columns = [
