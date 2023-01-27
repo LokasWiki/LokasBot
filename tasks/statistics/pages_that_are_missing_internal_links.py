@@ -18,7 +18,7 @@ tables = ArticleTables()
 def username(row, result, index):
     ll_user_name = str(row['ll_user_name'], 'utf-8')
     # name = username.replace("__", "[LOKA]").replace("_", " ").replace("[LOKA]", "_")
-    return f"[[user:{ll_user_name}|{ll_user_name}]] ([[نقاش المستخدم:{ll_user_name}|نقاش]])"
+    return f"[[مستخدم:{ll_user_name}|{ll_user_name}]] ([[نقاش المستخدم:{ll_user_name}|نقاش]])"
 
 
 def page_title(row, result, index):
