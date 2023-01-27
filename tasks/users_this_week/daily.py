@@ -7,34 +7,60 @@ After all of the sub pages have been generated and saved, the code creates insta
 
 The read_file method reads the contents of a text file and sets the text attribute of the MainPage instance to the contents of the file. The save_page method connects to the Wikipedia site, gets a Page object for the page specified in the title_of_page attribute, sets the text of the page to the contents of the text attribute, and saves the page with the summary specified in the summary attribute.
 """
-from module import SubPage,MainPage
+from module import SubPage, MainPage
 from data import list_page_sub_pages
 
-# Iterate through each page data in list_page_sub_pages
-for page_data in list_page_sub_pages:
-    # Create a SubPage object with the page data
-    obj = SubPage(input_dict=page_data)
-    # Save the page
-    obj.save_page()
 
-# Create a MainPage object for the main page
-main_page = MainPage(
-    title_of_page="DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا",
-    summary="update",
-    stub="stub/main_page.txt",
-)
-# Read the file for the main page
-main_page.read_file()
-# Save the main page
-main_page.save_page()
+def main_page():
+    try:
+        # Create a MainPage object for the main page
+        temp = MainPage(
+            title_of_page="DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا",
+            summary="update",
+            stub="stub/main_page.txt",
+        )
+        # Read the file for the main page
+        temp.read_file()
+        # Save the main page
+        temp.save_page()
+    except Exception as e:
+        print(f"An error occurred while processing : {e}")
 
-# Create a MainPage object for the archive page
-archive_page = MainPage(
-    title_of_page="DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER",
-    summary="update",
-    stub="stub/archive.txt",
-)
-# Read the file for the archive page
-archive_page.read_file()
-# Save the archive page
-archive_page.save_page()
+
+def archive_page():
+    try:
+        # Create a MainPage object for the archive page
+        temp = MainPage(
+            title_of_page="DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER",
+            summary="update",
+            stub="stub/archive.txt",
+        )
+        # Read the file for the archive page
+        temp.read_file()
+        # Save the archive page
+        temp.save_page()
+    except Exception as e:
+        print(f"An error occurred while processing : {e}")
+
+
+def week_pages():
+    # Iterate through each page data in list_page_sub_pages
+    for page_data in list_page_sub_pages:
+        try:
+            # Create a SubPage object with the page data
+            obj = SubPage(input_dict=page_data)
+            # Save the page
+            obj.save_page()
+        except Exception as e:
+            print(f"An error occurred while processing : {e}")
+
+
+def main(*args: str) -> int:
+    week_pages()
+    main_page()
+    archive_page()
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
