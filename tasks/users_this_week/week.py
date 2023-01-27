@@ -6,9 +6,20 @@ The SendTemplate class is responsible for querying a database using the query pr
 
 from module import SendTemplate
 from data import list_page_sub_pages
-# Iterate through each page data in list_page_sub_pages
-for page_data in list_page_sub_pages:
-    # Create a SendTemplate object with the page data
-    obj = SendTemplate(input_dict=page_data)
-    # Send the template to the user
-    obj.send()
+
+
+def main(*args: str) -> int:
+    # Iterate through each page data in list_page_sub_pages
+    for page_data in list_page_sub_pages:
+        try:
+            # Create a SendTemplate object with the page data
+            obj = SendTemplate(input_dict=page_data)
+            # Send the template to the user
+            obj.send()
+        except Exception as e:
+            print(f"An error occurred while processing : {e}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
