@@ -7,6 +7,7 @@ list_of_distribute_medals = [
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp > END_DATE) >= NUMBER_COUNT
+and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882)
 """,
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE}}"
     },
@@ -18,6 +19,7 @@ AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp > END_DATE) >= NUMBER_COUNT
+and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882)
 """,
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE}}"
     },
@@ -29,6 +31,7 @@ AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp > END_DATE) >= NUMBER_COUNT
+and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882)
 """,
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE}}"
     },
@@ -40,6 +43,7 @@ AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp > END_DATE) >= NUMBER_COUNT
+and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882)
 """,
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE}}"
     },
@@ -51,6 +55,7 @@ AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp > END_DATE) >= NUMBER_COUNT
+and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882)
 """,
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE}}"
     },
@@ -62,6 +67,7 @@ AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp > END_DATE) >= NUMBER_COUNT
+and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882)
 """,
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE}}"
     },
@@ -73,6 +79,7 @@ AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp > END_DATE) >= NUMBER_COUNT
+and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882)
 """,
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE}}"
     },
@@ -84,6 +91,7 @@ AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp > END_DATE) >= NUMBER_COUNT
+and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882)
 """,
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE}}"
     },
@@ -95,6 +103,7 @@ AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp > END_DATE) >= NUMBER_COUNT
+and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882)
 """,
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE}}"
     },
@@ -106,6 +115,7 @@ AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp > END_DATE) >= NUMBER_COUNT
+and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882)
 """,
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE}}"
     },
@@ -117,6 +127,7 @@ AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp > END_DATE) >= NUMBER_COUNT
+and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882)
 """,
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE}}"
     },
@@ -128,6 +139,7 @@ AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp > END_DATE) >= NUMBER_COUNT
+and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882)
 """,
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE}}"
     },
@@ -139,6 +151,7 @@ AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp > END_DATE) >= NUMBER_COUNT
+and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882)
 """,
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE}}"
     },
@@ -150,6 +163,7 @@ AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp > END_DATE) >= NUMBER_COUNT
+and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882)
 """,
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE}}"
     },
@@ -161,6 +175,7 @@ AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp > END_DATE) >= NUMBER_COUNT
+and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882)
 """,
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE}}"
     },
@@ -172,6 +187,7 @@ AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp > END_DATE) >= NUMBER_COUNT
+and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882)
 """,
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE}}"
     },
@@ -183,6 +199,7 @@ AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp > END_DATE) >= NUMBER_COUNT
+and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882)
 """,
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE}}"
     },
@@ -194,6 +211,7 @@ AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp > END_DATE) >= NUMBER_COUNT
+and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882)
 """,
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE}}"
     },
@@ -205,6 +223,7 @@ AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id  AND rev_timestamp > END_DATE) >= NUMBER_COUNT
+and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882)
 """,
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE}}"
     },
