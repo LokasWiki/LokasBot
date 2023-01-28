@@ -36,7 +36,7 @@ columns = [
     ("الرقم", None, index),
     ("المقالة", None, page_title),
     ("تاريخ الصفحة", None, page_history),
-    ("الحجم (كيلوبايت)", "ll_page_len"),
+    ("الحجم (بايت)", "ll_page_len"),
     ("أول مساهم", None, username),
 ]
 
