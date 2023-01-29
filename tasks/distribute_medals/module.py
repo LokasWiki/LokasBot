@@ -156,7 +156,7 @@ class SignatureScanner:
 
     @pattern.setter
     def pattern(self, value):
-        self._pattern = re.compile(value)
+        self._pattern = value
 
     @property
     def requests(self):
@@ -167,9 +167,10 @@ class SignatureScanner:
         return self._have_requests
 
     def scan(self, text):
-        matches = self._pattern.finditer(text)
+        matches = re.finditer(self.pattern, text, re.MULTILINE)
         self._requests = []
         for match in matches:
+            print(match.groupdict)
             request = match.groupdict()
             self._requests.append(request)
         if self._requests:
