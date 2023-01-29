@@ -96,7 +96,7 @@ class UnreviewedArticle:
             newText += text
             self._page.text = newText
             if self._page.exists() and (not self.page.isRedirectPage()):
-                self._page.save("بوت:صيانة V2.0، أضاف وسم مقالة غير مراجعة")
+                self._page.save("بوت:صيانة V2.1، أضاف وسم مقالة غير مراجعة")
 
     def remove_template(self):
         """
@@ -108,7 +108,7 @@ class UnreviewedArticle:
         if new_text != text:
             self.page.text = new_text
             if self._page.exists() and (not self.page.isRedirectPage()):
-                self._page.save("بوت:صيانة V2.0، حذف وسم مقالة غير مراجعة")
+                self._page.save("بوت:صيانة V2.1، حذف وسم مقالة غير مراجعة")
 
     def check(self):
         """
