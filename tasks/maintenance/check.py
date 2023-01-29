@@ -22,7 +22,7 @@ def create_database_table():
 
 
 def get_unreviewed_articles(cursor):
-    cursor.execute("SELECT id, title FROM pages WHERE status=0 ORDER BY date ASC LIMIT 50")
+    cursor.execute("SELECT id, title FROM pages WHERE status=0 ORDER BY date ASC LIMIT 100")
     rows = cursor.fetchall()
     return rows
 
