@@ -7,17 +7,16 @@ from module import SendTemplate, SignatureScanner, SignaturePage
 def main(*args: str) -> int:
     site = pywikibot.Site()
     # signaturePage
-    signaturePage = SignaturePage(site)
-    signaturePage.title = "ويكيبيديا:توزيع أوسمة/تواقيع"
+    page = SignaturePage(site)
+    page.title = "ويكيبيديا:توزيع أوسمة/تواقيع"
     #  get list of signatures
     scanner = SignatureScanner()
     scanner.pattern = r"\*(?P<signature>.*?)(?=\*|$)"
-    scanner.scan(signaturePage.get_page_text())
-
+    scanner.scan(page.get_page_text())
     if scanner.have_requests:
         for page_data in list_of_distribute_medals:
             try:
-                # Create a SendTemplate object with the page data
+                # # Create a SendTemplate object with the page data
                 obj = SendTemplate(input_dict=page_data, signature_list=scanner.requests)
                 # Send the template to the user
                 obj.send()

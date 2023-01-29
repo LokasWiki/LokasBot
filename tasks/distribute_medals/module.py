@@ -13,8 +13,8 @@ class Base:
     def __init__(self):
         # for test only
         #
-        first_day = datetime.datetime(2023, 1, 2)
-        last_day = datetime.datetime(2023, 1, 8)
+        first_day = datetime.datetime(2022, 12, 1)
+        last_day = datetime.datetime(2023, 1, 28)
         #
         # # for real
         # first_day = None
@@ -170,7 +170,6 @@ class SignatureScanner:
         matches = re.finditer(self.pattern, text, re.MULTILINE)
         self._requests = []
         for match in matches:
-            print(match.groupdict)
             request = match.groupdict()
             self._requests.append(request)
         if self._requests:
@@ -188,9 +187,8 @@ class SendTemplate(Base):
             - 'template_stub': The stub of the template to be sent to users, with placeholders for year, week, and rank.
         """
         super().__init__()
-
         self.database = Database()
-        self.database.query = str(input_dict['query']).replace("NUMBER_COUNT", input_dict['number'])
+        self.database.query = str(input_dict['query']).replace("NUMBER_COUNT", str(input_dict['number']))
         self.database.get_content_from_database()
         self.input_dict = input_dict
         self.signature_list = signature_list
@@ -201,29 +199,21 @@ class SendTemplate(Base):
         # Set the site and user to be used
         site = pywikibot.Site()
 
-        rank = 1
-        current_score = None
         for member in self.database.result:
-            name = str(member['name'], 'utf-8')
-            score = member['score']
-            if score != current_score:
-                rank = rank + 1
-                current_score = score
-            if rank > 6:
-                break
+            name = str(member['actor_name'], 'utf-8')
 
             # Retrieve the user talk page
             user = pywikibot.User(site, name)
 
             # Get the user page for the user
             talk_page = user.getUserTalkPage()
-
+            signature = str(random.choice(self.signature_list)['signature'])
             if talk_page.is_flow_page():
                 board = pywikibot.flow.Board(talk_page)
 
                 # Add a new section to the page
                 title = 'تهانينا'
-                content = self.input_dict['template_stub'].replace('NUMBER', str(self.input_dict['number'])).replace("SIGNATURE",str(random.choice(self.signature_list)))
+                content = self.input_dict['template_stub'].replace('NUMBER', str(self.input_dict['number'])).replace("SIGNATURE",signature)
 
                 try:
                     topic = board.new_topic(title, content)
@@ -235,9 +225,8 @@ class SendTemplate(Base):
                 # Add a new section to the page
                 text = talk_page.text
                 text += '\n\n== تهانينا ==\n\n'
-                text += self.input_dict['template_stub'].replace('NUMBER', str(self.input_dict['number'])).replace("SIGNATURE",str(random.choice(self.signature_list)))
+                text += self.input_dict['template_stub'].replace('NUMBER', str(self.input_dict['number'])).replace("SIGNATURE",signature)
 
-                text += "\n~~~~"
                 try:
                     # Save the edited page
 
