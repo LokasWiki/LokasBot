@@ -1,11 +1,11 @@
 import sqlite3
 
-import pywikibot
 import pymysql
 from pywikibot import config as _config
 import os
 import datetime
-import pywikibot.flow
+
+from bots.unreviewed_article.core import UnreviewedArticle
 
 
 class Database():
@@ -88,7 +88,6 @@ class Database():
         self._connection = value
 
 
-
 def create_database_table():
     home_path = os.path.expanduser("~")
     database_path = os.path.join(home_path, "maintenance.db")
@@ -141,3 +140,30 @@ def save_pages_to_db(gen, conn, cursor):
             conn.commit()
         except sqlite3.Error as e:
             print(f"An error occurred while inserting the title {entry.title()} into the database: {e}")
+
+
+def get_unreviewed_articles(cursor):
+    cursor.execute("SELECT id, title FROM pages WHERE status=0 ORDER BY date ASC LIMIT 100")
+    rows = cursor.fetchall()
+    return rows
+
+
+def process_unreviewed_article(site, cursor, conn, id, title):
+    try:
+        cursor.execute("UPDATE pages SET status = 1 WHERE id = ?", (id,))
+        conn.commit()
+        page = UnreviewedArticle(site)
+        page.title = title
+        page.load_page()
+        if page.page.exists() and (not page.page.isRedirectPage()):
+            if not page.check():
+                page.add_template()
+            else:
+                page.remove_template()
+        cursor.execute("DELETE FROM pages WHERE id = ?", (id,))
+        conn.commit()
+    except Exception as e:
+        print(f"An error occurred while processing {title}: {e}")
+        cursor.execute("UPDATE pages SET status = 0, date = date + ? WHERE id = ?",
+                       (datetime.timedelta(hours=1), id))
+        conn.commit()
