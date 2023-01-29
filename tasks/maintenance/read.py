@@ -27,7 +27,8 @@ def get_pages(site, start, end):
                                                  namespace=0, reverse=True)
     merged_gen = itertools.chain(gen1, gen2)
     gen = set(merged_gen)
-    gen = filter(lambda page: page.exists(), gen)
+
+    # gen = filter(lambda page: page.exists(), gen)
     return gen
 
 
