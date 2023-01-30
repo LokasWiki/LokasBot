@@ -106,7 +106,7 @@ def get_pages(start):
 FROM (
     SELECT DISTINCT log_title AS "pl_2_title"
     FROM logging
-    WHERE log_type IN ("review") 
+    WHERE log_type IN ("review")
     AND log_namespace IN (0)
     AND log_timestamp > DATE_SUB( now(), INTERVAL MINUTE_SUB_NUMBER MINUTE )
     UNION
