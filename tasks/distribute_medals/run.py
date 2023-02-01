@@ -16,6 +16,7 @@ def main(*args: str) -> int:
     if scanner.have_requests:
         for page_data in list_of_distribute_medals:
             try:
+                print("start get " + str(page_data['number']))
                 # # Create a SendTemplate object with the page data
                 obj = SendTemplate(input_dict=page_data, signature_list=scanner.requests)
                 # Send the template to the user

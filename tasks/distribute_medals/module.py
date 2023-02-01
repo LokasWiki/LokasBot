@@ -14,7 +14,7 @@ class Base:
         # for test only
         #
         first_day = datetime.datetime(2022, 12, 1)
-        last_day = datetime.datetime(2023, 1, 28)
+        last_day = datetime.datetime(2023, 1, 31)
         #
         # # for real
         # first_day = None
@@ -22,7 +22,8 @@ class Base:
 
         self.first_day_of_week = first_day
         # self.last_day_of_week = last_day
-        self.last_day_of_week = self.first_day_of_week + datetime.timedelta(days=6)
+        # self.last_day_of_week = self.first_day_of_week + datetime.timedelta(days=6)
+        self.last_day_of_week = last_day
 
         self.year, self.week, self.day = first_day.isocalendar()
 
@@ -88,6 +89,7 @@ class Database(Base):
         """
         self._query = str(value).replace("START_DATE", self.first_day_of_week_formatted).replace("END_DATE",
                                                                                                  self.last_day_of_week_formatted)
+
 
     def get_content_from_database(self):
         """Executes the current SQL query and stores the result in the `result` attribute.
@@ -205,6 +207,9 @@ class SendTemplate(Base):
             # Retrieve the user talk page
             user = pywikibot.User(site, name)
 
+            if user.is_blocked() or ("BOT" in [str(x).upper() for x in user.groups()]):
+                continue
+
             # Get the user page for the user
             talk_page = user.getUserTalkPage()
             signature = str(random.choice(self.signature_list)['signature'])
@@ -213,9 +218,10 @@ class SendTemplate(Base):
 
                 # Add a new section to the page
                 title = 'تهانينا'
-                content = self.input_dict['template_stub'].replace('NUMBER', str(self.input_dict['number'])).replace("SIGNATURE",signature)
+                content = self.input_dict['template_stub'].replace('NUMBER', str(self.input_dict['number'])).replace("SIGNATURE",signature).replace("USERNAME",name)
 
                 try:
+                    print("start send to " + name)
                     topic = board.new_topic(title, content)
                 except Exception as error:
                     print(f'Error saving page: {error}')
@@ -225,11 +231,11 @@ class SendTemplate(Base):
                 # Add a new section to the page
                 text = talk_page.text
                 text += '\n\n== تهانينا ==\n\n'
-                text += self.input_dict['template_stub'].replace('NUMBER', str(self.input_dict['number'])).replace("SIGNATURE",signature)
+                text += self.input_dict['template_stub'].replace('NUMBER', str(self.input_dict['number'])).replace("SIGNATURE",signature).replace("USERNAME",name)
 
                 try:
                     # Save the edited page
-
+                    print("start send to " + name)
                     talk_page.text = text
 
                     # Save the page
