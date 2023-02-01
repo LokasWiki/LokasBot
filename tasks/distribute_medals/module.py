@@ -13,12 +13,13 @@ class Base:
     def __init__(self):
         # for test only
         #
-        first_day = datetime.datetime(2022, 12, 1)
-        last_day = datetime.datetime(2023, 1, 31)
+        # first_day = datetime.datetime(2022, 12, 1)
+        # last_day = datetime.datetime(2023, 1, 31)
         #
         # # for real
-        # first_day = None
-        # last_day = None
+        #  well run every day
+        first_day = datetime.datetime.now() - datetime.timedelta(days=1)
+        last_day = datetime.datetime.now()
 
         self.first_day_of_week = first_day
         # self.last_day_of_week = last_day
