@@ -24,16 +24,11 @@ class UnreviewedArticle:
         self.summary = summary
 
     def __call__(self):
-
-        if not self.page.check():
-            self.page.add_template()
+        if not self.check():
+            self.add_template()
         else:
-            self.page.remove_template()
-
-        # some processing
-        processed_text = self.text
-        processed_summary = self.summary
-        return processed_text, processed_summary
+            self.remove_template()
+        return self.text, self.summary
 
     def add_template(self):
         """

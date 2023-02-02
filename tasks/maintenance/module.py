@@ -5,6 +5,7 @@ import pywikibot
 from pywikibot import config as _config
 import os
 import datetime
+import traceback
 
 from bots.unreviewed_article import UnreviewedArticle
 
@@ -158,7 +159,8 @@ class Pipeline:
 
     def process(self):
         for step in self.steps:
-            self.text, self.summary = step(self.page, self.text, self.summary)
+            obj = step(self.page, self.text, self.summary)
+            self.text, self.summary = obj()
         return self.text, self.summary
 
 
@@ -167,9 +169,7 @@ def process_article(site, cursor, conn, id, title):
         cursor.execute("UPDATE pages SET status = 1 WHERE id = ?", (id,))
         conn.commit()
         page = pywikibot.Page(site, title)
-        steps = [
-            UnreviewedArticle
-        ]
+        steps = [UnreviewedArticle]
         if page.exists() and (not page.isRedirectPage()):
             text = page.text
             summary = "بوت:صيانة V3.0"
@@ -183,6 +183,8 @@ def process_article(site, cursor, conn, id, title):
         conn.commit()
     except Exception as e:
         print(f"An error occurred while processing {title}: {e}")
+        just_the_string = traceback.format_exc()
+        print(just_the_string)
         cursor.execute("UPDATE pages SET status = 0, date = date + ? WHERE id = ?",
                        (datetime.timedelta(hours=1), id))
         conn.commit()
