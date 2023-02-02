@@ -5,7 +5,7 @@ import pywikibot
 """
 The UnreviewedArticle class is a class that can be used to interact with a MediaWiki article.
  An instance of this class is created with the following parameters:
- 
+
 get_page_text(): returns the text of the article.
 add_template(): adds the {{مقالة غير مراجعة}} template to the article's text and saves the article.
 remove_template(): removes the {{مقالة غير مراجعة}} template from the article's text and saves the article.
