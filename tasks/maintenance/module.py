@@ -1,6 +1,7 @@
 import sqlite3
 
 import pymysql
+import pywikibot
 from pywikibot import config as _config
 import os
 import datetime
@@ -142,7 +143,7 @@ def save_pages_to_db(gen, conn, cursor):
             print(f"An error occurred while inserting the title {entry.title()} into the database: {e}")
 
 
-def get_unreviewed_articles(cursor):
+def get_articles(cursor):
     cursor.execute("SELECT id, title FROM pages WHERE status=0 ORDER BY date ASC LIMIT 100")
     rows = cursor.fetchall()
     return rows
@@ -167,3 +168,41 @@ def process_unreviewed_article(site, cursor, conn, id, title):
         cursor.execute("UPDATE pages SET status = 0, date = date + ? WHERE id = ?",
                        (datetime.timedelta(hours=1), id))
         conn.commit()
+
+def process_article(site, cursor, conn, id, title):
+    try:
+        cursor.execute("UPDATE pages SET status = 1 WHERE id = ?", (id,))
+        conn.commit()
+        page = pywikibot.Page(site, title)
+        steps = [
+
+        ]
+        if page.exists() and (not page.isRedirectPage()):
+            text = page.text
+            summary = "بوت:صيانة V2.1"
+            pipeline = Pipeline(page, text, summary, steps)
+            processed_text, processed_summary = pipeline.process()
+            # write processed text back to the page
+            page.text = processed_text
+            page.save(summary=processed_summary)
+
+        cursor.execute("DELETE FROM pages WHERE id = ?", (id,))
+        conn.commit()
+    except Exception as e:
+        print(f"An error occurred while processing {title}: {e}")
+        cursor.execute("UPDATE pages SET status = 0, date = date + ? WHERE id = ?",
+                       (datetime.timedelta(hours=1), id))
+        conn.commit()
+
+
+class Pipeline:
+    def __init__(self, page, text, summary, steps):
+        self.page = page
+        self.text = text
+        self.summary = summary
+        self.steps = steps
+
+    def process(self):
+        for step in self.steps:
+            self.text, self.summary = step(self.page, self.text, self.summary)
+        return self.text, self.summary

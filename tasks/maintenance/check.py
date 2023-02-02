@@ -6,7 +6,7 @@ import sqlite3
 import pywikibot
 
 
-from module import create_database_table,get_unreviewed_articles,process_unreviewed_article
+from module import create_database_table,get_articles,process_article
 
 
 
@@ -15,14 +15,11 @@ def main():
     try:
         site = pywikibot.Site()
         conn, cursor = create_database_table()
-        rows = get_unreviewed_articles(cursor)
+        rows = get_articles(cursor)
         if rows:
             for row in rows:
-                time.sleep(2)
-                id = row[0]
-                title = row[1]
-                print(title)
-                process_unreviewed_article(site, cursor, conn, id, title)
+                process_article(site, cursor, conn, id=row[0], title=row[1])
+                time.sleep(1)
         else:
             time.sleep(60)
         conn.close()
