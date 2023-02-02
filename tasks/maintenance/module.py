@@ -6,7 +6,7 @@ from pywikibot import config as _config
 import os
 import datetime
 
-from bots.unreviewed_article.core import UnreviewedArticle
+from bots.unreviewed_article import UnreviewedArticle
 
 
 class Database():
@@ -149,25 +149,18 @@ def get_articles(cursor):
     return rows
 
 
-def process_unreviewed_article(site, cursor, conn, id, title):
-    try:
-        cursor.execute("UPDATE pages SET status = 1 WHERE id = ?", (id,))
-        conn.commit()
-        page = UnreviewedArticle(site)
-        page.title = title
-        page.load_page()
-        if page.page.exists() and (not page.page.isRedirectPage()):
-            if not page.check():
-                page.add_template()
-            else:
-                page.remove_template()
-        cursor.execute("DELETE FROM pages WHERE id = ?", (id,))
-        conn.commit()
-    except Exception as e:
-        print(f"An error occurred while processing {title}: {e}")
-        cursor.execute("UPDATE pages SET status = 0, date = date + ? WHERE id = ?",
-                       (datetime.timedelta(hours=1), id))
-        conn.commit()
+class Pipeline:
+    def __init__(self, page, text, summary, steps):
+        self.page = page
+        self.text = text
+        self.summary = summary
+        self.steps = steps
+
+    def process(self):
+        for step in self.steps:
+            self.text, self.summary = step(self.page, self.text, self.summary)
+        return self.text, self.summary
+
 
 def process_article(site, cursor, conn, id, title):
     try:
@@ -175,11 +168,11 @@ def process_article(site, cursor, conn, id, title):
         conn.commit()
         page = pywikibot.Page(site, title)
         steps = [
-
+            UnreviewedArticle
         ]
         if page.exists() and (not page.isRedirectPage()):
             text = page.text
-            summary = "بوت:صيانة V2.1"
+            summary = "بوت:صيانة V3.0"
             pipeline = Pipeline(page, text, summary, steps)
             processed_text, processed_summary = pipeline.process()
             # write processed text back to the page
@@ -193,16 +186,3 @@ def process_article(site, cursor, conn, id, title):
         cursor.execute("UPDATE pages SET status = 0, date = date + ? WHERE id = ?",
                        (datetime.timedelta(hours=1), id))
         conn.commit()
-
-
-class Pipeline:
-    def __init__(self, page, text, summary, steps):
-        self.page = page
-        self.text = text
-        self.summary = summary
-        self.steps = steps
-
-    def process(self):
-        for step in self.steps:
-            self.text, self.summary = step(self.page, self.text, self.summary)
-        return self.text, self.summary
