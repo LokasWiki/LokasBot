@@ -11,6 +11,7 @@ import traceback
 from bots.unreviewed_article import UnreviewedArticle
 from bots.has_categories import HasCategories
 from bots.portals_bar import PortalsBar
+from bots.unreferenced import Unreferenced
 
 class Database():
     """A class for interacting with a database.
@@ -174,7 +175,8 @@ def process_article(site, cursor, conn, id, title):
         steps = [
             UnreviewedArticle,
             HasCategories,
-            PortalsBar
+            PortalsBar,
+            Unreferenced
         ]
         if page.exists() and (not page.isRedirectPage()):
             text = page.text
