@@ -20,8 +20,6 @@ def main():
             for row in rows:
                 process_article(site, cursor, conn, id=row[0], title=row[1])
                 time.sleep(1)
-        else:
-            time.sleep(60)
         conn.close()
     except sqlite3.Error as e:
         print(f"An error occurred while interacting with the database: {e}")

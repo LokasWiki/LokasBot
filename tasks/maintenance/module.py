@@ -10,6 +10,7 @@ import traceback
 # bots
 from bots.unreviewed_article import UnreviewedArticle
 from bots.has_categories import HasCategories
+from bots.portals_bar import PortalsBar
 
 class Database():
     """A class for interacting with a database.
@@ -170,7 +171,11 @@ def process_article(site, cursor, conn, id, title):
         cursor.execute("UPDATE pages SET status = 1 WHERE id = ?", (id,))
         conn.commit()
         page = pywikibot.Page(site, title)
-        steps = [UnreviewedArticle,HasCategories]
+        steps = [
+            UnreviewedArticle,
+            HasCategories,
+            PortalsBar
+        ]
         if page.exists() and (not page.isRedirectPage()):
             text = page.text
             summary = "بوت:صيانة V3.0"
