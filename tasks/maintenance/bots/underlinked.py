@@ -16,10 +16,11 @@ class WikiLinkExtractor:
         for template in templates:
             self.text = self.text.replace(template, "")
 
-        pattern = re.compile(r'\[\[(?!.*:)(.*?)\]\]', re.IGNORECASE)
+        pattern = re.compile(r'\[\[([^:]*?)\]\]', re.IGNORECASE)
+
         matches = re.findall(pattern, self.text)
         for match in matches:
-            if "تصنيف:" not in match.lower() and "Category:" not in match.lower() and ":" not in match.split(":")[0]:
+            if "تصنيف:" not in match.lower() and "Category:" not in match.lower():
                 if "|" in match:
                     link = match.split("|")[0]
                 else:

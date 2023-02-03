@@ -45,7 +45,7 @@ class Orphan:
             self.summary += "، حذف  وسم [[:تصنيف:مقالات يتيمة|يتيمة]]"
 
     def check(self):
-        backlinks = self.page.backlinks(namespaces=0, content=False, follow_redirects=False,filter_redirects=False)
+        backlinks = self.page.backlinks(namespaces=0,content=False,follow_redirects=True,filter_redirects=False)
         num = 0
         has_category = False
         for link in backlinks:
