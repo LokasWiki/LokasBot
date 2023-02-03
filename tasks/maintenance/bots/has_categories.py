@@ -10,6 +10,8 @@ class HasCategories:
         self.summary = summary
 
     def __call__(self):
+        if "(توضيح)" in self.page.title():
+            return self.text, self.summary
         """
             true mean has category -> remove
             false mean not have category -> add

@@ -159,13 +159,15 @@ class Pipeline:
         self.text = text
         self.summary = summary
         self.steps = steps
-
+        self.oldText = text
     def process(self):
         for step in self.steps:
             obj = step(self.page, self.text, self.summary)
             self.text, self.summary = obj()
         return self.text, self.summary
 
+    def hasChange(self):
+        return self.text != self.oldText
 
 def process_article(site, cursor, conn, id, title):
     try:
@@ -184,8 +186,12 @@ def process_article(site, cursor, conn, id, title):
             pipeline = Pipeline(page, text, summary, steps)
             processed_text, processed_summary = pipeline.process()
             # write processed text back to the page
-            page.text = processed_text
-            page.save(summary=processed_summary)
+            if pipeline.hasChange():
+                print("start save "+ page.title())
+                page.text = processed_text
+                page.save(summary=processed_summary)
+            else:
+                print("page not changed " + page.title())
 
         cursor.execute("DELETE FROM pages WHERE id = ?", (id,))
         conn.commit()

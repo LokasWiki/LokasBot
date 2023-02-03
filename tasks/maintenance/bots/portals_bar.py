@@ -8,6 +8,9 @@ class PortalsBar:
         self.summary = summary
 
     def __call__(self):
+        if "(توضيح)" in self.page.title():
+            return self.text, self.summary
+
         if not self.check():
             self.add_template()
         else:
