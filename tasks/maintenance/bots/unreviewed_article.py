@@ -6,15 +6,6 @@ import pywikibot
 The UnreviewedArticle class is a class that can be used to interact with a MediaWiki article.
  An instance of this class is created with the following parameters:
 
-site: A pywikibot.Site object representing the site where the article is located
-The class contains the following properties:
-
-title: A string representing the title of the article
-page: A pywikibot.page.Page object representing the article
-The class contains the following methods:
-
-load_page(): loads the article's Page object and assigns it to the page property.
- This method is called automatically when the page property is accessed if it is not already loaded.
 get_page_text(): returns the text of the article.
 add_template(): adds the {{مقالة غير مراجعة}} template to the article's text and saves the article.
 remove_template(): removes the {{مقالة غير مراجعة}} template from the article's text and saves the article.
@@ -24,91 +15,42 @@ Please note that you should use this class with care, as it is making changes to
  It is always recommended to test it on a test wiki before using it on a production wiki.
 
 """
+
+
 class UnreviewedArticle:
-    def __init__(self, site):
-        """
-        Initialize the UnreviewedArticle class.
+    def __init__(self, page, text, summary):
+        self.page = page
+        self.text = text
+        self.summary = summary
 
-        Parameters:
-            site (pywikibot.site.APISite): The site object to connect to.
-        """
-        self._title = ""
-        self._page = None
-        self.site = site
-
-    @property
-    def title(self):
-        """
-        Get the title of the article.
-
-        Returns:
-            str: The title of the article.
-        """
-        return self._title
-
-    @title.setter
-    def title(self, value):
-        """
-        Set the title of the article.
-
-        Parameters:
-            value (str): The new title of the article.
-        """
-        self._title = value
-
-    @property
-    def page(self):
-        """
-             Get the pywikibot.Page object for the article.
-
-             Returns:
-                 pywikibot.Page: The pywikibot.Page object for the article.
-             """
-        return self._page
-
-    def load_page(self):
-        """
-          Load the pywikibot.Page object for the article.
-          """
-        self._page = pywikibot.Page(self.site, self.title)
-
-    def get_page_text(self):
-        """
-              Get the text content of the article.
-
-              Returns:
-                  str: The text content of the article.
-              """
-        if self._page is None:
-            self.load_page()
-        text = self._page.text
-        return text
+    def __call__(self):
+        if not self.check():
+            self.add_template()
+        else:
+            self.remove_template()
+        return self.text, self.summary
 
     def add_template(self):
         """
         This method adds the {{مقالة غير مراجعة}} template to the page if it doesn't already exist.
         """
-        text = self.page.text
         template = re.compile(r"{{مقالة غير مراجعة(?:\|[^}]+)?}}")
-        if not template.search(text):
-            newText = "{{مقالة غير مراجعة|تاريخ = {{نسخ:شهر وسنة}}}}"
-            newText += "\n"
-            newText += text
-            self._page.text = newText
-            if self._page.exists() and (not self.page.isRedirectPage()):
-                self._page.save("بوت:صيانة V2.1، أضاف وسم مقالة غير مراجعة")
+        if not template.search(self.text):
+            text = "{{مقالة غير مراجعة|تاريخ ={{نسخ:شهر وسنة}}}}"
+            text += "\n"
+            text += self.text
+            self.text = text
+            self.summary += "، أضاف وسم مقالة غير مراجعة"
 
     def remove_template(self):
         """
            This method removes the {{مقالة غير مراجعة}} template from the page if it exists.
            """
-        text = self.page.text
         template = re.compile(r"{{مقالة غير مراجعة(?:\|[^}]+)?}}")
-        new_text = template.sub("", text)
-        if new_text != text:
-            self.page.text = new_text
-            if self._page.exists() and (not self.page.isRedirectPage()):
-                self._page.save("بوت:صيانة V2.1، حذف وسم مقالة غير مراجعة")
+        new_text = template.sub("", self.text)
+        if new_text != self.text:
+            self.text = new_text
+            self.summary += "، حذف وسم مقالة غير مراجعة"
 
     def check(self):
         """

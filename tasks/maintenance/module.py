@@ -1,11 +1,20 @@
 import sqlite3
 
 import pymysql
+import pywikibot
 from pywikibot import config as _config
 import os
 import datetime
+import traceback
 
-from bots.unreviewed_article.core import UnreviewedArticle
+# bots
+from bots.unreviewed_article import UnreviewedArticle
+from bots.has_categories import HasCategories
+from bots.portals_bar import PortalsBar
+from bots.unreferenced import Unreferenced
+from bots.orphan import Orphan
+from bots.dead_end import DeadEnd
+from bots.underlinked import Underlinked
 
 
 class Database():
@@ -106,7 +115,7 @@ def get_pages(start):
 FROM (
     SELECT DISTINCT log_title AS "pl_2_title"
     FROM logging
-    WHERE log_type IN ("review") 
+    WHERE log_type IN ("review")
     AND log_namespace IN (0)
     AND log_timestamp > DATE_SUB( now(), INTERVAL MINUTE_SUB_NUMBER MINUTE )
     UNION
@@ -142,28 +151,76 @@ def save_pages_to_db(gen, conn, cursor):
             print(f"An error occurred while inserting the title {entry.title()} into the database: {e}")
 
 
-def get_unreviewed_articles(cursor):
+def get_articles(cursor):
     cursor.execute("SELECT id, title FROM pages WHERE status=0 ORDER BY date ASC LIMIT 100")
     rows = cursor.fetchall()
     return rows
 
 
-def process_unreviewed_article(site, cursor, conn, id, title):
+class Pipeline:
+    def __init__(self, page, text, summary, steps):
+        self.page = page
+        self.text = text
+        self.summary = summary
+        self.steps = steps
+        self.oldText = text
+
+    def process(self):
+        for step in self.steps:
+            obj = step(self.page, self.text, self.summary)
+            self.text, self.summary = obj()
+        return self.text, self.summary
+
+    def hasChange(self):
+        return self.text != self.oldText
+
+
+def check_status():
+    site = pywikibot.Site()
+    title = "مستخدم:LokasBot/إيقاف مهمة صيانة المقالات"
+    page = pywikibot.Page(site,title)
+    text = page.text
+    if text == "لا":
+        return True
+    return False
+
+def process_article(site, cursor, conn, id, title):
     try:
         cursor.execute("UPDATE pages SET status = 1 WHERE id = ?", (id,))
         conn.commit()
-        page = UnreviewedArticle(site)
-        page.title = title
-        page.load_page()
-        if page.page.exists() and (not page.page.isRedirectPage()):
-            if not page.check():
-                page.add_template()
+        page = pywikibot.Page(site, title)
+        steps = [
+            UnreviewedArticle,
+            HasCategories,
+            PortalsBar,
+            Unreferenced,
+            Orphan,
+            DeadEnd,
+            Underlinked
+        ]
+        if page.exists() and (not page.isRedirectPage()):
+            text = page.text
+            summary = "بوت:صيانة V4.4"
+            pipeline = Pipeline(page, text, summary, steps)
+            processed_text, processed_summary = pipeline.process()
+            # write processed text back to the page
+            if pipeline.hasChange() and check_status():
+                print("start save " + page.title())
+                page.text = processed_text
+                page.save(summary=processed_summary)
             else:
-                page.remove_template()
+                print("page not changed " + page.title())
+
         cursor.execute("DELETE FROM pages WHERE id = ?", (id,))
         conn.commit()
     except Exception as e:
         print(f"An error occurred while processing {title}: {e}")
-        cursor.execute("UPDATE pages SET status = 0, date = date + ? WHERE id = ?",
-                       (datetime.timedelta(hours=1), id))
+        just_the_string = traceback.format_exc()
+        print(just_the_string)
+        delta = datetime.timedelta(hours=1)
+        new_date = datetime.datetime.now() + delta
+        cursor.execute("UPDATE pages SET status = 0, date = ? WHERE id = ?",
+                       (new_date, id))
         conn.commit()
+
+
