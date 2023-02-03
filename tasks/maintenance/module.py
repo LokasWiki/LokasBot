@@ -203,6 +203,6 @@ def process_article(site, cursor, conn, id, title):
         print(just_the_string)
         delta = datetime.timedelta(hours=1)
         new_date = datetime.datetime.now() + delta
-        cursor.execute("UPDATE pages SET status = 0, date = date + ? WHERE id = ?",
+        cursor.execute("UPDATE pages SET status = 0, date = ? WHERE id = ?",
                        (new_date, id))
         conn.commit()
