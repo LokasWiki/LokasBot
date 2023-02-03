@@ -23,7 +23,7 @@ gen = page.backlinks(follow_redirects=False, namespaces=[0, 14, 10, 6], content=
 for p in gen:
     print(p.title())
     text = str(p.text)
-    reg_str = "\[\[(" + re.escape(page_title) + ")(\|(?:.*?))?\]\]"
+    reg_str = r"\[\[(" + re.escape(page_title) + r")(\|(?:.*?))?\]\]"
     print(reg_str)
     link_list = re.findall(reg_str, text)
     # if link_list:
