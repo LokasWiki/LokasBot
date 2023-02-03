@@ -13,6 +13,7 @@ from bots.has_categories import HasCategories
 from bots.portals_bar import PortalsBar
 from bots.unreferenced import Unreferenced
 from bots.orphan import  Orphan
+from bots.dead_end import  DeadEnd
 
 class Database():
     """A class for interacting with a database.
@@ -180,7 +181,8 @@ def process_article(site, cursor, conn, id, title):
             HasCategories,
             PortalsBar,
             Unreferenced,
-            Orphan
+            Orphan,
+            DeadEnd
         ]
         if page.exists() and (not page.isRedirectPage()):
             text = page.text
