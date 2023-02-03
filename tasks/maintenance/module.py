@@ -12,8 +12,10 @@ from bots.unreviewed_article import UnreviewedArticle
 from bots.has_categories import HasCategories
 from bots.portals_bar import PortalsBar
 from bots.unreferenced import Unreferenced
-from bots.orphan import  Orphan
-from bots.dead_end import  DeadEnd
+from bots.orphan import Orphan
+from bots.dead_end import DeadEnd
+from bots.underlinked import Underlinked
+
 
 class Database():
     """A class for interacting with a database.
@@ -162,6 +164,7 @@ class Pipeline:
         self.summary = summary
         self.steps = steps
         self.oldText = text
+
     def process(self):
         for step in self.steps:
             obj = step(self.page, self.text, self.summary)
@@ -170,6 +173,7 @@ class Pipeline:
 
     def hasChange(self):
         return self.text != self.oldText
+
 
 def process_article(site, cursor, conn, id, title):
     try:
@@ -182,7 +186,8 @@ def process_article(site, cursor, conn, id, title):
             PortalsBar,
             Unreferenced,
             Orphan,
-            DeadEnd
+            DeadEnd,
+            Underlinked
         ]
         if page.exists() and (not page.isRedirectPage()):
             text = page.text
@@ -191,7 +196,7 @@ def process_article(site, cursor, conn, id, title):
             processed_text, processed_summary = pipeline.process()
             # write processed text back to the page
             if pipeline.hasChange():
-                print("start save "+ page.title())
+                print("start save " + page.title())
                 page.text = processed_text
                 page.save(summary=processed_summary)
             else:
