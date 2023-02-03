@@ -72,6 +72,6 @@ class Underlinked:
         extractor = WikiLinkExtractor(self.text)
         links = extractor.extract_links()
         num_of_links = len(links)
-        if 1 >= num_of_links < 4:
+        if 1 <= num_of_links < 4:
             return True
         return False
