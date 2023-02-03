@@ -8,7 +8,7 @@ class PortalsBar:
         self.summary = summary
 
     def __call__(self):
-        if "(توضيح)" in self.page.title():
+        if "(توضيح)" in self.page.title() or "{{توضيح" in self.text:
             return self.text, self.summary
 
         if not self.check():

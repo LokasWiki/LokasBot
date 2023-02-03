@@ -11,7 +11,7 @@ class Unreferenced:
         self.templates = ["لا مصدر", "مصدر"]
 
     def __call__(self):
-        if "(توضيح)" in self.page.title():
+        if "(توضيح)" in self.page.title() or "{{توضيح" in self.text:
             return self.text, self.summary
         """
             true mean has category -> remove
