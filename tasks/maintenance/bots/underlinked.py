@@ -28,6 +28,7 @@ class WikiLinkExtractor:
                 self.links.append(link)
         return self.links
 
+
 class Underlinked:
     def __init__(self, page, text, summary):
         self.page = page
@@ -37,12 +38,8 @@ class Underlinked:
     def __call__(self):
         if "(توضيح)" in self.page.title() or "{{توضيح" in self.text:
             return self.text, self.summary
-        """
-            true mean has category -> remove
-            false mean not have category -> add
-        :return:
-        """
-        if not self.check():
+
+        if self.check():
             self.add_template()
         else:
             self.remove_template()
@@ -75,6 +72,6 @@ class Underlinked:
         extractor = WikiLinkExtractor(self.text)
         links = extractor.extract_links()
         num_of_links = len(links)
-        if 1 >= num_of_links < 3:
-            return False
-        return True
+        if 1 >= num_of_links < 4:
+            return True
+        return False
