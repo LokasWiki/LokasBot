@@ -61,8 +61,7 @@ ORDER BY COUNT(cl_from) DESC
 LIMIT 500;"""
 file_path = 'stub/categories_not_found_by_number_of_language_links.txt'
 # page_name = f'ويكيبيديا:إحصاءات/المقالات غير الموجودة حسب عدد وصلات اللغات/{language}'
-# page_name = f'ويكيبيديا:إحصاءات/التصانيف غير الموجودة'
-page_name = f'مستخدم:لوقا/ملعب 10'
+page_name = f'ويكيبيديا:إحصاءات/التصانيف غير الموجودة'
 prefix = f'{language}wiki'
 
 # Get the current time and day of the week
@@ -85,7 +84,8 @@ if day_of_week == 0:
 
     def page_title(row, result, index):
         cat_name = str(row['cl_to'], 'utf-8')
-        return "[[:en:category:"+cat_name+"]]"
+        name = cat_name.replace("__", "[LOKA]").replace("_", " ").replace("[LOKA]", "_")
+        return "[[:en:category:"+cat_name+"|"+name+"]]"
 
     columns = [
         ("الرقم", None, index),
