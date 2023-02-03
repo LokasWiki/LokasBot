@@ -6,7 +6,7 @@ import sqlite3
 import pywikibot
 
 
-from module import create_database_table,get_articles,process_article
+from module import create_database_table,get_articles,process_article,check_status
 
 
 
@@ -16,7 +16,7 @@ def main():
         site = pywikibot.Site()
         conn, cursor = create_database_table()
         rows = get_articles(cursor)
-        if rows:
+        if rows and check_status():
             for row in rows:
                 process_article(site, cursor, conn, id=row[0], title=row[1])
                 time.sleep(1)

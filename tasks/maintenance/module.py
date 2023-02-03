@@ -175,6 +175,15 @@ class Pipeline:
         return self.text != self.oldText
 
 
+def check_status():
+    site = pywikibot.Site()
+    title = "مستخدم:LokasBot/إيقاف مهمة صيانة المقالات"
+    page = pywikibot.Page(site,title)
+    text = page.text
+    if text == "لا":
+        return True
+    return False
+
 def process_article(site, cursor, conn, id, title):
     try:
         cursor.execute("UPDATE pages SET status = 1 WHERE id = ?", (id,))
@@ -195,7 +204,7 @@ def process_article(site, cursor, conn, id, title):
             pipeline = Pipeline(page, text, summary, steps)
             processed_text, processed_summary = pipeline.process()
             # write processed text back to the page
-            if pipeline.hasChange():
+            if pipeline.hasChange() and check_status():
                 print("start save " + page.title())
                 page.text = processed_text
                 page.save(summary=processed_summary)
@@ -213,3 +222,5 @@ def process_article(site, cursor, conn, id, title):
         cursor.execute("UPDATE pages SET status = 0, date = ? WHERE id = ?",
                        (new_date, id))
         conn.commit()
+
+
