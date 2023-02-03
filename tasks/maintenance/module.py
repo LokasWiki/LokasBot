@@ -199,6 +199,8 @@ def process_article(site, cursor, conn, id, title):
         print(f"An error occurred while processing {title}: {e}")
         just_the_string = traceback.format_exc()
         print(just_the_string)
+        delta = datetime.timedelta(hours=1)
+        new_date = datetime.datetime.now() + delta
         cursor.execute("UPDATE pages SET status = 0, date = date + ? WHERE id = ?",
-                       (datetime.timedelta(hours=1), id))
+                       (new_date, id))
         conn.commit()
