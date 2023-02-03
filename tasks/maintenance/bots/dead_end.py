@@ -2,7 +2,35 @@ import re
 
 import pywikibot
 
-from core import WikiLinkExtractor
+import re
+
+
+class WikiLinkExtractor:
+    def __init__(self, text):
+        self.text = text
+        self.links = []
+
+    def extract_links(self):
+        pattern = re.compile(r'\{\{.*?\}\}', re.IGNORECASE | re.DOTALL)
+        templates = re.findall(pattern, self.text)
+
+        for template in templates:
+            self.text = self.text.replace(template, "")
+
+        pattern = re.compile(r'\[\[(?!.*:)(.*?)\]\]', re.IGNORECASE)
+        matches = re.findall(pattern, self.text)
+        for match in matches:
+            if "تصنيف:" not in match.lower() and "Category:" not in match.lower() and ":" not in match.split(":")[0]:
+                if "|" in match:
+                    link = match.split("|")[0]
+                else:
+                    link = match
+                self.links.append(link)
+        return self.links
+
+
+
+
 class DeadEnd:
     def __init__(self, page, text, summary):
         self.page = page
@@ -29,9 +57,10 @@ class DeadEnd:
         """
         template = re.compile(r"{{نهاية مسدودة(?:\|[^}]+)?}}")
         if not template.search(self.text):
-            text = self.text
+            text = "{{نهاية مسدودة|تاريخ ={{نسخ:شهر وسنة}}}}"
             text += "\n"
-            text += "{{نهاية مسدودة|تاريخ ={{نسخ:شهر وسنة}}}}"
+            text += self.text
+
 
             self.text = text
             self.summary += "، أضاف  وسم [[:تصنيف:مقالات نهاية مسدودة|نهاية مسدودة]]"
