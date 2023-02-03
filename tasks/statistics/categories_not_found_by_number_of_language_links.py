@@ -1,3 +1,5 @@
+import time
+
 import pymysql
 from pywikibot import config as _config
 from module import UpdatePage, ArticleTables, index
@@ -59,32 +61,40 @@ ORDER BY COUNT(cl_from) DESC
 LIMIT 500;"""
 file_path = 'stub/categories_not_found_by_number_of_language_links.txt'
 # page_name = f'ويكيبيديا:إحصاءات/المقالات غير الموجودة حسب عدد وصلات اللغات/{language}'
-page_name = f'ويكيبيديا:إحصاءات/التصانيف غير الموجودة'
+# page_name = f'ويكيبيديا:إحصاءات/التصانيف غير الموجودة'
+page_name = f'مستخدم:لوقا/ملعب 10'
 prefix = f'{language}wiki'
-connection = pymysql.connect(
-        host=_config.db_hostname_format.format(prefix),
-        read_default_file=_config.db_connect_file,
-        db=_config.db_name_format.format(prefix),
-        charset='utf8mb4',
-        port=_config.db_port,
-        cursorclass=pymysql.cursors.DictCursor,
-)
-# Create an instance of the ArticleTables class
-tables = ArticleTables()
+
+# Get the current time and day of the week
+current_time = time.localtime()
+day_of_week = current_time.tm_wday
+
+# Check if it's Monday
+if day_of_week == 0:
+    connection = pymysql.connect(
+            host=_config.db_hostname_format.format(prefix),
+            read_default_file=_config.db_connect_file,
+            db=_config.db_name_format.format(prefix),
+            charset='utf8mb4',
+            port=_config.db_port,
+            cursorclass=pymysql.cursors.DictCursor,
+    )
+    # Create an instance of the ArticleTables class
+    tables = ArticleTables()
 
 
-def page_title(row, result, index):
-    cat_name = str(row['cl_to'], 'utf-8')
-    return "[[:en:category:"+cat_name+"]]"
+    def page_title(row, result, index):
+        cat_name = str(row['cl_to'], 'utf-8')
+        return "[[:en:category:"+cat_name+"]]"
 
-columns = [
-    ("الرقم", None, index),
-    ("التصانيف غير الموجودة", None, page_title),
-    ("عدد المقالات", "editcount"),
-]
+    columns = [
+        ("الرقم", None, index),
+        ("التصانيف غير الموجودة", None, page_title),
+        ("عدد المقالات", "editcount"),
+    ]
 
-tables.add_table("main_table", columns)
+    tables.add_table("main_table", columns)
 
-# Create an instance of the updater and update the page
-updater = UpdatePage(query, file_path, page_name, tables,connection=connection)
-updater.update()
+    # Create an instance of the updater and update the page
+    updater = UpdatePage(query, file_path, page_name, tables,connection=connection)
+    updater.update()
