@@ -51,7 +51,7 @@ class HasCategories:
         has_category = False
         for category in categories:
             tem = pywikibot.Category(self.page.site, category.title())
-            if not tem.isHiddenCategory():
+            if not tem.isHiddenCategory() and tem.exists() and (not tem.isRedirectPage()):
                 has_category = True
                 break
         return has_category

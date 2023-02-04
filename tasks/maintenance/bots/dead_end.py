@@ -26,7 +26,11 @@ class WikiLinkExtractor:
                     link = match.split("|")[0]
                 else:
                     link = match
-                self.links.append(link)
+                site = pywikibot.Site()
+                page_title = link
+                tmp_page = pywikibot.Page(site,page_title)
+                if tmp_page.exists() and (not tmp_page.isRedirectPage()) and (tmp_page.namespace() == 0):
+                    self.links.append(link)
         return self.links
 
 
