@@ -40,7 +40,7 @@ class Query:
     def insert_request(self, from_id, from_namespace, to_namespace, to_id, request_type, status):
         self.cursor.execute("""INSERT INTO requests (from_id, from_namespace, to_namespace, to_id, request_type, status)
                                VALUES (?, ?, ?, ?, ?, ?)
-                            """, (from_id, from_namespace, to_namespace, to_id, request_type, status))
+                            """, (int(from_id), int(from_namespace), int(to_namespace), int(to_id), int(request_type), int(status)))
         self.conn.commit()
 
     def insert_page(self, status, request_id):

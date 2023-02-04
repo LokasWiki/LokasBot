@@ -74,9 +74,9 @@ class RequestsPage:
         self._page = pywikibot.Page(self.site, self.title)
         self._lasteditUser = self._page.lastNonBotUser()
 
-    def check_user_edits(self):
+    def check_user_edits(self, number=3000):
         user = pywikibot.User(self.site, self.lasteditUser)
-        return user.editCount() >= 3000
+        return user.editCount() >= number
 
     def get_page_text(self):
         if self._page is None:
