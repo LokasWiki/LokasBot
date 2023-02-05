@@ -31,7 +31,7 @@ class WikiLinkExtractor:
                 tmp_page = pywikibot.Page(site,page_title)
                 if tmp_page.exists() and (not tmp_page.isRedirectPage()) and (tmp_page.namespace() == 0):
                     self.links.append(link)
-        return self.links
+        return list(set(self.links))
 
 
 
