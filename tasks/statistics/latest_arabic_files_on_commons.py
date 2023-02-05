@@ -9,11 +9,8 @@ w:ar:User:2023, علاء, https://quarry.wmcloud.org/query/34651
 """
 query = """ SELECT
 page_title AS file,
-actor_name AS username,
-(SELECT COUNT(rev_id) FROM revision WHERE rev_actor = actor_id) AS edit_count,
-(SELECT COUNT(img_name) FROM image WHERE img_actor = actor_id) AS upload_count
-FROM
-page
+actor_name AS username 
+FROM page
 INNER JOIN revision ON rev_page = page_id
 INNER JOIN actor ON actor_id = rev_actor
 WHERE
@@ -92,24 +89,12 @@ def username_link(row, result, index):
     return f"[https://commons.wikimedia.org/w/index.php?title=User:{username} {username}]"
 
 
-def username_edit_count(row, result, index):
-    username = str(row['username'], 'utf-8').replace(" ","_")
-
-    return f"[https://commons.wikimedia.org/wiki/Special:Contributions/{username} {row['edit_count']}]"
-
-
-def username_upload_count(row, result, index):
-    username = str(row['username'], 'utf-8').replace(" ","_")
-    return f"[https://commons.wikimedia.org/wiki/Special:ListFiles/{username} {row['upload_count']}]"
-
 
 columns = [
     ("الرقم", None, index),
     ("اسم الملف", None, file_name),
     ("الصورة الملف", None, file_image),
-    ("اسم المستخدم", None, username_link),
-    ("عدد التعديلات", None, username_edit_count),
-    ("عدد الملقات المرفوعة", None, username_upload_count),
+    ("اسم المستخدم", None, username_link)
 ]
 
 tables.add_table("main_table", columns)
