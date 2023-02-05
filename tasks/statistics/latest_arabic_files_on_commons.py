@@ -9,7 +9,7 @@ w:ar:User:2023, علاء, https://quarry.wmcloud.org/query/34651
 """
 query = """ SELECT
 page_title AS file,
-actor_name AS username 
+actor_name AS username
 FROM page
 INNER JOIN revision ON rev_page = page_id
 INNER JOIN actor ON actor_id = rev_actor
