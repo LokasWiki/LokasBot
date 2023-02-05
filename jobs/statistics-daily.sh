@@ -36,7 +36,9 @@ myArrayFiles=( "$HOME"/repos/tasks/statistics/activity_of_bureaucrats.py \
   "$HOME"/repos/tasks/statistics/users_by_number_of_categories_creation_with_bot.py \
   "$HOME"/repos/tasks/statistics/list_of_wikipedians_by_number_of_edits_with_bot.py \
   "$HOME"/repos/tasks/statistics/users_by_number_of_help_pages_creation.py \
-  "$HOME"/repos/tasks/statistics/categories_not_found_by_number_of_language_links.py
+  "$HOME"/repos/tasks/statistics/categories_not_found_by_number_of_language_links.py \
+  "$HOME"/repos/tasks/statistics/latest_arabic_files_on_commons.py \
+
 )
 
 run_file() {
