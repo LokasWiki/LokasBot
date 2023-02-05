@@ -28,11 +28,15 @@ if requests_page.check_user_edits(0):
             source_page = pywikibot.Page(site2, f"{request['namespace']}:{request['source']}")
             destination_page = pywikibot.Page(site2, f"بوابة:{request['destination']}")
 
-            print(source_page.title())
-            print(destination_page.title())
+            if source_page.exists() and destination_page.exists():
+                db.insert_request(source_page.pageid, source_page.namespace(), destination_page.namespace(),
+                                  destination_page.pageid, type_of_request, 0)
+            else:
+        # todo: add some action here
+                print("some page is not exists")
+                print(source_page.title())
+                print(destination_page.title())
 
-            db.insert_request(source_page.pageid, source_page.namespace(), destination_page.namespace(),
-                              destination_page.pageid, type_of_request, 0)
 
     else:
         requests_page.move_to_talk_page()
