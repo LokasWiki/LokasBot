@@ -45,12 +45,13 @@ class Orphan:
             self.summary += "، حذف  وسم [[:تصنيف:مقالات يتيمة|يتيمة]]"
 
     def check(self):
-        backlinks = self.page.backlinks(namespaces=0,content=False,follow_redirects=True,filter_redirects=False)
-        num = 0
-        has_category = False
+        backlinks = self.page.backlinks(namespaces=0, content=False, follow_redirects=True, filter_redirects=False)
+        unique_pages = set()
+        has_pages = False
         for link in backlinks:
-            num += 1
-            if num >= 3:
-                has_category = True
+            unique_pages.add(link)
+            if len(unique_pages) >= 3:
+                has_pages = True
                 break
-        return has_category
+        return has_pages
+
