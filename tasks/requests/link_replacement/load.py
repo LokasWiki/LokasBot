@@ -16,7 +16,7 @@ site2 = pywikibot.Site()
 type_of_request = 2
 
 
-requests = db.get_new_requests(5, type_of_request)
+requests = db.get_requests(5, type_of_request)
 
 for request in requests:
     page_title = request['from_title']

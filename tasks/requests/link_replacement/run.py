@@ -1,17 +1,32 @@
+
 import re
 
 import pywikibot
+import os, sys
+import pywikibot
 
-from module import  Query,RequestsPage,RequestsScanner,PageProcessor
+currentdir = os.path.dirname(os.path.realpath(__file__))
+parentdir = os.path.dirname(currentdir)
+sys.path.append(parentdir)
 
+from core import PageProcessor,RequestsPage,RequestsScanner,Query
+
+db = Query()
+
+# Create an instance of the RequestsPage class
 site = pywikibot.Site()
+site2 = pywikibot.Site("ar", "wikipedia")
 
-requests_query = Query('requests.db')
+type_of_request = 2
 
-request = requests_query.pop_request()
+pages = db.get_new_pages(100,type_of_request)
 
-print(request)
 
+#
+# for page in pages:
+#     print(page)
+
+"""
 
 page_title = "الأرشيدوقة ماريا آنا من النمسا"
 page_new_title = "الأرشيدوقة ماريا آنا من النمسا (1610-1665)"
@@ -43,3 +58,5 @@ for p in gen:
     # print(text)
     p.save(
         summary="بوت:[[ويكيبيديا:طلبات استبدال الوصلات]] استبدال [[" + page_title + "]] ب [[" + page_new_title + "]]")
+        
+"""

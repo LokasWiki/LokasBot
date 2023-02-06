@@ -133,9 +133,9 @@ class Query:
                             """, (str(title), int(namespace),int(status), int(request_id)))
         self.conn.commit()
 
-    def get_new_requests(self, limit, request_type):
-        self.cursor.execute("""SELECT * FROM requests WHERE status=0 AND request_type=? LIMIT ?""",
-                            (request_type, limit))
+    def get_requests(self, limit, request_type,status=0):
+        self.cursor.execute("""SELECT * FROM requests WHERE status=? AND request_type=? LIMIT ?""",
+                            (status,request_type, limit))
         requests = self.cursor.fetchall()
         requests_dict = []
         for request in requests:
@@ -148,6 +148,40 @@ class Query:
             request_dict["request_type"] = request[5]
             request_dict["status"] = request[6]
             requests_dict.append(request_dict)
+        return requests_dict
+
+    def get_request(self,request_id):
+        self.cursor.execute("""SELECT * FROM requests WHERE id= ?  LIMIT 1""",(request_id,))
+        request = self.cursor.fetchone()
+        request_dict = {}
+        request_dict["id"] = request[0]
+        request_dict["from_title"] = request[1]
+        request_dict["from_namespace"] = request[2]
+        request_dict["to_namespace"] = request[3]
+        request_dict["to_title"] = request[4]
+        request_dict["request_type"] = request[5]
+        request_dict["status"] = request[6]
+
+        return request_dict
+
+
+    def get_new_pages(self, limit, request_type,status = 0):
+        self.cursor.execute("""SELECT * FROM pages WHERE status=? AND request_id=? LIMIT ?""",
+                            (status,request_type, limit))
+        requests = self.cursor.fetchall()
+        requests_dict = []
+        for request in requests:
+            request_dict = {}
+            request_dict["id"] = request[0]
+            request_dict["title"] = request[1]
+            request_dict["namespace"] = request[2]
+            request_dict["data"] = request[3]
+            request_dict["status"] = request[4]
+            request_dict["request_id"] = request[5]
+            # request_dict["request"] = self.get_request(int(request[5]))
+            requests_dict.append(request_dict)
+
+        print(requests_dict)
         return requests_dict
 
     def update_request_status(self, request_id, status):
