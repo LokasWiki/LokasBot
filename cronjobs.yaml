@@ -7,7 +7,7 @@
 - name: statistics-daily
   no-filelog: false
   command: $HOME/repos/jobs/statistics-daily.sh
-  schedule: '0 5 * * *'
+  schedule: '0 1 * * *'
   image: tf-python39
   emails: onfailure
   <<: *defaults
@@ -84,7 +84,7 @@
 - name: maintenance-24h
   no-filelog: false
   command: $HOME/repos/jobs/maintenance_read.sh 2540
-  schedule: '0 1 * * *'
+  schedule: '0 3 * * *'
   image: tf-python39
   emails: onfailure
   <<: *defaults

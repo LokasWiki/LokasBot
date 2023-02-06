@@ -28,7 +28,7 @@ class Unreferenced:
         """
         This method adds the {{لا مصدر}} template to the page if it doesn't already exist.
         """
-        pattern = r"{{(" + "|".join(self.templates) + r")(.*?)}}"
+        pattern = r"{{(" + "|".join(self.templates) + r")\s*\|(.*?)}}|{{\s*(" + "|".join(self.templates) + r")\s*}}"
 
         template = re.compile(pattern)
         if not template.search(self.text):
@@ -44,7 +44,9 @@ class Unreferenced:
         """
            This method removes the {{لا مصدر}} template from the page if it exists.
            """
-        pattern = r"{{(" + "|".join(self.templates) + r")(.*?)}}"
+
+        pattern = r"{{(" + "|".join(self.templates) + r")\s*\|(.*?)}}|{{\s*(" + "|".join(self.templates) + r")\s*}}"
+
         template = re.compile(pattern)
         new_text = template.sub("", self.text)
         if new_text != self.text:

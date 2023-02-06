@@ -1,17 +1,14 @@
 {{إحصاء}}
 <div style="background: #E5E4E2; padding: 0.5em; font-family: Traditional Arabic; font-size: 130%;  -moz-border-radius: 0.3em; border-radius: 0.3em;">
 <center>
-تعرض هذه الصفحة قائمة التصانيف غير الموجودة في ويكيبديا العربية.
-
-كود الاستعلام موجود [https://github.com/loka1/LokasBot/blob/main/tasks/statistics/categories_not_found_by_number_of_language_links.py هنا].
-
+تعرض هذه الصفحة قائمة أحدث الصور بتسمية عربية على كومنز.
+<br/>
 
 '''حَدَّث BOT_USER_NAME هذه القائمة في :  BOT_TIME_NOW (ت ع م) '''
-</center>
 </div>
 <center>
 <div style="background: #E5E4E2; padding: 0.5em;   -moz-border-radius: 0.3em; border-radius: 0.3em;">
 BOT_TABLE_BODY
-</div>
 </center>
+</div>
 [[تصنيف:إحصاءات ويكيبيديا]]
