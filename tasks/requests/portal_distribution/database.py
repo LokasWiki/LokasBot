@@ -95,20 +95,20 @@ class Query:
 
     def create_requests_table(self):
         self.cursor.execute("""CREATE TABLE IF NOT EXISTS requests
-                              (id INTEGER PRIMARY KEY, 
+                              (id INTEGER PRIMARY KEY,
                                from_id INTEGER NOT NULL,
-                               from_namespace INT NOT NULL, 
-                               to_namespace INT NOT NULL, 
+                               from_namespace INT NOT NULL,
+                               to_namespace INT NOT NULL,
                                to_id INT NOT NULL,
-                               request_type INT NOT NULL, 
+                               request_type INT NOT NULL,
                                status INT)
                            """)
         self.conn.commit()
 
     def create_pages_table(self):
         self.cursor.execute("""CREATE TABLE IF NOT EXISTS pages
-                              (id INTEGER PRIMARY KEY, 
-                               date TEXT DEFAULT (datetime('now', 'localtime')), 
+                              (id INTEGER PRIMARY KEY,
+                               date TEXT DEFAULT (datetime('now', 'localtime')),
                                status INT NOT NULL,
                                request_id INT NOT NULL,
                                FOREIGN KEY (request_id) REFERENCES requests(id))
