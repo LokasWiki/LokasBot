@@ -32,6 +32,27 @@
   image: tf-python39
   emails: onfailure
   <<: *defaults
+- name: requests-raed
+  no-filelog: false
+  command: $HOME/repos/jobs/requests_read.sh
+  schedule: '*/15 * * * *'
+  image: tf-python39
+  emails: onfailure
+  <<: *defaults
+- name: requests-load
+  no-filelog: false
+  command: $HOME/repos/jobs/requests_load.sh
+  schedule: '*/25 * * * *'
+  image: tf-python39
+  emails: onfailure
+  <<: *defaults
+- name: requests-run
+  no-filelog: false
+  command: $HOME/repos/jobs/requests_run.sh
+  schedule: '*/60 * * * *'
+  image: tf-python39
+  emails: onfailure
+  <<: *defaults
 - name: maintenance-10
   no-filelog: false
   command: $HOME/repos/jobs/maintenance_read.sh 20
