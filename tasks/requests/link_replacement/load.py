@@ -11,7 +11,6 @@ db = Query()
 
 # Create an instance of the RequestsPage class
 site = pywikibot.Site("ar", "wikipedia")
-site2 = pywikibot.Site()
 
 type_of_request = 2
 
