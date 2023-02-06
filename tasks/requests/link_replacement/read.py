@@ -11,7 +11,6 @@ db = Query()
 
 # Create an instance of the RequestsPage class
 site = pywikibot.Site()
-site2 = pywikibot.Site("ar", "wikipedia")
 
 type_of_request = 2
 
@@ -31,8 +30,8 @@ if requests_page.check_user_edits(1):
     if scanner.have_requests:
         requests_page.start_request()
         for request in scanner.requests:
-            source_page = pywikibot.Page(site2, f"{request['source']}",ns=0)
-            destination_page = pywikibot.Page(site2, f"{request['destination']}",ns=0)
+            source_page = pywikibot.Page(site, f"{request['source']}",ns=0)
+            destination_page = pywikibot.Page(site, f"{request['destination']}",ns=0)
 
             if source_page.exists() and destination_page.exists() and source_page.namespace() == 0 and destination_page.namespace() == 0:
                 db.insert_request(source_page.title(with_ns=False), 0, 0,

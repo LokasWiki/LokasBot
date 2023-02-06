@@ -35,15 +35,12 @@ for request in requests:
         link_list = re.findall(reg_str, text)
         # if link_list:
         for r in link_list:
-            print(r)
             r_link = r[0]
             r_title = r[1]
             if r_title == '':
                 r_title = "|" + r_link
             old_link = "[[" + r[0] + r[1] + "]]"
             new_link = "[[" + page_new_title + r_title + "]]"
-            print(old_link)
-            print(new_link)
             text = text.replace(old_link, new_link)
 
         p.text = text
