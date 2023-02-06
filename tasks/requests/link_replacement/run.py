@@ -15,7 +15,6 @@ db = Query()
 
 # Create an instance of the RequestsPage class
 site = pywikibot.Site()
-site2 = pywikibot.Site("ar", "wikipedia")
 
 type_of_request = 2
 
@@ -29,7 +28,7 @@ for request in requests:
     pages = db.get_new_pages(100,request['id'])
 
     for page in pages:
-        p = pywikibot.Page(site2,page['title'],ns=page['namespace'])
+        p = pywikibot.Page(site,page['title'],ns=page['namespace'])
         text = str(p.text)
         reg_str = r"\[\[(" + re.escape(page_title) + r")(\|(?:.*?))?\]\]"
         link_list = re.findall(reg_str, text)
