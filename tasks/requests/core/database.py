@@ -178,7 +178,7 @@ class Query:
             request_dict["data"] = request[3]
             request_dict["status"] = request[4]
             request_dict["request_id"] = request[5]
-            # request_dict["request"] = self.get_request(int(request[5]))
+            request_dict["request"] = self.get_request(int(request[5]))
             requests_dict.append(request_dict)
 
         print(requests_dict)
@@ -186,4 +186,8 @@ class Query:
 
     def update_request_status(self, request_id, status):
         self.cursor.execute("""UPDATE requests SET status = ? WHERE id = ? """, (status, request_id))
+        self.conn.commit()
+
+    def delete_page(self,page_id):
+        self.cursor.execute("DELETE FROM pages WHERE id = ?", (page_id,))
         self.conn.commit()
