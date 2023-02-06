@@ -31,12 +31,12 @@ if requests_page.check_user_edits(1):
     if scanner.have_requests:
         requests_page.start_request()
         for request in scanner.requests:
-            source_page = pywikibot.Page(site2, f"{request['source']}")
-            destination_page = pywikibot.Page(site2, f"{request['destination']}")
+            source_page = pywikibot.Page(site2, f"{request['source']}",ns=0)
+            destination_page = pywikibot.Page(site2, f"{request['destination']}",ns=0)
 
             if source_page.exists() and destination_page.exists() and source_page.namespace() == 0 and destination_page.namespace() == 0:
-                db.insert_request(source_page.pageid, 0, 0,
-                                  destination_page.pageid, type_of_request, 0)
+                db.insert_request(source_page.title(with_ns=False), 0, 0,
+                                  destination_page.title(with_ns=False), type_of_request, 0)
             else:
                 # todo: add some action here
                 print("some page is not exists")

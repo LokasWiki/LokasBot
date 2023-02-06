@@ -96,10 +96,10 @@ class Query:
     def create_requests_table(self):
         self.cursor.execute("""CREATE TABLE IF NOT EXISTS requests
                               (id INTEGER PRIMARY KEY,
-                               from_id INTEGER NOT NULL,
+                               from_title TEXT NOT NULL,
                                from_namespace INT NOT NULL,
                                to_namespace INT NOT NULL,
-                               to_id INT NOT NULL,
+                               to_title TEXT NOT NULL,
                                request_type INT NOT NULL,
                                status INT)
                            """)
@@ -108,6 +108,8 @@ class Query:
     def create_pages_table(self):
         self.cursor.execute("""CREATE TABLE IF NOT EXISTS pages
                               (id INTEGER PRIMARY KEY,
+                               title TEXT NOT NULL,
+                               namespace INT NOT NULL,
                                date TEXT DEFAULT (datetime('now', 'localtime')),
                                status INT NOT NULL,
                                request_id INT NOT NULL,
@@ -118,17 +120,17 @@ class Query:
     def close(self):
         self.conn.close()
 
-    def insert_request(self, from_id, from_namespace, to_namespace, to_id, request_type, status):
-        self.cursor.execute("""INSERT INTO requests (from_id, from_namespace, to_namespace, to_id, request_type, status)
+    def insert_request(self, from_title, from_namespace, to_namespace, to_title, request_type, status):
+        self.cursor.execute("""INSERT INTO requests (from_title, from_namespace, to_namespace, to_title, request_type, status)
                                VALUES (?, ?, ?, ?, ?, ?)
                             """, (
-        int(from_id), int(from_namespace), int(to_namespace), int(to_id), int(request_type), int(status)))
+        str(from_title), int(from_namespace), int(to_namespace), str(to_title), int(request_type), int(status)))
         self.conn.commit()
 
-    def insert_page(self, status, request_id):
-        self.cursor.execute("""INSERT INTO pages (status, request_id)
-                               VALUES (?, ?)
-                            """, (status, request_id))
+    def insert_page(self,title, namespace, status, request_id):
+        self.cursor.execute("""INSERT INTO pages (title, namespace,status, request_id)
+                               VALUES (?, ?,?, ?)
+                            """, (str(title), int(namespace),int(status), int(request_id)))
         self.conn.commit()
 
     def get_new_requests(self, limit, request_type):
@@ -139,10 +141,10 @@ class Query:
         for request in requests:
             request_dict = {}
             request_dict["id"] = request[0]
-            request_dict["from_id"] = request[1]
+            request_dict["from_title"] = request[1]
             request_dict["from_namespace"] = request[2]
             request_dict["to_namespace"] = request[3]
-            request_dict["to_id"] = request[4]
+            request_dict["to_title"] = request[4]
             request_dict["request_type"] = request[5]
             request_dict["status"] = request[6]
             requests_dict.append(request_dict)
