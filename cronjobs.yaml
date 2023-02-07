@@ -42,14 +42,14 @@
 - name: requests-load
   no-filelog: false
   command: $HOME/repos/jobs/requests_load.sh
-  schedule: '*/25 * * * *'
+  schedule: '*/15 * * * *'
   image: tf-python39
   emails: onfailure
   <<: *defaults
 - name: requests-run
   no-filelog: false
   command: $HOME/repos/jobs/requests_run.sh
-  schedule: '*/60 * * * *'
+  schedule: '*/25 * * * *'
   image: tf-python39
   emails: onfailure
   <<: *defaults
