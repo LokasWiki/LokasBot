@@ -47,7 +47,7 @@ class Request(Base):
     def from_name(self):
          return get_namespace(self.from_namespace) + self.from_title
 
-    pages: Mapped[List["Pages"]] = relationship(
+    pages: Mapped[List["Page"]] = relationship(
         back_populates="request", cascade="all, delete-orphan"
     )
 
@@ -55,7 +55,7 @@ class Request(Base):
         return f"User(id={self.id!r}, from={self.from_title!r}, to={self.to_title!r})"
 
 
-class Pages(Base):
+class Page(Base):
     __tablename__ = "pages"
 
     id: Mapped[int] = mapped_column(primary_key=True)

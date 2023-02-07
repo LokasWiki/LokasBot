@@ -9,7 +9,7 @@ sys.path.append(parentdir)
 
 from core.module import PageProcessor, RequestsPage, RequestsScanner
 from core.database.engine import engine
-from core.database.models import Request, Status,Pages
+from core.database.models import Request, Status,Page
 
 # Create an instance of the RequestsPage class
 site = pywikibot.Site()
@@ -27,7 +27,7 @@ try:
             gen = page.backlinks(follow_redirects=False, namespaces=[0, 14, 10, 6], content=True)
             pages = []
             for p in gen:
-                pages.append(Pages(
+                pages.append(Page(
                     title=p.title(with_ns=False),
                     namespace=int(p.namespace())
                 ))
