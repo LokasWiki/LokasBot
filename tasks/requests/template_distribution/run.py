@@ -42,7 +42,7 @@ try:
                             break
                     print(link.title())
                     if not template_found:
-                        if 'extra' in request.__dict__ and str("أعلى") in str(request.__dict__['extra']):
+                        if 'extra' in request.__dict__ and "أعلى" in str(request.__dict__['extra']):
                             template_name = "{{" + request.from_title + "}}"
                             text = template_name + '\n' + link.text
                         else:
