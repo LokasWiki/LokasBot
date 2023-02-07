@@ -36,7 +36,7 @@ try:
                         # source_page = pywikibot.Page(site, f"{request['source']}",ns=0)
                         # destination_page = pywikibot.Page(site, f"{request['destination']}",ns=0)
                         # if source_page.exists() and destination_page.exists() and source_page.namespace() == 0 and destination_page.namespace() == 0:
-
+                        # todo:add check if template exists with send content to talk page
                         request_model = Request(
                             from_title=request['source'],
                             from_namespace=10,

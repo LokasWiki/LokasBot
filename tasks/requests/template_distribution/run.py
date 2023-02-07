@@ -9,13 +9,12 @@ parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
 
 from core.database.engine import engine
-from core.database.models import Request, Status,Page
-
+from core.database.models import Request, Status, Page
 
 # Create an instance of the RequestsPage class
 site = pywikibot.Site()
 
-type_of_request = 2
+type_of_request = 3
 
 try:
     session = Session(engine)
@@ -26,32 +25,38 @@ try:
 
     for request in session.scalars(stmt):
 
-        page_title = request.from_title
-        page_new_title = request.to_title
-
         pages = session.query(Page).filter(Page.request == request, Page.status == Status.PENDING).limit(100).all()
 
         for page in pages:
             try:
-                p = pywikibot.Page(site, page.page_name)
-                print(p.title())
-                text = str(p.text)
-                reg_str = r"\[\[(" + re.escape(page_title) + r")(\|(?:.*?))?\]\]"
-                link_list = re.findall(reg_str, text)
-                # if link_list:
-                for r in link_list:
-                    r_link = r[0]
-                    r_title = r[1]
-                    if r_title == '':
-                        r_title = "|" + r_link
-                    old_link = "[[" + r[0] + r[1] + "]]"
-                    new_link = "[[" + page_new_title + r_title + "]]"
-                    text = text.replace(old_link, new_link)
-
-                p.text = text
-                # print(text)
-                p.save(
-                    summary="بوت:[[ويكيبيديا:طلبات استبدال الوصلات]] استبدال [[" + page_title + "]] ب [[" + page_new_title + "]]")
+                link = pywikibot.Page(site, page.page_name)
+                if link.exists() and link.namespace() == 0:
+                    template_found = False
+                    for tpl in link.templates(content=False):
+                        if tpl.title() == page.title():
+                            template_found = True
+                            break
+                    print(link.title())
+                    if not template_found:
+                        if "أعلى" in request['extra']:
+                            template_name = "{{" + request['from_title'] + "}}"
+                            text = template_name + '\n' + text
+                        else:
+                            template_name = "{{" + request['from_title'] + "}}"
+                            text = link.text
+                            portal_template = '{{شريط بوابات'
+                            stub_template = '{{بذرة'
+                            category_template = '[[تصنيف:'
+                            if portal_template in text:
+                                text = text.replace(portal_template, template_name + '\n' + portal_template, 1)
+                            elif stub_template in text:
+                                text = text.replace(stub_template, template_name + '\n' + stub_template, 1)
+                            elif category_template in text:
+                                text = text.replace(category_template, template_name + '\n' + category_template, 1)
+                            else:
+                                text = text + '\n' + template_name
+                        link.text = text
+                        link.save("بوت:توزيع قالب")
 
                 page.status = Status.COMPLETED
                 session.commit()
