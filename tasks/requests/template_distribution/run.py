@@ -1,5 +1,7 @@
 import re
 import os, sys
+import traceback
+
 import pywikibot
 from sqlalchemy.orm import Session
 from sqlalchemy import select, func, distinct
@@ -25,7 +27,7 @@ try:
 
     for request in session.scalars(stmt):
 
-        pages = session.query(Page).filter(Page.request == request, Page.status == Status.PENDING).limit(100).all()
+        pages = session.query(Page).filter(Page.request == request, Page.status == Status.PENDING).limit(10).all()
 
         for page in pages:
             try:
@@ -33,16 +35,18 @@ try:
                 if link.exists() and link.namespace() == 0:
                     template_found = False
                     for tpl in link.templates(content=False):
-                        if tpl.title() == page.title():
+                        tpl_title = str(tpl.title()).lower()
+                        page_title = str(request.from_name).lower()
+                        if tpl_title == page_title:
                             template_found = True
                             break
                     print(link.title())
                     if not template_found:
-                        if "أعلى" in request['extra']:
-                            template_name = "{{" + request['from_title'] + "}}"
-                            text = template_name + '\n' + text
+                        if 'extra' in request.__dict__ and str("أعلى") in str(request.__dict__['extra']):
+                            template_name = "{{" + request.from_title + "}}"
+                            text = template_name + '\n' + link.text
                         else:
-                            template_name = "{{" + request['from_title'] + "}}"
+                            template_name = "{{" + request.from_title + "}}"
                             text = link.text
                             portal_template = '{{شريط بوابات'
                             stub_template = '{{بذرة'
@@ -55,13 +59,16 @@ try:
                                 text = text.replace(category_template, template_name + '\n' + category_template, 1)
                             else:
                                 text = text + '\n' + template_name
-                        link.text = text
-                        link.save("بوت:توزيع قالب")
+                        if text != link.text:
+                            link.text = text
+                            link.save("بوت:توزيع قالب")
 
                 page.status = Status.COMPLETED
                 session.commit()
             except Exception as e:
                 print(f"An error occurred where save : {e}")
+                just_the_string = traceback.format_exc()
+                print(just_the_string)
                 session.rollback()
 
 except Exception as e:
