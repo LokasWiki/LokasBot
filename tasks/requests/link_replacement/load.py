@@ -19,7 +19,7 @@ type_of_request = 2
 try:
     session = Session(engine)
 
-    stmt = select(Request).where(Request.status.in_([Status.PENDING]))
+    stmt = select(Request).filter(Request.status == Status.PENDING, Request.request_type == type_of_request).limit(20)
 
     for request in session.scalars(stmt):
         try:
