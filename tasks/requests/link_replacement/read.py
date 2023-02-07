@@ -30,17 +30,17 @@ if requests_page.check_user_edits(1):
     if scanner.have_requests:
         requests_page.start_request()
         for request in scanner.requests:
-            source_page = pywikibot.Page(site, f"{request['source']}",ns=0)
-            destination_page = pywikibot.Page(site, f"{request['destination']}",ns=0)
+            # source_page = pywikibot.Page(site, f"{request['source']}",ns=0)
+            # destination_page = pywikibot.Page(site, f"{request['destination']}",ns=0)
 
-            if source_page.exists() and destination_page.exists() and source_page.namespace() == 0 and destination_page.namespace() == 0:
-                db.insert_request(source_page.title(with_ns=False), 0, 0,
-                                  destination_page.title(with_ns=False), type_of_request, 0)
-            else:
-                # todo: add some action here
-                print("some page is not exists")
-                print(source_page.title())
-                print(destination_page.title())
+            # if source_page.exists() and destination_page.exists() and source_page.namespace() == 0 and destination_page.namespace() == 0:
+            db.insert_request(request['source'], 0, 0,
+                              request['destination'], type_of_request, 0)
+            # else:
+            #     # todo: add some action here
+            #     print("some page is not exists")
+            #     print(source_page.title())
+            #     print(destination_page.title())
 
     else:
         requests_page.move_to_talk_page()
