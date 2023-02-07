@@ -12,8 +12,6 @@ import enum
 
 
 
-
-
 from .engine import engine
 from .hellper import get_namespace
 
@@ -30,9 +28,9 @@ class Request(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     from_title: Mapped[str] = mapped_column(String(255))
-    to_title: Mapped[str] = mapped_column(String(255))
+    to_title: Mapped[str] = mapped_column(String(255),nullable=True)
     from_namespace: Mapped[int] = mapped_column(INTEGER)
-    to_namespace: Mapped[int] = mapped_column(INTEGER)
+    to_namespace: Mapped[int] = mapped_column(INTEGER,nullable=True)
     request_type: Mapped[int] = mapped_column(INTEGER)
     extra: Mapped[str] = mapped_column(Text,nullable=True)
     status: Mapped[Status] = mapped_column(insert_default=Status.PENDING)
