@@ -54,7 +54,7 @@ class Unreferenced:
             self.summary += "، حذف  وسم [[ويكيبيديا:الاستشهاد بمصادر|لا مصدر]]"
 
     def check(self):
-        pattern = r"<ref.*?>([.\w\W]*?)<\/ref>"
+        pattern = r"<ref[^>]*>[^<>]+<\/ref>"
         ref_tags = re.findall(pattern, self.text)
         num_of_ref_tags = len(ref_tags)
         if num_of_ref_tags == 0:
