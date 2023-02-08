@@ -98,7 +98,7 @@ def process_article(site, cursor, conn, id, title):
             page_new_title = item[1]
 
             text = str(text)
-            reg_str = "\[\[(" + re.escape(page_title) + ")(\|(?:.*?))?\]\]"
+            reg_str = r"\[\[(" + re.escape(page_title) + r")(\|(?:.*?))?\]\]"
             # print(reg_str)
             link_list = re.findall(reg_str, text)
             # if link_list:
