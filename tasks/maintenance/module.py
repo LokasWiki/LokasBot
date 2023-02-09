@@ -195,12 +195,12 @@ def process_article(site, cursor, conn, id, title):
             PortalsBar,
             Unreferenced,
             Orphan,
-            DeadEnd,
-            Underlinked
+            # DeadEnd, need more check
+            # Underlinked
         ]
         if page.exists() and (not page.isRedirectPage()):
             text = page.text
-            summary = "بوت:صيانة V4.6"
+            summary = "بوت:صيانة V4.7"
             pipeline = Pipeline(page, text, summary, steps)
             processed_text, processed_summary = pipeline.process()
             # write processed text back to the page
