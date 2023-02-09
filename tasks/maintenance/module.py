@@ -195,8 +195,8 @@ def process_article(site, cursor, conn, id, title):
             PortalsBar,
             Unreferenced,
             Orphan,
-            # DeadEnd, need more check
-            # Underlinked
+            DeadEnd,
+            Underlinked
         ]
         if page.exists() and (not page.isRedirectPage()):
             text = page.text
