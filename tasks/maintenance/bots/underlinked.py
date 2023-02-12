@@ -2,6 +2,7 @@ import re
 
 import pywikibot
 import re
+from core.utils.disambiguation import Disambiguation
 
 
 class WikiLinkExtractor:
@@ -40,7 +41,8 @@ class Underlinked:
         self.summary = summary
 
     def __call__(self):
-        if "(توضيح)" in self.page.title() or "{{توضيح" in self.text:
+        disambiguation = Disambiguation(self.page.title(), self.text)
+        if disambiguation.check("or"):
             return self.text, self.summary
 
         if self.check():

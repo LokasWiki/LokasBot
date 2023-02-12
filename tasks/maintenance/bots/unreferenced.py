@@ -1,6 +1,7 @@
 import re
 
 import pywikibot
+from core.utils.disambiguation import Disambiguation
 
 
 class Unreferenced:
@@ -11,7 +12,8 @@ class Unreferenced:
         self.templates = ["لا مصدر", "مصدر"]
 
     def __call__(self):
-        if "(توضيح)" in self.page.title() or "{{توضيح" in self.text:
+        disambiguation = Disambiguation(self.page.title(), self.text)
+        if disambiguation.check("or"):
             return self.text, self.summary
         """
             true mean has category -> remove
