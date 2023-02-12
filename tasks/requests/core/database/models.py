@@ -1,4 +1,4 @@
-from typing import List
+from typing import List as typing_list
 
 from sqlalchemy import String, INTEGER, TIMESTAMP,func,ForeignKey,Text
 from sqlalchemy.orm import DeclarativeBase
@@ -45,7 +45,7 @@ class Request(Base):
     def from_name(self):
          return get_namespace(self.from_namespace) + self.from_title
 
-    pages: Mapped[list["Page"]] = relationship(
+    pages: Mapped[typing_list["Page"]] = relationship(
         back_populates="request", cascade="all, delete-orphan"
     )
 

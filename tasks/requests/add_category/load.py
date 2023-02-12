@@ -5,12 +5,13 @@ from sqlalchemy import select
 
 from tasks.requests.core.module import PageProcessor, RequestsPage, RequestsScanner
 from tasks.requests.core.database.engine import engine
-from tasks.requests.core.database.models import Request, Status,Page
+from tasks.requests.core.database.models import Request, Status, Page
+from core.utils.wikidb import Database
 
 # Create an instance of the RequestsPage class
 site = pywikibot.Site()
 
-type_of_request = 2
+type_of_request = 1
 
 try:
     session = Session(engine)
@@ -19,13 +20,32 @@ try:
 
     for request in session.scalars(stmt):
         try:
-            page = pywikibot.Page(site, request.from_name)
-            gen = page.backlinks(follow_redirects=False, namespaces=[0, 14, 10, 6], content=True)
+            gen = []
+            database = Database()
+            if request.to_namespace == 10:
+                to_page = pywikibot.Page(site, request.to_name)
+                if to_page.exists():
+                    database.query = """select pl_title as prt_title from pagelinks
+where pl_from = {} and pl_from_namespace = 10 and pl_namespace = 0;""".format(to_page.pageid)
+                    database.get_content_from_database()
+                    gen = database.result
+            else:
+                to_page = pywikibot.Page(site, request.to_name)
+                if to_page.exists():
+                    database.query = """select page.page_title as prt_title from categorylinks
+inner join page on page.page_id = categorylinks.cl_from
+where cl_to in (select page.page_title from page where page_id = {})
+and cl_type = "page"
+and page.page_namespace = 0""".format(to_page.pageid)
+                    database.get_content_from_database()
+                    gen = database.result
+
             pages = []
-            for p in gen:
+            for row in gen:
+                page_title = str(row['prt_title'], 'utf-8')
                 pages.append(Page(
-                    title=p.title(with_ns=False),
-                    namespace=int(p.namespace())
+                    title=page_title,
+                    namespace=0
                 ))
             request.status = Status.RECEIVED
             request.pages = pages
