@@ -19,7 +19,9 @@ class PortalsBar:
             "Portal bar",
             "شب",
             "شريط بوابة",
-            "شريط البوابات"
+            "شريط البوابات",
+            "بوابة",
+            "Portal"
         ]
         self.list_of_needed_templates = [
             "مقالات بحاجة لشريط بوابات"
@@ -94,11 +96,18 @@ class PortalsBar:
     def check(self):
         parsed = wtp.parse(self.text)
         template_found = False
+        exclude_list = [
+            "نمط",
+            "حد",
+            "قد",
+            "عرض",
+            "فاصل"
+        ]
         for needed_templated in self.list_of_templates:
             for template in parsed.templates:
                 if needed_templated.lower() == template.normal_name().lower():
                     # to remove the نمط argument {{شريط بوابات|نمط=قائمة|كيمياء|فيزياء}}
-                    arguments = [arg for arg in template.arguments if arg.name.strip().lower() != "نمط"]
+                    arguments = [arg for arg in template.arguments if arg.name.strip().lower() not in exclude_list]
                     for argument in arguments:
                         if len(str(argument.value).strip()) > 1 :
                             template_found = True
