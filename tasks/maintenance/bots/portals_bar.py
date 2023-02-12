@@ -1,4 +1,7 @@
 import re
+import wikitextparser as wtp
+
+from core.utils.disambiguation import Disambiguation
 
 
 class PortalsBar:
@@ -8,7 +11,8 @@ class PortalsBar:
         self.summary = summary
 
     def __call__(self):
-        if "(توضيح)" in self.page.title() or "{{توضيح" in self.text:
+        disambiguation = Disambiguation(self.page.title(),self.text)
+        if disambiguation.check("or"):
             return self.text, self.summary
 
         if not self.check():
@@ -26,12 +30,12 @@ class PortalsBar:
             template_name = "{{مقالات بحاجة لشريط بوابات}}"
             category_template = '[[تصنيف:'
             if category_template in self.text:
-                text = self.text.replace(category_template, template_name + '\n' + category_template,1)
+                text = self.text.replace(category_template, template_name + '\n' + category_template, 1)
             else:
                 text = self.text + '\n' + template_name
             self.text = text
 
-            #todo:remove empty Portals Bar bar
+            # todo:remove empty Portals Bar bar
             self.summary += "، أضاف وسم مقالات بحاجة لشريط بوابات"
 
     def remove_template(self):
