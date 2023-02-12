@@ -10,7 +10,7 @@ from pywikibot import config as _config
 from module import UpdatePage, ArticleTables, index, Database
 
 # Set the parameters for the update
-query = """select 
+query = """select
 comment.comment_text  as "deleted_page",
 revision.rev_timestamp as "date_of_delete",
 wb_items_per_site.ips_site_page   as "name_of_page"
@@ -19,7 +19,7 @@ from revision
 
 join page on page.page_id = revision.rev_page
 join comment on comment.comment_id = revision.rev_comment_id
-join wb_items_per_site on wb_items_per_site.ips_item_id=REPLACE(page.page_title,"Q","") 
+join wb_items_per_site on wb_items_per_site.ips_item_id=REPLACE(page.page_title,"Q","")
 
 where comment.comment_text like "%clientsitelink-remove%" and comment.comment_text like "%enwiki%"
 and rev_timestamp > (NOW() - INTERVAL 1 MONTH)
