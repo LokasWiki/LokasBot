@@ -1,14 +1,9 @@
-import os, sys
 import pywikibot
 from sqlalchemy.orm import Session
 
-currentdir = os.path.dirname(os.path.realpath(__file__))
-parentdir = os.path.dirname(currentdir)
-sys.path.append(parentdir)
-
-from core.module import PageProcessor, RequestsPage, RequestsScanner
-from core.database.engine import engine
-from core.database.models import Request, Status
+from tasks.requests.core.module import PageProcessor, RequestsPage, RequestsScanner
+from tasks.requests.core.database.engine import engine
+from tasks.requests.core.database.models import Request, Status
 
 # Create an instance of the RequestsPage class
 site = pywikibot.Site()

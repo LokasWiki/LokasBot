@@ -1,3 +1,4 @@
+import os, sys
 import pywikibot
 from sqlalchemy.orm import Session
 
@@ -8,19 +9,19 @@ from tasks.requests.core.database.models import Request, Status
 # Create an instance of the RequestsPage class
 site = pywikibot.Site()
 
-type_of_request = 3
+type_of_request = 1
 
 try:
 
     requests_page = RequestsPage(site)
-    requests_page.title = "ويكيبيديا:طلبات توزيع قالب تصفح"
+    requests_page.title = "ويكيبيديا:طلبات إضافة تصنيف"
     requests_page.header_text = "{{/ترويسة}}"
 
     requests_page.load_page()
 
     if requests_page.check_user_edits(1):
         scanner = RequestsScanner()
-        scanner.pattern = r"\*\s*\[\[قالب:(?P<source>.*)\]\](?P<extra>.*)"
+        scanner.pattern = r"\*\s*\[\[:تصنيف:(?P<source>.*)\]\](?P<extra>.*)\[\[:(?P<namespace_destination>.*):(?P<destination>.*)\]\]"
         scanner.scan(requests_page.get_page_text())
 
         if scanner.have_requests:
@@ -28,15 +29,15 @@ try:
             try:
                 with Session(engine) as session:
                     for request in scanner.requests:
-                        # source_page = pywikibot.Page(site, f"{request['source']}",ns=0)
-                        # destination_page = pywikibot.Page(site, f"{request['destination']}",ns=0)
-                        # if source_page.exists() and destination_page.exists() and source_page.namespace() == 0 and destination_page.namespace() == 0:
-                        # todo:add check if template exists with send content to talk page
+                        to_namespace = 14
+                        if request['namespace_destination'] == "قالب":
+                            to_namespace = 10
                         request_model = Request(
                             from_title=request['source'],
-                            from_namespace=10,
-                            request_type=type_of_request,
-                            extra=request['extra']
+                            to_title=request['destination'],
+                            from_namespace=14,
+                            to_namespace= to_namespace,
+                            request_type=type_of_request
                         )
                         session.add(request_model)
                     session.commit()
@@ -45,10 +46,8 @@ try:
                 print("An error occurred while committing the changes:", e)
 
         else:
-            print("no reqtest found")
             requests_page.move_to_talk_page()
     else:
-        print("not allow for user")
         requests_page.move_to_talk_page()
     # Get the page text after removing the header text
 except Exception as e:
