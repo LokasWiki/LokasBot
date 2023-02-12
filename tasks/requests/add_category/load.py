@@ -1,7 +1,7 @@
+import os, sys
 import pywikibot
 from sqlalchemy.orm import Session
 from sqlalchemy import select
-
 
 from tasks.requests.core.module import PageProcessor, RequestsPage, RequestsScanner
 from tasks.requests.core.database.engine import engine

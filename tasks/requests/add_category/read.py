@@ -1,4 +1,4 @@
-
+import os, sys
 import pywikibot
 from sqlalchemy.orm import Session
 

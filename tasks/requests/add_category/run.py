@@ -1,9 +1,7 @@
 import re
-import os, sys
 import pywikibot
 from sqlalchemy.orm import Session
 from sqlalchemy import select, func, distinct
-
 
 from tasks.requests.core.database.engine import engine
 from tasks.requests.core.database.models import Request, Status,Page
