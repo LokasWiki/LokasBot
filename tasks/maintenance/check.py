@@ -9,8 +9,6 @@ import pywikibot
 from module import create_database_table,get_articles,process_article,check_status
 
 
-
-
 def main():
     try:
         site = pywikibot.Site()
@@ -27,4 +25,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
