@@ -193,10 +193,10 @@ def process_article(site, cursor, conn, id, title):
             UnreviewedArticle,
             HasCategories,
             PortalsBar,
-            Unreferenced,
+            # Unreferenced,
             Orphan,
-            DeadEnd,
-            Underlinked
+            # DeadEnd,
+            # Underlinked
         ]
         if page.exists() and (not page.isRedirectPage()):
             text = page.text
