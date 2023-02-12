@@ -1,4 +1,6 @@
 import re
+import traceback
+
 import pywikibot
 from sqlalchemy.orm import Session
 from sqlalchemy import select, func, distinct
@@ -10,7 +12,7 @@ from tasks.requests.core.database.models import Request, Status,Page
 # Create an instance of the RequestsPage class
 site = pywikibot.Site()
 
-type_of_request = 2
+type_of_request = 1
 
 try:
     session = Session(engine)
@@ -24,35 +26,37 @@ try:
         page_title = request.from_title
         page_new_title = request.to_title
 
+        added_category = pywikibot.Category(site,request.from_name)
+
         pages = session.query(Page).filter(Page.request == request, Page.status == Status.PENDING).limit(100).all()
 
         for page in pages:
             try:
                 p = pywikibot.Page(site, page.page_name)
-                print(p.title())
-                text = str(p.text)
-                reg_str = r"\[\[(" + re.escape(page_title) + r")(\|(?:.*?))?\]\]"
-                link_list = re.findall(reg_str, text)
-                # if link_list:
-                for r in link_list:
-                    r_link = r[0]
-                    r_title = r[1]
-                    if r_title == '':
-                        r_title = "|" + r_link
-                    old_link = "[[" + r[0] + r[1] + "]]"
-                    new_link = "[[" + page_new_title + r_title + "]]"
-                    text = text.replace(old_link, new_link)
+                if p.exists():
+                    categories = p.categories()
+                    has_category = False
+                    for category in categories:
+                        tem = pywikibot.Category(p.site, category.title())
+                        if tem.title(with_ns=False).lower() == added_category.title(with_ns=False).lower():
+                            has_category = True
+                            break
 
-                p.text = text
-                # print(text)
-                p.save(
-                    summary="بوت:[[ويكيبيديا:طلبات استبدال الوصلات]] استبدال [[" + page_title + "]] ب [[" + page_new_title + "]]")
+                    if not has_category:
+                        text = p.text
+                        text += "\n[["+added_category.title(with_ns=True)+"]]"
+                        p.text = text
+                        p.save( summary="بوت:إضافة تصنيف")
 
-                page.status = Status.COMPLETED
-                session.commit()
+                    page.status = Status.COMPLETED
+                    session.commit()
             except Exception as e:
                 print(f"An error occurred where save : {e}")
+                just_the_string = traceback.format_exc()
+                print(just_the_string)
                 session.rollback()
 
 except Exception as e:
     print(f"An error occurred: {e}")
+    just_the_string = traceback.format_exc()
+    print(just_the_string)
