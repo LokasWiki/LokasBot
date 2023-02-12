@@ -45,7 +45,7 @@ class Request(Base):
     def from_name(self):
          return get_namespace(self.from_namespace) + self.from_title
 
-    pages: Mapped[List["Page"]] = relationship(
+    pages: Mapped[list["Page"]] = relationship(
         back_populates="request", cascade="all, delete-orphan"
     )
 
