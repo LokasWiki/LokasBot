@@ -1,4 +1,6 @@
 import re
+
+import pywikibot
 import wikitextparser as wtp
 
 
@@ -45,7 +47,8 @@ class PortalsMerge:
                 if "|نمط=" in temp_arg:
                     new_template_option_string += str(arg).lower().strip()
                 else:
-                    list_option.append(str(arg).lower().strip())
+                    if self.check_portal(arg.value):
+                        list_option.append(str(arg).lower().strip())
 
         for argument in list(set(list_option)):
             new_template_option_string += str(argument)
@@ -53,6 +56,17 @@ class PortalsMerge:
         new_template = "{{شريط بوابات" + new_template_option_string + "}}"
         print(new_template)
 
+    def check_portal(self,portal_name):
+        portal_page = pywikibot.Page(self.page.site,portal_name)
+        status = False
+        if portal_page.exists() and portal_page.namespace() == 100:
+            if portal_page.isRedirectPage():
+                target_page = portal_page.getRedirectTarget()
+                if target_page.exists() and target_page.namespace() == 100:
+                    status = True
+            else:
+                status = True
+        return status
 
     def check(self):
         parsed = wtp.parse(self.text)
