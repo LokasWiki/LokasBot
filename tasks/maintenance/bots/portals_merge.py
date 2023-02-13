@@ -22,9 +22,45 @@ class PortalsMerge:
             "بوابة",
             "Portal"
         ]
-        self.list_of_needed_templates = [
-            "مقالات بحاجة لشريط بوابات"
+        self.exclude_list = [
+            "حد",
+            "قد",
+            "عرض",
+            "فاصل"
         ]
+        self.list_of_template_found = []
 
     def __call__(self):
-        pass
+        if self.check():
+            self.merge_in_one_template()
+        return self.text, self.summary
+
+    def merge_in_one_template(self):
+        new_template_option_string = ""
+        list_option = []
+        for template in self.list_of_template_found:
+            arguments = [arg for arg in template.arguments if arg.name.strip().lower() not in self.exclude_list]
+            for arg in arguments:
+                temp_arg = str(arg).lower().strip().replace(" ","")
+                if "|نمط=" in temp_arg:
+                    new_template_option_string += str(arg).lower().strip()
+                else:
+                    list_option.append(str(arg).lower().strip())
+
+        for argument in list(set(list_option)):
+            new_template_option_string += str(argument)
+
+        new_template = "{{شريط بوابات" + new_template_option_string + "}}"
+        print(new_template)
+
+
+    def check(self):
+        parsed = wtp.parse(self.text)
+        templates_found_number = 0
+        for needed_templated in self.list_of_templates:
+            for template in parsed.templates:
+                if needed_templated.lower() == template.normal_name().lower():
+                    self.list_of_template_found.append(template)
+                    templates_found_number +=1
+
+        return bool(templates_found_number)
