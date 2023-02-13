@@ -5,6 +5,9 @@
 
 export PYWIKIBOT_DIR="$HOME/repos"
 
+export PYTHONPATH="${PYTHONPATH}:$HOME/repos"
+
+
 python3  "$HOME"/repos/tasks/maintenance/read.py "$1"
 
 # Exit the script after running all the Python files

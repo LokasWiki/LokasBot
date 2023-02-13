@@ -4,6 +4,8 @@
 . "$HOME"/repos/.venvs/lokas-bot-scripts/bin/activate
 
 export PYWIKIBOT_DIR="$HOME/repos"
+export PYTHONPATH="${PYTHONPATH}:$HOME/repos"
+
 
 python3  "$HOME"/repos/tasks/requests/link_replacement/load.py
 python3  "$HOME"/repos/tasks/requests/template_distribution/load.py

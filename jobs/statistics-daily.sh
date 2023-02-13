@@ -5,6 +5,7 @@
 . "$HOME"/repos/.venvs/lokas-bot-scripts/bin/activate
 
 export PYWIKIBOT_DIR="$HOME/repos"
+export PYTHONPATH="${PYTHONPATH}:$HOME/repos"
 
 
 myArrayFiles=( "$HOME"/repos/tasks/statistics/activity_of_bureaucrats.py \
