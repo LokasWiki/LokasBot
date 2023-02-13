@@ -25,6 +25,6 @@ class Disambiguation:
         return template_found
 
     def check_title(self):
-        if re.search(r"^\s*\(\s*(توضيح|disambiguation)\s*\)(.*)$", self.page_title) is not None:
+        if re.search(r"\(\s*(توضيح|disambiguation)\s*\)", self.page_title) is not None:
             return True
         return False

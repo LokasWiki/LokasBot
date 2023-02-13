@@ -27,6 +27,7 @@ list_of_allow_titles = [
         " (توضيح)تجربه"
         " ( توضيح)تجربه"
         " ( توضيح )تجربه",
+        "XX (توضيح)"
     ]
 list_of_not_allow_titles = [
         "disambiguation) تجربه",
