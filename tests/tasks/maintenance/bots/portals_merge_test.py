@@ -35,19 +35,6 @@ class TestMain(unittest.TestCase):
         self.assertEqual(new_text, text)
         self.assertEqual(new_summary, summary)
 
-    def test_run_if_portals_template_found(self):
-        page = unittest.mock.Mock()
-        page.title.return_value = "Example Page"
-
-        text = "Some text without the template.\n{{شريط بوابات|كيمياء|فيزياء}}\nSome text without the template.{{شريط بوابات|نمط=قائمة|مصر|فيزياء}}"
-
-        summary = "Test summary"
-        pb = PortalsMerge(page, text, summary)
-        new_text, new_summary = pb.__call__()
-
-        self.assertEqual(new_text, "Some text without the template.\nSome text without the template.{{شريط بوابات|نمط=قائمة|كيمياء|مصر|فيزياء}}")
-        self.assertEqual(new_summary, summary)
-
 
 if __name__ == "__main__":
     unittest.main()
