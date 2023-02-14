@@ -8,6 +8,7 @@ class PortalsMerge:
     def __init__(self, page, text, summary):
         self.page = page
         self.text = text
+        self.tem_text = text
         self.summary = summary
         self.list_of_templates = [
             "صندوق بوابات",
@@ -31,17 +32,20 @@ class PortalsMerge:
             "فاصل"
         ]
         self.list_of_template_found = []
+        self.change_summary = True
 
     def __call__(self):
         if self.check():
             self.merge_in_one_template()
-            self.summary += "، فحص بوابات"
+            if self.change_summary:
+                self.summary += "، فحص بوابات"
         return self.text, self.summary
 
     def merge_in_one_template(self):
         new_template_option_string = ""
         list_option = []
         number_of_valid_portal = 0
+
         for template in self.list_of_template_found:
             self.text = self.text.replace(str(template), "")
             arguments = [arg for arg in template.arguments if arg.name.strip().lower() not in self.exclude_list]
@@ -52,18 +56,25 @@ class PortalsMerge:
                 else:
                     if len(str(arg).lower().strip()) > 1:
                         if self.check_portal(arg.value):
-                            number_of_valid_portal +=1
+                            number_of_valid_portal += 1
                             list_option.append(str(arg).lower().strip())
 
         for argument in list(set(list_option)):
             new_template_option_string += str(argument)
 
         new_template = "{{شريط بوابات" + new_template_option_string + "}}"
-        if number_of_valid_portal:
+        print(len(self.list_of_template_found) == 1 and len(str(new_template)) == len(
+            str(self.list_of_template_found[0])))
+        if (
+                len(self.list_of_template_found) == 1
+                and len(str(new_template)) == len(str(self.list_of_template_found[0]))
+        ):
+            self.text = self.tem_text
+            self.change_summary = False
+        elif number_of_valid_portal:
             self.add_portal(new_template)
 
     def check_portal(self, portal_name):
-        print(portal_name)
         portal_page = pywikibot.Page(self.page.site, f"بوابة:{portal_name}")
         status = False
         if portal_page.exists() and portal_page.namespace() == 100:
