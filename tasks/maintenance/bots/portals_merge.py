@@ -35,6 +35,7 @@ class PortalsMerge:
     def __call__(self):
         if self.check():
             self.merge_in_one_template()
+            self.summary += "، فحص بوابات"
         return self.text, self.summary
 
     def merge_in_one_template(self):
@@ -49,9 +50,10 @@ class PortalsMerge:
                 if "|نمط=" in temp_arg:
                     new_template_option_string += str(arg).lower().strip()
                 else:
-                    if self.check_portal(arg.value):
-                        number_of_valid_portal +=1
-                        list_option.append(str(arg).lower().strip())
+                    if len(str(arg).lower().strip()) > 1:
+                        if self.check_portal(arg.value):
+                            number_of_valid_portal +=1
+                            list_option.append(str(arg).lower().strip())
 
         for argument in list(set(list_option)):
             new_template_option_string += str(argument)
@@ -61,7 +63,8 @@ class PortalsMerge:
             self.add_portal(new_template)
 
     def check_portal(self, portal_name):
-        portal_page = pywikibot.Page(self.page.site, portal_name)
+        print(portal_name)
+        portal_page = pywikibot.Page(self.page.site, f"بوابة:{portal_name}")
         status = False
         if portal_page.exists() and portal_page.namespace() == 100:
             if portal_page.isRedirectPage():
@@ -79,7 +82,6 @@ class PortalsMerge:
         else:
             text = self.text + '\n' + template_name
         self.text = text
-        self.summary += "، فحص بوابات"
 
     def check(self):
         parsed = wtp.parse(self.text)
