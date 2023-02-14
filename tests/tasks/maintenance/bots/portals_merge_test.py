@@ -182,6 +182,7 @@ class TestMain(unittest.TestCase):
         self.assertEqual(new_summary, "Test summary، فحص بوابات")
 
     def test_run_if_one_portals_template_found_all_portals_not_found(self):
+        # test
         page = unittest.mock.Mock()
         page.title.return_value = "Example Page"
 
