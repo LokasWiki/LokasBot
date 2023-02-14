@@ -11,6 +11,7 @@ import traceback
 from bots.unreviewed_article import UnreviewedArticle
 from bots.has_categories import HasCategories
 from bots.portals_bar import PortalsBar
+from bots.portals_merge import PortalsMerge
 from bots.unreferenced import Unreferenced
 from bots.orphan import Orphan
 from bots.dead_end import DeadEnd
@@ -192,6 +193,7 @@ def process_article(site, cursor, conn, id, title):
         steps = [
             UnreviewedArticle,
             HasCategories,
+            PortalsMerge,
             PortalsBar,
             # Unreferenced,
             Orphan,
