@@ -68,6 +68,7 @@ from logging
 INNER JOIN actor on logging.log_actor = actor_id
 where log_timestamp BETWEEN START_WEEK_DATE AND END_WEEK_DATE
 and log_type in ("block", "protect", "delete", "rights")
+and actor_name IN (SELECT user_name FROM user_groups INNER JOIN user ON user_id = ug_user WHERE ug_group = 'sysop')
 and actor_name not in (SELECT replace(pl_title,"_"," ")
 FROM pagelinks
 where pagelinks.pl_from = 7352181
