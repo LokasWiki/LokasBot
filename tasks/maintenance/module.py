@@ -202,7 +202,7 @@ def process_article(site, cursor, conn, id, title):
         ]
         if page.exists() and (not page.isRedirectPage()):
             text = page.text
-            summary = "بوت:صيانة V4.7"
+            summary = "بوت:صيانة V4.8"
             pipeline = Pipeline(page, text, summary, steps)
             processed_text, processed_summary = pipeline.process()
             # write processed text back to the page
