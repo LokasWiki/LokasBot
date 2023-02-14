@@ -89,36 +89,73 @@ class Database():
         self._connection = value
 
 
+list_of_namespace = [
+    {
+        "namespace" : 0,
+        "namespace_text" : "",
+        "header_text" : "مقالات (نطاق 0) (COUNT صفحة)"
+    },
+    {
+        "namespace" : 4,
+        "namespace_text" : "ويكيبيديا",
+        "header_text" : "ويكيبيديا (نطاق NAMESPACE) (COUNT صفحة)"
+    },
+    {
+        "namespace" : 6,
+        "namespace_text" : "ملف",
+        "header_text" : "ملف (نطاق NAMESPACE) (COUNT صفحة)"
+    },
+    {
+        "namespace" : 10,
+        "namespace_text" : "قالب",
+        "header_text" : "قالب (نطاق NAMESPACE) (COUNT صفحة)"
+    },
+    {
+        "namespace" : 14,
+        "namespace_text" : "تصنيف",
+        "header_text" : "تصنيف (نطاق NAMESPACE) (COUNT صفحة)"
+    }
+]
+main_text = ""
+for item in list_of_namespace:
+    db = Database()
+    db.query = """select page_title
+    from page
+    where page_namespace in ({}) and page_title like "%اسكتلندا%" and page_is_redirect = 0 
+    order by page_id;""".format(item['namespace'])
 
-db = Database()
-db.query = """select page_title
-from page
-where page_namespace in (10) and page_title like "%أفريقي%" and page_is_redirect = 0 order by page_id;"""
-db.get_content_from_database()
+    db.get_content_from_database()
 
-text = """<big>'''حالة الطلب:'''</big>  {{تم}}   <big>'''أو'''</big>    {{مرفوض}}
-{| class="wikitable"
-|+
-! colspan="3" |<big>قالب (نطاق 10) (762 قالب)</big>
-|-
-!العنوان السابق
-!نقل إلى
-!حالة الطلب"""
-text +="\n"
-for row in db.result:
-    o_title = str(row['page_title'], 'utf-8')
-    result = re.search("أفريقي", o_title)
-    n_title = o_title[:result.start()] + "إفريقي" + o_title[result.end():]
-    oo_title = o_title[:result.start()] + "'''أفريقي'''" + o_title[result.end():]
-    text +="|- \n|[[:قالب:"+o_title+"|قالب:"+oo_title+"]] \n|قالب:"+n_title+" \n|"
-    # text +="|- \n|[["+o_title+"|"+oo_title+"]] \n|"+n_title+" \n|"
+    text = """<big>'''حالة الطلب:'''</big>  {{تم}}   <big>'''أو'''</big>    {{مرفوض}}
+    {| class="wikitable"
+    |+
+    ! colspan="3" |<big>HEADER</big>
+    |-
+    !العنوان السابق
+    !نقل إلى
+    !حالة الطلب"""
 
-    text += "\n"
-text +="\n"
-text +="""|}"""
+    text = text.replace("HEADER",str(item['header_text']).replace('COUNT',str(len(db.result))).replace("NAMESPACE",str(item['namespace'])))
+    text +="\n"
+    for row in db.result:
+        o_title = str(row['page_title'], 'utf-8')
+        result = re.search("اسكتلندا", o_title)
+        n_title = o_title[:result.start()] + "إسكتلندا" + o_title[result.end():]
+        oo_title = o_title[:result.start()] + "'''اسكتلندا'''" + o_title[result.end():]
+        if item['namespace'] == 0:
+            text +="|- \n|[["+o_title+"|"+oo_title+"]] \n|"+n_title+" \n|"
+        else:
+            text += "|- \n|[[:"+item['namespace_text']+":" + o_title + "|"+item['namespace_text']+":" + oo_title + "]] \n|"+item['namespace_text']+":" + n_title + " \n|"
 
+
+
+        text += "\n"
+    text +="\n"
+    text +="""|}"""
+    main_text += "\n" + text + "\n"
 
 site = pywikibot.Site()
-page = pywikibot.Page(site,"مستخدم:لوقا/ملعب 4")
-page.text = text
+# print(main_text)
+page = pywikibot.Page(site,"مستخدم:لوقا/ملعب 17")
+page.text = main_text
 page.save("انشاء")
