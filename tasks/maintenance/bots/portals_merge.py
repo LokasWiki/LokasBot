@@ -2,10 +2,10 @@ import re
 
 import pywikibot
 import wikitextparser as wtp
-
+from core.utils.lua_to_python import get_lue_table,LuaToPython,portal_aliases_file_name
 
 class PortalsMerge:
-    def __init__(self, page, text, summary):
+    def __init__(self, page, text, summary, ltp=None):
         self.page = page
         self.text = text
         self.tem_text = text
@@ -33,6 +33,11 @@ class PortalsMerge:
         ]
         self.list_of_template_found = []
         self.change_summary = True
+
+        if ltp is None:
+            self.ltp = LuaToPython(get_lue_table(portal_aliases_file_name))
+        else:
+            self.ltp = ltp
 
     def __call__(self):
         if self.check():
@@ -84,6 +89,12 @@ class PortalsMerge:
                     status = True
             else:
                 status = True
+
+        if not status:
+            searchStaus = self.ltp.search(portal_page)
+            if searchStaus is not None:
+                status = True
+
         return status
 
     def add_portal(self, template_name):
