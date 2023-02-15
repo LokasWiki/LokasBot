@@ -8,6 +8,7 @@ export PYWIKIBOT_DIR="$HOME/repos"
 export PYTHONPATH="${PYTHONPATH}:$HOME/repos"
 
 
+python3  "$HOME"/repos/tasks/maintenance/tasks/portal_aliases.py
 python3  "$HOME"/repos/tasks/maintenance/check.py
 
 # Exit the script after running all the Python files

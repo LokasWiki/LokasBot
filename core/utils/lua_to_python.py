@@ -1,6 +1,23 @@
+import os
 import re
 
 from core.utils.regex_scanner import RequestsScanner
+
+portal_aliases_file_name = "portal_aliases.txt"
+
+def save_lue_table(name,text):
+    home_path = os.path.expanduser("~")
+    lue_path = os.path.join(home_path, name)
+    with open(lue_path, 'w') as f:
+        f.write(text)
+
+
+def get_lue_table(name):
+    home_path = os.path.expanduser("~")
+    lue_path = os.path.join(home_path, name)
+    with open(lue_path, 'r') as f:
+        content = f.read()
+    return content
 
 
 class LuaToPython:
@@ -29,6 +46,10 @@ class LuaToPython:
         return value_list
 
     def search(self,search_item):
+
+        if self.data.items() == 0:
+            self._parse_table()
+
         name = None
         for item in self.data:
             if item == search_item:
@@ -39,3 +60,6 @@ class LuaToPython:
                     name = item
                     break
         return name
+
+
+
