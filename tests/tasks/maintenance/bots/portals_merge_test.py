@@ -52,7 +52,11 @@ class TestMain(unittest.TestCase):
 
         summary = "Test summary"
         pb = PortalsMerge(page, text, summary, ltp_mock)
-        pb.check_portal = MagicMock(return_value=True)
+
+        def side_effect_func(value):
+            return True, value
+
+        pb.check_portal = MagicMock(side_effect=side_effect_func)
         new_text, new_summary = pb.__call__()
 
         self.assertEqual(len(new_text), len("{{شريط بوابات|نمط=قائمة|مصر|فيزياء|كيمياء}}\n"))
@@ -70,7 +74,11 @@ class TestMain(unittest.TestCase):
 
         summary = "Test summary"
         pb = PortalsMerge(page, text, summary, ltp_mock)
-        pb.check_portal = MagicMock(return_value=False)
+
+        def side_effect_func(value):
+            return False, value
+
+        pb.check_portal = MagicMock(side_effect=side_effect_func)
         new_text, new_summary = pb.__call__()
 
         self.assertEqual(new_text, "test")
@@ -91,8 +99,8 @@ class TestMain(unittest.TestCase):
 
         def side_effect_func(value):
             if value == "مصر":
-                return False
-            return True
+                return False,value
+            return True,value
 
         pb.check_portal = MagicMock(side_effect=side_effect_func)
         new_text, new_summary = pb.__call__()
@@ -112,7 +120,11 @@ class TestMain(unittest.TestCase):
 
         summary = "Test summary"
         pb = PortalsMerge(page, text, summary, ltp_mock)
-        pb.check_portal = MagicMock(return_value=True)
+
+        def side_effect_func(value):
+            return True, value
+
+        pb.check_portal = MagicMock(side_effect=side_effect_func)
         new_text, new_summary = pb.__call__()
 
         self.assertEqual(len(new_text), len("{{شريط بوابات|نمط=قائمة|مصر|فيزياء|كيمياء}}\n"))
@@ -130,7 +142,11 @@ class TestMain(unittest.TestCase):
 
         summary = "Test summary"
         pb = PortalsMerge(page, text, summary, ltp_mock)
-        pb.check_portal = MagicMock(return_value=True)
+
+        def side_effect_func(value):
+            return True, value
+
+        pb.check_portal = MagicMock(side_effect=side_effect_func)
         new_text, new_summary = pb.__call__()
 
         self.assertEqual(new_text, "test")
@@ -148,7 +164,11 @@ class TestMain(unittest.TestCase):
 
         summary = "Test summary"
         pb = PortalsMerge(page, text, summary, ltp_mock)
-        pb.check_portal = MagicMock(return_value=False)
+
+        def side_effect_func(value):
+            return False, value
+
+        pb.check_portal = MagicMock(side_effect=side_effect_func)
         new_text, new_summary = pb.__call__()
 
         self.assertEqual(new_text, "test")
@@ -169,8 +189,8 @@ class TestMain(unittest.TestCase):
 
         def side_effect_func(value):
             if value == "مصر":
-                return False
-            return True
+                return False,value
+            return True,value
 
         pb.check_portal = MagicMock(side_effect=side_effect_func)
         new_text, new_summary = pb.__call__()
@@ -190,7 +210,11 @@ class TestMain(unittest.TestCase):
 
         summary = "Test summary"
         pb = PortalsMerge(page, text, summary, ltp_mock)
-        pb.check_portal = MagicMock(return_value=True)
+
+        def side_effect_func(value):
+            return True, value
+
+        pb.check_portal = MagicMock(side_effect=side_effect_func)
         new_text, new_summary = pb.__call__()
 
         self.assertEqual(len(new_text), len(text))
@@ -212,8 +236,8 @@ class TestMain(unittest.TestCase):
 
         def side_effect_func(value):
             if value == "مصر":
-                return False
-            return True
+                return False,value
+            return True,value
 
         pb.check_portal = MagicMock(side_effect=side_effect_func)
         new_text, new_summary = pb.__call__()
@@ -236,15 +260,13 @@ class TestMain(unittest.TestCase):
         pb = PortalsMerge(page, text, summary, ltp_mock)
 
         def side_effect_func(value):
-            return False
+            return False, value
 
         pb.check_portal = MagicMock(side_effect=side_effect_func)
         new_text, new_summary = pb.__call__()
         print(new_text)
         self.assertEqual(len(new_text), len("testtest"))
         self.assertEqual(new_summary, "Test summary، فحص بوابات")
-
-
 
 
 if __name__ == "__main__":

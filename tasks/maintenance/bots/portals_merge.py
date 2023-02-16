@@ -68,9 +68,10 @@ class PortalsMerge:
                     new_template_option_string += str(arg).lower().strip()
                 else:
                     if len(str(arg).lower().strip()) > 1:
-                        if self.check_portal(arg.value):
+                        status, name = self.check_portal(arg.value)
+                        if status:
                             number_of_valid_portal += 1
-                            list_option.append(str(arg).lower().strip())
+                            list_option.append(f"|{name}")
 
         for argument in list(set(list_option)):
             new_template_option_string += str(argument)
@@ -92,20 +93,24 @@ class PortalsMerge:
 
     def check_portal(self, portal_name):
         portal_page = pywikibot.Page(self.page.site, f"بوابة:{portal_name}")
+        name = portal_name
         status = False
         if portal_page.exists() and portal_page.namespace() == 100:
             if portal_page.isRedirectPage():
                 target_page = portal_page.getRedirectTarget()
                 if target_page.exists() and target_page.namespace() == 100:
                     status = True
+                    name = target_page.title(with_ns=False)
             else:
                 status = True
+                name = portal_page.title(with_ns=False)
 
         if not status:
             search_staus = self.ltp.search(portal_name)
             if search_staus is not None:
                 status = True
-        return status
+                name = search_staus
+        return status, name
 
     def add_portal(self, template_name):
         category_template = '[[تصنيف:'
