@@ -9,7 +9,6 @@ import wikitextparser as wtp
 
 class TestMain(unittest.TestCase):
 
-
     def setUp(self) -> None:
         self.list_of_templates = [
             "صندوق بوابات",
@@ -27,7 +26,6 @@ class TestMain(unittest.TestCase):
             "Portal"
         ]
 
-
     def test_run_if_no_portals_template_found(self):
         page = unittest.mock.Mock()
         ltp_mock = MagicMock()
@@ -36,7 +34,7 @@ class TestMain(unittest.TestCase):
 
         text = "Some text without the template."
         summary = "Test summary"
-        pb = PortalsMerge(page, text, summary,ltp_mock)
+        pb = PortalsMerge(page, text, summary, ltp_mock)
         new_text, new_summary = pb.__call__()
 
         self.assertEqual(new_text, text)
@@ -53,7 +51,7 @@ class TestMain(unittest.TestCase):
         text = "{{شريط بوابات|كيمياء|فيزياء}}{{شريط بوابات|نمط=قائمة|مصر|فيزياء}}"
 
         summary = "Test summary"
-        pb = PortalsMerge(page, text, summary,ltp_mock)
+        pb = PortalsMerge(page, text, summary, ltp_mock)
         pb.check_portal = MagicMock(return_value=True)
         new_text, new_summary = pb.__call__()
 
@@ -71,7 +69,7 @@ class TestMain(unittest.TestCase):
         text = "test{{شريط بوابات|كيمياء|فيزياء}}{{شريط بوابات|نمط=قائمة|مصر|فيزياء}}"
 
         summary = "Test summary"
-        pb = PortalsMerge(page, text, summary,ltp_mock)
+        pb = PortalsMerge(page, text, summary, ltp_mock)
         pb.check_portal = MagicMock(return_value=False)
         new_text, new_summary = pb.__call__()
 
@@ -89,7 +87,7 @@ class TestMain(unittest.TestCase):
         text = "{{شريط بوابات|كيمياء|فيزياء}}{{شريط بوابات|نمط=قائمة|مصر|فيزياء}}"
 
         summary = "Test summary"
-        pb = PortalsMerge(page, text, summary,ltp_mock)
+        pb = PortalsMerge(page, text, summary, ltp_mock)
 
         def side_effect_func(value):
             if value == "مصر":
@@ -113,7 +111,7 @@ class TestMain(unittest.TestCase):
         text = "{{بوابة|كيمياء|فيزياء}}{{شريط بوابات|نمط=قائمة|مصر|فيزياء}}"
 
         summary = "Test summary"
-        pb = PortalsMerge(page, text, summary,ltp_mock)
+        pb = PortalsMerge(page, text, summary, ltp_mock)
         pb.check_portal = MagicMock(return_value=True)
         new_text, new_summary = pb.__call__()
 
@@ -131,7 +129,7 @@ class TestMain(unittest.TestCase):
         text = "test{{بوابة|        }}{{شريط بوابات|نمط=قائمة}}"
 
         summary = "Test summary"
-        pb = PortalsMerge(page, text, summary,ltp_mock)
+        pb = PortalsMerge(page, text, summary, ltp_mock)
         pb.check_portal = MagicMock(return_value=True)
         new_text, new_summary = pb.__call__()
 
@@ -149,7 +147,7 @@ class TestMain(unittest.TestCase):
         text = "test{{بوابة|كيمياء|فيزياء}}{{شريط بوابات|نمط=قائمة|مصر|فيزياء}}"
 
         summary = "Test summary"
-        pb = PortalsMerge(page, text, summary,ltp_mock)
+        pb = PortalsMerge(page, text, summary, ltp_mock)
         pb.check_portal = MagicMock(return_value=False)
         new_text, new_summary = pb.__call__()
 
@@ -167,7 +165,7 @@ class TestMain(unittest.TestCase):
         text = "{{بوابة|كيمياء|فيزياء}}{{شريط بوابات|نمط=قائمة|مصر|فيزياء}}"
 
         summary = "Test summary"
-        pb = PortalsMerge(page, text, summary,ltp_mock)
+        pb = PortalsMerge(page, text, summary, ltp_mock)
 
         def side_effect_func(value):
             if value == "مصر":
@@ -191,13 +189,13 @@ class TestMain(unittest.TestCase):
         text = "test{{شريط بوابات|نمط=قائمة|مصر|فيزياء}}test"
 
         summary = "Test summary"
-        pb = PortalsMerge(page, text, summary,ltp_mock)
+        pb = PortalsMerge(page, text, summary, ltp_mock)
         pb.check_portal = MagicMock(return_value=True)
         new_text, new_summary = pb.__call__()
 
         self.assertEqual(len(new_text), len(text))
         self.assertEqual(text, new_text)
-        self.assertEqual(new_summary, summary,ltp_mock)
+        self.assertEqual(new_summary, summary, ltp_mock)
 
     def test_run_if_one_portals_template_found_all_portals_found_expect_one(self):
         page = unittest.mock.Mock()
@@ -210,7 +208,7 @@ class TestMain(unittest.TestCase):
         text = "test{{شريط بوابات|نمط=قائمة|مصر|فيزياء}}test"
 
         summary = "Test summary"
-        pb = PortalsMerge(page, text, summary,ltp_mock)
+        pb = PortalsMerge(page, text, summary, ltp_mock)
 
         def side_effect_func(value):
             if value == "مصر":
@@ -235,7 +233,7 @@ class TestMain(unittest.TestCase):
         text = "test{{شريط بوابات|نمط=قائمة|مصر|فيزياء}}test"
 
         summary = "Test summary"
-        pb = PortalsMerge(page, text, summary,ltp_mock)
+        pb = PortalsMerge(page, text, summary, ltp_mock)
 
         def side_effect_func(value):
             return False
@@ -245,6 +243,8 @@ class TestMain(unittest.TestCase):
         print(new_text)
         self.assertEqual(len(new_text), len("testtest"))
         self.assertEqual(new_summary, "Test summary، فحص بوابات")
+
+
 
 
 if __name__ == "__main__":

@@ -2,7 +2,8 @@ import re
 
 import pywikibot
 import wikitextparser as wtp
-from core.utils.lua_to_python import get_lue_table,LuaToPython,portal_aliases_file_name
+from core.utils.lua_to_python import get_lue_table, LuaToPython, portal_aliases_file_name
+
 
 class PortalsMerge:
     def __init__(self, page, text, summary, ltp=None):
@@ -48,11 +49,18 @@ class PortalsMerge:
 
     def merge_in_one_template(self):
         new_template_option_string = ""
+        temp_template_option_string = ""
+
         list_option = []
         number_of_valid_portal = 0
 
         for template in self.list_of_template_found:
             self.text = self.text.replace(str(template), "")
+            # for test
+            tem_arguments = [arg for arg in template.arguments if arg.name.strip().lower()]
+            for t_argument in tem_arguments:
+                temp_template_option_string += str(t_argument).lower().strip()
+            # for merge
             arguments = [arg for arg in template.arguments if arg.name.strip().lower() not in self.exclude_list]
             for arg in arguments:
                 temp_arg = str(arg).lower().strip().replace(" ", "")
@@ -68,15 +76,18 @@ class PortalsMerge:
             new_template_option_string += str(argument)
 
         new_template = "{{شريط بوابات" + new_template_option_string + "}}"
-        print(len(self.list_of_template_found) == 1 and len(str(new_template)) == len(
-            str(self.list_of_template_found[0])))
+        temp_template = "{{شريط بوابات" + temp_template_option_string + "}}"
+
+        print(new_template)
+        print(temp_template)
+
         if (
-                len(self.list_of_template_found) == 1
-                and len(str(new_template)) == len(str(self.list_of_template_found[0]))
+                len(new_template) == len(temp_template)
         ):
             self.text = self.tem_text
             self.change_summary = False
         elif number_of_valid_portal:
+
             self.add_portal(new_template)
 
     def check_portal(self, portal_name):
@@ -91,10 +102,9 @@ class PortalsMerge:
                 status = True
 
         if not status:
-            searchStaus = self.ltp.search(portal_page)
-            if searchStaus is not None:
+            search_staus = self.ltp.search(portal_name)
+            if search_staus is not None:
                 status = True
-
         return status
 
     def add_portal(self, template_name):
