@@ -1,9 +1,11 @@
 from waybackpy.exceptions import NoCDXRecordFound
 from datetime import datetime, timedelta
+from urllib.parse import quote
 
 from tasks.webcite.modules.cites.webcite import WebCite
-from waybackpy import WaybackMachineCDXServerAPI
 
+from waybackpy import WaybackMachineCDXServerAPI
+from waybackpy import WaybackMachineSaveAPI
 
 class Cite:
     def __init__(self, template):
@@ -15,7 +17,7 @@ class Cite:
 
         self.url = self.template.url()
 
-        self.user_agent = "Mozilla/5.0 (Windows NT 5.1; rv:40.0) Gecko/20100101 Firefox/40.0"
+        self.user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36"
         self.archive_object = None
 
     def is_archived(self):
@@ -29,7 +31,8 @@ class Cite:
         return False
 
     def check_available_on_api(self):
-        cdx_api = WaybackMachineCDXServerAPI(self.url.value, self.user_agent)
+        encoded_url = quote(str(self.url.value).strip().lower(), safe=':/?=&')
+        cdx_api = WaybackMachineCDXServerAPI(encoded_url, self.user_agent)
         found = False
         archive_obj = None
         try:
@@ -49,3 +52,11 @@ class Cite:
         except NoCDXRecordFound:
             found = False
         return found, archive_obj
+
+    def archive_it(self):
+        encoded_url = quote(str(self.url.value).strip().lower(), safe=':/?=&')
+        save_api = WaybackMachineSaveAPI(encoded_url, self.user_agent)
+        self.archive_object = save_api.save()
+
+    def update_template(self):
+        self.template.update_template(self.archive_object.archive_url,self.archive_object.timestamp)

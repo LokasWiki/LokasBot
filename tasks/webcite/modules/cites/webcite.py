@@ -14,6 +14,11 @@ class WebCite:
             "archive-url",
             "مسار أرشيف"
         ]
+        self.archive_date_args = [
+            "archivedate",
+            "تاريخ الأرشيف",
+            "archive-date",
+        ]
         self.url_args = [
             "url",
             "المسار",
@@ -45,3 +50,18 @@ class WebCite:
             for arg in self.arguments_after_clean:
                 if arg.name.strip().lower() == need_arg.strip().lower():
                     self.archive_url_args_found.append(arg)
+
+    def update_template(self,url,timestamp):
+        for need_arg in self.archive_url_args:
+            if self.template.has_arg(need_arg):
+                self.template.del_arg(need_arg)
+
+        for need_arg in self.archive_date_args:
+            if self.template.has_arg(need_arg):
+                self.template.del_arg(need_arg)
+
+        self.template.set_arg("تاريخ الأرشيف"," {{safesubst:#وقت:j F Y|"+timestamp+"}}")
+
+        self.template.set_arg("مسار الأرشيف	",url)
+
+        print(self.template)
