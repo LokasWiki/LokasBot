@@ -18,7 +18,7 @@ class TestMain(unittest.TestCase):
         save_lue_table("test_lue_table.txt", content)
 
         # Read the file to verify that the content was saved
-        with open(self.test_file, "r") as f:
+        with open(self.test_file) as f:
             file_content = f.read()
 
         self.assertEqual(content, file_content)
@@ -35,7 +35,7 @@ class TestMain(unittest.TestCase):
         save_lue_table("test_lue_table.txt", content)
 
         # Read the file to verify that the content was saved
-        with open(self.test_file, "r") as f:
+        with open(self.test_file) as f:
             file_content = f.read()
 
         self.assertEqual(content, file_content)
@@ -46,7 +46,7 @@ class TestMain(unittest.TestCase):
         save_lue_table("test_lue_table.txt", content)
 
         # Read the file to verify that the content was saved
-        with open(self.test_file, "r") as f:
+        with open(self.test_file) as f:
             file_content = f.read()
 
         self.assertEqual(content, file_content)

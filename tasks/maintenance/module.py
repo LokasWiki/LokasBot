@@ -125,7 +125,7 @@ FROM (
     INNER JOIN page ON revision.rev_page = page.page_id
     WHERE page.page_namespace IN (0)
     AND rev_timestamp > DATE_SUB( now(), INTERVAL MINUTE_SUB_NUMBER MINUTE ) and page_is_redirect = 0
-    UNION 
+    UNION
     select page.page_title AS "pl_2_title" from categorylinks
     inner join page on page.page_id = categorylinks.cl_from
     # تصنيف:مقالات تحتوي بوابات مكررة
