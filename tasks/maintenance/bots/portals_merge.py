@@ -1,5 +1,3 @@
-import re
-
 import pywikibot
 import wikitextparser as wtp
 from core.utils.lua_to_python import get_lue_table, LuaToPython, portal_aliases_file_name
@@ -41,6 +39,9 @@ class PortalsMerge:
             self.ltp = ltp
 
     def __call__(self):
+        if self.ignore():
+            return self.text, self.summary
+
         if self.check():
             self.merge_in_one_template()
             if self.change_summary:
@@ -79,12 +80,7 @@ class PortalsMerge:
         new_template = "{{شريط بوابات" + new_template_option_string + "}}"
         temp_template = "{{شريط بوابات" + temp_template_option_string + "}}"
 
-        print(new_template)
-        print(temp_template)
-
-        if (
-                len(new_template) == len(temp_template)
-        ):
+        if len(new_template) == len(temp_template):
             self.text = self.tem_text
             self.change_summary = False
         elif number_of_valid_portal:
@@ -130,3 +126,12 @@ class PortalsMerge:
                     templates_found_number += 1
 
         return bool(templates_found_number)
+
+    def ignore(self):
+        parsed = wtp.parse(self.text)
+        found = False
+        for template in parsed.templates:
+            if "لا لصيانة البوابات".lower() == template.normal_name().lower():
+                found = True
+                break
+        return found

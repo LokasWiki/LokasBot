@@ -40,6 +40,20 @@ class TestMain(unittest.TestCase):
         self.assertEqual(new_text, text)
         self.assertEqual(new_summary, "Test summary")
 
+    def test_run_if_ignore_template_found(self):
+        page = unittest.mock.Mock()
+        ltp_mock = MagicMock()
+        ltp_mock.search.return_value = None
+        page.title.return_value = "Example Page"
+
+        text = "Some text {{لا لصيانة البوابات}} without the template.{{شريط بوابات|كيمياء|فيزياء}}{{شريط بوابات|نمط=قائمة|مصر|فيزياء}}"
+        summary = "Test summary"
+        pb = PortalsMerge(page, text, summary, ltp_mock)
+        new_text, new_summary = pb.__call__()
+
+        self.assertEqual(new_text, text)
+        self.assertEqual(new_summary, "Test summary")
+
     def test_run_if_portals_template_found(self):
         page = unittest.mock.Mock()
 
