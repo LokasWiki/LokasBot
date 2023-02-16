@@ -26,9 +26,9 @@ class MyTestCase(unittest.TestCase):
 | title = محافظ الجيزة يصدر قراراً بحركة رؤساء الوحدات المحلية..48 قيادة بالمراكز والمدن
 | date = 2022-7-19
 | موقع = اليوم السابع
-| url2 = 
-| title = 
-| uvfd = 
+| url2 =
+| title =
+| uvfd =
 | لغة = ar
 | accessdate = 2023-2-16
 }}"""
