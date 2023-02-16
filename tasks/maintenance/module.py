@@ -215,6 +215,7 @@ def process_article(site, cursor, conn, id, title):
         ]
         extra_steps = [
             PortalsMerge,
+            PortalsBar
         ]
         if page.exists() and (not page.isRedirectPage()):
             text = page.text
