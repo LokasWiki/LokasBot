@@ -75,7 +75,7 @@ class MyTestCase(unittest.TestCase):
         template = """{{استشهاد ويب
         | عنوان = السعودية تتأهل إلى نهائيات كأس العالم 2018
         | موقع = www.alarabiya.net
-        | url = 
+        | url =
         | تاريخ الوصول = 2017-11-11| مسار أرشيف = https://web.archive.org/web/20180216041626/http://www.alarabiya.net/ar/sport/saudi-sport/2017/09/05/الأخضر-ينهي-غيابه-الطويل-عن-المونديال-ويقطع-تذكرة-موسكو.html | تاريخ أرشيف = 16 فبراير 2018 }}"""
         parser = wtp.Template(template)
         obj = WebCite(parser)
