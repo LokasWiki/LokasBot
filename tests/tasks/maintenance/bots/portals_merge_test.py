@@ -282,6 +282,29 @@ class TestMain(unittest.TestCase):
         self.assertEqual(len(new_text), len("testtest"))
         self.assertEqual(new_summary, "Test summary، فحص بوابات")
 
+    def test_run_if_one_only_portals_template_found_all_portals_not_found(self):
+        # test
+        page = unittest.mock.Mock()
+
+        ltp_mock = MagicMock()
+        ltp_mock.search.return_value = None
+
+        page.title.return_value = "Example Page"
+
+        text = "test{{بوابة|البرازيل|تلفاز}}test"
+
+        summary = "Test summary"
+        pb = PortalsMerge(page, text, summary, ltp_mock)
+
+        def side_effect_func(value):
+            return True, value
+
+        pb.check_portal = MagicMock(side_effect=side_effect_func)
+        new_text, new_summary = pb.__call__()
+
+        self.assertEqual(len(new_text), len("testtest\n{{شريط بوابات|البرازيل|تلفاز}}"))
+        self.assertEqual(new_summary, "Test summary، فحص بوابات")
+
 
 if __name__ == "__main__":
     unittest.main()

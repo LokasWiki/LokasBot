@@ -80,7 +80,7 @@ class PortalsMerge:
         new_template = "{{شريط بوابات" + new_template_option_string + "}}"
         temp_template = "{{شريط بوابات" + temp_template_option_string + "}}"
 
-        if len(new_template) == len(temp_template):
+        if len(new_template) == len(temp_template) and  len(self.list_of_template_found) == 1 and self.list_of_template_found[0].normal_name().lower() == "شريط بوابات":
             self.text = self.tem_text
             self.change_summary = False
         elif number_of_valid_portal:
