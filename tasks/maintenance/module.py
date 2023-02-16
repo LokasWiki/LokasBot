@@ -125,7 +125,14 @@ FROM (
     INNER JOIN page ON revision.rev_page = page.page_id
     WHERE page.page_namespace IN (0)
     AND rev_timestamp > DATE_SUB( now(), INTERVAL MINUTE_SUB_NUMBER MINUTE ) and page_is_redirect = 0
-
+    UNION 
+    select page.page_title AS "pl_2_title" from categorylinks
+    inner join page on page.page_id = categorylinks.cl_from
+    # تصنيف:مقالات تحتوي بوابات مكررة
+    # تصنيف:صفحات_تحتوي_بوابات_مكررة_باستخدام_قالب_بوابة
+    where cl_to in (select page.page_title from page where page_id in (6202012,6009002))
+    and cl_type = "page"
+    and page.page_namespace = 0
 ) AS pages_list"""
     database = Database()
     database.query = query.replace("MINUTE_SUB_NUMBER", str(start))
