@@ -7,13 +7,11 @@ from tasks.webcite.modules.cites.webcite import WebCite
 from waybackpy import WaybackMachineCDXServerAPI
 from waybackpy import WaybackMachineSaveAPI
 
+
 class Cite:
     def __init__(self, template):
 
-        if template is None:
-            self.template = WebCite(template)
-        else:
-            self.template = template
+        self.template = template
 
         self.url = self.template.url()
 
@@ -24,10 +22,13 @@ class Cite:
         return self.check_available()
 
     def check_available(self):
-        if self.template.url() is not None:
-            status, archive_obj = self.check_available_on_api()
-            self.archive_object = archive_obj
-            return status
+        try:
+            if self.template.url() is not None:
+                status, archive_obj = self.check_available_on_api()
+                self.archive_object = archive_obj
+                return status
+        except AttributeError:
+            print(" 'Template' object has no attribute 'url'")
         return False
 
     def check_available_on_api(self):
@@ -59,4 +60,4 @@ class Cite:
         self.archive_object = save_api.save()
 
     def update_template(self):
-        self.template.update_template(self.archive_object.archive_url,self.archive_object.timestamp)
+        self.template.update_template(self.archive_object.archive_url, self.archive_object.timestamp)
