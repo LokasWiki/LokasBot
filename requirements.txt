@@ -5,5 +5,5 @@ pywikibot [mysql,mwoauth] == 7.7.1
 pywikibot-extensions == 22.11.12
 SQLAlchemy == 2.0.2
 typing-extensions == 4.4.0
-
+waybackpy~=3.0.6
 wikitextparser~=0.51.1

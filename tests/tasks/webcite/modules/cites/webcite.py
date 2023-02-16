@@ -19,6 +19,8 @@ class MyTestCase(unittest.TestCase):
         self.assertIs(obj.is_archived(), False)
         self.assertEqual(len(obj.archive_url_args_found), 0)
         self.assertEqual(len(obj.arguments_after_clean), 6)
+        self.assertEqual(parser.get_arg("url").name.strip().lower(),obj.url().name.strip().lower())
+        self.assertEqual(parser.get_arg("url").value.strip().lower(),obj.url().value.strip().lower())
 
     def test_simple_with_empty_arg(self):
         template = """{{استشهاد ويب
@@ -37,7 +39,8 @@ class MyTestCase(unittest.TestCase):
         self.assertIs(obj.is_archived(), False)
         self.assertEqual(len(obj.archive_url_args_found), 0)
         self.assertEqual(len(obj.arguments_after_clean), 6)
-
+        self.assertEqual(parser.get_arg("url").name.strip().lower(), obj.url().name.strip().lower())
+        self.assertEqual(parser.get_arg("url").value.strip().lower(), obj.url().value.strip().lower())
 
     def test_simple_with_one_arg_url(self):
         template = """{{استشهاد ويب
@@ -51,6 +54,35 @@ class MyTestCase(unittest.TestCase):
         self.assertIs(obj.is_archived(), True)
         self.assertEqual(len(obj.archive_url_args_found), 1)
         self.assertEqual(len(obj.arguments_after_clean), 7)
+        self.assertEqual(parser.get_arg("مسار").name.strip().lower(), obj.url().name.strip().lower())
+        self.assertEqual(parser.get_arg("مسار").value.strip().lower(), obj.url().value.strip().lower())
+
+    def test_simple_with_none_arg_url(self):
+        template = """{{استشهاد ويب
+        | عنوان = السعودية تتأهل إلى نهائيات كأس العالم 2018
+        | موقع = www.alarabiya.net
+        | لغة = ar
+        | تاريخ الوصول = 2017-11-11| مسار أرشيف = https://web.archive.org/web/20180216041626/http://www.alarabiya.net/ar/sport/saudi-sport/2017/09/05/الأخضر-ينهي-غيابه-الطويل-عن-المونديال-ويقطع-تذكرة-موسكو.html | تاريخ أرشيف = 16 فبراير 2018 }}"""
+        parser = wtp.Template(template)
+        obj = WebCite(parser)
+        self.assertIs(obj.is_archived(), True)
+        self.assertEqual(len(obj.archive_url_args_found), 1)
+        self.assertEqual(len(obj.arguments_after_clean), 6)
+        self.assertIsNone(obj.url())
+
+
+    def test_simple_with_empty_arg_url(self):
+        template = """{{استشهاد ويب
+        | عنوان = السعودية تتأهل إلى نهائيات كأس العالم 2018
+        | موقع = www.alarabiya.net
+        | url = 
+        | تاريخ الوصول = 2017-11-11| مسار أرشيف = https://web.archive.org/web/20180216041626/http://www.alarabiya.net/ar/sport/saudi-sport/2017/09/05/الأخضر-ينهي-غيابه-الطويل-عن-المونديال-ويقطع-تذكرة-موسكو.html | تاريخ أرشيف = 16 فبراير 2018 }}"""
+        parser = wtp.Template(template)
+        obj = WebCite(parser)
+        self.assertIs(obj.is_archived(), True)
+        self.assertEqual(len(obj.archive_url_args_found), 1)
+        self.assertEqual(len(obj.arguments_after_clean), 5)
+        self.assertIsNone(obj.url())
 
 
 
