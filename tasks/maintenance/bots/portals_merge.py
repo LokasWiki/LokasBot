@@ -1,11 +1,10 @@
-import re
-
 import pywikibot
 import wikitextparser as wtp
+from core.utils.lua_to_python import get_lue_table, LuaToPython, portal_aliases_file_name
 
 
 class PortalsMerge:
-    def __init__(self, page, text, summary):
+    def __init__(self, page, text, summary, ltp=None):
         self.page = page
         self.text = text
         self.tem_text = text
@@ -34,7 +33,15 @@ class PortalsMerge:
         self.list_of_template_found = []
         self.change_summary = True
 
+        if ltp is None:
+            self.ltp = LuaToPython(get_lue_table(portal_aliases_file_name))
+        else:
+            self.ltp = ltp
+
     def __call__(self):
+        if self.ignore():
+            return self.text, self.summary
+
         if self.check():
             self.merge_in_one_template()
             if self.change_summary:
@@ -43,11 +50,18 @@ class PortalsMerge:
 
     def merge_in_one_template(self):
         new_template_option_string = ""
+        temp_template_option_string = ""
+
         list_option = []
         number_of_valid_portal = 0
 
         for template in self.list_of_template_found:
             self.text = self.text.replace(str(template), "")
+            # for test
+            tem_arguments = [arg for arg in template.arguments if arg.name.strip().lower()]
+            for t_argument in tem_arguments:
+                temp_template_option_string += str(t_argument).lower().strip()
+            # for merge
             arguments = [arg for arg in template.arguments if arg.name.strip().lower() not in self.exclude_list]
             for arg in arguments:
                 temp_arg = str(arg).lower().strip().replace(" ", "")
@@ -55,36 +69,44 @@ class PortalsMerge:
                     new_template_option_string += str(arg).lower().strip()
                 else:
                     if len(str(arg).lower().strip()) > 1:
-                        if self.check_portal(arg.value):
+                        status, name = self.check_portal(arg.value)
+                        if status:
                             number_of_valid_portal += 1
-                            list_option.append(str(arg).lower().strip())
+                            list_option.append(f"|{name}")
 
         for argument in list(set(list_option)):
             new_template_option_string += str(argument)
 
         new_template = "{{شريط بوابات" + new_template_option_string + "}}"
-        print(len(self.list_of_template_found) == 1 and len(str(new_template)) == len(
-            str(self.list_of_template_found[0])))
-        if (
-                len(self.list_of_template_found) == 1
-                and len(str(new_template)) == len(str(self.list_of_template_found[0]))
-        ):
+        temp_template = "{{شريط بوابات" + temp_template_option_string + "}}"
+
+        if len(new_template) == len(temp_template):
             self.text = self.tem_text
             self.change_summary = False
         elif number_of_valid_portal:
+
             self.add_portal(new_template)
 
     def check_portal(self, portal_name):
         portal_page = pywikibot.Page(self.page.site, f"بوابة:{portal_name}")
+        name = portal_name
         status = False
         if portal_page.exists() and portal_page.namespace() == 100:
             if portal_page.isRedirectPage():
                 target_page = portal_page.getRedirectTarget()
                 if target_page.exists() and target_page.namespace() == 100:
                     status = True
+                    name = target_page.title(with_ns=False)
             else:
                 status = True
-        return status
+                name = portal_page.title(with_ns=False)
+
+        if not status:
+            search_staus = self.ltp.search(portal_name)
+            if search_staus is not None:
+                status = True
+                name = search_staus
+        return status, name
 
     def add_portal(self, template_name):
         category_template = '[[تصنيف:'
@@ -104,3 +126,12 @@ class PortalsMerge:
                     templates_found_number += 1
 
         return bool(templates_found_number)
+
+    def ignore(self):
+        parsed = wtp.parse(self.text)
+        found = False
+        for template in parsed.templates:
+            if "لا لصيانة البوابات".lower() == template.normal_name().lower():
+                found = True
+                break
+        return found
