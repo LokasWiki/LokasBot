@@ -1,5 +1,7 @@
 import wikitextparser as wtp
 
+from tasks.webcite.modules.cite import Cite
+
 
 class Parsed:
 
@@ -35,6 +37,6 @@ class Parsed:
         for needed_templated in self.list_of_templates:
             for template in parsed.templates:
                 if needed_templated.lower() == template.normal_name().lower():
-                    self.cite_templates.append(template)
+                    self.cite_templates.append(Cite(template))
                     templates_found_number += 1
         return bool(templates_found_number)
