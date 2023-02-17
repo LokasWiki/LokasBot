@@ -84,6 +84,22 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(len(obj.arguments_after_clean), 5)
         self.assertIsNone(obj.url())
 
+    def test_simple_with_replace_arg_url(self):
+        template = """{{استشهاد ويب
+        | عنوان = السعودية تتأهل إلى نهائيات كأس العالم 2018
+        | موقع = www.alarabiya.net
+        | url = http://temburong.gov.bn/SitePages/MUKIM%20BOKOK.aspx
+        | تاريخ الوصول = 2017-11-11| مسار أرشيف = https://web.archive.org/web/20180216041626/http://www.alarabiya.net/ar/sport/saudi-sport/2017/09/05/الأخضر-ينهي-غيابه-الطويل-عن-المونديال-ويقطع-تذكرة-موسكو.html | تاريخ أرشيف = 16 فبراير 2018 }}"""
+        parser = wtp.Template(template)
+        obj = WebCite(parser)
+        self.assertIs(obj.is_archived(), True)
+        self.assertEqual(len(obj.archive_url_args_found), 1)
+        self.assertEqual(len(obj.arguments_after_clean), 6)
+        self.assertIsNotNone(obj.url())
+        obj.replace_to(obj.url_args,"مسار")
+        self.assertEqual(obj.template.has_arg("url"),False)
+        self.assertEqual(obj.template.has_arg("مسار"),True)
+        self.assertEqual(obj.template.get_arg("مسار").value.strip().lower(),"http://temburong.gov.bn/SitePages/MUKIM%20BOKOK.aspx".strip().lower())
 
 
 if __name__ == '__main__':
