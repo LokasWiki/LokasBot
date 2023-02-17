@@ -1,3 +1,5 @@
+import traceback
+
 import wikitextparser as wtp
 
 from tasks.webcite.modules.cite import Cite
@@ -48,12 +50,17 @@ class Parsed:
     def start_replace(self):
         for template in self.cite_templates:
 
-            webcite = WebCite(template)
+            try:
+                webcite = WebCite(template)
 
-            cite = Cite(webcite)
+                cite = Cite(webcite)
 
-            if cite.is_archived() is False:
-                cite.archive_it()
-            cite.update_template()
+                if cite.is_archived() is False:
+                    cite.archive_it()
+                cite.update_template()
 
-            self.text = str(self.text).replace(str(cite.template.o_template), str(cite.template.template))
+                self.text = str(self.text).replace(str(cite.template.o_template), str(cite.template.template))
+            except Exception as e:
+                print(f"An error occurred while processing {template}: {e}")
+                just_the_string = traceback.format_exc()
+                print(just_the_string)

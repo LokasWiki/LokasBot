@@ -6,6 +6,7 @@ import wikitextparser as wtp
 from datetime import datetime
 from typing import Optional
 
+
 class DateFormatter:
     def __init__(self, language: str = 'en'):
         self.language = language
@@ -36,12 +37,28 @@ class WebCite:
             "archivedate",
             "تاريخ الأرشيف",
             "archive-date",
+            "تاريخ أرشيف"
         ]
         self.url_args = [
             "url",
             "المسار",
             "مسار"
         ]
+        self.title_args = [
+            "title",
+            "العنوان",
+            "عنوان",
+        ]
+
+        self.accessdate_args = [
+            "accessdate",
+            "access-date",
+            "تاريخ الوصول",
+            "accessdate",
+            "تاريخ الوصول للمسار"
+
+        ]
+
         self.arguments_after_clean = []
         self.archive_url_args_found = []
         self._check_args_found()
@@ -69,7 +86,19 @@ class WebCite:
                 if arg.name.strip().lower() == need_arg.strip().lower():
                     self.archive_url_args_found.append(arg)
 
-    def update_template(self,url,timestamp):
+    def replace_to(self, searched_list, arg):
+        my_arg = None
+        for need_arg in searched_list:
+            if self.template.has_arg(need_arg.strip().lower()):
+                tem_arg = copy.deepcopy(self.template.get_arg(need_arg.strip().lower()))
+                if len(tem_arg.value) >= 10:
+                    self.template.del_arg(need_arg.strip().lower())
+                    my_arg = tem_arg
+
+        if my_arg is not None:
+            self.template.set_arg(arg.strip().lower(), my_arg.value.strip())
+
+    def update_template(self, url, timestamp):
         for need_arg in self.archive_url_args:
             if self.template.has_arg(need_arg):
                 self.template.del_arg(need_arg)
@@ -81,7 +110,10 @@ class WebCite:
         formatter_ar = DateFormatter(language='ar')
         formatted_date_ar = formatter_ar.format_timestamp(timestamp)
 
-        self.template.set_arg("تاريخ الأرشيف",formatted_date_ar)
+        self.replace_to(self.url_args,"مسار")
+        self.replace_to(self.title_args,"عنوان")
+        self.replace_to(self.accessdate_args,"تاريخ الوصول")
 
-        self.template.set_arg("مسار الأرشيف	",url)
+        self.template.set_arg("تاريخ الأرشيف", formatted_date_ar)
 
+        self.template.set_arg("مسار الأرشيف", url)
