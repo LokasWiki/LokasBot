@@ -121,7 +121,7 @@ for item in list_of_namespace:
     db = Database()
     db.query = """select page_title
     from page
-    where page_namespace in ({}) and page_title like "%اسكتلندا%" and page_is_redirect = 0 
+    where page_namespace in ({}) and page_title like "%اسكتلندا%" and page_is_redirect = 0
     order by page_id;""".format(item['namespace'])
 
     db.get_content_from_database()

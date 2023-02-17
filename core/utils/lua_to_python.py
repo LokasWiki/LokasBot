@@ -15,7 +15,7 @@ def save_lue_table(name,text):
 def get_lue_table(name):
     home_path = os.path.expanduser("~")
     lue_path = os.path.join(home_path, name)
-    with open(lue_path, 'r') as f:
+    with open(lue_path) as f:
         content = f.read()
     return content
 
