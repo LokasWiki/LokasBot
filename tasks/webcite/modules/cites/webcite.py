@@ -83,5 +83,5 @@ class WebCite:
 
         self.template.set_arg("تاريخ الأرشيف",formatted_date_ar)
 
-        self.template.set_arg("مسار الأرشيف	",url)
+        self.template.set_arg("مسار الأرشيف",url)
 

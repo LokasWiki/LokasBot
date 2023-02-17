@@ -3,7 +3,7 @@ from tasks.webcite.modules.parsed import Parsed
 
 site = pywikibot.Site()
 
-page_name = "دوناتا أوغسطس"
+page_name = "حاتم الطائي"
 page = pywikibot.Page(site, page_name)
 
 summary = ""
