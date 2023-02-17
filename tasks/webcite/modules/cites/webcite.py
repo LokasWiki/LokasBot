@@ -36,6 +36,7 @@ class WebCite:
             "archivedate",
             "تاريخ الأرشيف",
             "archive-date",
+            "تاريخ أرشيف"
         ]
         self.url_args = [
             "url",
