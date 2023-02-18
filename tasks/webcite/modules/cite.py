@@ -1,4 +1,8 @@
-from waybackpy.exceptions import NoCDXRecordFound
+import time
+import traceback
+
+import requests
+from waybackpy.exceptions import NoCDXRecordFound, TooManyRequestsError
 from datetime import datetime, timedelta
 from urllib.parse import quote
 
@@ -6,6 +10,12 @@ from tasks.webcite.modules.cites.webcite import WebCite
 
 from waybackpy import WaybackMachineCDXServerAPI
 from waybackpy import WaybackMachineSaveAPI
+
+
+class Archive:
+    def __init__(self, url, timestamp):
+        self.url = url
+        self.timestamp = timestamp
 
 
 class Cite:
@@ -19,45 +29,59 @@ class Cite:
         self.archive_object = None
 
     def is_archived(self):
-        return self.check_available()
+        return self.template.is_archived()
 
     def check_available(self):
-        try:
-            if self.template.url() is not None:
-                status, archive_obj = self.check_available_on_api()
-                self.archive_object = archive_obj
-                return status
-        except AttributeError:
-            print(" 'Template' object has no attribute 'url'")
-        return False
+        pass
+        # try:
+        #     if self.template.url() is not None:
+        #         status, archive_obj = self.check_available_on_api()
+        #         self.archive_object = archive_obj
+        #         return status
+        # except AttributeError:
+        #     print(" 'Template' object has no attribute 'url'")
+        # return False
 
     def check_available_on_api(self):
-        encoded_url = quote(str(self.url.value).strip().lower(), safe=':/?=&')
+        # encoded_url = quote(str(self.url.value).strip().lower(), safe=':/?=&')
+        encoded_url = str(self.url.value).strip().lower()
         cdx_api = WaybackMachineCDXServerAPI(encoded_url, self.user_agent)
-        found = False
-        archive_obj = None
         try:
             newest = cdx_api.newest()
-            date_str = str(newest.timestamp)
-            date_obj = datetime.strptime(date_str, '%Y%m%d%H%M%S')
+            # check if the date is before 5 minutes from now
+            five_minutes_ago = datetime.now() - timedelta(minutes=5)
+            if not (newest.datetime_timestamp < five_minutes_ago) and (newest.statuscode == 200):
+                self.archive_object = Archive(newest.archive_url, newest.timestamp)
 
-            # check if the date is before 6 months from now
-            six_months_ago = datetime.now() - timedelta(days=30 * 6)
-            if date_obj < six_months_ago:
-                found = False
-            else:
-                # newest.archive_url
-                found = True
-                archive_obj = newest
+        except Exception as e:
 
-        except NoCDXRecordFound:
-            found = False
-        return found, archive_obj
+            print(f"An error occurred while processing: {e} and url is {encoded_url}")
+
+            # just_the_string = traceback.format_exc()
+            #
+            # print(just_the_string)
 
     def archive_it(self):
-        encoded_url = quote(str(self.url.value).strip().lower(), safe=':/?=&')
-        save_api = WaybackMachineSaveAPI(encoded_url, self.user_agent)
-        self.archive_object = save_api.save()
+        self.check_available_on_api()
+
+        if self.archive_object is None:
+            try:
+                encoded_url = str(self.url.value).strip().lower()
+
+                save_api = WaybackMachineSaveAPI(encoded_url, self.user_agent)
+                self.archive_object = Archive(save_api.save(), str(save_api.timestamp().strftime('%Y%m%d%H%M%S')))
+            except TooManyRequestsError as e:
+                # todo:add option to database
+                just_the_string = traceback.format_exc()
+                print(just_the_string)
+                print("ip well blocked now stop run bot for 6 minutes")
+                # time.sleep(60*6)
+            except Exception as e:
+                print(f"An error occurred while processing: {e}")
+                just_the_string = traceback.format_exc()
+                print(just_the_string)
 
     def update_template(self):
-        self.template.update_template(self.archive_object.archive_url, self.archive_object.timestamp)
+
+        if self.archive_object is not None:
+            self.template.update_template(self.archive_object.url, self.archive_object.timestamp)

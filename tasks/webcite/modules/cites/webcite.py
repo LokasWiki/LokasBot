@@ -12,7 +12,8 @@ class DateFormatter:
         self.language = language
 
     def format_timestamp(self, timestamp: str) -> str:
-        dt = datetime.strptime(timestamp, '%Y%m%d%H%M%S')
+
+        dt = datetime.strptime(timestamp, "%Y%m%d%H%M%S")
         if self.language == 'ar':
             month_names = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
                            'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر']
