@@ -62,7 +62,7 @@ class Parsed:
 
                 if cite.is_archived() is False:
                     self.number += 1
-                    time.sleep(10)
+                    time.sleep(2)
                     cite.archive_it()
                     cite.update_template()
                     self.text = str(self.text).replace(str(cite.template.o_template), str(cite.template.template))

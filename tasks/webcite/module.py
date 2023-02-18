@@ -139,7 +139,7 @@ def save_pages_to_db(gen, conn, cursor):
 
 
 def get_articles(cursor):
-    cursor.execute("SELECT id, title FROM pages WHERE status=0 ORDER BY date ASC LIMIT 100")
+    cursor.execute("SELECT id, title FROM pages WHERE status=0 ORDER BY date ASC LIMIT 20")
     rows = cursor.fetchall()
     return rows
 
@@ -172,7 +172,7 @@ def process_article(site, cursor, conn, id, title):
                 page.save(new_summary)
             else:
                 print("page not changed " + page.title())
-            time.sleep(30)
+            time.sleep(60)
         # todo add option to not update page if have one or more links not archived
         cursor.execute("DELETE FROM pages WHERE id = ?", (id,))
         conn.commit()
