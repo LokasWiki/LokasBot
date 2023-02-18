@@ -3,6 +3,7 @@ import traceback
 
 import wikitextparser as wtp
 
+from tasks.webcite.data import list_of_template
 from tasks.webcite.modules.cite import Cite
 from tasks.webcite.modules.cites.webcite import WebCite
 
@@ -13,32 +14,23 @@ class Parsed:
         self.text = text
         self.old_text = text
         self.cite_templates = []
-        self.list_of_templates = [
-            "مرجع موقع",
-            "استشهاد ويب/إنجليزي",
-            "Cite web",
-            "Citeweb",
-            "مرجع وب",
-            "مرجع وب/إنجليزي",
-            "Cita web",
-            "يستشهد ويب",
-            "استشهاد بموقع",
-            "Web cite",
-            "مرجع ويب",
-            "مرجع ويب/إنجليزي",
-            "Cw",
-            "استشهاد ويب"
-        ]
+        self.list_of_templates = []
         self.summary = summary
         self.max_number = 9
         self.number = 0
 
     def __call__(self):
+        self._fill_all_template()
         if self.check():
             self.start_replace()
         if self.text != self.old_text:
-            self.summary += "بوت:الإبلاغ عن رابط معطوب أو مؤرشف V0.6*"
+            self.summary += "بوت:الإبلاغ عن رابط معطوب أو مؤرشف V0.7*"
         return self.text, self.summary
+
+    def _fill_all_template(self):
+        for dic in list_of_template:
+            for template in dic['list_of_template']:
+                self.list_of_templates.append(template)
 
     def check(self):
         parsed = wtp.parse(self.text)
@@ -57,8 +49,7 @@ class Parsed:
                 break
             try:
                 print(self.number)
-                webcite = WebCite(template)
-                cite = Cite(webcite)
+                cite = Cite(template)
 
                 if cite.is_archived() is False:
                     self.number += 1
