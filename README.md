@@ -40,7 +40,7 @@ Toolforge setup and job management
     ````
 - ### run tool-bot on web
   https://github.com/loka1/LokasBot-web
-  
+
 <hr>
 
 # خطوات تثبيت البوت علي الجهاز المحلي

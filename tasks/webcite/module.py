@@ -172,7 +172,7 @@ def process_article(site, cursor, conn, id, title):
                 page.save(new_summary)
             else:
                 print("page not changed " + page.title())
-            time.sleep(60)
+            time.sleep(30)
         # todo add option to not update page if have one or more links not archived
         cursor.execute("DELETE FROM pages WHERE id = ?", (id,))
         conn.commit()
