@@ -1,3 +1,4 @@
+import time
 import traceback
 
 import wikitextparser as wtp
@@ -29,12 +30,14 @@ class Parsed:
             "استشهاد ويب"
         ]
         self.summary = summary
+        self.max_number = 9
+        self.number = 0
 
     def __call__(self):
         if self.check():
             self.start_replace()
         if self.text != self.old_text:
-            self.summary += "بوت:الإبلاغ عن رابط معطوب أو مؤرشف V0.4*"
+            self.summary += "بوت:الإبلاغ عن رابط معطوب أو مؤرشف V0.5*"
         return self.text, self.summary
 
     def check(self):
@@ -49,17 +52,20 @@ class Parsed:
 
     def start_replace(self):
         for template in self.cite_templates:
-
+            # to make it only archive 10 links in one edit
+            if self.number == self.max_number:
+                break
             try:
+                print(self.number)
                 webcite = WebCite(template)
-
                 cite = Cite(webcite)
 
                 if cite.is_archived() is False:
+                    self.number += 1
+                    time.sleep(10)
                     cite.archive_it()
-                cite.update_template()
-
-                self.text = str(self.text).replace(str(cite.template.o_template), str(cite.template.template))
+                    cite.update_template()
+                    self.text = str(self.text).replace(str(cite.template.o_template), str(cite.template.template))
             except Exception as e:
                 print(f"An error occurred while processing {template}: {e}")
                 just_the_string = traceback.format_exc()
