@@ -8,14 +8,14 @@ import datetime
 import traceback
 
 # bots
-from bots.unreviewed_article import UnreviewedArticle
-from bots.has_categories import HasCategories
-from bots.portals_bar import PortalsBar
-from bots.portals_merge import PortalsMerge
-from bots.unreferenced import Unreferenced
-from bots.orphan import Orphan
-from bots.dead_end import DeadEnd
-from bots.underlinked import Underlinked
+from tasks.maintenance.bots.unreviewed_article import UnreviewedArticle
+from tasks.maintenance.bots.has_categories import HasCategories
+from tasks.maintenance.bots.portals_bar import PortalsBar
+from tasks.maintenance.bots.portals_merge import PortalsMerge
+from tasks.maintenance.bots.unreferenced import Unreferenced
+from tasks.maintenance.bots.orphan import Orphan
+from tasks.maintenance.bots.dead_end import DeadEnd
+from tasks.maintenance.bots.underlinked import Underlinked
 
 
 class Database():
