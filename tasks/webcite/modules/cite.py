@@ -1,11 +1,9 @@
-import time
 import traceback
 
-import requests
 from waybackpy.exceptions import NoCDXRecordFound, TooManyRequestsError
 from datetime import datetime, timedelta
-from urllib.parse import quote
 
+from tasks.webcite.data import list_of_template
 from tasks.webcite.modules.cites.webcite import WebCite
 
 from waybackpy import WaybackMachineCDXServerAPI
@@ -21,12 +19,23 @@ class Archive:
 class Cite:
     def __init__(self, template):
 
-        self.template = template
-
+        self.template = self._set_right_class(template)
+        self.list_of_templates = []
         self.url = self.template.url()
 
         self.user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36"
         self.archive_object = None
+
+    def _fill_all_template(self):
+        for dic in list_of_template:
+            for template in dic['list_of_template']:
+                self.list_of_templates.append(template)
+
+    def _set_right_class(self, template):
+        self._fill_all_template()
+        for t in self.list_of_templates:
+            if str(t).strip().lower() == str(template.name).strip().lower():
+                return WebCite(template)
 
     def is_archived(self):
         return self.template.is_archived()
