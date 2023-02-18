@@ -5,3 +5,4 @@
 [submodule "LokasBot-web"]
 	path = LokasBot-web
 	url = https://github.com/loka1/LokasBot-web.git
+	branch = main
