@@ -7,15 +7,15 @@ import os
 import datetime
 import traceback
 
-# bots
-from tasks.maintenance.bots.unreviewed_article import UnreviewedArticle
 from tasks.maintenance.bots.has_categories import HasCategories
+from tasks.maintenance.bots.orphan import Orphan
 from tasks.maintenance.bots.portals_bar import PortalsBar
 from tasks.maintenance.bots.portals_merge import PortalsMerge
-from tasks.maintenance.bots.unreferenced import Unreferenced
-from tasks.maintenance.bots.orphan import Orphan
-from tasks.maintenance.bots.dead_end import DeadEnd
-from tasks.maintenance.bots.underlinked import Underlinked
+from tasks.maintenance.bots.unreviewed_article import UnreviewedArticle
+
+
+# bots
+
 
 
 class Database():
@@ -106,7 +106,7 @@ def create_database_table():
 
     # Create the table with a status column
     cursor.execute(
-        '''CREATE TABLE IF NOT EXISTS pages (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, status INTEGER, date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)''')
+        '''CREATE TABLE IF NOT EXISTS pages (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, status INTEGER, date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,thread INTEGER)''')
 
     return conn, cursor
 
@@ -146,27 +146,27 @@ FROM (
     return gen
 
 
-def save_pages_to_db(gen, conn, cursor):
+def save_pages_to_db(gen, conn, cursor, thread_number):
     for entry in gen:
         try:
             title = entry
             cursor.execute("SELECT * FROM pages WHERE title = ?", (title,))
             if cursor.fetchone() is None:
                 print("added : " + title)
-                cursor.execute("INSERT INTO pages (title, status) VALUES (?, 0)", (title,))
+                cursor.execute("INSERT INTO pages (title, status,thread) VALUES (?, 0,?)", (title, int(thread_number)))
             conn.commit()
         except sqlite3.Error as e:
             print(f"An error occurred while inserting the title {entry.title()} into the database: {e}")
 
 
-def get_articles(cursor):
-    cursor.execute("SELECT id, title FROM pages WHERE status=0 ORDER BY date ASC LIMIT 100")
+def get_articles(cursor, thread_number):
+    cursor.execute("SELECT id, title FROM pages WHERE thread=? status=0 ORDER BY date ASC LIMIT 100", (int(thread_number)))
     rows = cursor.fetchall()
     return rows
 
 
 class Pipeline:
-    def __init__(self, page, text, summary, steps,extra_steps):
+    def __init__(self, page, text, summary, steps, extra_steps):
         self.page = page
         self.text = text
         self.summary = summary
@@ -193,13 +193,14 @@ class Pipeline:
 def check_status():
     site = pywikibot.Site()
     title = "مستخدم:LokasBot/إيقاف مهمة صيانة المقالات"
-    page = pywikibot.Page(site,title)
+    page = pywikibot.Page(site, title)
     text = page.text
     if text == "لا":
         return True
     return False
 
-def process_article(site, cursor, conn, id, title):
+
+def process_article(site, cursor, conn, id, title, thread_number):
     try:
         cursor.execute("UPDATE pages SET status = 1 WHERE id = ?", (id,))
         conn.commit()
@@ -220,7 +221,7 @@ def process_article(site, cursor, conn, id, title):
         if page.exists() and (not page.isRedirectPage()):
             text = page.text
             summary = "بوت:صيانة V4.8.6"
-            pipeline = Pipeline(page, text, summary, steps,extra_steps)
+            pipeline = Pipeline(page, text, summary, steps, extra_steps)
             processed_text, processed_summary = pipeline.process()
             # write processed text back to the page
             if pipeline.hasChange() and check_status():
@@ -241,5 +242,3 @@ def process_article(site, cursor, conn, id, title):
         cursor.execute("UPDATE pages SET status = 0, date = ? WHERE id = ?",
                        (new_date, id))
         conn.commit()
-
-
