@@ -99,7 +99,7 @@ def create_database_table():
 
     # Create the table with a status column
     cursor.execute(
-        '''CREATE TABLE IF NOT EXISTS pages (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, status INTEGER, date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)''')
+        '''CREATE TABLE IF NOT EXISTS pages (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, status INTEGER, date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,thread INTEGER)''')
 
     return conn, cursor
 
@@ -125,21 +125,25 @@ FROM (
     return gen
 
 
-def save_pages_to_db(gen, conn, cursor):
+def save_pages_to_db(gen, conn, cursor, thread_number):
     for entry in gen:
         try:
             title = entry
             cursor.execute("SELECT * FROM pages WHERE title = ?", (title,))
             if cursor.fetchone() is None:
                 print("added : " + title)
-                cursor.execute("INSERT INTO pages (title, status) VALUES (?, 0)", (title,))
+                cursor.execute("INSERT INTO pages (title, status,thread) VALUES (?, 0)",
+                               (title, int(thread_number)))
             conn.commit()
         except sqlite3.Error as e:
             print(f"An error occurred while inserting the title {entry.title()} into the database: {e}")
 
 
-def get_articles(cursor):
-    cursor.execute("SELECT id, title FROM pages WHERE status=0 ORDER BY date ASC LIMIT 20")
+def get_articles(cursor, thread_number):
+    print("thread_number")
+    print(thread_number)
+    cursor.execute("SELECT id, title,thread FROM pages WHERE status=0 and thread=? ORDER BY date ASC LIMIT 20",
+                   (int(thread_number),))
     rows = cursor.fetchall()
     return rows
 
@@ -154,14 +158,13 @@ def check_status():
     return False
 
 
-def process_article(site, cursor, conn, id, title):
+def process_article(site, cursor, conn, id, title, thread_number):
     try:
         cursor.execute("UPDATE pages SET status = 1 WHERE id = ?", (id,))
         conn.commit()
         page = pywikibot.Page(site, title)
 
         if page.exists() and (not page.isRedirectPage()):
-            text = page.text
             summary = ""
             bot = Parsed(page.text, summary)
             new_text, new_summary = bot()
@@ -172,7 +175,6 @@ def process_article(site, cursor, conn, id, title):
                 page.save(new_summary)
             else:
                 print("page not changed " + page.title())
-            time.sleep(30)
         # todo add option to not update page if have one or more links not archived
         cursor.execute("DELETE FROM pages WHERE id = ?", (id,))
         conn.commit()

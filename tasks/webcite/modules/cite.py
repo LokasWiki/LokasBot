@@ -1,4 +1,5 @@
 import traceback
+import urllib.parse
 
 from waybackpy.exceptions import NoCDXRecordFound, TooManyRequestsError
 from datetime import datetime, timedelta
@@ -52,9 +53,9 @@ class Cite:
         # return False
 
     def check_available_on_api(self):
-        # encoded_url = quote(str(self.url.value).strip().lower(), safe=':/?=&')
-        encoded_url = str(self.url.value).strip().lower()
-        cdx_api = WaybackMachineCDXServerAPI(encoded_url, self.user_agent)
+
+        decode_url = urllib.parse.unquote(self.url.value.strip())
+        cdx_api = WaybackMachineCDXServerAPI(decode_url, self.user_agent)
         try:
             newest = cdx_api.newest()
             # check if the date is before 5 minutes from now
@@ -64,7 +65,7 @@ class Cite:
 
         except Exception as e:
 
-            print(f"An error occurred while processing: {e} and url is {encoded_url}")
+            print(f"An error occurred while processing: {e} and url is {decode_url}")
 
             # just_the_string = traceback.format_exc()
             #
@@ -75,9 +76,9 @@ class Cite:
 
         if self.archive_object is None:
             try:
-                encoded_url = str(self.url.value).strip().lower()
+                decode_url = urllib.parse.unquote(self.url.value.strip())
 
-                save_api = WaybackMachineSaveAPI(encoded_url, self.user_agent)
+                save_api = WaybackMachineSaveAPI(decode_url, self.user_agent)
                 self.archive_object = Archive(save_api.save(), str(save_api.timestamp().strftime('%Y%m%d%H%M%S')))
             except TooManyRequestsError as e:
                 # todo:add option to database

@@ -1,27 +1,46 @@
-import time
 import sqlite3
+import time
 import traceback
+import threading
 
 import pywikibot
 
 from tasks.webcite.module import create_database_table, get_articles, process_article, check_status
 
 
-def main():
+def read(thread_number):
     try:
         site = pywikibot.Site()
         conn, cursor = create_database_table()
-        rows = get_articles(cursor)
-        print(len(rows))
+        rows = get_articles(cursor, thread_number)
         if len(rows) > 0 and check_status():
             for row in rows:
-                process_article(site, cursor, conn, id=row[0], title=row[1])
-                time.sleep(1)
+                process_article(site, cursor, conn, id=row[0], title=row[1], thread_number=row[2])
         conn.close()
     except sqlite3.Error as e:
         print(f"An error occurred while interacting with the database: {e}")
         just_the_string = traceback.format_exc()
         print(just_the_string)
+
+
+def run_threads():
+    # create threads
+    threads = []
+    for i in range(1, 5):
+        thread = threading.Thread(target=read, args=(i,))
+        threads.append(thread)
+
+    # start threads
+    for thread in threads:
+        thread.start()
+
+    # wait for all threads to complete
+    for thread in threads:
+        thread.join()
+
+
+def main():
+    run_threads()
     return 0
 
 
