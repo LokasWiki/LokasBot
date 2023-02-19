@@ -7,15 +7,22 @@ import os
 import datetime
 import traceback
 
-from tasks.maintenance.bots.has_categories import HasCategories
-from tasks.maintenance.bots.orphan import Orphan
-from tasks.maintenance.bots.portals_bar import PortalsBar
-from tasks.maintenance.bots.portals_merge import PortalsMerge
-from tasks.maintenance.bots.unreviewed_article import UnreviewedArticle
+# from tasks.maintenance.bots.has_categories import HasCategories
+# from tasks.maintenance.bots.orphan import Orphan
+# from tasks.maintenance.bots.portals_bar import PortalsBar
+# from tasks.maintenance.bots.portals_merge import PortalsMerge
+# from tasks.maintenance.bots.unreviewed_article import UnreviewedArticle
 
 
 # bots
-
+from bots.unreviewed_article import UnreviewedArticle
+from bots.has_categories import HasCategories
+from bots.portals_bar import PortalsBar
+from bots.unreferenced import Unreferenced
+from bots.orphan import Orphan
+from bots.dead_end import DeadEnd
+from bots.underlinked import Underlinked
+from bots.portals_merge import PortalsMerge
 
 
 class Database():
@@ -160,7 +167,7 @@ def save_pages_to_db(gen, conn, cursor, thread_number):
 
 
 def get_articles(cursor, thread_number):
-    cursor.execute("SELECT id, title FROM pages WHERE thread=? status=0 ORDER BY date ASC LIMIT 100", (int(thread_number)))
+    cursor.execute("SELECT id, title FROM pages WHERE thread=? and status=0 ORDER BY date ASC LIMIT 100", (int(thread_number)))
     rows = cursor.fetchall()
     return rows
 
