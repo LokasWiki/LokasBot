@@ -1,5 +1,6 @@
 import sqlite3
-import time
+
+from threading import Timer
 
 import pymysql
 import pywikibot
@@ -9,12 +10,6 @@ import datetime
 import traceback
 
 from tasks.webcite.modules.parsed import Parsed
-
-import signal
-
-
-def timeout_handler(signum, frame):
-    raise TimeoutError("Parsing took too long!")
 
 
 class Database():
@@ -165,6 +160,10 @@ def check_status():
 
 
 def process_article(site, cursor, conn, id, title, thread_number):
+    def handle_timeout():
+        print(f"Timeout while processing {title}")
+        raise TimeoutError()
+
     try:
         cursor.execute("UPDATE pages SET status = 1 WHERE id = ?", (id,))
         conn.commit()
@@ -172,33 +171,31 @@ def process_article(site, cursor, conn, id, title, thread_number):
 
         if page.exists() and (not page.isRedirectPage()):
             summary = ""
-            # set timeout for Parsed class
-            signal.signal(signal.SIGALRM, timeout_handler)
-            signal.alarm(600)  # set 10 minute timeout
+            bot = Parsed(page.text, summary)
 
-            try:
-                bot = Parsed(page.text, summary)
-                new_text, new_summary = bot()
-                # write processed text back to the page
-                if new_text != page.text and check_status():
-                    print("start save " + page.title())
-                    page.text = new_text
-                    page.save(new_summary)
-                else:
-                    print("page not changed " + page.title())
-                # todo add option to not update page if have one or more links not archived
-                cursor.execute("DELETE FROM pages WHERE id = ?", (id,))
-                conn.commit()
-            except TimeoutError:
-                print("Parsing took too long for page:", page.title())
-                delta = datetime.timedelta(hours=6)
-                new_date = datetime.datetime.now() + delta
-                cursor.execute("UPDATE pages SET status = 0, date = ? WHERE id = ?",
-                               (new_date, id))
-                conn.commit()
-                return
-            finally:
-                signal.alarm(0)  # reset the alarm
+            # Set the timeout here with Timer
+            t = Timer(600, handle_timeout)
+            t.start()
+
+            new_text, new_summary = bot()
+            # write processed text back to the page
+            if new_text != page.text and check_status():
+                print("start save " + page.title())
+                page.text = new_text
+                page.save(new_summary)
+            else:
+                print("page not changed " + page.title())
+            t.cancel()
+        # todo add option to not update page if have one or more links not archived
+        cursor.execute("DELETE FROM pages WHERE id = ?", (id,))
+        conn.commit()
+
+    except TimeoutError:
+        delta = datetime.timedelta(hours=6)
+        new_date = datetime.datetime.now() + delta
+        cursor.execute("UPDATE pages SET status = 0, date = ? WHERE id = ?",
+                       (new_date, id))
+        conn.commit()
     except Exception as e:
         print(f"An error occurred while processing {title}: {e}")
         just_the_string = traceback.format_exc()
