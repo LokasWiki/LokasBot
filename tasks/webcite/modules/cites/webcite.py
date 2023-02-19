@@ -115,6 +115,6 @@ class WebCite:
         self.replace_to(self.title_args,"عنوان")
         self.replace_to(self.accessdate_args,"تاريخ الوصول")
 
-        self.template.set_arg("تاريخ الأرشيف", formatted_date_ar)
+        self.template.set_arg("تاريخ أرشيف", formatted_date_ar)
 
-        self.template.set_arg("مسار الأرشيف", url)
+        self.template.set_arg("مسار أرشيف", url)
