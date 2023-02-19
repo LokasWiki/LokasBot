@@ -17,7 +17,7 @@ class Parsed:
         self.cite_templates = []
         self.list_of_templates = []
         self.summary = summary
-        self.max_number = 9
+        self.max_number = 15
         self.number = 0
 
     def __call__(self):

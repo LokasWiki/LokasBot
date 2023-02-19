@@ -1,10 +1,12 @@
 import copy
 import re
+import urllib
 
 import wikitextparser as wtp
 
 from datetime import datetime
 from typing import Optional
+import urllib.parse
 
 
 class DateFormatter:
@@ -117,5 +119,5 @@ class WebCite:
         o_url_value = self.template.get_arg("مسار").value.strip()
         self.template.set_arg("تاريخ أرشيف", formatted_date_ar)
         self.template.del_arg("مسار")
-        self.template.set_arg("مسار", o_url_value)
+        self.template.set_arg("مسار", urllib.parse.unquote(o_url_value))
         self.template.set_arg("مسار أرشيف", url)
