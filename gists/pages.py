@@ -121,7 +121,7 @@ for item in list_of_namespace:
     db = Database()
     db.query = """select page_title
     from page
-    where page_namespace in ({}) and page_title like "%اسكتلندا%" and page_is_redirect = 0
+    where page_namespace in ({}) and page_title like "%بيروفي%" and page_is_redirect = 0
     order by page_id;""".format(item['namespace'])
 
     db.get_content_from_database()
@@ -139,9 +139,9 @@ for item in list_of_namespace:
     text +="\n"
     for row in db.result:
         o_title = str(row['page_title'], 'utf-8')
-        result = re.search("اسكتلندا", o_title)
-        n_title = o_title[:result.start()] + "إسكتلندا" + o_title[result.end():]
-        oo_title = o_title[:result.start()] + "'''اسكتلندا'''" + o_title[result.end():]
+        result = re.search("بيروفي", o_title)
+        n_title = o_title[:result.start()] + "بيروي" + o_title[result.end():]
+        oo_title = o_title[:result.start()] + "'''بيروفي'''" + o_title[result.end():]
         if item['namespace'] == 0:
             text +="|- \n|[["+o_title+"|"+oo_title+"]] \n|"+n_title+" \n|"
         else:
@@ -156,6 +156,6 @@ for item in list_of_namespace:
 
 site = pywikibot.Site()
 # print(main_text)
-page = pywikibot.Page(site,"مستخدم:لوقا/ملعب 17")
+page = pywikibot.Page(site,"مستخدم:لوقا/ملعب 18")
 page.text = main_text
 page.save("انشاء")
