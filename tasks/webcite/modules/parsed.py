@@ -25,7 +25,7 @@ class Parsed:
         if self.check():
             self.start_replace()
         if self.text != self.old_text:
-            self.summary += "بوت:الإبلاغ عن رابط معطوب أو مؤرشف V0.7*"
+            self.summary += "بوت:الإبلاغ عن رابط معطوب أو مؤرشف V0.8*"
         return self.text, self.summary
 
     def _fill_all_template(self):
@@ -61,8 +61,8 @@ class Parsed:
                         cite.archive_it()
                         cite.update_template()
                     else:
-                        print("Rate limit exceeded, sleeping for 30 seconds")
-                        time.sleep(30)
+                        print("Rate limit exceeded, sleeping for 60 seconds")
+                        time.sleep(60)
                     limiter.clear_old_requests()
                     self.text = str(self.text).replace(str(cite.template.o_template), str(cite.template.template))
             except Exception as e:

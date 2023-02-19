@@ -13,7 +13,6 @@ def read(thread_number):
         site = pywikibot.Site()
         conn, cursor = create_database_table()
         rows = get_articles(cursor, thread_number)
-        print(len(rows))
         if len(rows) > 0 and check_status():
             for row in rows:
                 process_article(site, cursor, conn, id=row[0], title=row[1], thread_number=row[2])

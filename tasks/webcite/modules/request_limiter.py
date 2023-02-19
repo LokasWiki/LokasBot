@@ -1,3 +1,4 @@
+import os
 import sqlite3
 import time
 
@@ -9,7 +10,10 @@ class RequestLimiter:
         self.db_conn = self._create_db_table()
 
     def _create_db_table(self):
-        conn = sqlite3.connect("request_limiter.db")
+        home_path = os.path.expanduser("~")
+        database_path = os.path.join(home_path, "request_limiter.db")
+
+        conn = sqlite3.connect(database_path)
         cursor = conn.cursor()
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS requests (
