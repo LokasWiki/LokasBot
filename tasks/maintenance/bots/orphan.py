@@ -2,6 +2,7 @@ import re
 
 from core.utils.disambiguation import Disambiguation
 
+
 class Orphan:
     def __init__(self, page, text, summary):
         self.page = page
@@ -56,4 +57,3 @@ class Orphan:
                 has_pages = True
                 break
         return has_pages
-

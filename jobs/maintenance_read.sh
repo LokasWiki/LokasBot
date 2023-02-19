@@ -7,9 +7,9 @@ export PYWIKIBOT_DIR="$HOME/repos"
 
 export PYTHONPATH="${PYTHONPATH}:$HOME/repos"
 
-python3  "$HOME"/repos/tasks/maintenance/tasks/portal_aliases.py
+python3  "$HOME"/repos/tasks/maintenance/task/portal_aliases.py
 python3  "$HOME"/repos/tasks/maintenance/read.py "$1"
-python3  "$HOME"/repos/tasks/maintenance/tasks/portals_merge.py
+python3  "$HOME"/repos/tasks/maintenance/task/portals_merge.py
 
 # Exit the script after running all the Python files
 exit 0

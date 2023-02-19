@@ -7,23 +7,11 @@ import os
 import datetime
 import traceback
 
-# from tasks.maintenance.bots.has_categories import HasCategories
-# from tasks.maintenance.bots.orphan import Orphan
-# from tasks.maintenance.bots.portals_bar import PortalsBar
-# from tasks.maintenance.bots.portals_merge import PortalsMerge
-# from tasks.maintenance.bots.unreviewed_article import UnreviewedArticle
-
-
-# bots
-from bots.unreviewed_article import UnreviewedArticle
-from bots.has_categories import HasCategories
-from bots.portals_bar import PortalsBar
-from bots.unreferenced import Unreferenced
-from bots.orphan import Orphan
-from bots.dead_end import DeadEnd
-from bots.underlinked import Underlinked
-from bots.portals_merge import PortalsMerge
-
+from tasks.maintenance.bots.has_categories import HasCategories
+from tasks.maintenance.bots.orphan import Orphan
+from tasks.maintenance.bots.portals_bar import PortalsBar
+from tasks.maintenance.bots.portals_merge import PortalsMerge
+from tasks.maintenance.bots.unreviewed_article import UnreviewedArticle
 
 class Database():
     """A class for interacting with a database.
