@@ -99,7 +99,7 @@ def create_database_table():
 
     # Create the table with a status column
     cursor.execute(
-        '''CREATE TABLE IF NOT EXISTS pages (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, status INTEGER, date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)''')
+        '''CREATE TABLE IF NOT EXISTS pages (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, status INTEGER, date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,thread INTEGER)''')
 
     return conn, cursor
 
@@ -125,21 +125,23 @@ FROM (
     return gen
 
 
-def save_pages_to_db(gen, conn, cursor):
+def save_pages_to_db(gen, conn, cursor, thread_number):
     for entry in gen:
         try:
             title = entry
             cursor.execute("SELECT * FROM pages WHERE title = ?", (title,))
             if cursor.fetchone() is None:
                 print("added : " + title)
-                cursor.execute("INSERT INTO pages (title, status) VALUES (?, 0)", (title,))
+                cursor.execute("INSERT INTO pages (title, status,thread_number) VALUES (?, 0)",
+                               (title, int(thread_number)))
             conn.commit()
         except sqlite3.Error as e:
             print(f"An error occurred while inserting the title {entry.title()} into the database: {e}")
 
 
-def get_articles(cursor):
-    cursor.execute("SELECT id, title FROM pages WHERE status=0 ORDER BY date ASC LIMIT 20")
+def get_articles(cursor, thread_number):
+    cursor.execute("SELECT id, title FROM pages WHERE status=0 and thread_number=? ORDER BY date ASC LIMIT 20",
+                   (int(thread_number),))
     rows = cursor.fetchall()
     return rows
 
@@ -154,7 +156,7 @@ def check_status():
     return False
 
 
-def process_article(site, cursor, conn, id, title):
+def process_article(site, cursor, conn, id, title, thread_number):
     try:
         cursor.execute("UPDATE pages SET status = 1 WHERE id = ?", (id,))
         conn.commit()
