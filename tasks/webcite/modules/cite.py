@@ -54,18 +54,17 @@ class Cite:
 
     def check_available_on_api(self):
 
-        decode_url = urllib.parse.unquote(self.url.value.strip())
-        cdx_api = WaybackMachineCDXServerAPI(decode_url, self.user_agent)
+        cdx_api = WaybackMachineCDXServerAPI(self.url.value.strip(), self.user_agent)
         try:
             newest = cdx_api.newest()
             # check if the date is before 5 minutes from now
             five_minutes_ago = datetime.now() - timedelta(minutes=5)
             if not (newest.datetime_timestamp < five_minutes_ago) and (newest.statuscode == 200):
-                self.archive_object = Archive(newest.archive_url, newest.timestamp)
+                self.archive_object = Archive(urllib.parse.unquote(newest.archive_url), newest.timestamp)
 
         except Exception as e:
 
-            print(f"An error occurred while processing: {e} and url is {decode_url}")
+            print(f"An error occurred while processing: {e} and url is {self.url.value.strip()}")
 
             # just_the_string = traceback.format_exc()
             #
@@ -76,10 +75,9 @@ class Cite:
 
         if self.archive_object is None:
             try:
-                decode_url = urllib.parse.unquote(self.url.value.strip())
 
-                save_api = WaybackMachineSaveAPI(decode_url, self.user_agent)
-                self.archive_object = Archive(save_api.save(), str(save_api.timestamp().strftime('%Y%m%d%H%M%S')))
+                save_api = WaybackMachineSaveAPI(self.url.value.strip(), self.user_agent)
+                self.archive_object = Archive(urllib.parse.unquote(save_api.save()), str(save_api.timestamp().strftime('%Y%m%d%H%M%S')))
             except TooManyRequestsError as e:
                 # todo:add option to database
                 just_the_string = traceback.format_exc()
