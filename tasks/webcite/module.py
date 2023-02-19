@@ -132,7 +132,7 @@ def save_pages_to_db(gen, conn, cursor, thread_number):
             cursor.execute("SELECT * FROM pages WHERE title = ?", (title,))
             if cursor.fetchone() is None:
                 print("added : " + title)
-                cursor.execute("INSERT INTO pages (title, status,thread_number) VALUES (?, 0)",
+                cursor.execute("INSERT INTO pages (title, status,thread) VALUES (?, 0)",
                                (title, int(thread_number)))
             conn.commit()
         except sqlite3.Error as e:
@@ -140,7 +140,9 @@ def save_pages_to_db(gen, conn, cursor, thread_number):
 
 
 def get_articles(cursor, thread_number):
-    cursor.execute("SELECT id, title FROM pages WHERE status=0 and thread_number=? ORDER BY date ASC LIMIT 20",
+    print("thread_number")
+    print(thread_number)
+    cursor.execute("SELECT id, title,thread FROM pages WHERE status=0 and thread=? ORDER BY date ASC LIMIT 20",
                    (int(thread_number),))
     rows = cursor.fetchall()
     return rows
@@ -163,7 +165,6 @@ def process_article(site, cursor, conn, id, title, thread_number):
         page = pywikibot.Page(site, title)
 
         if page.exists() and (not page.isRedirectPage()):
-            text = page.text
             summary = ""
             bot = Parsed(page.text, summary)
             new_text, new_summary = bot()
@@ -174,7 +175,6 @@ def process_article(site, cursor, conn, id, title, thread_number):
                 page.save(new_summary)
             else:
                 print("page not changed " + page.title())
-            time.sleep(30)
         # todo add option to not update page if have one or more links not archived
         cursor.execute("DELETE FROM pages WHERE id = ?", (id,))
         conn.commit()

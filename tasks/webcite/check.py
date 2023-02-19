@@ -1,6 +1,7 @@
-import time
 import sqlite3
+import time
 import traceback
+import threading
 
 import pywikibot
 
@@ -11,11 +12,11 @@ def read(thread_number):
     try:
         site = pywikibot.Site()
         conn, cursor = create_database_table()
-        rows = get_articles(cursor, 1)
+        rows = get_articles(cursor, thread_number)
         print(len(rows))
         if len(rows) > 0 and check_status():
             for row in rows:
-                process_article(site, cursor, conn, id=row[0], title=row[1], thread_number=row[4])
+                process_article(site, cursor, conn, id=row[0], title=row[1], thread_number=row[2])
         conn.close()
     except sqlite3.Error as e:
         print(f"An error occurred while interacting with the database: {e}")
@@ -23,15 +24,24 @@ def read(thread_number):
         print(just_the_string)
 
 
+def run_threads():
+    # create threads
+    threads = []
+    for i in range(1, 5):
+        thread = threading.Thread(target=read, args=(i,))
+        threads.append(thread)
+
+    # start threads
+    for thread in threads:
+        thread.start()
+
+    # wait for all threads to complete
+    for thread in threads:
+        thread.join()
+
+
 def main():
-    # for 20 m
-    read(1)
-    # for 120 m
-    read(2)
-    # for 6 h
-    read(3)
-    # for 24 h
-    read(4)
+    run_threads()
     return 0
 
 
