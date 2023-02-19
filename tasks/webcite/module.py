@@ -132,7 +132,7 @@ def save_pages_to_db(gen, conn, cursor, thread_number):
             cursor.execute("SELECT * FROM pages WHERE title = ?", (title,))
             if cursor.fetchone() is None:
                 print("added : " + title)
-                cursor.execute("INSERT INTO pages (title, status,thread) VALUES (?, 0)",
+                cursor.execute("INSERT INTO pages (title, status,thread) VALUES (?, 0,?)",
                                (title, int(thread_number)))
             conn.commit()
         except sqlite3.Error as e:
