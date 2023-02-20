@@ -14,10 +14,18 @@ def read(thread_number):
     try:
         site = pywikibot.Site()
         conn, cursor = create_database_table()
+
         rows = get_articles(cursor, thread_number)
         if len(rows) > 0 and check_status():
             for row in rows:
-                process_article(site, cursor, conn, id=row[0], title=row[1], thread_number=row[2])
+                process_article(site, cursor, conn, id=row[0], title=row[1], thread_number=thread_number)
+        else:
+            if thread_number == 1:
+                rows = get_articles(cursor, 2)
+            else:
+                rows = get_articles(cursor, 1)
+            for row in rows:
+                process_article(site, cursor, conn, id=row[0], title=row[1], thread_number=thread_number)
         conn.close()
     except sqlite3.Error as e:
         print(f"An error occurred while interacting with the database: {e}")
