@@ -4,7 +4,8 @@ import urllib.parse
 from waybackpy.exceptions import NoCDXRecordFound, TooManyRequestsError
 from datetime import datetime, timedelta
 
-from tasks.webcite.data import list_of_template,web_type,press_release_type
+from tasks.webcite.data import list_of_template, web_type, press_release_type, newsgroup_type
+from tasks.webcite.modules.cites.newsgroup import Newsgroup
 from tasks.webcite.modules.cites.webcite import WebCite
 from tasks.webcite.modules.cites.press_release import PressRelease
 
@@ -37,6 +38,8 @@ class Cite:
                     return WebCite(template)
                 elif class_name == press_release_type:
                     return PressRelease(template)
+                elif class_name == newsgroup_type:
+                    return Newsgroup(template)
 
     def is_archived(self):
         return self.template.is_archived()
