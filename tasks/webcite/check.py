@@ -6,16 +6,18 @@ import threading
 import pywikibot
 
 from tasks.webcite.module import create_database_table, get_articles, process_article, check_status
+from tasks.webcite.modules.request_limiter import RequestLimiter
 
 
 def read(thread_number):
     try:
+        limiter = RequestLimiter()
         site = pywikibot.Site()
         conn, cursor = create_database_table()
         rows = get_articles(cursor, thread_number)
         if len(rows) > 0 and check_status():
             for row in rows:
-                process_article(site, cursor, conn, id=row[0], title=row[1], thread_number=row[2])
+                process_article(site, cursor, conn, id=row[0], title=row[1], thread_number=row[2], limiter=limiter)
         conn.close()
     except sqlite3.Error as e:
         print(f"An error occurred while interacting with the database: {e}")
@@ -27,7 +29,7 @@ def run_threads():
     # create threads
     threads = []
     for i in range(1, 5):
-        thread = threading.Thread(target=read, args=(i,))
+        thread = threading.Thread(target=read, args=(i, ))
         threads.append(thread)
 
     # start threads
@@ -40,7 +42,9 @@ def run_threads():
 
 
 def main():
+    limiter = RequestLimiter()
     run_threads()
+    limiter.clear_old_requests()
     return 0
 
 

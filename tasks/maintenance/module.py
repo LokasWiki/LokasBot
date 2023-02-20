@@ -155,7 +155,7 @@ def save_pages_to_db(gen, conn, cursor, thread_number):
 
 
 def get_articles(cursor, thread_number):
-    cursor.execute("SELECT id, title,thread FROM pages WHERE thread=? and status=0 ORDER BY date ASC LIMIT 100", (int(thread_number),))
+    cursor.execute("SELECT id, title,thread FROM pages WHERE thread=? and status=0 ORDER BY date ASC LIMIT 20", (int(thread_number),))
     rows = cursor.fetchall()
     return rows
 

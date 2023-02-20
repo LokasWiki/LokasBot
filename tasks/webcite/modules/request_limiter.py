@@ -4,7 +4,7 @@ import time
 
 
 class RequestLimiter:
-    def __init__(self, limit, interval):
+    def __init__(self, limit=10, interval=60):
         self.limit = limit
         self.interval = interval
         self.db_conn = self._create_db_table()

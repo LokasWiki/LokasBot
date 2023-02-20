@@ -159,7 +159,7 @@ def check_status():
     return False
 
 
-def process_article(site, cursor, conn, id, title, thread_number):
+def process_article(site, cursor, conn, id, title, thread_number,limiter):
     def handle_timeout():
         print(f"Timeout while processing {title}")
         raise TimeoutError()
@@ -171,7 +171,7 @@ def process_article(site, cursor, conn, id, title, thread_number):
 
         if page.exists() and (not page.isRedirectPage()):
             summary = ""
-            bot = Parsed(page.text, summary)
+            bot = Parsed(page.text, summary,limiter)
 
             # Set the timeout here with Timer
             t = Timer(600, handle_timeout)

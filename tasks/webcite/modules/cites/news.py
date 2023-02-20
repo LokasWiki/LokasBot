@@ -7,7 +7,7 @@ import urllib.parse
 from tasks.webcite.modules.dateformatter import DateFormatter
 
 
-class WebCite:
+class News:
     def __init__(self, template):
         self.template = template
         self.o_template = copy.deepcopy(template)
