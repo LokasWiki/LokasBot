@@ -44,17 +44,21 @@ class Parsed:
                 break
             try:
                 cite = Cite(template)
-                if cite.is_archived() is False:
-                    self.number += 1
-                    time.sleep(2)
-                    if self.limiter.can_make_request():
-                        self.limiter.add_request()
-                        cite.archive_it()
-                        cite.update_template()
-                    else:
-                        print("Rate limit exceeded, sleeping for 60 seconds")
-                        time.sleep(60)
-                    self.text = str(self.text).replace(str(cite.template.o_template), str(cite.template.template))
+                # to check if url found
+                if cite.check_available():
+                    # to check if cite has archive link
+                    if cite.is_archived() is False:
+                        self.number += 1
+                        time.sleep(2)
+                        if self.limiter.can_make_request():
+                            self.limiter.add_request()
+                            # start archive cite
+                            cite.archive_it()
+                            cite.update_template()
+                        else:
+                            print("Rate limit exceeded, sleeping for 60 seconds")
+                            time.sleep(60)
+                        self.text = str(self.text).replace(str(cite.template.o_template), str(cite.template.template))
             except Exception as e:
                 print(f"An error occurred while processing {template}: {e}")
                 just_the_string = traceback.format_exc()

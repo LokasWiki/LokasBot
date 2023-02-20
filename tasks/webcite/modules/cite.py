@@ -51,6 +51,7 @@ class Cite:
         return self.template.is_archived()
 
     def check_available(self):
+        return self.url is not None
         pass
         # try:
         #     if self.template.url() is not None:
