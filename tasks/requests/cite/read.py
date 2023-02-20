@@ -20,7 +20,7 @@ try:
 
     if requests_page.check_user_edits(1):
         scanner = RequestsScanner()
-        scanner.pattern = r"\*\s*\[\[:(?P<namespace>.*):(?P<source>.*)\]\]"
+        scanner.pattern = r"\*\s*\[\[:(?P<namespace>.*\:)?(?P<source>.*)\]\]"
         scanner.scan(requests_page.get_page_text())
 
         if scanner.have_requests:
@@ -32,8 +32,9 @@ try:
                         # destination_page = pywikibot.Page(site, f"{request['destination']}",ns=0)
                         # if source_page.exists() and destination_page.exists() and source_page.namespace() == 0 and destination_page.namespace() == 0:
                         from_namespace = 0
-                        if request['namespace'] == "قالب":
+                        if request['namespace'] == "تصنيف:":
                             from_namespace = 14
+
                         request_model = Request(
                             from_title=request['source'],
                             from_namespace=from_namespace,

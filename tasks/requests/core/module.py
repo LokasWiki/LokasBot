@@ -88,17 +88,18 @@ class RequestsPage:
 
     def move_to_talk_page(self):
         talk_page = self._page.toggleTalkPage()
+        tem_page_text = self._page.text
 
         text = talk_page.text
         text += f"\n\n== طلب جديد عبر البوت من المستخدم {self.lasteditUser} ==\n\n"
         text += str(self._page.text).replace(self._header_text, "")
         text += "\n~~~~"
         talk_page.text = text
-
-        talk_page.save(f" طلب جديد عبر البوت من المستخدم {self.lasteditUser}")
-
         self._page.text = self._header_text + "\n\n"
-        self._page.save(f"نقل طلب جديد غير مصرح به من المستخدم الي الارشيف{self.lasteditUser}")
+
+        if tem_page_text.strip().lower() != self._header_text.strip().lower():
+            talk_page.save(f" طلب جديد عبر البوت من المستخدم {self.lasteditUser}")
+            self._page.save(f"نقل طلب جديد غير مصرح به من المستخدم الي الارشيف{self.lasteditUser}")
 
     def start_request(self):
         self._page.text = self._header_text + "\n\n"
