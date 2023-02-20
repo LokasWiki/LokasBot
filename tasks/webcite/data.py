@@ -1,6 +1,7 @@
 web_type = "web".strip().lower()
 press_release_type = "press_release".strip().lower()
 newsgroup_type = "newsgroup".strip().lower()
+news_type = "news".strip().lower()
 
 list_of_template = [
     # webcite
@@ -26,6 +27,13 @@ list_of_template = [
     # Cite newsgroup
     ["استشهاد بمجموعة أخبار", newsgroup_type],
     ["Cite newsgroup", newsgroup_type],
-
+    # Cite news
+    ["استشهاد بخبر", news_type],
+    ["Cite news", news_type],
+    ["Cite newspaper", news_type],
+    ["يستشهد خبر", news_type],
+    ["Cite News", news_type],
+    ["Tidningsref", news_type],
+    ["Cita noticia", news_type],
 
 ]
