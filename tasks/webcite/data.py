@@ -2,6 +2,7 @@ web_type = "web".strip().lower()
 press_release_type = "press_release".strip().lower()
 newsgroup_type = "newsgroup".strip().lower()
 news_type = "news".strip().lower()
+map_type = "map".strip().lower()
 
 list_of_template = [
     # webcite
@@ -35,5 +36,9 @@ list_of_template = [
     ["Cite News", news_type],
     ["Tidningsref", news_type],
     ["Cita noticia", news_type],
+    # cite map
+    ["استشهاد بخريطة", web_type],
+    ["Cite map", web_type],
+
 
 ]
