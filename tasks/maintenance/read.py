@@ -8,10 +8,8 @@ def main(*args: str) -> int:
         time_before_start = int(sys.argv[1])
 
         if time_before_start == 2540:
-            thread_number = 2
+            thread_number = 3
         elif time_before_start == 500:
-            thread_number = 2
-        elif time_before_start == 200:
             thread_number = 2
 
         pages = get_pages(time_before_start)

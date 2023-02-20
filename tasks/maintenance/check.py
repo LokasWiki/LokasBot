@@ -35,10 +35,11 @@ def read(thread_number):
 
 def run_threads():
     # create threads
-    threads = []
-    for i in range(1, 3):
-        thread = threading.Thread(target=read, args=(i,))
-        threads.append(thread)
+    threads = [
+        threading.Thread(target=read, args=(1,)),
+        threading.Thread(target=read, args=(2,)),
+        threading.Thread(target=read, args=(3,))
+    ]
 
     # start threads
     for thread in threads:

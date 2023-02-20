@@ -70,12 +70,6 @@
   <<: *defaults
 - name: maintenance-120
   no-filelog: false
-  command: $HOME/repos/jobs/maintenance_read.sh 200
-  schedule: '*/120 * * * * '
-  image: tf-python39
-  emails: onfailure
-- name: maintenance-6h
-  no-filelog: false
   command: $HOME/repos/jobs/maintenance_read.sh 500
   schedule: '0 */6 * * *'
   image: tf-python39
@@ -104,12 +98,6 @@
   continuous: true
   <<: *defaults
 - name: webcite-120
-  no-filelog: false
-  command: $HOME/repos/jobs/webcite_read.sh 200
-  schedule: '*/120 * * * * '
-  image: tf-python39
-  emails: onfailure
-- name: webcite-6h
   no-filelog: false
   command: $HOME/repos/jobs/webcite_read.sh 500
   schedule: '0 */6 * * *'
