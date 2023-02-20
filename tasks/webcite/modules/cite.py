@@ -90,10 +90,9 @@ class Cite:
                 self.archive_object = Archive(urllib.parse.unquote(save_api.save()), str(save_api.timestamp().strftime('%Y%m%d%H%M%S')))
             except TooManyRequestsError as e:
                 # todo:add option to database
+                print(f"An error occurred while send link to archive site processing: {e}")
                 just_the_string = traceback.format_exc()
                 print(just_the_string)
-                print("ip well blocked now stop run bot for 6 minutes")
-                # time.sleep(60*6)
             except Exception as e:
                 print(f"An error occurred while processing: {e}")
                 just_the_string = traceback.format_exc()
