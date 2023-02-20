@@ -1,24 +1,26 @@
-web_type = "web"
+web_type = "web".strip().lower()
+press_release_type = "press_release".strip().lower()
 
 list_of_template = [
-    {
-        "type": web_type,
-        "list_of_template": [
-            "مرجع موقع",
-            "استشهاد ويب/إنجليزي",
-            "Cite web",
-            "Citeweb",
-            "مرجع وب",
-            "مرجع وب/إنجليزي",
-            "Cita web",
-            "يستشهد ويب",
-            "استشهاد بموقع",
-            "Web cite",
-            "مرجع ويب",
-            "مرجع ويب/إنجليزي",
-            "Cw",
-            "استشهاد ويب"
-        ]
+    # webcite
+    ["مرجع موقع", web_type],
+    ["استشهاد ويب/إنجليزي", web_type],
+    ["Cite web", web_type],
+    ["Citeweb", web_type],
+    ["مرجع وب", web_type],
+    ["مرجع وب/إنجليزي", web_type],
+    ["Cita web", web_type],
+    ["يستشهد ويب", web_type],
+    ["استشهاد بموقع", web_type],
+    ["Web cite", web_type],
+    ["مرجع ويب", web_type],
+    ["مرجع ويب/إنجليزي", web_type],
+    ["Cw", web_type],
+    ["استشهاد ويب", web_type],
+    # Cite press release
+    ["استشهاد ببيان صحفي", press_release_type],
+    ["Cite press", press_release_type],
+    ["Cite pressrelease", press_release_type],
+    ["Cite press release", press_release_type],
 
-    }
 ]

@@ -4,8 +4,9 @@ import urllib.parse
 from waybackpy.exceptions import NoCDXRecordFound, TooManyRequestsError
 from datetime import datetime, timedelta
 
-from tasks.webcite.data import list_of_template
+from tasks.webcite.data import list_of_template,web_type,press_release_type
 from tasks.webcite.modules.cites.webcite import WebCite
+from tasks.webcite.modules.cites.press_release import PressRelease
 
 from waybackpy import WaybackMachineCDXServerAPI
 from waybackpy import WaybackMachineSaveAPI
@@ -20,23 +21,22 @@ class Archive:
 class Cite:
     def __init__(self, template):
 
-        self.list_of_templates = []
+        self.list_of_templates = list_of_template
         self.template = self._set_right_class(template)
         self.url = self.template.url()
 
         self.user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36"
         self.archive_object = None
 
-    def _fill_all_template(self):
-        for dic in list_of_template:
-            for template in dic['list_of_template']:
-                self.list_of_templates.append(template)
-
     def _set_right_class(self, template):
-        self._fill_all_template()
         for t in self.list_of_templates:
-            if str(t).strip().lower() == str(template.name).strip().lower():
-                return WebCite(template)
+            if str(t[0]).strip().lower() == str(template.name).strip().lower():
+                class_name = t[1].strip().lower()
+                print(class_name)
+                if class_name == web_type:
+                    return WebCite(template)
+                elif class_name == press_release_type:
+                    return PressRelease(template)
 
     def is_archived(self):
         return self.template.is_archived()

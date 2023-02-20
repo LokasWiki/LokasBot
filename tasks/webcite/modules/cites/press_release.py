@@ -7,7 +7,7 @@ import urllib.parse
 from tasks.webcite.modules.dateformatter import DateFormatter
 
 
-class WebCite:
+class PressRelease:
     def __init__(self, template):
         self.template = template
         self.o_template = copy.deepcopy(template)
@@ -94,9 +94,9 @@ class WebCite:
         formatter_ar = DateFormatter(language='ar')
         formatted_date_ar = formatter_ar.format_timestamp(timestamp)
 
-        self.replace_to(self.url_args, "مسار")
-        self.replace_to(self.title_args, "عنوان")
-        self.replace_to(self.accessdate_args, "تاريخ الوصول")
+        self.replace_to(self.url_args,"مسار")
+        self.replace_to(self.title_args,"عنوان")
+        self.replace_to(self.accessdate_args,"تاريخ الوصول")
         o_url_value = self.template.get_arg("مسار").value.strip()
         self.template.set_arg("تاريخ أرشيف", formatted_date_ar)
         self.template.del_arg("مسار")
