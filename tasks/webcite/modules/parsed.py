@@ -58,10 +58,7 @@ class Parsed:
                         else:
                             print("Rate limit exceeded, sleeping for 60 seconds")
                             time.sleep(60)
-
-                if cite.archive_object is not None:
-                    self.text = str(self.text).replace(str(cite.template.o_template), str(cite.template.template))
-
+                        self.text = str(self.text).replace(str(cite.template.o_template), str(cite.template.template))
             except Exception as e:
                 print(f"An error occurred while processing {template}: {e}")
                 just_the_string = traceback.format_exc()
