@@ -24,7 +24,7 @@ class Parsed:
         if self.check():
             self.start_replace()
         if self.text != self.old_text:
-            self.summary += "بوت:الإبلاغ عن رابط معطوب أو مؤرشف V1.0*"
+            self.summary += "بوت:الإبلاغ عن رابط معطوب أو مؤرشف V1.1*"
         return self.text, self.summary
 
     def check(self):
@@ -58,7 +58,10 @@ class Parsed:
                         else:
                             print("Rate limit exceeded, sleeping for 60 seconds")
                             time.sleep(60)
-                        self.text = str(self.text).replace(str(cite.template.o_template), str(cite.template.template))
+
+                if cite.archive_object is not None:
+                    self.text = str(self.text).replace(str(cite.template.o_template), str(cite.template.template))
+
             except Exception as e:
                 print(f"An error occurred while processing {template}: {e}")
                 just_the_string = traceback.format_exc()

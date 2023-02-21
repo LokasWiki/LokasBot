@@ -62,19 +62,19 @@ class Cite:
         #     print(" 'Template' object has no attribute 'url'")
         # return False
 
-    def check_available_on_api(self):
+    def check_available_on_api(self,minutes_number=5):
 
         cdx_api = WaybackMachineCDXServerAPI(self.url.value.strip(), self.user_agent)
         try:
             newest = cdx_api.newest()
             # check if the date is before 5 minutes from now
-            five_minutes_ago = datetime.now() - timedelta(minutes=5)
+            five_minutes_ago = datetime.now() - timedelta(minutes=minutes_number)
             if not (newest.datetime_timestamp < five_minutes_ago) and (newest.statuscode == 200):
                 self.archive_object = Archive(urllib.parse.unquote(newest.archive_url), newest.timestamp)
 
         except Exception as e:
 
-            print(f"An error occurred while processing: {e} and url is {self.url.value.strip()}")
+            print(f"An error occurred while processing (check_available_on_api): {e} and url is {self.url.value.strip()}")
 
             # just_the_string = traceback.format_exc()
             #
@@ -85,16 +85,18 @@ class Cite:
 
         if self.archive_object is None:
             try:
-
                 save_api = WaybackMachineSaveAPI(self.url.value.strip(), self.user_agent)
-                self.archive_object = Archive(urllib.parse.unquote(save_api.save()), str(save_api.timestamp().strftime('%Y%m%d%H%M%S')))
+                save_api.save()
+                # not get url from save api but from available aoi to check if url URL has been excluded from the Wayback Machine.
+                self.check_available_on_api(minutes_number=1)
+                # self.archive_object = Archive(urllib.parse.unquote(save_api.save()), str(save_api.timestamp().strftime('%Y%m%d%H%M%S')))
             except TooManyRequestsError as e:
                 # todo:add option to database
                 print(f"An error occurred while send link to archive site processing: {e}")
                 just_the_string = traceback.format_exc()
                 print(just_the_string)
             except Exception as e:
-                print(f"An error occurred while processing: {e}")
+                print(f"An error occurred while saved url processing: {e}")
                 just_the_string = traceback.format_exc()
                 print(just_the_string)
 
