@@ -1,6 +1,7 @@
 import traceback
 import urllib.parse
 
+import requests
 from waybackpy.exceptions import NoCDXRecordFound, TooManyRequestsError
 from datetime import datetime, timedelta
 
@@ -87,7 +88,10 @@ class Cite:
             try:
 
                 save_api = WaybackMachineSaveAPI(self.url.value.strip(), self.user_agent)
-                self.archive_object = Archive(urllib.parse.unquote(save_api.save()), str(save_api.timestamp().strftime('%Y%m%d%H%M%S')))
+                r = requests.get(save_api.save())
+                if r.status_code == 200:
+                    self.archive_object = Archive(urllib.parse.unquote(save_api.save()),
+                                                  str(save_api.timestamp().strftime('%Y%m%d%H%M%S')))
             except TooManyRequestsError as e:
                 # todo:add option to database
                 print(f"An error occurred while send link to archive site processing: {e}")
