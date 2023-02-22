@@ -9,7 +9,7 @@ inner join templatelinks on page.page_id = templatelinks.tl_from
 inner join linktarget on lt_id = tl_target_id
 
 inner join iwlinks on page.page_id = iwlinks.iwl_from
-where iwlinks.iwl_title in  (select iwl_title from iwlinks  where iwl_from = 9119730) and lt_title in (
+where iwlinks.iwl_title in  (select iwl_title from iwlinks  where iwl_from = 9119754) and lt_title in (
   "استشهاد_بويكي_بيانات",
   "Citeq",
   "Cite_Q"
