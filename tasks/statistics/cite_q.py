@@ -44,9 +44,15 @@ if day_of_week == 4:
         try:
             site = pywikibot.Site("wikidata")
             page_item = pywikibot.page.ItemPage(site, name)
-            page_item.get()
-            if 'ar' in page_item.labels:
-                name_of_itme = page_item.labels['ar']
+            if page_item.isRedirectPage():
+                target_page = page_item.getRedirectTarget()
+                target_page.get()
+                if 'ar' in target_page.labels:
+                    name_of_itme = target_page.labels['ar']
+            else:
+                page_item.get()
+                if 'ar' in page_item.labels:
+                    name_of_itme = page_item.labels['ar']
 
         except:
             print("error to get item from wikdata")
@@ -60,7 +66,7 @@ if day_of_week == 4:
         for row in result:
             for key in total:
                 total[key] += row[key]
-        return f"""\n|- class="sortbottom"\n! colspan="3" | عدد الاستشهادات الكلي\n! style="text-align:center;" | {total['count_of_cites']}\n"""
+        return f"""|- class="sortbottom"\n! colspan="3" | عدد الاستشهادات الكلي\n! style="text-align:center;" | {total['count_of_cites']}\n"""
 
 
     columns = [
