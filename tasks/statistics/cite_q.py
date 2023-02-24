@@ -27,7 +27,7 @@ day_of_week = current_time.tm_wday
 
 
 # Check if it's fri
-if day_of_week == 4:
+if day_of_week == 3:
 
     # Create an instance of the ArticleTables class
     tables = ArticleTables()

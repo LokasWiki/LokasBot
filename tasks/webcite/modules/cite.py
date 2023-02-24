@@ -1,8 +1,16 @@
+"""
+This module contains classes related to creating and updating citations.
+
+Classes:
+Archive: A class for storing information about an archived webpage.
+Cite: A class for creating and updating citations using templates.
+"""
+
 import traceback
 import urllib.parse
 
 import requests
-from waybackpy.exceptions import NoCDXRecordFound, TooManyRequestsError
+from waybackpy.exceptions import  TooManyRequestsError
 from datetime import datetime, timedelta
 
 from tasks.webcite.data import list_of_template, web_type, press_release_type, newsgroup_type, news_type, map_type
@@ -17,12 +25,29 @@ from waybackpy import WaybackMachineSaveAPI
 
 
 class Archive:
+    """
+    A class for storing information about an archived webpage.
+
+    Attributes:
+    - url (str): The URL of the archived webpage.
+    - timestamp (str): The timestamp of the archived webpage.
+    """
     def __init__(self, url, timestamp):
         self.url = url
         self.timestamp = timestamp
 
 
 class Cite:
+    """
+    A class for creating and updating citations using templates.
+
+    Attributes:
+        - list_of_templates (list): A list of available templates.
+        - template: The template used for creating the citation.
+        - url (str): The URL of the citation.
+        - user_agent (str): The user agent used when interacting with the Wayback Machine.
+        - archive_object (Archive): The archived version of the citation.
+    """
     def __init__(self, template):
 
         self.list_of_templates = list_of_template
@@ -33,6 +58,15 @@ class Cite:
         self.archive_object = None
 
     def _set_right_class(self, template):
+        """
+        Sets the right Cite class based on the type of template.
+
+        Args:
+            template: WebpageTemplate object.
+
+        Returns:
+            Cite object.
+        """
         for t in self.list_of_templates:
             if str(t[0]).strip().lower() == str(template.name).strip().lower():
                 class_name = t[1].strip().lower()
@@ -49,22 +83,35 @@ class Cite:
                     return CiteMap(template)
 
     def is_archived(self):
+        """
+        Checks if the webpage is already archived.
+
+        Returns:
+            Boolean value, True if webpage is archived, else False.
+        """
         return self.template.is_archived()
 
     def check_available(self):
+        """
+        Checks if the webpage URL is valid.
+
+        Returns:
+            Boolean value, True if URL is valid, else False.
+        """
         return self.url is not None
-        pass
-        # try:
-        #     if self.template.url() is not None:
-        #         status, archive_obj = self.check_available_on_api()
-        #         self.archive_object = archive_obj
-        #         return status
-        # except AttributeError:
-        #     print(" 'Template' object has no attribute 'url'")
-        # return False
 
     def check_available_on_api(self):
+        """
+        Checks if the webpage is available on Wayback Machine API
+        and returns the archived URL and timestamp if
+        available.
 
+        If the citation is available, an Archive object is created
+        and stored in self.archive_object.
+
+        Returns:
+        - None.
+        """
         cdx_api = WaybackMachineCDXServerAPI(self.url.value.strip(), self.user_agent)
         try:
             newest = cdx_api.newest()
@@ -92,13 +139,12 @@ class Cite:
                 if r.status_code == 200:
                     self.archive_object = Archive(urllib.parse.unquote(save_api.save()),
                                                   str(save_api.timestamp().strftime('%Y%m%d%H%M%S')))
-            except TooManyRequestsError as e:
-                # todo:add option to database
-                print(f"An error occurred while send link to archive site processing: {e}")
+            except TooManyRequestsError as error:
+                print(f"An error occurred while send link to archive site processing: {error}")
                 just_the_string = traceback.format_exc()
                 print(just_the_string)
-            except Exception as e:
-                print(f"An error occurred while processing: {e}")
+            except Exception as error:
+                print(f"An error occurred while processing: {error}")
                 just_the_string = traceback.format_exc()
                 print(just_the_string)
 
