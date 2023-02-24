@@ -4,7 +4,7 @@ import urllib
 
 import urllib.parse
 
-from tasks.webcite.modules.dateformatter import DateFormatter
+from tasks.webcite.modules.date_formatter import DateFormatter
 
 
 class BaseCite:
