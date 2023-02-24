@@ -8,6 +8,7 @@ from tasks.webcite.modules.dateformatter import DateFormatter
 
 
 class BaseCite:
+    """Class representing a base for cite template"""
     def __init__(self, template):
         self.template = template
         self.o_template = copy.deepcopy(template)
