@@ -10,7 +10,7 @@ import traceback
 import urllib.parse
 
 import requests
-from waybackpy.exceptions import  TooManyRequestsError
+from waybackpy.exceptions import TooManyRequestsError
 from datetime import datetime, timedelta
 
 from tasks.webcite.data import list_of_template, web_type, press_release_type, newsgroup_type, news_type, map_type
@@ -98,8 +98,37 @@ class Cite:
         Returns:
             Boolean value, True if URL is valid, else False.
         """
-        return self.url is not None
+        if self.url is not None and self.url.value.strip() is not None:
+            return self.is_url_excluded(self.url.value.strip())
+        return None
 
+    def is_url_excluded(self, url):
+        sites = [
+            'archive.org',
+            'web.archive.org',
+            'mail.yahoo.com',
+            'duckduckgo.com/?q=',
+            'google.com/search',
+            '127.0.0.1',
+            'localhost',
+            '0.0.0.0',
+            'chrome:',
+            'chrome-extension:',
+            'about:',
+            'moz-extension:',
+            '192.168.',
+            '10.',
+            'file:',
+            'edge:',
+            'extension:',
+            'safari-web-extension:',
+            'chrome-error:'
+        ]
+        status = True
+        for site in sites:
+            if site.strip().lower() in url.strip().lower():
+                status = None
+        return status
     def check_available_on_api(self):
         """
         Checks if the webpage is available on Wayback Machine API
