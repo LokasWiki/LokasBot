@@ -1,4 +1,3 @@
-
 from core.utils.wikidb import Database
 
 import pywikibot

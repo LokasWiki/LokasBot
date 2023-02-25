@@ -7,11 +7,11 @@ d = antispam.Detector("my_model.dat")
 
 
 db = Database()
-db.query = """  SELECT user.user_name AS "username" 
+db.query = """  SELECT user.user_name AS "username"
   FROM ipblocks
   INNER JOIN user ON ipblocks.ipb_user = user.user_id
   INNER JOIN comment ON ipblocks.ipb_reason_id = comment.comment_id
-  WHERE comment.comment_text LIKE "%مستخدم%" 
+  WHERE comment.comment_text LIKE "%مستخدم%"
   AND comment.comment_text NOT LIKE "%جوا%"
   limit 30000;"""
 db.get_content_from_database()
@@ -25,7 +25,7 @@ for row in db.result:
 
 
 db2 = Database()
-db2.query = """ SELECT user.user_name AS "username" 
+db2.query = """ SELECT user.user_name AS "username"
  FROM user
  WHERE user.user_id NOT IN (SELECT ipb_user FROM ipblocks)
  limit 30000;"""
