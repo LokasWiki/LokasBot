@@ -116,8 +116,6 @@ class Cite:
             'chrome-extension:',
             'about:',
             'moz-extension:',
-            '192.168.',
-            '10.',
             'file:',
             'edge:',
             'extension:',
