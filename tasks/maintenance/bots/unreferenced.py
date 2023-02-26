@@ -96,12 +96,21 @@ class Unreferenced:
         parsed = wtp.parse(self.text)
         tags = parsed.get_tags()
         num_of_ref_tags = 0
-
+        # check tags
         for tag in tags:
             if tag.name.strip().lower() == "ref".strip().lower():
                 num_of_ref_tags += 1
                 break
-
+        #   check template
+        if num_of_ref_tags == 0:
+            templates = parsed.templates
+            list_of_cites_template = ['sfn']
+            for needed_template in list_of_cites_template:
+                for template in templates:
+                    if needed_template.strip().lower() == template.name.strip().lower():
+                        num_of_ref_tags += 1
+                        break
+        # chcek wikdata
         if num_of_ref_tags == 0:
             num_of_ref_tags = self.have_wikidata_ref()
 
