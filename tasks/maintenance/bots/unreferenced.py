@@ -82,7 +82,7 @@ class Unreferenced:
         num_of_ref_tags = 0
 
         for tag in tags:
-            if tag.name.strip().lower() == str("ref").strip().lower():
+            if tag.name.strip().lower() == "ref".strip().lower():
                 num_of_ref_tags += 1
                 break
 
