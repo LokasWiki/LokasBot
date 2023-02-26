@@ -23,6 +23,10 @@ class Unreferenced:
             "مصدر",
         ]
 
+        self.extra_templates = [
+            "مصدر وحيد"
+        ]
+
     def __call__(self):
         disambiguation = Disambiguation(self.page.title(), self.text)
         if disambiguation.check("or"):

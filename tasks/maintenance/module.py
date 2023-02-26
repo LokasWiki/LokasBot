@@ -10,6 +10,7 @@ from tasks.maintenance.bots.has_categories import HasCategories
 from tasks.maintenance.bots.orphan import Orphan
 from tasks.maintenance.bots.portals_bar import PortalsBar
 from tasks.maintenance.bots.portals_merge import PortalsMerge
+from tasks.maintenance.bots.unreferenced import Unreferenced
 from tasks.maintenance.bots.unreviewed_article import UnreviewedArticle
 
 def create_database_table():
@@ -123,7 +124,7 @@ def process_article(site, cursor, conn, id, title, thread_number):
             UnreviewedArticle,
             HasCategories,
             PortalsBar,
-            # Unreferenced,
+            Unreferenced,
             Orphan,
             # DeadEnd,
             # Underlinked
