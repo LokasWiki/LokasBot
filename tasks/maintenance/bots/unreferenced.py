@@ -79,7 +79,7 @@ class Unreferenced:
         found = False
         for cat in categories:
             print(cat.title(with_ns=False))
-            if str('مرجع من ويكي بيانات').strip().lower() == cat.title(with_ns=False).strip().lower():
+            if 'مرجع من ويكي بيانات'.strip().lower() == cat.title(with_ns=False).strip().lower():
                 found = True
                 break
 
