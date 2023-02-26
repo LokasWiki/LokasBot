@@ -79,14 +79,17 @@ class Unreferenced:
 
     def have_wikidata_ref(self):
         # Get the categories on the page
-        categories = self.page.categories()
-        found = False
-        for cat in categories:
-            print(cat.title(with_ns=False))
-            if 'مرجع من ويكي بيانات'.strip().lower() == cat.title(with_ns=False).strip().lower():
-                found = True
-                break
 
+        categories = self.page.categories()
+        found = 0
+        list_category = [
+            'مرجع من ويكي بيانات', 'صفحات بها مراجع ويكي بيانات'
+        ]
+        for cat in categories:
+            for needed_cat in list_category:
+                if needed_cat.strip().lower() == cat.title(with_ns=False).strip().lower():
+                    found = 1
+                    break
         return found
 
     def check(self):
