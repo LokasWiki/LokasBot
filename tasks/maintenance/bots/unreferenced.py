@@ -1,6 +1,3 @@
-import re
-
-import pywikibot
 from core.utils.disambiguation import Disambiguation
 import wikitextparser as wtp
 
@@ -53,7 +50,7 @@ class Unreferenced:
                     found = True
                     break
 
-        if found == False:
+        if not found:
             new_text = "{{لا مصدر|تاريخ ={{نسخ:شهر وسنة}}}}"
             new_text += "\n"
             new_text += self.text
@@ -76,6 +73,18 @@ class Unreferenced:
             self.text = new_text
             self.summary += "، حذف  وسم [[ويكيبيديا:الاستشهاد بمصادر|لا مصدر]]"
 
+    def have_wikidata_ref(self):
+        # Get the categories on the page
+        categories = self.page.categories()
+        found = False
+        for cat in categories:
+            print(cat.title(with_ns=False))
+            if str('مرجع من ويكي بيانات').strip().lower() == cat.title(with_ns=False).strip().lower():
+                found = True
+                break
+
+        return found
+
     def check(self):
         parsed = wtp.parse(self.text)
         tags = parsed.get_tags()
@@ -85,6 +94,9 @@ class Unreferenced:
             if tag.name.strip().lower() == str("ref").strip().lower():
                 num_of_ref_tags += 1
                 break
+
+        if num_of_ref_tags == 0:
+            num_of_ref_tags = self.have_wikidata_ref()
 
         if num_of_ref_tags == 0:
             return False
