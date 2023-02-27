@@ -2,8 +2,8 @@ import os
 
 
 class File:
-    def __init__(self):
-        self.script_dir = os.path.dirname(__file__)
+    def __init__(self,script_dir):
+        self.script_dir = script_dir
         self.file_path = ""
         self.contents = ""
 

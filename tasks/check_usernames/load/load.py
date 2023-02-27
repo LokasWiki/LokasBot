@@ -1,6 +1,4 @@
-import os
-
-import self as self
+from coverage.annotate import os
 
 from core.utils.file import File
 from core.utils.wikidb import Database
@@ -9,20 +7,73 @@ import pywikibot
 
 import antispam
 
+
+class Load:
+    def __init__(self, content_text, ai_model, names, page_title, site):
+        self.stub_content = content_text
+        self.ai_model = ai_model
+        self.list_of_names = names
+        self.page_title = page_title
+        self.site = site
+        self.username_bot = self.site.username()
+        self.page = None
+        self.text = ""
+
+    def load_page(self):
+        self.page = pywikibot.Page(self.site, self.page_title)
+        return self
+
+    def build_table(self):
+
+        # start create page
+        table_body = ""
+
+        num = 1
+
+        for user_name in self.list_of_names:
+
+            try:
+                msg1 = user_name.strip().lower().replace(" ", "_")
+
+                if self.ai_model.score(msg1) >= 0.6:
+                    table_body += """|{0}||{2}||{1}||لا||\n|-
+                  """.format(num, "{{مس|" + user_name + "}}", str(self.ai_model.score(msg1)))
+                    num += 1
+            except:
+                table_body += """|{0}||{2}||{1}||لا||\n|-
+                      """.format(num, "{{مس|" + user_name + "}}", "غير معروف")
+                num += 1
+
+        # start add data to text stub
+        self.text = self.stub_content.replace("BOT_TABLE_BODY", table_body).replace(
+            'BOT_USER_NAME', f"[[مستخدم:{self.username_bot}|{self.username_bot}]]"
+        ).replace(
+            "BOT_TIME_NOW", "{{نسخ:#time:H:i، j F Y}}"
+        )
+        return self
+
+    def save_page(self):
+        # start save page
+        self.page.text = self.text
+        self.page.save("بوت:تحديث")
+        return self
+
+
+script_dir = os.path.dirname(__file__)
+
 # text stub
-file = File()
+file = File(script_dir=script_dir)
 file_path = 'stub/load.txt'
 file.set_stub_path(file_path)
 file.get_file_content()
 content = file.contents
 
 # model file
-model = File()
+model = File(script_dir=script_dir)
 model_path = 'ai/models/v1/my_model.dat'
 model.set_stub_path(model_path)
 
-d = antispam.Detector(model.file_path)
-
+ai_model = antispam.Detector(model.file_path)
 
 # database users list
 db = Database()
@@ -37,41 +88,10 @@ for row in db.result:
     name = str(row['q_log_title'], 'utf-8')
     names.append(name)
 
-
-page_title = "ويكيبيديا:إخطار الإداريين/أسماء مستخدمين للفحص"
+# page_title = "ويكيبيديا:إخطار الإداريين/أسماء مستخدمين للفحص"
+page_title = "مستخدم:لوقا/ملعب 20"
 
 site = pywikibot.Site()
-page = pywikibot.Page(site, page_title)
 
-
-# start create page
-table_body = ""
-
-num = 1
-
-for name in names:
-
-   try:
-       msg1 = name.strip().lower().replace(" ", "_")
-
-       if d.score(msg1) >= 0.6:
-           table_body += """|{0}||{2}||{1}||لا||\n|-
-          """.format(num, "{{مس|" + name + "}}", str(d.score(msg1)))
-           num += 1
-   except:
-       table_body += """|{0}||{2}||{1}||لا||\n|-
-              """.format(num, "{{مس|" + name + "}}", "غير معروف")
-       num += 1
-
-# start add data to text stub
-username_bot = site.username()
-content = content.replace("BOT_TABLE_BODY", table_body).replace(
-    'BOT_USER_NAME', f"[[مستخدم:{username_bot}|{username_bot}]]"
-).replace(
-    "BOT_TIME_NOW", "{{نسخ:#time:H:i، j F Y}}"
-)
-
-# start save page
-page.text = content
-
-page.save("بوت:تحديث")
+load_obj = Load(content_text=content, ai_model=ai_model, names=names, page_title=page_title, site=site)
+load_obj.load_page().build_table().save_page()
