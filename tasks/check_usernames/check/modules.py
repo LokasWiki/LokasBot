@@ -2,7 +2,7 @@ import pywikibot
 import wikitextparser as wtp
 import pywikibot.flow
 from datetime import datetime
-
+from pywikibot.data.api import Request
 
 # todo: move this class to core and move tests files
 class DateFormatter:
@@ -57,15 +57,15 @@ class DateFormatter:
 class Category:
     def __init__(self, site):
         self.site = site
-
+        self.cat_name = None
     def create(self):
         try:
             formatter = DateFormatter("ar")
             start_date = datetime.now()
             start_time_str = start_date.strftime("%Y%m%d%H%M%S")
             cat_date = formatter.format_timestamp(start_time_str)
-            cat_name = f"تصنيف:أسماء مستخدمين مخالفة مرشحة للمنع منذ {cat_date}"
-            cat = pywikibot.Category(self.site, cat_name)
+            self.cat_name = f"تصنيف:أسماء مستخدمين مخالفة مرشحة للمنع منذ {cat_date}"
+            cat = pywikibot.Category(self.site, self.cat_name)
             cat.text = "{{تصنيف تهذيب شهري}}"
             cat.save("إنشاء تصنيف صيانة")
         except:
@@ -73,19 +73,23 @@ class Category:
 
 
 class SendAlert:
-    def __init__(self, user_name, has_reason, reason, site):
+    def __init__(self, user_name, has_reason, reason, site,cat_name):
         self.user_name = user_name
         self.has_reason = has_reason
+        self.cat_name = cat_name
         self.reason = reason
         self.site = site
-
+        self.header = ""
+        self.revisionId = None
+        self.token= None
+        self.page_title =None
     def start_send(self):
         # Retrieve the user talk page
         user = pywikibot.User(self.site, self.user_name)
 
         # Get the user page for the user
         talk_page = user.getUserTalkPage()
-
+        self.page_title = talk_page.title(with_ns=True)
         if talk_page.is_flow_page():
             board = pywikibot.flow.Board(talk_page)
 
@@ -98,6 +102,12 @@ class SendAlert:
 
             try:
                 topic = board.new_topic(title, content)
+                # add category to header
+                self.get_header_text()
+
+                self.header += """\n[[تصنيف:أسماء مستخدمين مخالفة مرشحة للمنع]]\n[[CAT_NAME|{{اسم_الصفحة_الأساسي}}]]\n""".replace("CAT_NAME",self.cat_name)
+                self.token = self.site.tokens["edit"]
+                self.save_flow_header()
 
             except Exception as error:
                 print(f'Error saving page: {error}')
@@ -121,10 +131,65 @@ class SendAlert:
             except Exception as error:
                 print(f'Error saving page: {error}')
 
+    def get_header_text(self):
+
+        params = {
+            "action": "flow",
+            "format": "json",
+            "submodule": "view-header",
+            "page": self.page_title,
+            "utf8": 1,
+            "formatversion": "2",
+            "vhformat": "wikitext"
+        }
+        # Create a custom API request
+        request = Request(site=self.site, parameters=params)
+        # Send the request to the API and get the response
+        data = request.submit()
+        # Extract the header information from the API response
+        try:
+            self.header = data['flow']['view-header']['result']['header']['revision']['content']['content']
+            self.revisionId = data['flow']['view-header']['result']['header']['revision']['revisionId']
+        except:
+            self.header = ""
+            self.revisionId = data['flow']['view-header']['result']['header']['revision']['revisionId']
+
+    def save_flow_header(self):
+        """
+        Get the header information of a Flow page using the Pywikibot API.
+
+        :param page_title: the title of the Flow page
+        :return: a dictionary containing the header information
+        """
+        # Set up the site and API parameters
+        site = pywikibot.Site()
+        params = {
+            "action": "flow",
+            "format": "json",
+            "submodule": "edit-header",
+            "page": self.page_title,
+            "utf8": 1,
+            "formatversion": "2",
+            "ehprev_revision": self.revisionId,
+            "ehcontent": self.header,
+            "vhformat": "wikitext",
+            "token": self.token,  # get the edit token
+        }
+
+        # Create a custom API request
+        request = Request(site=self.site, parameters=params, use_get=False)
+
+        # Send the request to the API and get the response
+        data = request.submit()
+
+        # todo:add check error here
+
+
 
 class ReadUsers:
-    def __init__(self, site, page_title):
+    def __init__(self, site, page_title,cat_name):
         self.page = None
+        self.cat_name = cat_name
         self.parsed = None
         self.site = site
         self.page_title = page_title
@@ -155,7 +220,7 @@ class ReadUsers:
     def start_send_alert(self):
         for user in self.users:
             try:
-                send_obj = SendAlert(user['username'], user['has_reason'], user['reason'], site=self.site)
+                send_obj = SendAlert(user['username'], user['has_reason'], user['reason'], site=self.site,cat_name=self.cat_name)
                 send_obj.start_send()
             except:
                 print("can`t send  alert")
