@@ -1,3 +1,5 @@
+
+antispam~=0.0.10
 Flask~=2.2.2
 MarkupSafe~=2.1.2
 mwparserfromhell == 0.6.4
