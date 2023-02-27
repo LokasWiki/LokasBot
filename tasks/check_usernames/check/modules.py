@@ -21,11 +21,11 @@ class ReadUsers:
             reason = row[4]
             status = row[3]
             user = row[2]
-            if status.strip().lower() == str("نعم").strip().lower():
+            if status.strip().lower() == "نعم".strip().lower():
                 t = wtp.Template(user)
                 user_dic = {
                     "reason": reason,
-                    "has_reason": not (str(reason).strip().lower() == str("")),
+                    "has_reason": not (str(reason).strip().lower() == ""),
                     "user_template": user,
                     "username": t.arguments[0].value.strip()
                 }
@@ -33,7 +33,7 @@ class ReadUsers:
 
     def start_send_alert(self):
         for user in self.users:
-            if str(user['username']).strip().lower() == str("Lokas7755").strip().lower():
+            if str(user['username']).strip().lower() == "Lokas7755".strip().lower():
 
                 self.send_alert(user['username'], user['has_reason'], user['reason'])
 
