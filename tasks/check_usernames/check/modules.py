@@ -106,7 +106,7 @@ class SendAlert:
                 self.get_header_text()
 
                 self.header += """\n[[تصنيف:أسماء مستخدمين مخالفة مرشحة للمنع]]\n[[CAT_NAME|{{اسم_الصفحة_الأساسي}}]]\n""".replace("CAT_NAME",self.cat_name)
-                self.token = self.site.tokens["edit"]
+                self.token = self.site.tokens["csrf"]
                 self.save_flow_header()
 
             except Exception as error:
@@ -220,8 +220,8 @@ class ReadUsers:
     def start_send_alert(self):
         for user in self.users:
             try:
-                if str(user['username']).strip().lower() == str("Lokas7755").strip().lower():
-                    send_obj = SendAlert(user['username'], user['has_reason'], user['reason'], site=self.site,cat_name=self.cat_name)
-                    send_obj.start_send()
+                # if str(user['username']).strip().lower() == str("Lokas7755").strip().lower():
+                send_obj = SendAlert(user['username'], user['has_reason'], user['reason'], site=self.site,cat_name=self.cat_name)
+                send_obj.start_send()
             except:
                 print("can`t send  alert")

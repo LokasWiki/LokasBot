@@ -11,6 +11,7 @@ export PYTHONPATH="${PYTHONPATH}:$HOME/repos"
 python3  "$HOME"/repos/tasks/requests/template_distribution/read.py
 python3  "$HOME"/repos/tasks/requests/add_category/read.py
 python3  "$HOME"/repos/tasks/requests/cite/read.py
+python3  "$HOME"/repos/tasks/check_usernames/check/check.py
 
 # Exit the script after running all the Python files
 exit 0

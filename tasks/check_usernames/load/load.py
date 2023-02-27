@@ -88,8 +88,8 @@ for row in db.result:
     name = str(row['q_log_title'], 'utf-8')
     names.append(name)
 
-# page_title = "ويكيبيديا:إخطار الإداريين/أسماء مستخدمين للفحص"
-page_title = "مستخدم:لوقا/ملعب 20"
+page_title = "ويكيبيديا:إخطار الإداريين/أسماء مستخدمين للفحص"
+# page_title = "مستخدم:لوقا/ملعب 20"
 
 site = pywikibot.Site()
 
