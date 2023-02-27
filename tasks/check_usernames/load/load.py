@@ -35,7 +35,7 @@ class Load:
             try:
                 msg1 = user_name.strip().lower().replace(" ", "_")
 
-                if self.ai_model.score(msg1) >= 0.6:
+                if self.ai_model.score(msg1) >= 0.6 or len(msg1) >= 20 or len(msg1) <= 2:
                     table_body += """|{0}||{2}||{1}||لا||\n|-
                   """.format(num, "{{مس|" + user_name + "}}", str(self.ai_model.score(msg1)))
                     num += 1
