@@ -1,5 +1,7 @@
 import os
 
+import self as self
+
 from core.utils.file import File
 from core.utils.wikidb import Database
 
@@ -7,17 +9,22 @@ import pywikibot
 
 import antispam
 
-
+# text stub
 file = File()
 file_path = 'stub/load.txt'
 file.set_stub_path(file_path)
 file.get_file_content()
 content = file.contents
 
-d = antispam.Detector("my_model.dat")
+# model file
+model = File()
+model_path = 'ai/models/v1/my_model.dat'
+model.set_stub_path(model_path)
+
+d = antispam.Detector(model.file_path)
 
 
-
+# database users list
 db = Database()
 db.query = """select logging.log_title as "q_log_title" from logging
 inner join user on user.user_name = logging.log_title
@@ -37,7 +44,7 @@ site = pywikibot.Site()
 page = pywikibot.Page(site, page_title)
 
 
-
+# start create page
 table_body = ""
 
 num = 1
@@ -56,12 +63,15 @@ for name in names:
               """.format(num, "{{مس|" + name + "}}", "غير معروف")
        num += 1
 
+# start add data to text stub
 username_bot = site.username()
 content = content.replace("BOT_TABLE_BODY", table_body).replace(
     'BOT_USER_NAME', f"[[مستخدم:{username_bot}|{username_bot}]]"
 ).replace(
     "BOT_TIME_NOW", "{{نسخ:#time:H:i، j F Y}}"
 )
+
+# start save page
 page.text = content
 
 page.save("بوت:تحديث")
