@@ -15,7 +15,7 @@ class Check:
 
     def check(self):
         if self.text is not None:
-            if self.text.strip().lower() == str("نعم").strip().lower():
+            if self.text.strip().lower() == "نعم".strip().lower():
                 return True
         return False
 
