@@ -142,11 +142,11 @@ class ReadUsers:
             reason = row[4]
             status = row[3]
             user = row[2]
-            if status.strip().lower() == str("نعم").strip().lower():
+            if status.strip().lower() == "نعم".strip().lower():
                 t = wtp.Template(user)
                 user_dic = {
                     "reason": reason,
-                    "has_reason": not (str(reason).strip().lower() == str("")),
+                    "has_reason": not (str(reason).strip().lower() == ""),
                     "user_template": user,
                     "username": t.arguments[0].value.strip()
                 }
