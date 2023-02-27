@@ -220,7 +220,7 @@ class ReadUsers:
     def start_send_alert(self):
         for user in self.users:
             try:
-                if str(user['username']).strip().lower() == str("Lokas7755").strip().lower():
+                if str(user['username']).strip().lower() == "Lokas7755".strip().lower():
                     send_obj = SendAlert(user['username'], user['has_reason'], user['reason'], site=self.site,cat_name=self.cat_name)
                     send_obj.start_send()
             except:
