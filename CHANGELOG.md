@@ -7,5 +7,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [1.0.0] - 2023-02-27
-### New features
+### Added
 - تم إضافة الإصدار الأول من بوت (ويكيبيديا:إخطار الإداريين/أسماء مستخدمين للفحص)  ([#92](https://github.com/loka1/LokasBot/pull/92))  
