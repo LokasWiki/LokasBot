@@ -96,9 +96,9 @@ class SendAlert:
             # Add a new section to the page
             title = 'اسم المستخدم مخالف'
             if self.has_reason:
-                content = "{{نسخ:تنبيه اسم مستخدم|REASON}}".replace("REASON", str(self.reason).strip())
+                content = "{{نسخ:تنبيه اسم مستخدم|REASON|with_title=no}}".replace("REASON", str(self.reason).strip())
             else:
-                content = "{{نسخ:تنبيه اسم مستخدم}}"
+                content = "{{نسخ:تنبيه اسم مستخدم|with_title=no}}"
 
             try:
                 topic = board.new_topic(title, content)
@@ -220,7 +220,8 @@ class ReadUsers:
     def start_send_alert(self):
         for user in self.users:
             try:
-                send_obj = SendAlert(user['username'], user['has_reason'], user['reason'], site=self.site,cat_name=self.cat_name)
-                send_obj.start_send()
+                if str(user['username']).strip().lower() == str("Lokas7755").strip().lower():
+                    send_obj = SendAlert(user['username'], user['has_reason'], user['reason'], site=self.site,cat_name=self.cat_name)
+                    send_obj.start_send()
             except:
                 print("can`t send  alert")
