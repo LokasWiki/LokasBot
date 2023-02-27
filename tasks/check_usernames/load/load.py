@@ -1,5 +1,5 @@
 import os
-
+import datetime
 from core.utils.file import File
 from core.utils.wikidb import Database
 
@@ -77,11 +77,24 @@ ai_model = antispam.Detector(model.file_path)
 
 # database users list
 db = Database()
+# Get yesterday's date
+yesterday = datetime.date.today() - datetime.timedelta(days=1)
+
+# Get start time for yesterday
+start_time = datetime.datetime.combine(yesterday, datetime.time.min)
+
+# Get last time for yesterday
+last_time = datetime.datetime.combine(yesterday, datetime.time.max)
+
+# Format dates for SQL query
+start_time_sql = start_time.strftime("%Y%m%d%H%M%S")
+last_time_sql = last_time.strftime("%Y%m%d%H%M%S")
+
 db.query = """select logging.log_title as "q_log_title" from logging
 inner join user on user.user_name = logging.log_title
 where log_type in ("newusers")
-and log_timestamp > DATE_SUB(NOW(), INTERVAL 30 day)
-and user.user_id NOT IN (SELECT ipb_user FROM ipblocks)"""
+and log_timestamp BETWEEN {} AND {}
+and user.user_id NOT IN (SELECT ipb_user FROM ipblocks)""".format(start_time_sql,last_time_sql)
 db.get_content_from_database()
 names = []
 for row in db.result:
