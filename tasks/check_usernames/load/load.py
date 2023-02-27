@@ -1,8 +1,33 @@
+import os
+
 from core.utils.wikidb import Database
 
 import pywikibot
 
 import antispam
+
+class File:
+    def __init__(self):
+        self.script_dir = os.path.dirname(__file__)
+        self.file_path = ""
+        self.contents = ""
+
+    def set_stub_path(self, name):
+        # Construct the file path
+        self.file_path = os.path.join(self.script_dir, name)
+
+    def get_file_content(self):
+        # Open the file in read mode
+        with open(self.file_path) as file:
+            # Read the contents of the file
+            self.contents = file.read()
+
+
+file = File()
+file_path = 'stub/load.txt'
+file.set_stub_path(file_path)
+file.get_file_content()
+content = file.contents
 
 d = antispam.Detector("my_model.dat")
 
@@ -21,26 +46,14 @@ for row in db.result:
     names.append(name)
 
 
-page_title = "مستخدم:لوقا/ملعب 20"
+page_title = "ويكيبيديا:إخطار الإداريين/أسماء مستخدمين للفحص"
 
 site = pywikibot.Site()
 page = pywikibot.Page(site, page_title)
 
-text = """<div style="background: #E5E4E2; padding: 0.5em; font-family: Traditional Arabic; font-size: 130%; -moz-border-radius: 0.3em; border-radius: 0.3em;">
-<center>
 
-أسماء المستخدمين في الأسفل تم التعرف عليها بواسطة البوت كأسماء [[ويكيبيديا:سياسة اسم المستخدم|'''يُحتمل مخالفتها للسياسة''']].
 
-{{ويكيبيديا:إخطار الإداريين/أسماء مستخدمين للفحص/رسالة للإداري}}
-
-''قام [[مستخدم:LokasBot|LokasBot]] بتحديث هذه القائمة في : 00:30، 6 ديسمبر 2022 (ت ع م) ''
-</div>
-<center>
-<div style="background: #E5E4E2; padding: 0.5em; -moz-border-radius: 0.3em; border-radius: 0.3em;">
-{| class="wikitable sortable"
-!style="background-color:#808080" align="center"|الرقم!!style="background-color:#808080" align="center"|نسبة التنبؤ!!style="background-color:#808080" align="center"|المستخدم!!style="background-color:#808080" align="center"|حالة المراجعة!!style="background-color:#808080" align="center"|السبب
-|-
-"""
+table_body = ""
 
 num = 1
 
@@ -50,19 +63,20 @@ for name in names:
        msg1 = name.strip().lower().replace(" ", "_")
 
        if d.score(msg1) >= 0.6:
-           text += """|{0}||{2}||{1}||لا||\n|-
+           table_body += """|{0}||{2}||{1}||لا||\n|-
           """.format(num, "{{مس|" + name + "}}", str(d.score(msg1)))
            num += 1
    except:
-       text += """|{0}||{2}||{1}||لا||\n|-
+       table_body += """|{0}||{2}||{1}||لا||\n|-
               """.format(num, "{{مس|" + name + "}}", "غير معروف")
        num += 1
 
-text += """
-|}
-[[تصنيف:إدارة ويكيبيديا]]
- """
-
-page.text = text
+username_bot = site.username()
+content = content.replace("BOT_TABLE_BODY", table_body).replace(
+    'BOT_USER_NAME', f"[[مستخدم:{username_bot}|{username_bot}]]"
+).replace(
+    "BOT_TIME_NOW", "{{نسخ:#time:H:i، j F Y}}"
+)
+page.text = content
 
 page.save("بوت:تحديث")
