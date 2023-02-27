@@ -1,3 +1,5 @@
+
+antispam~=0.0.10
 Flask~=2.2.2
 MarkupSafe~=2.1.2
 mwparserfromhell == 0.6.4
@@ -11,5 +13,3 @@ SQLAlchemy == 2.0.2
 typing-extensions == 4.4.0
 waybackpy~=3.0.6
 wikitextparser~=0.51.1
-
-antispam~=0.0.10
