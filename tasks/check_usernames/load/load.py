@@ -1,4 +1,4 @@
-from coverage.annotate import os
+import os
 
 from core.utils.file import File
 from core.utils.wikidb import Database
