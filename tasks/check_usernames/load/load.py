@@ -35,7 +35,7 @@ class Load:
             try:
                 msg1 = user_name.strip().lower().replace(" ", "_")
 
-                if self.ai_model.score(msg1) >= 0.6 or len(msg1) >= 20 or len(msg1) <= 2:
+                if self.ai_model.score(msg1) >= 0.9 or len(msg1) >= 20 or len(msg1) <= 2:
                     table_body += """|{0}||{2}||{1}||لا||\n|-
                   """.format(num, "{{مس|" + user_name + "}}", str(self.ai_model.score(msg1)))
                     num += 1
@@ -59,52 +59,63 @@ class Load:
         return self
 
 
-script_dir = os.path.dirname(__file__)
+def main(*args: str) -> int:
+    try:
 
-# text stub
-file = File(script_dir=script_dir)
-file_path = 'stub/load.txt'
-file.set_stub_path(file_path)
-file.get_file_content()
-content = file.contents
+        script_dir = os.path.dirname(__file__)
 
-# model file
-model = File(script_dir=script_dir)
-model_path = 'ai/models/v1/my_model.dat'
-model.set_stub_path(model_path)
+        # text stub
+        file = File(script_dir=script_dir)
+        file_path = 'stub/load.txt'
+        file.set_stub_path(file_path)
+        file.get_file_content()
+        content = file.contents
 
-ai_model = antispam.Detector(model.file_path)
+        # model file
+        model = File(script_dir=script_dir)
+        model_path = 'ai/models/v1/my_model.dat'
+        model.set_stub_path(model_path)
 
-# database users list
-db = Database()
-# Get yesterday's date
-yesterday = datetime.date.today() - datetime.timedelta(days=1)
+        ai_model = antispam.Detector(model.file_path)
 
-# Get start time for yesterday
-start_time = datetime.datetime.combine(yesterday, datetime.time.min)
+        # database users list
+        db = Database()
+        # Get yesterday's date
+        yesterday = datetime.date.today() - datetime.timedelta(days=1)
 
-# Get last time for yesterday
-last_time = datetime.datetime.combine(yesterday, datetime.time.max)
+        # Get start time for yesterday
+        start_time = datetime.datetime.combine(yesterday, datetime.time.min)
 
-# Format dates for SQL query
-start_time_sql = start_time.strftime("%Y%m%d%H%M%S")
-last_time_sql = last_time.strftime("%Y%m%d%H%M%S")
+        # Get last time for yesterday
+        last_time = datetime.datetime.combine(yesterday, datetime.time.max)
 
-db.query = """select logging.log_title as "q_log_title" from logging
-inner join user on user.user_name = logging.log_title
-where log_type in ("newusers")
-and log_timestamp BETWEEN {} AND {}
-and user.user_id NOT IN (SELECT ipb_user FROM ipblocks)""".format(start_time_sql,last_time_sql)
-db.get_content_from_database()
-names = []
-for row in db.result:
-    name = str(row['q_log_title'], 'utf-8')
-    names.append(name)
+        # Format dates for SQL query
+        start_time_sql = start_time.strftime("%Y%m%d%H%M%S")
+        last_time_sql = last_time.strftime("%Y%m%d%H%M%S")
 
-page_title = "ويكيبيديا:إخطار الإداريين/أسماء مستخدمين للفحص"
-# page_title = "مستخدم:لوقا/ملعب 20"
+        db.query = """select logging.log_title as "q_log_title" from logging
+        inner join user on user.user_name = logging.log_title
+        where log_type in ("newusers")
+        and log_timestamp BETWEEN {} AND {}
+        and user.user_id NOT IN (SELECT ipb_user FROM ipblocks)""".format(start_time_sql, last_time_sql)
+        db.get_content_from_database()
+        names = []
+        for row in db.result:
+            name = str(row['q_log_title'], 'utf-8')
+            names.append(name)
 
-site = pywikibot.Site()
+        page_title = "ويكيبيديا:إخطار الإداريين/أسماء مستخدمين للفحص"
+        # page_title = "مستخدم:لوقا/ملعب 20"
 
-load_obj = Load(content_text=content, ai_model=ai_model, names=names, page_title=page_title, site=site)
-load_obj.load_page().build_table().save_page()
+        site = pywikibot.Site()
+
+        load_obj = Load(content_text=content, ai_model=ai_model, names=names, page_title=page_title, site=site)
+        load_obj.load_page().build_table().save_page()
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
