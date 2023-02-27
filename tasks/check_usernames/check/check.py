@@ -1,6 +1,11 @@
+import os
+
+import antispam
 import pywikibot
 
+from core.utils.file import File
 from modules import ReadUsers,Category
+from tasks.check_usernames.load.load import Load
 
 class Check:
     def __init__(self, site, page_title):
@@ -40,3 +45,29 @@ if check_page.check():
     read_users.load_page()
     read_users.parse_table()
     read_users.start_send_alert()
+
+
+    # new code to remove table after send alert
+    # note this code under test
+    page_title = "ويكيبيديا:إخطار الإداريين/أسماء مستخدمين للفحص"
+    names = []
+
+    script_dir = os.path.dirname(__file__)
+
+    # text stub
+    file = File(script_dir=script_dir)
+    file_path = 'stub/load.txt'
+    file.set_stub_path(file_path)
+    file.get_file_content()
+    content = file.contents
+
+    # model file
+    model = File(script_dir=script_dir)
+    model_path = 'ai/models/v1/my_model.dat'
+    model.set_stub_path(model_path)
+
+    ai_model = antispam.Detector(model.file_path)
+
+    load_obj = Load(content_text=content, ai_model=ai_model, names=names, page_title=page_title, site=site)
+    load_obj.load_page().build_table().save_page()
+
