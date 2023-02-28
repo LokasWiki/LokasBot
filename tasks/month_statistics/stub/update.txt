@@ -3,13 +3,13 @@
 :* عدد الزيارات: {{Formatnum:0}}
 :* عدد التعديلات: {{Formatnum:TOTAL_EDITS}}
 :* عدد المقالات الجديدة: {{Formatnum:NEW_PAGES_COUNT_0}}
-:* عدد المقالات المحذوفة: {{Formatnum:DELETE_COUNT_0}}
+:* عدد المقالات المحذوفة: {{Formatnum:DELETED_COUNT_0}}
 :* عدد القوالب الجديدة: {{Formatnum:NEW_PAGES_COUNT_10}}
-:* عدد القوالب المحذوفة: {{Formatnum:DELETE_COUNT_10}}
+:* عدد القوالب المحذوفة: {{Formatnum:DELETED_COUNT_10}}
 :* عدد التصانيف الجديدة: {{Formatnum:NEW_PAGES_COUNT_14}}
-:* عدد التصانيف المحذوفة: {{Formatnum:DELETE_COUNT_14}}
+:* عدد التصانيف المحذوفة: {{Formatnum:DELETED_COUNT_14}}
 :* عدد الصور الجديدة: {{Formatnum:UPLOAD_COUNT}}
-:* عدد الصور المحذوفة: {{Formatnum:DELETE_COUNT_6}}
+:* عدد الصور المحذوفة: {{Formatnum:DELETED_COUNT_6}}
 :* عدد عمليات الحذف: {{Formatnum:DELETE_COUNT}}
 :* عدد المسجلين الجدد: {{Formatnum:NEWUSERS_COUNT }}
 :* عدد عمليات المنع: {{Formatnum:BLOCK_COUNT}}

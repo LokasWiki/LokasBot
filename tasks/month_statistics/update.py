@@ -61,15 +61,15 @@ db.query = f"select count(*) as 'delete_count',log_namespace as 'namespace' from
 db.get_content_from_database()
 deleted_count_by_namespace = []
 for row in db.result:
-    deleted_count_by_namespace.append(["delete_count_" + str(row['namespace']), row['delete_count']])
+    deleted_count_by_namespace.append(["deleted_count_" + str(row['namespace']), row['delete_count']])
 
 text = str(content).replace("BLOCK_COUNT", block_count).replace("NEWUSERS_COUNT", newusers_count).replace(
     "DELETE_COUNT", delete_count).replace("TOTAL_EDITS", total_edits).replace("UPLOAD_COUNT", upload_count)
 
 for dcbn in deleted_count_by_namespace:
-    text = str(text).replace(str(dcbn[0].upper().strip()),str(dcbn[1]))
+    text = str(text).replace(str(dcbn[0].upper().strip()), str(dcbn[1]))
 
-
+# new pages
 db.query = """
 
 SELECT  count(*) as "new_pages", page_namespace as "namespace"
@@ -80,17 +80,17 @@ FROM (
     WHERE page_is_redirect = 0
     GROUP BY page_id
 ) as temp
-WHERE first_revision >= @start_date
-AND first_revision <= @end_date
+WHERE first_revision >= "START_DATE"
+AND first_revision <= "END_DATE"
 GROUP BY page_namespace;
-""".replace("@start_date",start_time).replace("@end_date",end_time)
+""".replace("START_DATE", start_time).replace("END_DATE", end_time)
 db.get_content_from_database()
 new_pages_count_by_namespace = []
 for row in db.result:
     new_pages_count_by_namespace.append(["new_pages_count_" + str(row['namespace']), row['new_pages']])
-for dcbn in new_pages_count_by_namespace:
-    text = str(text).replace(str(dcbn[0].upper().strip()),str(dcbn[1]))
 
+for npcbn in new_pages_count_by_namespace:
+    text = str(text).replace(str(npcbn[0].upper().strip()), str(npcbn[1]))
 
 page.text = text
 
