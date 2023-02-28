@@ -7,10 +7,10 @@ from core.utils.wikidb import Database
 
 script_dir = os.path.dirname(__file__)
 site = pywikibot.Site()
-import datetime
 
 # Define the month you want to query
-month = datetime.date(2022, 11, 1)  # January 2022
+# todo: make it dynamic
+month = datetime.date(2023, 2, 1)
 
 # Calculate the first and last days of the month
 first_day_of_month = month.replace(day=1)
@@ -22,8 +22,8 @@ start_time = first_day_of_month.strftime("%Y%m%d") + '000000'
 end_time = last_day_of_month.strftime("%Y%m%d") + '235959'
 
 
-# print("start_time,end_time")
-# print(start_time,end_time)
+print("start_time,end_time")
+print(start_time,end_time)
 
 # Use these values in your SQL query
 sql_query = f"SELECT * FROM my_table WHERE date BETWEEN '{start_time}' AND '{end_time}'"
@@ -35,8 +35,8 @@ file.set_stub_path(file_path)
 file.get_file_content()
 content = file.contents
 
-# page_title = "ويكيبيديا:إحصاءات الشهر"
-page_title = "مستخدم:لوقا/ملعب 21"
+page_title = "ويكيبيديا:إحصاءات الشهر"
+# page_title = "مستخدم:لوقا/ملعب 21"
 
 page = pywikibot.Page(site, page_title)
 
@@ -115,3 +115,4 @@ for npcbn in new_pages_count_by_namespace:
 page.text = text
 
 page.save("تحديث")
+# todo:add main def
