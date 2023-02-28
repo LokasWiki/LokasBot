@@ -26,7 +26,7 @@ class Check:
         return False
 
     def reload(self):
-        self.page.text = "لا"
+        self.page.text = ""
         self.page.save("بوت:تم")
 
 
