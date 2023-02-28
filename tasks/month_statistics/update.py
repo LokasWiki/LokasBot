@@ -10,7 +10,7 @@ site = pywikibot.Site()
 import datetime
 
 # Define the month you want to query
-month = datetime.date(2021, 11, 1)  # January 2022
+month = datetime.date(2022, 11, 1)  # January 2022
 
 # Calculate the first and last days of the month
 first_day_of_month = month.replace(day=1)
@@ -20,6 +20,10 @@ last_day_of_month = last_day_of_month - datetime.timedelta(days=last_day_of_mont
 # Format the start and end times for the month in the format "%Y%m%d%H%M%S"
 start_time = first_day_of_month.strftime("%Y%m%d") + '000000'
 end_time = last_day_of_month.strftime("%Y%m%d") + '235959'
+
+
+# print("start_time,end_time")
+# print(start_time,end_time)
 
 # Use these values in your SQL query
 sql_query = f"SELECT * FROM my_table WHERE date BETWEEN '{start_time}' AND '{end_time}'"
@@ -40,33 +44,46 @@ db = Database()
 db.query = f"select count(*) as 'block_count' from logging where log_type= 'block' and log_action = 'block' and log_timestamp between '{start_time}' and '{end_time}';"
 db.get_content_from_database()
 block_count = str(db.result[0]['block_count'])
-
+# print(block_count)
+# print(db.query)
 db.query = f"select count(*) as 'newusers_count' from logging where log_type= 'newusers' and log_timestamp between '{start_time}' and '{end_time}';"
 db.get_content_from_database()
 newusers_count = str(db.result[0]['newusers_count'])
-
+# print(newusers_count)
+# print(db.query)
 db.query = f"select count(*) as 'delete_count' from logging where log_type= 'delete' and log_action = 'delete'  and log_timestamp between '{start_time}' and '{end_time}';"
 db.get_content_from_database()
 delete_count = str(db.result[0]['delete_count'])
-
+# print(delete_count)
+# print(db.query)
 db.query = f"select count(rev_id) as 'total_edits' from revision where rev_timestamp between '{start_time}' and '{end_time}';"
 db.get_content_from_database()
 total_edits = str(db.result[0]['total_edits'])
-
+# print(total_edits)
+# print(db.query)
 db.query = f"select count(*) as 'upload_count' from logging where log_type= 'upload' and log_action in ('upload','overwrite') and log_timestamp between '{start_time}' and '{end_time}';"
 db.get_content_from_database()
 upload_count = str(db.result[0]['upload_count'])
-
+# print(upload_count)
+# print(db.query)
 db.query = f"select count(*) as 'delete_count',log_namespace as 'namespace' from logging where log_type= 'delete' and log_action = 'delete'  and log_timestamp between '{start_time}' and '{end_time}' group by log_namespace;"
 db.get_content_from_database()
 deleted_count_by_namespace = []
 for row in db.result:
-    deleted_count_by_namespace.append(["deleted_count_" + str(row['namespace']), row['delete_count']])
+    # print(row)
+    if row['namespace'] in [0,10,14,6]:
+        deleted_count_by_namespace.append(["deleted_count_" + str(row['namespace']), row['delete_count']])
+# print(deleted_count_by_namespace)
+# print(db.query)
 
 text = str(content).replace("BLOCK_COUNT", block_count).replace("NEWUSERS_COUNT", newusers_count).replace(
     "DELETE_COUNT", delete_count).replace("TOTAL_EDITS", total_edits).replace("UPLOAD_COUNT", upload_count)
 
 for dcbn in deleted_count_by_namespace:
+    # print("=====================================")
+    # print(str(dcbn[0].upper().strip()))
+    # print(str(dcbn[1]))
+    # print(text)
     text = str(text).replace(str(dcbn[0].upper().strip()), str(dcbn[1]))
 
 # new pages
@@ -87,11 +104,14 @@ GROUP BY page_namespace;
 db.get_content_from_database()
 new_pages_count_by_namespace = []
 for row in db.result:
-    new_pages_count_by_namespace.append(["new_pages_count_" + str(row['namespace']), row['new_pages']])
+    # print(row)
+    if row['namespace'] in [0, 10, 14, 6]:
+        new_pages_count_by_namespace.append(["new_pages_count_" + str(row['namespace']), row['new_pages']])
 
 for npcbn in new_pages_count_by_namespace:
     text = str(text).replace(str(npcbn[0].upper().strip()), str(npcbn[1]))
-
+# print(new_pages_count_by_namespace)
+# print(db.query)
 page.text = text
 
 page.save("تحديث")
