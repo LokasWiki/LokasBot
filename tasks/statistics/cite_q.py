@@ -66,7 +66,7 @@ if day_of_week == 3:
         for row in result:
             for key in total:
                 total[key] += row[key]
-        return f"""|- class="sortbottom"\n! colspan="3" | عدد الاستشهادات الكلي\n! style="text-align:center;" | {total['count_of_cites']}\n"""
+        return f"""|- class="sortbottom"\n! colspan="3" | مجمل عدد الاستشهادات\n! style="text-align:center;" | {total['count_of_cites']}\n"""
 
 
     columns = [
