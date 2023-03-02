@@ -37,7 +37,7 @@ class Load:
         num = 1
         # add old users if found
         for user in self.users:
-            table_body += """|{0}||{1}||{2}||{3}||\n|-
+            table_body += """|{}||{}||{}||{}||\n|-
                                       """.format(num, user[1], user[2], user[3], user[4])
             num += 1
 
