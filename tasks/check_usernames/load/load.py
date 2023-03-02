@@ -96,7 +96,7 @@ class LastCheck:
         return status
 
     def get_users_from_table(self):
-        page_title = "مستخدم:لوقا/ملعب 22"
+        page_title = "ويكيبيديا:إخطار الإداريين/أسماء مستخدمين للفحص"
         page = pywikibot.Page(self.site, page_title)
         if page.exists():
             text = page.text
@@ -153,7 +153,7 @@ def main(*args: str) -> int:
             name = str(row['q_log_title'], 'utf-8')
             names.append(name)
 
-        page_title = "مستخدم:لوقا/ملعب 22"
+        page_title = "ويكيبيديا:إخطار الإداريين/أسماء مستخدمين للفحص"
         # page_title = "مستخدم:لوقا/ملعب 20"
 
         site = pywikibot.Site()
