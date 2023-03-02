@@ -130,7 +130,7 @@ def main(*args: str) -> int:
         # database users list
         db = Database()
         # Get yesterday's date
-        yesterday = datetime.date.today() - datetime.timedelta(days=2)
+        yesterday = datetime.date.today() - datetime.timedelta(days=1)
 
         # Get start time for yesterday
         start_time = datetime.datetime.combine(yesterday, datetime.time.min)
