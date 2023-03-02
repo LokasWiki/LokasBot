@@ -29,13 +29,14 @@ class Unreferenced:
 
     def __call__(self):
         disambiguation = Disambiguation(self.page.title(), self.text)
-        if disambiguation.check("or"):
+        if disambiguation.check("or") or self.check_skip():
             return self.text, self.summary
         """
             true mean has category -> remove
             false mean not have category -> add
         :return:
         """
+
         if not self.check():
             self.add_template()
         else:
@@ -91,6 +92,22 @@ class Unreferenced:
                     found = 1
                     break
         return found
+
+    def check_skip(self):
+        # todo:add test to this
+        # https://ar.wikipedia.org/w/index.php?title=%D9%86%D9%82%D8%A7%D8%B4_%D8%A7%D9%84%D9%85%D8%B3%D8%AA%D8%AE%D8%AF%D9%85:%D9%84%D9%88%D9%82%D8%A7&oldid=61348322#%D8%AE%D8%B7%D8%A3_%D9%84%D9%84%D8%A8%D9%88%D8%AA
+        categories = self.page.categories()
+        skip = 0
+        list_category = [
+            'بوابة تقويم/مقالات متعلقة',
+            'بوابة سنوات/مقالات متعلقة',
+        ]
+        for cat in categories:
+            for needed_cat in list_category:
+                if needed_cat.strip().lower() == cat.title(with_ns=False).strip().lower():
+                    skip = 1
+                    break
+        return skip
 
     def check(self):
         parsed = wtp.parse(self.text)
