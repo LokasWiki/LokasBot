@@ -1,5 +1,6 @@
 import sys
 from module import create_database_table, get_pages, save_pages_to_db
+import traceback
 
 
 def main(*args: str) -> int:
@@ -18,6 +19,8 @@ def main(*args: str) -> int:
         conn.close()
     except Exception as e:
         print(f"An error occurred: {e}")
+        just_the_string = traceback.format_exc()
+        print(just_the_string)
     return 0
 
 
