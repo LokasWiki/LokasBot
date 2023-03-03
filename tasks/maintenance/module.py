@@ -1,3 +1,4 @@
+import random
 import sqlite3
 
 import pywikibot
@@ -48,6 +49,18 @@ FROM (
     where cl_to in (select page.page_title from page where page_id in (6202012,6009002))
     and cl_type = "page"
     and page.page_namespace = 0
+    UNION
+    select page_title as "pl_2_title" from page
+    where page.page_is_redirect = 0
+    and page.page_namespace = 0
+    and page_id in (select fp_page_id from flaggedpages where fp_page_id = page_id)
+    and page_id in (select cl_from from categorylinks where cl_to like "جميع_المقالات_غير_المراجعة")
+    UNION
+    select page_title as "pl_2_title" from page
+    where page.page_is_redirect = 0
+    and page.page_namespace = 0
+    and page_id not in (select fp_page_id from flaggedpages where fp_page_id = page_id)
+    and page_id not in (select cl_from from categorylinks where cl_to like "جميع_المقالات_غير_المراجعة")
 ) AS pages_list"""
     database = Database()
     database.query = query.replace("MINUTE_SUB_NUMBER", str(start))
@@ -75,7 +88,8 @@ def save_pages_to_db(gen, conn, cursor, thread_number):
 
 
 def get_articles(cursor, thread_number):
-    cursor.execute("SELECT id, title,thread FROM pages WHERE thread=? and status=0 ORDER BY date ASC LIMIT 20", (int(thread_number),))
+    random_number = random.randint(1, 10)
+    cursor.execute("SELECT id, title,thread FROM pages WHERE thread=? and status=0 ORDER BY date ASC LIMIT 50 OFFSET ?;", (int(thread_number),int(random_number)))
     rows = cursor.fetchall()
     return rows
 
@@ -135,7 +149,7 @@ def process_article(site, cursor, conn, id, title, thread_number):
         ]
         if page.exists() and (not page.isRedirectPage()):
             text = page.text
-            summary = "بوت:صيانة V4.8.9"
+            summary = "بوت:صيانة V4.8.10"
             pipeline = Pipeline(page, text, summary, steps, extra_steps)
             processed_text, processed_summary = pipeline.process()
             # write processed text back to the page

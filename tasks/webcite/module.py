@@ -1,3 +1,4 @@
+import random
 import sqlite3
 
 from threading import Timer
@@ -141,10 +142,11 @@ def save_pages_to_db(gen, conn, cursor, thread_number):
 
 
 def get_articles(cursor, thread_number):
-    print("thread_number")
-    print(thread_number)
-    cursor.execute("SELECT id, title,thread FROM pages WHERE status=0 and thread=? ORDER BY date ASC LIMIT 20",
-                   (int(thread_number),))
+
+    random_number = random.randint(1, 10)
+
+    cursor.execute("SELECT id, title,thread FROM pages WHERE status=0 and thread=? ORDER BY date ASC LIMIT 50 OFFSET ?;",
+                   (int(thread_number),int(random_number)))
     rows = cursor.fetchall()
     return rows
 
