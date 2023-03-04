@@ -17,14 +17,14 @@ class Parsed:
         self.list_of_templates = list_of_template
         self.summary = summary
         self.limiter = limiter
-        self.max_number = 15
+        self.max_number = 20
         self.number = 0
 
     def __call__(self):
         if self.check():
             self.start_replace()
         if self.text != self.old_text:
-            self.summary += "بوت:الإبلاغ عن رابط معطوب أو مؤرشف V1.2.3*"
+            self.summary += "بوت:الإبلاغ عن رابط معطوب أو مؤرشف V1.2.5*"
         return self.text, self.summary
 
     def check(self):
