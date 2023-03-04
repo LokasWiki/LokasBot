@@ -1,57 +1,25 @@
-import re
-
 import pywikibot
-
+import wikitextparser as wtp
 import re
 from core.utils.disambiguation import Disambiguation
-
-
-class WikiLinkExtractor:
-    def __init__(self, text):
-        self.text = text
-        self.links = []
-
-    def extract_links(self):
-        pattern = re.compile(r'\{\{.*?\}\}', re.IGNORECASE | re.DOTALL)
-        templates = re.findall(pattern, self.text)
-
-        for template in templates:
-            self.text = self.text.replace(template, "")
-
-        pattern = re.compile(r'\[\[([^:]*?)\]\]', re.IGNORECASE)
-
-        matches = re.findall(pattern, self.text)
-        for match in matches:
-            if "تصنيف:" not in match.lower() and "Category:" not in match.lower():
-                if "|" in match:
-                    link = match.split("|")[0]
-                else:
-                    link = match
-                site = pywikibot.Site()
-                page_title = link
-                tmp_page = pywikibot.Page(site,page_title)
-                if tmp_page.exists() and (not tmp_page.isRedirectPage()) and (tmp_page.namespace() == 0):
-                    self.links.append(link)
-        return list(set(self.links))
-
-
-
 
 class DeadEnd:
     def __init__(self, page, text, summary):
         self.page = page
         self.text = text
         self.summary = summary
+        self.templates = [
+            "نهاية مسدودة",
+            "Deadend",
+            "Dead end",
+            "Internallinks"
+        ]
 
     def __call__(self):
         disambiguation = Disambiguation(self.page.title(), self.text)
         if disambiguation.check("or"):
             return self.text, self.summary
-        """
-            true mean has category -> remove
-            false mean not have category -> add
-        :return:
-        """
+
         if not self.check():
             self.add_template()
         else:
@@ -62,30 +30,51 @@ class DeadEnd:
         """
         This method adds the {{نهاية مسدودة}} template to the page if it doesn't already exist.
         """
-        template = re.compile(r"{{نهاية مسدودة(?:\|[^}]+)?}}")
-        if not template.search(self.text):
-            text = "{{نهاية مسدودة|تاريخ ={{نسخ:شهر وسنة}}}}"
-            text += "\n"
-            text += self.text
+        parsed = wtp.parse(self.text)
+        found = False
+        for needed_template in self.templates:
+            for template in parsed.templates:
+                if template.name.strip().lower() == needed_template.strip().lower():
+                    found = True
+                    break
 
+        if not found:
+            new_text = "{{نهاية مسدودة|تاريخ ={{نسخ:شهر وسنة}}}}"
+            new_text += "\n"
+            new_text += self.text
 
-            self.text = text
+            self.text = new_text
             self.summary += "، أضاف  وسم [[:تصنيف:مقالات نهاية مسدودة|نهاية مسدودة]]"
 
     def remove_template(self):
         """
            This method removes the {{نهاية مسدودة}} template from the page if it exists.
            """
-        template = re.compile(r"{{نهاية مسدودة(?:\|[^}]+)?}}")
-        new_text = template.sub("", self.text)
+        parsed = wtp.parse(self.text)
+        new_text = self.text
+        for needed_template in self.templates:
+            for template in parsed.templates:
+                if template.name.strip().lower() == needed_template.strip().lower():
+                    new_text = str(new_text).replace(str(template), "")
+
         if new_text != self.text:
             self.text = new_text
             self.summary += "، حذف  وسم [[:تصنيف:مقالات نهاية مسدودة|نهاية مسدودة]]"
 
     def check(self):
-        extractor = WikiLinkExtractor(self.text)
-        links = extractor.extract_links()
-        num_of_links = len(links)
-        if num_of_links == 0:
-            return False
-        return True
+        number_of_link = 0
+        parsed = wtp.parse(self.text)
+        links = parsed.wikilinks
+        for link in links:
+            temp_page = pywikibot.Page(self.page.site,link.title)
+            if temp_page.exists() and temp_page.namespace() == 0:
+                if temp_page.isRedirectPage():
+                    temp_page_redirect = temp_page.getRedirectTarget()
+                    if temp_page_redirect.exists() and temp_page_redirect.namespace() == 0:
+                        number_of_link = 1
+                        break
+                else:
+                    number_of_link = 1
+                    break
+
+        return bool(number_of_link)

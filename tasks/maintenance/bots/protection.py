@@ -33,7 +33,7 @@ class Protection:
             "شبه محمي",
             "حماية تخريب"
         ]
-
+        self.type_of_protection = None
         self.summary = summary
 
     def __call__(self):
@@ -81,6 +81,11 @@ class Protection:
         # The dictionary is not empty that mean page have protection
         if bool(protection):
             has_protection = True
+            # check date
+            # check page type
+            # check move if found only
+            # check edit if found only
+            # check edit type
             print("The dictionary is not empty")
 
         return has_protection

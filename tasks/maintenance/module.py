@@ -7,6 +7,7 @@ import datetime
 import traceback
 
 from core.utils.wikidb import Database
+from tasks.maintenance.bots.dead_end import DeadEnd
 from tasks.maintenance.bots.has_categories import HasCategories
 from tasks.maintenance.bots.orphan import Orphan
 from tasks.maintenance.bots.portals_bar import PortalsBar
@@ -140,7 +141,7 @@ def process_article(site, cursor, conn, id, title, thread_number):
             PortalsBar,
             Unreferenced,
             Orphan,
-            # DeadEnd,
+            DeadEnd,
             # Underlinked
         ]
         extra_steps = [
