@@ -19,6 +19,7 @@ def read(thread_number):
         rows = get_articles(cursor, thread_number)
         if len(rows) > 0 and check_status():
             for row in rows:
+                print(row)
                 process_article(site, cursor, conn, id=row[0], title=row[1], thread_number=thread_number, limiter=limiter)
 
         conn.close()

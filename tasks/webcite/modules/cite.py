@@ -7,7 +7,6 @@ Cite: A class for creating and updating citations using templates.
 """
 
 import traceback
-import urllib.parse
 
 import requests
 from waybackpy.exceptions import TooManyRequestsError
@@ -145,7 +144,7 @@ class Cite:
             # check if the date is before 5 minutes from now
             five_minutes_ago = datetime.now() - timedelta(minutes=5)
             if not (newest.datetime_timestamp < five_minutes_ago) and (newest.statuscode == 200):
-                self.archive_object = Archive(urllib.parse.unquote(newest.archive_url), newest.timestamp)
+                self.archive_object = Archive(newest.archive_url, newest.timestamp)
 
         except Exception as e:
 
@@ -164,7 +163,7 @@ class Cite:
                 save_api = WaybackMachineSaveAPI(self.url.value.strip(), self.user_agent)
                 r = requests.get(save_api.save())
                 if r.status_code == 200:
-                    self.archive_object = Archive(urllib.parse.unquote(save_api.save()),
+                    self.archive_object = Archive(save_api.save(),
                                                   str(save_api.timestamp().strftime('%Y%m%d%H%M%S')))
             except TooManyRequestsError as error:
                 print(f"An error occurred while send link to archive site processing: {error}")
