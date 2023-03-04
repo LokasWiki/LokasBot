@@ -1,9 +1,5 @@
 import copy
 
-import urllib
-
-import urllib.parse
-
 from tasks.webcite.modules.date_formatter import DateFormatter
 
 
@@ -101,5 +97,5 @@ class BaseCite:
         o_url_value = self.template.get_arg("مسار").value.strip()
         self.template.set_arg("تاريخ أرشيف", formatted_date_ar)
         self.template.del_arg("مسار")
-        self.template.set_arg("مسار", urllib.parse.unquote(o_url_value))
+        self.template.set_arg("مسار", o_url_value)
         self.template.set_arg("مسار أرشيف", url)
