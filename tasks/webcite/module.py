@@ -143,8 +143,6 @@ def save_pages_to_db(gen, conn, cursor, thread_number):
 
 def get_articles(cursor, thread_number):
 
-    random_number = random.randint(1, 3)
-
     query1 = """
         SELECT id, title, thread
         FROM pages
@@ -169,13 +167,13 @@ def get_articles(cursor, thread_number):
         LIMIT 100 OFFSET ?;
     """
 
-    cursor.execute(query1, (random_number,))
+    cursor.execute(query1, (thread_number,))
     result1 = cursor.fetchall()
 
-    cursor.execute(query2, (random_number,))
+    cursor.execute(query2, (thread_number,))
     result2 = cursor.fetchall()
 
-    cursor.execute(query3, (random_number,))
+    cursor.execute(query3, (thread_number,))
     result3 = cursor.fetchall()
 
     rows = result1 + result2 + result3
