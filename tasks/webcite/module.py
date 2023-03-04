@@ -208,7 +208,7 @@ def process_article(site, cursor, conn, id, title, thread_number,limiter):
                 bot = Parsed(page.text, summary,limiter)
 
                 # Set the timeout here with Timer
-                t = Timer(600, handle_timeout)
+                t = Timer(1000, handle_timeout)
                 t.start()
 
                 new_text, new_summary = bot()
