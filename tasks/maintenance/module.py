@@ -7,6 +7,7 @@ import datetime
 import traceback
 
 from core.utils.wikidb import Database
+from tasks.maintenance.bots.dead_end import DeadEnd
 from tasks.maintenance.bots.has_categories import HasCategories
 from tasks.maintenance.bots.orphan import Orphan
 from tasks.maintenance.bots.portals_bar import PortalsBar
@@ -140,7 +141,7 @@ def process_article(site, cursor, conn, id, title, thread_number):
             PortalsBar,
             Unreferenced,
             Orphan,
-            # DeadEnd,
+            DeadEnd,
             # Underlinked
         ]
         extra_steps = [
@@ -149,7 +150,7 @@ def process_article(site, cursor, conn, id, title, thread_number):
         ]
         if page.exists() and (not page.isRedirectPage()):
             text = page.text
-            summary = "بوت:صيانة V4.8.10"
+            summary = "بوت:صيانة V4.9.0"
             pipeline = Pipeline(page, text, summary, steps, extra_steps)
             processed_text, processed_summary = pipeline.process()
             # write processed text back to the page
