@@ -35,21 +35,21 @@
 - name: requests-raed
   no-filelog: false
   command: $HOME/repos/jobs/requests_read.sh
-  schedule: '*/15 * * * *'
+  schedule: '*/5 * * * *'
   image: tf-python39
   emails: onfailure
   <<: *defaults
 - name: requests-load
   no-filelog: false
   command: $HOME/repos/jobs/requests_load.sh
-  schedule: '*/15 * * * *'
+  schedule: '*/10 * * * *'
   image: tf-python39
   emails: onfailure
   <<: *defaults
 - name: requests-run
   no-filelog: false
   command: $HOME/repos/jobs/requests_run.sh
-  schedule: '*/25 * * * *'
+  schedule: '*/15 * * * *'
   image: tf-python39
   emails: onfailure
   <<: *defaults

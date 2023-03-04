@@ -17,11 +17,11 @@ try:
 
     stmt = select(Request).join(Page).filter(Request.status == Status.RECEIVED, Page.status == Status.PENDING,
                                              Request.request_type == type_of_request).group_by(Request).having(
-        func.count(Page.id) == func.count(distinct(Page.id))).limit(10)
+        func.count(Page.id) == func.count(distinct(Page.id))).limit(100)
 
     for request in session.scalars(stmt):
 
-        pages = session.query(Page).filter(Page.request == request, Page.status == Status.PENDING).limit(10).all()
+        pages = session.query(Page).filter(Page.request == request, Page.status == Status.PENDING).limit(100).all()
 
         for page in pages:
             try:
