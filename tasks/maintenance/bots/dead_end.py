@@ -1,7 +1,7 @@
 import pywikibot
 import wikitextparser as wtp
-import re
 from core.utils.disambiguation import Disambiguation
+
 
 class DeadEnd:
     def __init__(self, page, text, summary):
@@ -66,7 +66,7 @@ class DeadEnd:
         parsed = wtp.parse(self.text)
         links = parsed.wikilinks
         for link in links:
-            temp_page = pywikibot.Page(self.page.site,link.title)
+            temp_page = pywikibot.Page(self.page.site, link.title)
             if temp_page.exists() and temp_page.namespace() == 0:
                 if temp_page.isRedirectPage():
                     temp_page_redirect = temp_page.getRedirectTarget()
