@@ -196,30 +196,33 @@ def process_article(site, cursor, conn, id, title, thread_number,limiter):
         raise TimeoutError()
 
     try:
-        cursor.execute("UPDATE pages SET status = 1 WHERE id = ?", (id,))
-        conn.commit()
-        page = pywikibot.Page(site, title)
+        cursor.execute("SELECT status FROM pages WHERE id = ?", (id,))
+        status = cursor.fetchone()[0]
+        if status == 0:
+            cursor.execute("UPDATE pages SET status = 1 WHERE id = ?", (id,))
+            conn.commit()
+            page = pywikibot.Page(site, title)
 
-        if page.exists() and (not page.isRedirectPage()):
-            summary = ""
-            bot = Parsed(page.text, summary,limiter)
+            if page.exists() and (not page.isRedirectPage()):
+                summary = ""
+                bot = Parsed(page.text, summary,limiter)
 
-            # Set the timeout here with Timer
-            t = Timer(600, handle_timeout)
-            t.start()
+                # Set the timeout here with Timer
+                t = Timer(600, handle_timeout)
+                t.start()
 
-            new_text, new_summary = bot()
-            # write processed text back to the page
-            if new_text != page.text and check_status():
-                print("start save " + page.title())
-                page.text = new_text
-                page.save(new_summary)
-            else:
-                print("page not changed " + page.title())
-            t.cancel()
-        # todo add option to not update page if have one or more links not archived
-        cursor.execute("DELETE FROM pages WHERE id = ?", (id,))
-        conn.commit()
+                new_text, new_summary = bot()
+                # write processed text back to the page
+                if new_text != page.text and check_status():
+                    print("start save " + page.title())
+                    page.text = new_text
+                    page.save(new_summary)
+                else:
+                    print("page not changed " + page.title())
+                t.cancel()
+            # todo add option to not update page if have one or more links not archived
+            cursor.execute("DELETE FROM pages WHERE id = ?", (id,))
+            conn.commit()
 
     except TimeoutError:
         delta = datetime.timedelta(hours=6)
