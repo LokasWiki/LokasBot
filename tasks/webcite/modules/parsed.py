@@ -5,7 +5,6 @@ import wikitextparser as wtp
 
 from tasks.webcite.data import list_of_template
 from tasks.webcite.modules.cite import Cite
-from tasks.webcite.modules.request_limiter import RequestLimiter
 
 
 class Parsed:
@@ -24,7 +23,7 @@ class Parsed:
         if self.check():
             self.start_replace()
         if self.text != self.old_text:
-            self.summary += "بوت:الإبلاغ عن رابط معطوب أو مؤرشف V1.2.5*"
+            self.summary += "بوت:الإبلاغ عن رابط معطوب أو مؤرشف V1.2.6*"
         return self.text, self.summary
 
     def check(self):
@@ -32,7 +31,7 @@ class Parsed:
         templates_found_number = 0
         for needed_templated in self.list_of_templates:
             for template in parsed.templates:
-                if needed_templated[0].lower() == template.normal_name().lower():
+                if needed_templated[0].lower().strip().replace(" ","_") == template.normal_name().lower().strip().replace(" ","_"):
                     self.cite_templates.append(template)
                     templates_found_number += 1
         return bool(templates_found_number)

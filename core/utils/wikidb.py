@@ -2,7 +2,7 @@ import pymysql
 from pywikibot import config as _config
 
 
-class Database():
+class Database:
     """A class for interacting with a database.
 
     Attributes:

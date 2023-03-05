@@ -67,9 +67,8 @@ class Cite:
             Cite object.
         """
         for t in self.list_of_templates:
-            if str(t[0]).strip().lower() == str(template.name).strip().lower():
+            if str(t[0]).lower().strip().replace(" ","_") == str(template.name).lower().strip().replace(" ","_"):
                 class_name = t[1].strip().lower()
-                print(class_name)
                 if class_name == web_type:
                     return WebCite(template)
                 elif class_name == press_release_type:
@@ -123,7 +122,7 @@ class Cite:
         ]
         status = True
         for site in sites:
-            if site.strip().lower() in url.strip().lower():
+            if site.lower().strip().replace(" ","_") in url.lower().strip().replace(" ","_"):
                 status = None
         return status
     def check_available_on_api(self):
