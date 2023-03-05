@@ -63,7 +63,8 @@ def save_pages_to_db(gen, conn, cursor, thread_number):
 
 
 def get_articles(cursor, thread_number):
-
+    if thread_number == 1:
+        thread_number = 0
     query1 = """
         SELECT id, title, thread
         FROM pages
