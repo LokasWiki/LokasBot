@@ -5,6 +5,7 @@ from tasks.webcite.modules.date_formatter import DateFormatter
 
 class BaseCite:
     """Class representing a base for cite template"""
+
     def __init__(self, template):
         self.template = template
         self.o_template = copy.deepcopy(template)
@@ -47,7 +48,7 @@ class BaseCite:
     def url(self):
         for need_arg in self.url_args:
             for arg in self.template.arguments:
-                if need_arg.strip().lower() == arg.name.strip().lower():
+                if need_arg.lower().strip().replace(" ", "_") == arg.name.lower().strip().replace(" ", "_"):
                     if arg.value.strip().lower():
                         return self.template.get_arg(arg.name)
         return None
@@ -64,7 +65,7 @@ class BaseCite:
 
         for need_arg in self.archive_url_args:
             for arg in self.arguments_after_clean:
-                if arg.name.strip().lower() == need_arg.strip().lower():
+                if arg.name.lower().strip().replace(" ", "_") == need_arg.lower().strip().replace(" ", "_"):
                     self.archive_url_args_found.append(arg)
 
     def replace_to(self, searched_list, arg):
