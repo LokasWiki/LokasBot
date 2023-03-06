@@ -12,11 +12,12 @@ list_page_sub_pages is a list of dictionaries representing data for creating a s
 list_page_sub_pages = [
     {
         "competition_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER",
+        "send_alert": True,
         "title_of_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER/مقالات",
         "summary": "update",
         "team": "المستخدمون الـ5 الأوائل في إنشاء المقالات",
         "activity": "مقالات",
-        "template_stub":"{{وسام كاتب الأسبوع|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد إنشاء المقالات|USER_NAME}}",
+        "template_stub": "{{وسام كاتب الأسبوع|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد إنشاء المقالات|USER_NAME}}",
         'query': """SELECT actor_name as name, COUNT(*) as score
     FROM revision r
     INNER JOIN actor ON r.rev_actor = actor.actor_id
@@ -42,11 +43,12 @@ and pl_namespace = 2)
     },
     {
         "competition_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER",
+        "send_alert": True,
         "title_of_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER/مراجعة المقالات",
         "summary": "update",
         "activity": "مراجعة للمقالات",
         "team": "أكثر 5 مستخدمين مراجعة للمقالات",
-        "template_stub":"{{وسام مراجع مقالات الأسبوع|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد مراجعة المقالات|USER_NAME}}",
+        "template_stub": "{{وسام مراجع مقالات الأسبوع|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد مراجعة المقالات|USER_NAME}}",
         'query': """select
   actor_name as name,
   COUNT(*) as score
@@ -75,6 +77,7 @@ LIMIT 10;"""
     },
     {
         "competition_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER",
+        "send_alert": True,
         "title_of_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER/إدارة",
         "summary": "update",
         "activity": "أفعال إدارية",
@@ -98,10 +101,11 @@ LIMIT 10;"""
     },
     {
         "competition_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER",
+        "send_alert": True,
         "title_of_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER/إضافة نصوص",
         "summary": "update",
         "team": "المستخدمون الـ 5 الأوائل في إضافة نصوص",
-        "template_stub":"{{وسام الأسبوع 2|WEEK_NUMBER YEAR_NUMBER|RANK|بإضافة النصوص|USER_NAME}}",
+        "template_stub": "{{وسام الأسبوع 2|WEEK_NUMBER YEAR_NUMBER|RANK|بإضافة النصوص|USER_NAME}}",
         "activity": "إضافة نصوص",
         'query': """SELECT actor_name as name, SUM(CAST(rev.rev_len as signed)-CAST(parent.rev_len as signed)) AS score, COUNT(rev.rev_id) as edit_count
 FROM revision rev
@@ -135,11 +139,12 @@ LIMIT 10;"""
     },
     {
         "competition_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER",
+        "send_alert": True,
         "title_of_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER/مراجعة التعديلات",
         "summary": "update",
         "activity": "مراجعة للتعديلات",
         "team": "أكثر 5 مستخدمين مراجعة للتعديلات",
-        "template_stub" : "{{وسام مراجع تعديلات الأسبوع|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد مراجعة التعديلات المعلقة|USER_NAME}}",
+        "template_stub": "{{وسام مراجع تعديلات الأسبوع|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد مراجعة التعديلات المعلقة|USER_NAME}}",
         'query': """select actor_name as name, COUNT(*) as score
     from logging
     INNER JOIN actor ON actor.actor_id = logging.log_actor
@@ -162,10 +167,11 @@ and pl_namespace = 2)
     },
     {
         "competition_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER",
+        "send_alert": True,
         "title_of_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER/تعديلات",
         "summary": "update",
         "team": "المستخدمون الـ5 الأوائل بعدد التعديلات",
-        "template_stub":"{{وسام الأسبوع 1|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد التعديلات هذا الأسبوع|USER_NAME}}",
+        "template_stub": "{{وسام الأسبوع 1|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد التعديلات هذا الأسبوع|USER_NAME}}",
         "activity": "تعديلات",
         'query': """SELECT actor_name as name, COUNT(rev.rev_id) as score
 FROM revision rev
@@ -190,11 +196,12 @@ LIMIT 10;"""
     },
     {
         "competition_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER",
+        "send_alert": True,
         "title_of_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER/جدد",
         "summary": "update",
         "activity": "تعديلات",
         "team": "أنشط 5 مستخدمين بين المستخدمين الواعدين",
-        "template_stub":"{{وسام الأسبوع 3|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد التعديلات لحديثي التسجيل|USER_NAME}}",
+        "template_stub": "{{وسام الأسبوع 3|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد التعديلات لحديثي التسجيل|USER_NAME}}",
         'query': """SELECT actor_name as name, COUNT(revision.rev_id) AS score
 FROM user
 INNER JOIN actor ON user_id = actor_user
@@ -216,5 +223,29 @@ GROUP BY actor_name
 ORDER BY score DESC,name
 LIMIT 10;
 """
+    },
+    {
+        "competition_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER",
+        "send_alert": False,
+        "title_of_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER/بوتات",
+        "summary": "update",
+        "team": "البوتات الـ5 الأوائل بعدد التعديلات",
+        "template_stub": "{{وسام الأسبوع 1|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد التعديلات هذا الأسبوع|USER_NAME}}",
+        "activity": "تعديلات",
+        'query': """SELECT actor_name as name, COUNT(rev.rev_id) as score
+FROM revision rev
+INNER JOIN actor on rev.rev_actor = actor_id
+WHERE rev_timestamp BETWEEN START_WEEK_DATE AND END_WEEK_DATE
+AND actor_name  IN (SELECT user_name FROM user_groups INNER JOIN user ON user_id = ug_user WHERE ug_group = "bot")
+and actor_name not in (SELECT replace(pl_title,"_"," ") FROM pagelinks where pagelinks.pl_from = 7352181 and pl_namespace = 2)
+and actor_name not in (
+	"New user message",
+  	"MediaWiki message delivery",
+  	"Flow talk page manager"
+)
+GROUP BY actor_name
+HAVING score > 0
+ORDER BY score DESC,name
+LIMIT 15;"""
     },
 ]
