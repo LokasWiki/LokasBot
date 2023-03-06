@@ -1,6 +1,8 @@
 from core.utils.disambiguation import Disambiguation
 import wikitextparser as wtp
 
+from core.utils.helpers import prepare_str
+
 
 class Unreferenced:
     def __init__(self, page, text, summary):
@@ -51,7 +53,7 @@ class Unreferenced:
         found = False
         for needed_template in self.templates:
             for template in parsed.templates:
-                if template.name.strip().lower() == needed_template.strip().lower():
+                if prepare_str(template.name) == prepare_str(needed_template):
                     found = True
                     break
 
@@ -71,7 +73,7 @@ class Unreferenced:
         new_text = self.text
         for needed_template in self.templates:
             for template in parsed.templates:
-                if template.name.strip().lower() == needed_template.strip().lower():
+                if prepare_str(template.name) == prepare_str(needed_template):
                     new_text = str(new_text).replace(str(template), "")
 
         if new_text != self.text:
@@ -88,7 +90,7 @@ class Unreferenced:
         ]
         for cat in categories:
             for needed_cat in list_category:
-                if needed_cat.strip().lower() == cat.title(with_ns=False).strip().lower():
+                if prepare_str(needed_cat) == prepare_str(cat.title(with_ns=False)):
                     found = 1
                     break
         return found
@@ -104,7 +106,7 @@ class Unreferenced:
         ]
         for cat in categories:
             for needed_cat in list_category:
-                if needed_cat.strip().lower() == cat.title(with_ns=False).strip().lower():
+                if prepare_str(needed_cat) == prepare_str(cat.title(with_ns=False)):
                     skip = 1
                     break
         return skip
@@ -115,7 +117,7 @@ class Unreferenced:
         num_of_ref_tags = 0
         # check tags
         for tag in tags:
-            if tag.name.strip().lower() == "ref".strip().lower():
+            if prepare_str(tag.name) == prepare_str("ref"):
                 num_of_ref_tags += 1
                 break
         #   check template
@@ -124,7 +126,7 @@ class Unreferenced:
             list_of_cites_template = ['sfn']
             for needed_template in list_of_cites_template:
                 for template in templates:
-                    if needed_template.strip().lower() == template.name.strip().lower():
+                    if prepare_str(needed_template) == prepare_str(template.name):
                         num_of_ref_tags += 1
                         break
         # chcek wikdata

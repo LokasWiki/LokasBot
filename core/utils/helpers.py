@@ -9,3 +9,7 @@ def check_status(name):
     if text == "لا":
         return True
     return False
+
+
+def prepare_str(string):
+    return str(string).strip().lower().replace(" ", "_")

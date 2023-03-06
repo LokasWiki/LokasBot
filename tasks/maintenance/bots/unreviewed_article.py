@@ -1,6 +1,8 @@
 import wikitextparser as wtp
 import pywikibot
 
+from core.utils.helpers import prepare_str
+
 
 class UnreviewedArticle:
     def __init__(self, page, text, summary):
@@ -12,6 +14,7 @@ class UnreviewedArticle:
         ]
 
     def __call__(self):
+        # todo:add try here for check def
         if not self.check():
             self.add_template()
         else:
@@ -26,7 +29,7 @@ class UnreviewedArticle:
         found = False
         for needed_template in self.templates:
             for template in parsed.templates:
-                if template.name.strip().lower() == needed_template.strip().lower():
+                if prepare_str(template.name) == prepare_str(needed_template):
                     found = True
                     break
 
@@ -46,7 +49,7 @@ class UnreviewedArticle:
         new_text = self.text
         for needed_template in self.templates:
             for template in parsed.templates:
-                if template.name.strip().lower() == needed_template.strip().lower():
+                if prepare_str(template.name) == prepare_str(needed_template):
                     new_text = str(new_text).replace(str(template), "")
 
         if new_text != self.text:

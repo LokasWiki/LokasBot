@@ -1,6 +1,8 @@
 from core.utils.disambiguation import Disambiguation
 import wikitextparser as wtp
 
+from core.utils.helpers import prepare_str
+
 
 class Orphan:
     def __init__(self, page, text, summary):
@@ -36,7 +38,7 @@ class Orphan:
         found = False
         for needed_template in self.templates:
             for template in parsed.templates:
-                if template.name.strip().lower() == needed_template.strip().lower():
+                if prepare_str(template.name) == prepare_str(needed_template):
                     found = True
                     break
 
@@ -56,7 +58,7 @@ class Orphan:
         new_text = self.text
         for needed_template in self.templates:
             for template in parsed.templates:
-                if template.name.strip().lower() == needed_template.strip().lower():
+                if prepare_str(template.name) == prepare_str(needed_template):
                     new_text = str(new_text).replace(str(template), "")
 
         if new_text != self.text:
