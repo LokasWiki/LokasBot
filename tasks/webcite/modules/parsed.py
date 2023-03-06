@@ -23,7 +23,7 @@ class Parsed:
         if self.check():
             self.start_replace()
         if self.text != self.old_text:
-            self.summary += "بوت:الإبلاغ عن رابط معطوب أو مؤرشف V1.2.6*"
+            self.summary += "بوت:الإبلاغ عن رابط معطوب أو مؤرشف V1.2.7*"
         return self.text, self.summary
 
     def check(self):
