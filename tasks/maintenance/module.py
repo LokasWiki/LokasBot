@@ -1,11 +1,11 @@
-import random
-import sqlite3
-
 import pywikibot
-import os
 import datetime
 import traceback
+from datetime import timedelta
+from pywikibot import Timestamp
 
+from core.utils.helpers import check_status
+from core.utils.pipeline import Pipeline
 from core.utils.wikidb import Database
 from tasks.maintenance.bots.dead_end import DeadEnd
 from tasks.maintenance.bots.has_categories import HasCategories
@@ -14,18 +14,6 @@ from tasks.maintenance.bots.portals_bar import PortalsBar
 from tasks.maintenance.bots.portals_merge import PortalsMerge
 from tasks.maintenance.bots.unreferenced import Unreferenced
 from tasks.maintenance.bots.unreviewed_article import UnreviewedArticle
-
-def create_database_table():
-    home_path = os.path.expanduser("~")
-    database_path = os.path.join(home_path, "maintenance.db")
-    conn = sqlite3.connect(database_path)
-    cursor = conn.cursor()
-
-    # Create the table with a status column
-    cursor.execute(
-        '''CREATE TABLE IF NOT EXISTS pages (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, status INTEGER, date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,thread INTEGER)''')
-
-    return conn, cursor
 
 
 def get_pages(start):
@@ -75,94 +63,71 @@ FROM (
     return gen
 
 
-def save_pages_to_db(gen, conn, cursor, thread_number):
-    for entry in gen:
-        try:
-            title = entry
-            cursor.execute("SELECT * FROM pages WHERE title = ?", (title,))
-            if cursor.fetchone() is None:
-                print("added : " + title)
-                cursor.execute("INSERT INTO pages (title, status,thread) VALUES (?, 0,?)", (title, int(thread_number)))
-            conn.commit()
-        except sqlite3.Error as e:
-            print(f"An error occurred while inserting the title {entry.title()} into the database: {e}")
-
-
-def get_articles(cursor, thread_number):
-    random_number = random.randint(1, 10)
-    cursor.execute("SELECT id, title,thread FROM pages WHERE thread=? and status=0 ORDER BY date ASC LIMIT 50 OFFSET ?;", (int(thread_number),int(random_number)))
-    rows = cursor.fetchall()
-    return rows
-
-
-class Pipeline:
-    def __init__(self, page, text, summary, steps, extra_steps):
-        self.page = page
-        self.text = text
-        self.summary = summary
-        self.steps = steps
-        self.extra_steps = extra_steps
-        self.oldText = text
-
-    def process(self):
-        for step in self.steps:
-            obj = step(self.page, self.text, self.summary)
-            self.text, self.summary = obj()
-
-        if self.hasChange():
-            for step in self.extra_steps:
-                obj = step(self.page, self.text, self.summary)
-                self.text, self.summary = obj()
-
-        return self.text, self.summary
-
-    def hasChange(self):
-        return self.text != self.oldText
-
-
-def check_status():
-    site = pywikibot.Site()
-    title = "مستخدم:LokasBot/إيقاف مهمة صيانة المقالات"
-    page = pywikibot.Page(site, title)
-    text = page.text
-    if text == "لا":
-        return True
-    return False
-
-
 def process_article(site, cursor, conn, id, title, thread_number):
     try:
-        cursor.execute("UPDATE pages SET status = 1 WHERE id = ?", (id,))
-        conn.commit()
-        page = pywikibot.Page(site, title)
-        steps = [
-            UnreviewedArticle,
-            HasCategories,
-            PortalsBar,
-            Unreferenced,
-            Orphan,
-            DeadEnd,
-            # Underlinked
-        ]
-        extra_steps = [
-            PortalsMerge,
-            PortalsBar
-        ]
-        if page.exists() and (not page.isRedirectPage()):
-            text = page.text
-            summary = "بوت:صيانة V4.9.0"
-            pipeline = Pipeline(page, text, summary, steps, extra_steps)
-            processed_text, processed_summary = pipeline.process()
-            # write processed text back to the page
-            if pipeline.hasChange() and check_status():
-                print("start save " + page.title())
-                page.text = processed_text
-                page.save(summary=processed_summary)
-            else:
-                print("page not changed " + page.title())
+        cursor.execute("SELECT status FROM pages WHERE id = ? LIMIT 1", (id,))
+        row = cursor.fetchone()
+        if row is not None:
+            status = row[0]
+            if status == 0:
+                cursor.execute("UPDATE pages SET status = 1 WHERE id = ?", (id,))
+                conn.commit()
+                page = pywikibot.Page(site, title)
 
-        cursor.execute("DELETE FROM pages WHERE id = ?", (id,))
-        conn.commit()
+                # get first revision
+                revisions = page.revisions(reverse=True, total=1)
+                first_edit = None
+                for revision in revisions:
+                    first_edit = revision['timestamp']
+                    break
+                status = False
+
+                # Get the current time
+                current_time = Timestamp.utcnow()
+
+                # Calculate the difference between the timestamp and the current time
+                time_difference = current_time - first_edit
+
+                # Check if the time difference is less than 3 hours
+                if time_difference > timedelta(hours=3):
+                    status = True
+                if status:
+                    steps = [
+                        UnreviewedArticle,
+                        HasCategories,
+                        PortalsBar,
+                        Unreferenced,
+                        Orphan,
+                        DeadEnd,
+                        # Underlinked
+                    ]
+                    extra_steps = [
+                        PortalsMerge,
+                        PortalsBar
+                    ]
+                    if page.exists() and (not page.isRedirectPage()):
+                        text = page.text
+                        summary = "بوت:صيانة V5.0.0"
+                        pipeline = Pipeline(page, text, summary, steps, extra_steps)
+                        processed_text, processed_summary = pipeline.process()
+                        # write processed text back to the page
+                        if pipeline.hasChange() and check_status("مستخدم:LokasBot/إيقاف مهمة صيانة المقالات"):
+                            print("start save " + page.title())
+                            page.text = processed_text
+                            page.save(summary=processed_summary)
+                        else:
+                            print("page not changed " + page.title())
+
+                    cursor.execute("DELETE FROM pages WHERE id = ?", (id,))
+                    conn.commit()
+                else:
+                    print("skip need more time to edit it")
+                    # todo:move it to one function
+                    delta = datetime.timedelta(hours=1)
+                    new_date = datetime.datetime.now() + delta
+                    cursor.execute("UPDATE pages SET status = 0, date = ? WHERE id = ?",
+                                   (new_date, id))
+                    conn.commit()
     except Exception as e:
         print(f"An error occurred while processing {title}: {e}")
         just_the_string = traceback.format_exc()
