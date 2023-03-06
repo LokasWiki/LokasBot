@@ -1,11 +1,8 @@
-import random
 import sqlite3
-
 from threading import Timer
-
-import pymysql
+from datetime import timedelta
+from pywikibot import Timestamp
 import pywikibot
-from pywikibot import config as _config
 import os
 import datetime
 import traceback
@@ -135,21 +132,50 @@ def process_article(site, cursor, conn, id, title, thread_number,limiter):
                     t = Timer(1600, handle_timeout)
                     t.start()
 
-                    new_text, new_summary = bot()
-                    # write processed text back to the page
-                    if new_text != page.text and check_status():
-                        print("start save " + page.title())
-                        page.text = new_text
-                        page.save(new_summary)
+                    # get first revision
+                    revisions = page.revisions(reverse=True, total=1)
+                    first_edit = None
+                    for revision in revisions:
+                        first_edit = revision['timestamp']
+                        break
+                    status = False
+
+                    # Get the current time
+                    current_time = Timestamp.utcnow()
+
+                    # Calculate the difference between the timestamp and the current time
+                    time_difference = current_time - first_edit
+
+                    # Check if the time difference is less than 3 hours
+                    if time_difference > timedelta(hours=3):
+                        status = True
+
+                    # if status true can edit
+                    if status:
+                        new_text, new_summary = bot()
+                        # write processed text back to the page
+                        if new_text != page.text and check_status():
+                            print("start save " + page.title())
+                            page.text = new_text
+                            page.save(new_summary)
+                        else:
+                            print("page not changed " + page.title())
+                        t.cancel()
+                        # todo add option to not update page if have one or more links not archived
+                        cursor.execute("DELETE FROM pages WHERE id = ?", (id,))
+                        conn.commit()
                     else:
-                        print("page not changed " + page.title())
-                    t.cancel()
-                # todo add option to not update page if have one or more links not archived
-                cursor.execute("DELETE FROM pages WHERE id = ?", (id,))
-                conn.commit()
+                        t.cancel()
+                        print("skip need more time to edit it")
+                        # todo:move it to one function
+                        delta = datetime.timedelta(hours=1)
+                        new_date = datetime.datetime.now() + delta
+                        cursor.execute("UPDATE pages SET status = 0, date = ? WHERE id = ?",
+                                       (new_date, id))
+                        conn.commit()
 
     except TimeoutError:
-        delta = datetime.timedelta(hours=6)
+        delta = datetime.timedelta(hours=3)
         new_date = datetime.datetime.now() + delta
         cursor.execute("UPDATE pages SET status = 0, date = ? WHERE id = ?",
                        (new_date, id))
