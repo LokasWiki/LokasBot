@@ -1,5 +1,7 @@
 import pywikibot
 import wikitextparser as wtp
+
+from core.utils.helpers import prepare_str
 from core.utils.lua_to_python import get_lue_table, LuaToPython, portal_aliases_file_name
 
 
@@ -39,6 +41,7 @@ class PortalsMerge:
             self.ltp = ltp
 
     def __call__(self):
+        print("starts")
         if self.ignore():
             return self.text, self.summary
 
@@ -80,11 +83,11 @@ class PortalsMerge:
         new_template = "{{شريط بوابات" + new_template_option_string + "}}"
         temp_template = "{{شريط بوابات" + temp_template_option_string + "}}"
 
-        if len(new_template) == len(temp_template) and  len(self.list_of_template_found) == 1 and self.list_of_template_found[0].normal_name().lower() == "شريط بوابات":
+        if len(new_template) == len(temp_template) and len(self.list_of_template_found) == 1 and \
+                prepare_str(self.list_of_template_found[0].normal_name()) == prepare_str("شريط بوابات"):
             self.text = self.tem_text
             self.change_summary = False
         elif number_of_valid_portal:
-
             self.add_portal(new_template)
 
     def check_portal(self, portal_name):
@@ -109,11 +112,16 @@ class PortalsMerge:
         return status, name
 
     def add_portal(self, template_name):
-        category_template = '[[تصنيف:'
-        if category_template in self.text:
-            text = self.text.replace(category_template, template_name + '\n' + category_template, 1)
+
+        stub_template = '{{بذرة'
+        if stub_template in self.text:
+            text = self.text.replace(stub_template, template_name + '\n' + stub_template, 1)
         else:
-            text = self.text + '\n' + template_name
+            category_template = '[[تصنيف:'
+            if category_template in self.text:
+                text = self.text.replace(category_template, template_name + '\n' + category_template, 1)
+            else:
+                text = self.text + '\n' + template_name
         self.text = text
 
     def check(self):
@@ -121,7 +129,7 @@ class PortalsMerge:
         templates_found_number = 0
         for needed_templated in self.list_of_templates:
             for template in parsed.templates:
-                if needed_templated.lower() == template.normal_name().lower():
+                if prepare_str(needed_templated) == prepare_str(template.normal_name()):
                     self.list_of_template_found.append(template)
                     templates_found_number += 1
 
@@ -131,7 +139,7 @@ class PortalsMerge:
         parsed = wtp.parse(self.text)
         found = False
         for template in parsed.templates:
-            if "لا لصيانة البوابات".lower() == template.normal_name().lower():
+            if prepare_str("لا لصيانة البوابات") == prepare_str(template.normal_name()):
                 found = True
                 break
         return found

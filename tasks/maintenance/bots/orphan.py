@@ -1,6 +1,7 @@
-import re
-
 from core.utils.disambiguation import Disambiguation
+import wikitextparser as wtp
+
+from core.utils.helpers import prepare_str
 
 
 class Orphan:
@@ -8,6 +9,11 @@ class Orphan:
         self.page = page
         self.text = text
         self.summary = summary
+        self.templates = [
+            "بذرة غير مصنفة",
+            "Orphan",
+            "يتيم",
+        ]
 
     def __call__(self):
         disambiguation = Disambiguation(self.page.title(), self.text)
@@ -28,21 +34,33 @@ class Orphan:
         """
         This method adds the {{يتيمة}} template to the page if it doesn't already exist.
         """
-        template = re.compile(r"{{يتيمة(?:\|[^}]+)?}}")
-        if not template.search(self.text):
-            text = "{{يتيمة|تاريخ ={{نسخ:شهر وسنة}}}}"
-            text += "\n"
-            text += self.text
+        parsed = wtp.parse(self.text)
+        found = False
+        for needed_template in self.templates:
+            for template in parsed.templates:
+                if prepare_str(template.name) == prepare_str(needed_template):
+                    found = True
+                    break
 
-            self.text = text
+        if not found:
+            new_text = "{{يتيمة|تاريخ ={{نسخ:شهر وسنة}}}}"
+            new_text += "\n"
+            new_text += self.text
+
+            self.text = new_text
             self.summary += "، أضاف  وسم [[:تصنيف:مقالات يتيمة|يتيمة]]"
 
     def remove_template(self):
         """
            This method removes the {{يتيمة}} template from the page if it exists.
            """
-        template = re.compile(r"{{يتيمة(?:\|[^}]+)?}}")
-        new_text = template.sub("", self.text)
+        parsed = wtp.parse(self.text)
+        new_text = self.text
+        for needed_template in self.templates:
+            for template in parsed.templates:
+                if prepare_str(template.name) == prepare_str(needed_template):
+                    new_text = str(new_text).replace(str(template), "")
+
         if new_text != self.text:
             self.text = new_text
             self.summary += "، حذف  وسم [[:تصنيف:مقالات يتيمة|يتيمة]]"

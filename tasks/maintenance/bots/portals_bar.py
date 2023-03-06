@@ -2,6 +2,7 @@ import re
 import wikitextparser as wtp
 
 from core.utils.disambiguation import Disambiguation
+from core.utils.helpers import prepare_str
 
 
 class PortalsBar:
@@ -48,7 +49,7 @@ class PortalsBar:
         template_found = False
         for needed_templated in self.list_of_needed_templates:
             for template in parsed.templates:
-                if needed_templated.lower() == template.normal_name().lower():
+                if prepare_str(needed_templated) == prepare_str(template.normal_name()):
                     template_found = True
                     break
 
@@ -56,11 +57,15 @@ class PortalsBar:
 
         if not template_found:
             template_name = "{{مقالات بحاجة لشريط بوابات}}"
-            category_template = '[[تصنيف:'
-            if category_template in self.text:
-                text = self.text.replace(category_template, template_name + '\n' + category_template, 1)
+            stub_template = '{{بذرة'
+            if stub_template in self.text:
+                text = self.text.replace(stub_template, template_name + '\n' + stub_template, 1)
             else:
-                text = self.text + '\n' + template_name
+                category_template = '[[تصنيف:'
+                if category_template in self.text:
+                    text = self.text.replace(category_template, template_name + '\n' + category_template, 1)
+                else:
+                    text = self.text + '\n' + template_name
             self.text = text
             is_edited = True
 
@@ -72,7 +77,7 @@ class PortalsBar:
         is_edited = False
         for needed_templated in self.list_of_templates:
             for template in parsed.templates:
-                if needed_templated.lower() == template.normal_name().lower():
+                if prepare_str(needed_templated) == prepare_str(template.normal_name()):
                     self.text = self.text.replace(str(template), "")
                     is_edited = True
         return is_edited
@@ -106,7 +111,7 @@ class PortalsBar:
         ]
         for needed_templated in self.list_of_templates:
             for template in parsed.templates:
-                if needed_templated.lower() == template.normal_name().lower():
+                if prepare_str(needed_templated) == prepare_str(template.normal_name()):
                     # to remove the نمط argument {{شريط بوابات|نمط=قائمة|كيمياء|فيزياء}}
                     arguments = [arg for arg in template.arguments if arg.name.strip().lower() not in exclude_list]
                     for argument in arguments:
