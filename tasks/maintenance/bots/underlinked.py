@@ -82,7 +82,7 @@ class UnderLinked:
                     if len(list(set(links_list))) >= 4:
                         break
         status = False
-        if len(list(set(links_list))) >= 1 and len(list(set(links_list))) >= 3:
+        if 1 <= len(list(set(links_list))) < 3:
             status = True
 
         return status
