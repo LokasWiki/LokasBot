@@ -50,10 +50,6 @@ def process_article(site, cursor, conn, id, title, thread_number, limiter):
                     summary = ""
                     bot = Parsed(page.text, summary, limiter)
 
-                    # Set the timeout here with Timer
-                    t = Timer(1600, handle_timeout)
-                    t.start()
-
                     # get first revision
                     revisions = page.revisions(reverse=True, total=1)
                     first_edit = None
@@ -82,12 +78,10 @@ def process_article(site, cursor, conn, id, title, thread_number, limiter):
                             page.save(new_summary)
                         else:
                             print("page not changed " + page.title())
-                        t.cancel()
                         # todo add option to not update page if have one or more links not archived
                         cursor.execute("DELETE FROM pages WHERE id = ?", (id,))
                         conn.commit()
                     else:
-                        t.cancel()
                         print("skip need more time to edit it")
                         # todo:move it to one function
                         delta = datetime.timedelta(hours=1)
