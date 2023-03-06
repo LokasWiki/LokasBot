@@ -41,6 +41,7 @@ class PortalsMerge:
             self.ltp = ltp
 
     def __call__(self):
+        print("starts")
         if self.ignore():
             return self.text, self.summary
 
@@ -87,7 +88,6 @@ class PortalsMerge:
             self.text = self.tem_text
             self.change_summary = False
         elif number_of_valid_portal:
-
             self.add_portal(new_template)
 
     def check_portal(self, portal_name):
@@ -112,11 +112,16 @@ class PortalsMerge:
         return status, name
 
     def add_portal(self, template_name):
-        category_template = '[[تصنيف:'
-        if category_template in self.text:
-            text = self.text.replace(category_template, template_name + '\n' + category_template, 1)
+
+        stub_template = '{{بذرة'
+        if stub_template in self.text:
+            text = self.text.replace(stub_template, template_name + '\n' + stub_template, 1)
         else:
-            text = self.text + '\n' + template_name
+            category_template = '[[تصنيف:'
+            if category_template in self.text:
+                text = self.text.replace(category_template, template_name + '\n' + category_template, 1)
+            else:
+                text = self.text + '\n' + template_name
         self.text = text
 
     def check(self):

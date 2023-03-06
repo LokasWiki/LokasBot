@@ -57,11 +57,15 @@ class PortalsBar:
 
         if not template_found:
             template_name = "{{مقالات بحاجة لشريط بوابات}}"
-            category_template = '[[تصنيف:'
-            if category_template in self.text:
-                text = self.text.replace(category_template, template_name + '\n' + category_template, 1)
+            stub_template = '{{بذرة'
+            if stub_template in self.text:
+                text = self.text.replace(stub_template, template_name + '\n' + stub_template, 1)
             else:
-                text = self.text + '\n' + template_name
+                category_template = '[[تصنيف:'
+                if category_template in self.text:
+                    text = self.text.replace(category_template, template_name + '\n' + category_template, 1)
+                else:
+                    text = self.text + '\n' + template_name
             self.text = text
             is_edited = True
 
