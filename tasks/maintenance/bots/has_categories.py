@@ -1,7 +1,6 @@
-import re
-
 import pywikibot
 from core.utils.disambiguation import Disambiguation
+import wikitextparser as wtp
 
 
 class HasCategories:
@@ -9,6 +8,9 @@ class HasCategories:
         self.page = page
         self.text = text
         self.summary = summary
+        self.templates = [
+            "بذرة غير مصنفة"
+        ]
 
     def __call__(self):
         disambiguation = Disambiguation(self.page.title(), self.text)
@@ -29,21 +31,33 @@ class HasCategories:
         """
         This method adds the {{بذرة غير مصنفة}} template to the page if it doesn't already exist.
         """
-        template = re.compile(r"{{بذرة غير مصنفة(?:\|[^}]+)?}}")
-        if not template.search(self.text):
-            text = self.text
-            text += "\n"
-            text += "{{بذرة غير مصنفة|تاريخ ={{نسخ:شهر وسنة}}}}"
+        parsed = wtp.parse(self.text)
+        found = False
+        for needed_template in self.templates:
+            for template in parsed.templates:
+                if template.name.strip().lower() == needed_template.strip().lower():
+                    found = True
+                    break
 
-            self.text = text
+        if not found:
+            new_text = self.text
+            new_text += "\n"
+            new_text += "{{بذرة غير مصنفة|تاريخ ={{نسخ:شهر وسنة}}}}"
+
+            self.text = new_text
             self.summary += "، أضاف  وسم [[:تصنيف:مقالات غير مصنفة|غير مصنفة]]"
 
     def remove_template(self):
         """
            This method removes the {{بذرة غير مصنفة}} template from the page if it exists.
            """
-        template = re.compile(r"{{بذرة غير مصنفة(?:\|[^}]+)?}}")
-        new_text = template.sub("", self.text)
+        parsed = wtp.parse(self.text)
+        new_text = self.text
+        for needed_template in self.templates:
+            for template in parsed.templates:
+                if template.name.strip().lower() == needed_template.strip().lower():
+                    new_text = str(new_text).replace(str(template), "")
+
         if new_text != self.text:
             self.text = new_text
             self.summary += "، حذف  وسم [[:تصنيف:مقالات غير مصنفة|غير مصنفة]]"
@@ -54,6 +68,7 @@ class HasCategories:
         seen_categories = set()
         for category in categories:
             tem = pywikibot.Category(self.page.site, category.title())
+            # todo: fix this logic to check Redirect cat
             if not tem.isHiddenCategory() and tem.exists() and (not tem.isRedirectPage()):
                 if len(seen_categories) == 1:
                     break
@@ -61,4 +76,3 @@ class HasCategories:
                     seen_categories.add(category.title())
                     has_category = True
         return has_category
-
