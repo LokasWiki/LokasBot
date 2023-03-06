@@ -1,7 +1,7 @@
 import sys
 
-from core.utils.sqlite import create_database_table, maintenance_db_name
-from module import get_pages, save_pages_to_db
+from core.utils.sqlite import create_database_table, maintenance_db_name, save_pages_to_db
+from module import get_pages
 import traceback
 
 

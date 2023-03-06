@@ -1,7 +1,7 @@
 import sys
 
-from core.utils.sqlite import create_database_table, webcite_db_name
-from tasks.webcite.module import get_pages, save_pages_to_db
+from core.utils.sqlite import create_database_table, webcite_db_name, save_pages_to_db
+from tasks.webcite.module import get_pages
 
 
 def main(*args: str) -> int:
