@@ -1,20 +1,5 @@
-import re
-
+import wikitextparser as wtp
 import pywikibot
-
-"""
-The UnreviewedArticle class is a class that can be used to interact with a MediaWiki article.
- An instance of this class is created with the following parameters:
-
-get_page_text(): returns the text of the article.
-add_template(): adds the {{مقالة غير مراجعة}} template to the article's text and saves the article.
-remove_template(): removes the {{مقالة غير مراجعة}} template from the article's text and saves the article.
-check(): checks if the article is flagged as reviewed or not, using the MediaWiki API.
-
-Please note that you should use this class with care, as it is making changes to the articles in the wiki.
- It is always recommended to test it on a test wiki before using it on a production wiki.
-
-"""
 
 
 class UnreviewedArticle:
@@ -22,6 +7,9 @@ class UnreviewedArticle:
         self.page = page
         self.text = text
         self.summary = summary
+        self.templates = [
+            "مقالة غير مراجعة"
+        ]
 
     def __call__(self):
         if not self.check():
@@ -34,23 +22,37 @@ class UnreviewedArticle:
         """
         This method adds the {{مقالة غير مراجعة}} template to the page if it doesn't already exist.
         """
-        template = re.compile(r"{{مقالة غير مراجعة(?:\|[^}]+)?}}")
-        if not template.search(self.text):
-            text = "{{مقالة غير مراجعة|تاريخ ={{نسخ:شهر وسنة}}}}"
-            text += "\n"
-            text += self.text
-            self.text = text
+        parsed = wtp.parse(self.text)
+        found = False
+        for needed_template in self.templates:
+            for template in parsed.templates:
+                if template.name.strip().lower() == needed_template.strip().lower():
+                    found = True
+                    break
+
+        if not found:
+            new_text = "{{مقالة غير مراجعة|تاريخ ={{نسخ:شهر وسنة}}}}"
+            new_text += "\n"
+            new_text += self.text
+
+            self.text = new_text
             self.summary += "، أضاف وسم مقالة غير مراجعة"
 
     def remove_template(self):
         """
            This method removes the {{مقالة غير مراجعة}} template from the page if it exists.
            """
-        template = re.compile(r"{{مقالة غير مراجعة(?:\|[^}]+)?}}")
-        new_text = template.sub("", self.text)
+        parsed = wtp.parse(self.text)
+        new_text = self.text
+        for needed_template in self.templates:
+            for template in parsed.templates:
+                if template.name.strip().lower() == needed_template.strip().lower():
+                    new_text = str(new_text).replace(str(template), "")
+
         if new_text != self.text:
             self.text = new_text
             self.summary += "، حذف وسم مقالة غير مراجعة"
+
 
     def check(self):
         """
