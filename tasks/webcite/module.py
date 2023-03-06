@@ -10,8 +10,6 @@ from tasks.webcite.modules.parsed import Parsed
 from core.utils.wikidb import Database
 
 
-
-
 def get_pages(start):
     query = """SELECT pl_2_title
 FROM (
@@ -33,8 +31,7 @@ FROM (
     return gen
 
 
-
-def process_article(site, cursor, conn, id, title, thread_number,limiter):
+def process_article(site, cursor, conn, id, title, thread_number, limiter):
     def handle_timeout():
         print(f"Timeout while processing {title}")
         raise TimeoutError()
@@ -51,7 +48,7 @@ def process_article(site, cursor, conn, id, title, thread_number,limiter):
 
                 if page.exists() and (not page.isRedirectPage()):
                     summary = ""
-                    bot = Parsed(page.text, summary,limiter)
+                    bot = Parsed(page.text, summary, limiter)
 
                     # Set the timeout here with Timer
                     t = Timer(1600, handle_timeout)

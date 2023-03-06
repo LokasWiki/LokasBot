@@ -1,6 +1,8 @@
 import pywikibot
 import datetime
 import traceback
+from datetime import timedelta
+from pywikibot import Timestamp
 
 from core.utils.helpers import check_status
 from core.utils.pipeline import Pipeline
@@ -63,37 +65,69 @@ FROM (
 
 def process_article(site, cursor, conn, id, title, thread_number):
     try:
-        cursor.execute("UPDATE pages SET status = 1 WHERE id = ?", (id,))
-        conn.commit()
-        page = pywikibot.Page(site, title)
-        steps = [
-            UnreviewedArticle,
-            HasCategories,
-            PortalsBar,
-            Unreferenced,
-            Orphan,
-            DeadEnd,
-            # Underlinked
-        ]
-        extra_steps = [
-            PortalsMerge,
-            PortalsBar
-        ]
-        if page.exists() and (not page.isRedirectPage()):
-            text = page.text
-            summary = "بوت:صيانة V4.9.0"
-            pipeline = Pipeline(page, text, summary, steps, extra_steps)
-            processed_text, processed_summary = pipeline.process()
-            # write processed text back to the page
-            if pipeline.hasChange() and check_status("مستخدم:LokasBot/إيقاف مهمة صيانة المقالات"):
-                print("start save " + page.title())
-                page.text = processed_text
-                page.save(summary=processed_summary)
-            else:
-                print("page not changed " + page.title())
+        cursor.execute("SELECT status FROM pages WHERE id = ? LIMIT 1", (id,))
+        row = cursor.fetchone()
+        if row is not None:
+            status = row[0]
+            if status == 0:
+                cursor.execute("UPDATE pages SET status = 1 WHERE id = ?", (id,))
+                conn.commit()
+                page = pywikibot.Page(site, title)
 
-        cursor.execute("DELETE FROM pages WHERE id = ?", (id,))
-        conn.commit()
+                # get first revision
+                revisions = page.revisions(reverse=True, total=1)
+                first_edit = None
+                for revision in revisions:
+                    first_edit = revision['timestamp']
+                    break
+                status = False
+
+                # Get the current time
+                current_time = Timestamp.utcnow()
+
+                # Calculate the difference between the timestamp and the current time
+                time_difference = current_time - first_edit
+
+                # Check if the time difference is less than 3 hours
+                if time_difference > timedelta(hours=3):
+                    status = True
+                if status:
+                    steps = [
+                        UnreviewedArticle,
+                        HasCategories,
+                        PortalsBar,
+                        Unreferenced,
+                        Orphan,
+                        DeadEnd,
+                        # Underlinked
+                    ]
+                    extra_steps = [
+                        PortalsMerge,
+                        PortalsBar
+                    ]
+                    if page.exists() and (not page.isRedirectPage()):
+                        text = page.text
+                        summary = "بوت:صيانة V4.9.0"
+                        pipeline = Pipeline(page, text, summary, steps, extra_steps)
+                        processed_text, processed_summary = pipeline.process()
+                        # write processed text back to the page
+                        if pipeline.hasChange() and check_status("مستخدم:LokasBot/إيقاف مهمة صيانة المقالات"):
+                            print("start save " + page.title())
+                            page.text = processed_text
+                            page.save(summary=processed_summary)
+                        else:
+                            print("page not changed " + page.title())
+
+                    cursor.execute("DELETE FROM pages WHERE id = ?", (id,))
+                    conn.commit()
+                else:
+                    print("skip need more time to edit it")
+                    # todo:move it to one function
+                    delta = datetime.timedelta(hours=1)
+                    new_date = datetime.datetime.now() + delta
+                    cursor.execute("UPDATE pages SET status = 0, date = ? WHERE id = ?",
+                                   (new_date, id))
+                    conn.commit()
     except Exception as e:
         print(f"An error occurred while processing {title}: {e}")
         just_the_string = traceback.format_exc()
