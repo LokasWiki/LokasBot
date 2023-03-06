@@ -1,19 +1,17 @@
-import datetime
-import os
 import threading
-import time
 import sqlite3
 import traceback
 
 import pywikibot
 
-from module import create_database_table, get_articles, process_article, check_status
+from core.utils.sqlite import create_database_table, maintenance_db_name
+from module import get_articles, process_article, check_status
 
 
 def read(thread_number):
     try:
         site = pywikibot.Site()
-        conn, cursor = create_database_table()
+        conn, cursor = create_database_table(maintenance_db_name)
 
         rows = get_articles(cursor, thread_number)
         if len(rows) > 0 and check_status():

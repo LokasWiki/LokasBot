@@ -11,17 +11,6 @@ from tasks.webcite.modules.parsed import Parsed
 from core.utils.wikidb import Database
 
 
-def create_database_table():
-    home_path = os.path.expanduser("~")
-    database_path = os.path.join(home_path, "webcite.db")
-    conn = sqlite3.connect(database_path)
-    cursor = conn.cursor()
-
-    # Create the table with a status column
-    cursor.execute(
-        '''CREATE TABLE IF NOT EXISTS pages (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, status INTEGER, date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,thread INTEGER)''')
-
-    return conn, cursor
 
 
 def get_pages(start):

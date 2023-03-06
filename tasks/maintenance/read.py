@@ -1,5 +1,7 @@
 import sys
-from module import create_database_table, get_pages, save_pages_to_db
+
+from core.utils.sqlite import create_database_table, maintenance_db_name
+from module import get_pages, save_pages_to_db
 import traceback
 
 
@@ -14,8 +16,8 @@ def main(*args: str) -> int:
             thread_number = 2
 
         pages = get_pages(time_before_start)
-        conn, cursor = create_database_table()
-        save_pages_to_db(pages, conn, cursor,thread_number=thread_number)
+        conn, cursor = create_database_table(maintenance_db_name)
+        save_pages_to_db(pages, conn, cursor, thread_number=thread_number)
         conn.close()
     except Exception as e:
         print(f"An error occurred: {e}")

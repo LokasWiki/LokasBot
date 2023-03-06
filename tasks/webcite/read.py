@@ -1,5 +1,7 @@
 import sys
-from tasks.webcite.module import create_database_table, get_pages, save_pages_to_db
+
+from core.utils.sqlite import create_database_table, webcite_db_name
+from tasks.webcite.module import get_pages, save_pages_to_db
 
 
 def main(*args: str) -> int:
@@ -13,7 +15,7 @@ def main(*args: str) -> int:
             thread_number = 2
 
         pages = get_pages(time_before_start)
-        conn, cursor = create_database_table()
+        conn, cursor = create_database_table(webcite_db_name)
         save_pages_to_db(pages, conn, cursor, thread_number=thread_number)
         conn.close()
     except Exception as e:
