@@ -70,11 +70,20 @@ class HasCategories:
         seen_categories = set()
         for category in categories:
             tem = pywikibot.Category(self.page.site, category.title())
-            # todo: fix this logic to check Redirect cat
-            if not tem.isHiddenCategory() and tem.exists() and (not tem.isRedirectPage()):
-                if len(seen_categories) == 1:
-                    break
-                if category.title() not in seen_categories:
-                    seen_categories.add(category.title())
-                    has_category = True
+            if not tem.isHiddenCategory() and tem.exists():
+                if tem.isCategoryRedirect():
+                    target_cat = tem.getCategoryRedirectTarget()
+                    if not target_cat.isHiddenCategory() and target_cat.exists():
+                        if len(seen_categories) == 1:
+                            break
+                        if category.title() not in seen_categories:
+                            seen_categories.add(category.title())
+                            has_category = True
+                else:
+                    if len(seen_categories) == 1:
+                        break
+                    if category.title() not in seen_categories:
+                        seen_categories.add(category.title())
+                        has_category = True
+
         return has_category
