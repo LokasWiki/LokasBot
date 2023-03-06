@@ -377,7 +377,10 @@ class SendTemplate(Base):
                     talk_page.text = text
 
                     # Save the page
-                    talk_page.save("بوت:[[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مستخدمو الأسبوع الأكثر نشاطا]]")
+                    talk_page.save(
+                        "بوت:[[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مستخدمو الأسبوع الأكثر نشاطا]]",
+                        minor=False
+                    )
                 except Exception as error:
                     print(f'Error saving page: {error}')
 
