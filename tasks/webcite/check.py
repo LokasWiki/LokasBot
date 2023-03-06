@@ -5,8 +5,8 @@ import threading
 
 import pywikibot
 
-from core.utils.sqlite import create_database_table, webcite_db_name
-from tasks.webcite.module import get_articles, process_article, check_status
+from core.utils.sqlite import create_database_table, webcite_db_name, get_articles
+from tasks.webcite.module import  process_article, check_status
 from tasks.webcite.modules.request_limiter import RequestLimiter
 
 

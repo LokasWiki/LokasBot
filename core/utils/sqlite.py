@@ -29,3 +29,43 @@ def save_pages_to_db(gen, conn, cursor, thread_number):
             conn.commit()
         except sqlite3.Error as e:
             print(f"An error occurred while inserting the title {entry.title()} into the database: {e}")
+
+
+def get_articles(cursor, thread_number):
+    if thread_number == 1:
+        thread_number = 0
+    query1 = """
+        SELECT id, title, thread
+        FROM pages
+        WHERE status = 0 AND thread = 1
+        ORDER BY date ASC
+        LIMIT 200 OFFSET ?;
+    """
+
+    query2 = """
+        SELECT id, title, thread
+        FROM pages
+        WHERE status = 0 AND thread = 2
+        ORDER BY date ASC
+        LIMIT 150 OFFSET ?;
+    """
+
+    query3 = """
+        SELECT id, title, thread
+        FROM pages
+        WHERE status = 0 AND thread = 3
+        ORDER BY date ASC
+        LIMIT 100 OFFSET ?;
+    """
+
+    cursor.execute(query1, (thread_number,))
+    result1 = cursor.fetchall()
+
+    cursor.execute(query2, (thread_number,))
+    result2 = cursor.fetchall()
+
+    cursor.execute(query3, (thread_number,))
+    result3 = cursor.fetchall()
+
+    rows = result1 + result2 + result3
+    return rows

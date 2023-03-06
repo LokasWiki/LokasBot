@@ -1,8 +1,4 @@
-import random
-import sqlite3
-
 import pywikibot
-import os
 import datetime
 import traceback
 
@@ -60,14 +56,6 @@ FROM (
 
     gen = set(gen)
     return gen
-
-
-def get_articles(cursor, thread_number):
-    random_number = random.randint(1, 10)
-    cursor.execute("SELECT id, title,thread FROM pages WHERE thread=? and status=0 ORDER BY date ASC LIMIT 50 OFFSET ?;", (int(thread_number),int(random_number)))
-    rows = cursor.fetchall()
-    return rows
-
 
 class Pipeline:
     def __init__(self, page, text, summary, steps, extra_steps):

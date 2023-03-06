@@ -4,25 +4,19 @@ import traceback
 
 import pywikibot
 
-from core.utils.sqlite import create_database_table, maintenance_db_name
-from module import get_articles, process_article, check_status
+from core.utils.sqlite import create_database_table, maintenance_db_name, get_articles
+from module import process_article, check_status
 
 
 def read(thread_number):
     try:
+        print(thread_number)
         site = pywikibot.Site()
         conn, cursor = create_database_table(maintenance_db_name)
-
         rows = get_articles(cursor, thread_number)
         if len(rows) > 0 and check_status():
             for row in rows:
-                process_article(site, cursor, conn, id=row[0], title=row[1], thread_number=thread_number)
-        else:
-            if thread_number == 1:
-                rows = get_articles(cursor, 2)
-            else:
-                rows = get_articles(cursor, 1)
-            for row in rows:
+                print(row)
                 process_article(site, cursor, conn, id=row[0], title=row[1], thread_number=thread_number)
         conn.close()
     except sqlite3.Error as e:
