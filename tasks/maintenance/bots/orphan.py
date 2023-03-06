@@ -10,7 +10,7 @@ class Orphan:
         self.text = text
         self.summary = summary
         self.templates = [
-            "بذرة غير مصنفة",
+            "يتيمة",
             "Orphan",
             "يتيم",
         ]
