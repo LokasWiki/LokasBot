@@ -5,8 +5,9 @@ import threading
 
 import pywikibot
 
+from core.utils.helpers import check_status
 from core.utils.sqlite import create_database_table, webcite_db_name, get_articles
-from tasks.webcite.module import  process_article, check_status
+from tasks.webcite.module import  process_article
 from tasks.webcite.modules.request_limiter import RequestLimiter
 
 
@@ -18,7 +19,7 @@ def read(thread_number):
         conn, cursor = create_database_table(webcite_db_name)
 
         rows = get_articles(cursor, thread_number)
-        if len(rows) > 0 and check_status():
+        if len(rows) > 0 and check_status("مستخدم:LokasBot/الإبلاغ عن رابط معطوب أو مؤرشف"):
             for row in rows:
                 print(row)
                 process_article(site, cursor, conn, id=row[0], title=row[1], thread_number=thread_number, limiter=limiter)

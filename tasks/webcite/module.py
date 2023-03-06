@@ -1,12 +1,11 @@
-import sqlite3
 from threading import Timer
 from datetime import timedelta
-from pywikibot import Timestamp
 import pywikibot
-import os
+from pywikibot import Timestamp
 import datetime
 import traceback
 
+from core.utils.helpers import check_status
 from tasks.webcite.modules.parsed import Parsed
 from core.utils.wikidb import Database
 
@@ -33,16 +32,6 @@ FROM (
     gen = set(gen)
     return gen
 
-
-
-def check_status():
-    site = pywikibot.Site()
-    title = "مستخدم:LokasBot/الإبلاغ عن رابط معطوب أو مؤرشف"
-    page = pywikibot.Page(site, title)
-    text = page.text
-    if text == "لا":
-        return True
-    return False
 
 
 def process_article(site, cursor, conn, id, title, thread_number,limiter):
@@ -90,7 +79,7 @@ def process_article(site, cursor, conn, id, title, thread_number,limiter):
                     if status:
                         new_text, new_summary = bot()
                         # write processed text back to the page
-                        if new_text != page.text and check_status():
+                        if new_text != page.text and check_status("مستخدم:LokasBot/الإبلاغ عن رابط معطوب أو مؤرشف"):
                             print("start save " + page.title())
                             page.text = new_text
                             page.save(new_summary)

@@ -2,6 +2,8 @@ import pywikibot
 import datetime
 import traceback
 
+from core.utils.helpers import check_status
+from core.utils.pipeline import Pipeline
 from core.utils.wikidb import Database
 from tasks.maintenance.bots.dead_end import DeadEnd
 from tasks.maintenance.bots.has_categories import HasCategories
@@ -10,6 +12,7 @@ from tasks.maintenance.bots.portals_bar import PortalsBar
 from tasks.maintenance.bots.portals_merge import PortalsMerge
 from tasks.maintenance.bots.unreferenced import Unreferenced
 from tasks.maintenance.bots.unreviewed_article import UnreviewedArticle
+
 
 def get_pages(start):
     query = """SELECT pl_2_title
@@ -57,40 +60,6 @@ FROM (
     gen = set(gen)
     return gen
 
-class Pipeline:
-    def __init__(self, page, text, summary, steps, extra_steps):
-        self.page = page
-        self.text = text
-        self.summary = summary
-        self.steps = steps
-        self.extra_steps = extra_steps
-        self.oldText = text
-
-    def process(self):
-        for step in self.steps:
-            obj = step(self.page, self.text, self.summary)
-            self.text, self.summary = obj()
-
-        if self.hasChange():
-            for step in self.extra_steps:
-                obj = step(self.page, self.text, self.summary)
-                self.text, self.summary = obj()
-
-        return self.text, self.summary
-
-    def hasChange(self):
-        return self.text != self.oldText
-
-
-def check_status():
-    site = pywikibot.Site()
-    title = "مستخدم:LokasBot/إيقاف مهمة صيانة المقالات"
-    page = pywikibot.Page(site, title)
-    text = page.text
-    if text == "لا":
-        return True
-    return False
-
 
 def process_article(site, cursor, conn, id, title, thread_number):
     try:
@@ -116,7 +85,7 @@ def process_article(site, cursor, conn, id, title, thread_number):
             pipeline = Pipeline(page, text, summary, steps, extra_steps)
             processed_text, processed_summary = pipeline.process()
             # write processed text back to the page
-            if pipeline.hasChange() and check_status():
+            if pipeline.hasChange() and check_status("مستخدم:LokasBot/إيقاف مهمة صيانة المقالات"):
                 print("start save " + page.title())
                 page.text = processed_text
                 page.save(summary=processed_summary)
