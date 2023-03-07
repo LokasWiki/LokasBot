@@ -27,7 +27,9 @@ class File:
 
     def get_json_content(self):
         # Open the file in read mode
-        with open(self.file_path, 'w') as file:
+        with open(self.file_path) as file:
             # Read the contents of the file
-            my_list = json.load(file)
-        return my_list
+            self.contents = file.read()
+
+
+
