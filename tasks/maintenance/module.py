@@ -12,6 +12,7 @@ from tasks.maintenance.bots.has_categories import HasCategories
 from tasks.maintenance.bots.orphan import Orphan
 from tasks.maintenance.bots.portals_bar import PortalsBar
 from tasks.maintenance.bots.portals_merge import PortalsMerge
+from tasks.maintenance.bots.template_redirects import TemplateRedirects
 from tasks.maintenance.bots.underlinked import UnderLinked
 from tasks.maintenance.bots.unreferenced import Unreferenced
 from tasks.maintenance.bots.unreviewed_article import UnreviewedArticle
@@ -104,11 +105,12 @@ def process_article(site, cursor, conn, id, title, thread_number):
                     ]
                     extra_steps = [
                         PortalsMerge,
-                        PortalsBar
+                        PortalsBar,
+                        TemplateRedirects
                     ]
                     if page.exists() and (not page.isRedirectPage()):
                         text = page.text
-                        summary = "بوت:صيانة V5.2.0"
+                        summary = "بوت:صيانة V5.3.0"
                         pipeline = Pipeline(page, text, summary, steps, extra_steps)
                         processed_text, processed_summary = pipeline.process()
                         # write processed text back to the page
