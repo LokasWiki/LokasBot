@@ -22,6 +22,9 @@ class UnderLinked:
         if disambiguation.check("or"):
             return self.text, self.summary
 
+        if self.ignore():
+            return self.text, self.summary
+
         if self.check():
             self.add_template()
         else:
@@ -86,3 +89,12 @@ class UnderLinked:
             status = True
 
         return status
+
+    def ignore(self):
+        parsed = wtp.parse(self.text)
+        found = False
+        for template in parsed.templates:
+            if prepare_str("لا للوصلات قليلة") == prepare_str(template.normal_name()):
+                found = True
+                break
+        return found
