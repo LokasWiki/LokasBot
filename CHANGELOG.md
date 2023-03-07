@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.2.0] - 2023-03-7
 ### Added
-- اضافة جدول جديد للبوتات ولكن بدون توزيع الاوسمة (إضافة/إزالة قالب نهاية مسدودة) (مهمة مستخدمو الأسبوع الأكثر نشاطا)  ([#112](https://github.com/loka1/LokasBot/pull/112))
+- اضافة جدول جديد للبوتات ولكن بدون توزيع الاوسمة (مهمة مستخدمو الأسبوع الأكثر نشاطا)  ([#112](https://github.com/loka1/LokasBot/pull/112))
 - -اعادة تفعيل بوت (إضافة/إزالة قالب وصلات قليلة) بعد اعادة كتابة كود البوت من جديد (مهمة الصيانة)  ([#113](https://github.com/loka1/LokasBot/pull/113))
 - اضافة مهمة استبدال القوالب بالاعتماد علي (ويكيبيديا:AutoWikiBrowser/Template redirects) (تعمل كمهمة اضافيه)(مهمة الصيانة)  ([#114](https://github.com/loka1/LokasBot/pull/114))
 
