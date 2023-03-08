@@ -87,10 +87,6 @@ LIMIT 500;"""
 file_path = 'stub/users_with_bots_by_the_number_of_pages_created.txt'
 page_name = "ويكيبيديا:إحصاءات/المستخدمين حسب عدد إنشاء الصفحات (متضمنة البوتات)"
 
-# Create an instance of the ArticleTables class
-tables = ArticleTables()
-
-
 def username(row, result, index):
     username = str(row['user_name'], 'utf-8')
     name = username.replace("__", "[LOKA]").replace("_", " ").replace("[LOKA]", "_")
@@ -115,9 +111,13 @@ columns = [
     ("صفحة نقاش المقالة", "take_page_created"),
 ]
 
-tables.add_table("main_table", columns)
 
-def main(*args: str) -> int:
+
+def main(*args: str) -> int
+    # Create an instance of the ArticleTables class
+    tables = ArticleTables()
+    tables.add_table("main_table", columns)
+
     # Create an instance of the updater and update the page
     updater = UpdatePage(query, file_path, page_name, tables)
     updater.update()

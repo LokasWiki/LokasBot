@@ -35,9 +35,6 @@ connection = pymysql.connect(
 file_path = 'stub/wiki_maintenance/main_template.txt'
 page_name = "مستخدم:لوقا/ملعب 14"
 
-# Create an instance of the ArticleTables class
-tables = ArticleTables()
-
 
 def delete_page(row, result, index):
     page_title = str(row['deleted_page'], 'utf-8')
@@ -61,9 +58,10 @@ columns = [
     ("حذفت بتاريخ", None, date_of_delete),
 ]
 
-tables.add_table("main_table", columns)
-
 def main(*args: str) -> int:
+    # Create an instance of the ArticleTables class
+    tables = ArticleTables()
+    tables.add_table("main_table", columns)
 
     # Create an instance of the updater and update the page
     updater = UpdatePage(query, file_path, page_name, tables, connection=connection)

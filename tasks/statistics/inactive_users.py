@@ -18,10 +18,6 @@ GROUP BY actor_name, user_groups"""
 file_path = 'stub/inactive_users.txt'
 page_name = "ويكيبيديا:إحصاءات/المستخدمين غير النشطين"
 
-# Create an instance of the ArticleTables class
-tables = ArticleTables()
-
-
 def username(row, result,index):
     username = str(row['ll_actor_name'], 'utf-8')
     name = username.replace("__", "[LOKA]").replace("_", " ").replace("[LOKA]", "_")
@@ -42,9 +38,10 @@ columns = [
     ("الصلاحية", None, user_groups),
 ]
 
-tables.add_table("main_table", columns)
-
 def main(*args: str) -> int:
+    # Create an instance of the ArticleTables class
+    tables = ArticleTables()
+    tables.add_table("main_table", columns)
 
     # Create an instance of the updater and update the page
     updater = UpdatePage(query, file_path, page_name, tables)

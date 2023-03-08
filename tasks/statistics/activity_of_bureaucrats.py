@@ -97,9 +97,6 @@ def create_category_page_for_every_user():
 
 # auto call
 list_of_categories = create_category_page_for_every_user()
-# Create an instance of the ArticleTables class
-tables = ArticleTables()
-
 
 def username(row, result, index):
     username = str(row['user_name'], 'utf-8')
@@ -143,10 +140,10 @@ columns = [
     ("المجموع", None, total),
 ]
 
-tables.add_table("main_table", columns)
-
 def main(*args: str) -> int:
-
+    # Create an instance of the ArticleTables class
+    tables = ArticleTables()
+    tables.add_table("main_table", columns)
 
     # Create an instance of the updater and update the page
     updater = UpdatePage(query, file_path, page_name, tables)

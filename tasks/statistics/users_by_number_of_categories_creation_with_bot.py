@@ -17,9 +17,6 @@ query = """SELECT actor_name, COUNT(*) as q_user_editcount
 file_path = 'stub/users_by_number_of_categories_creation_with_bot.txt'
 page_name = "ويكيبيديا:إحصاءات/المستخدمين حسب عدد إنشاء التصانيف (متضمنة البوتات)"
 
-# Create an instance of the ArticleTables class
-tables = ArticleTables()
-
 
 def username(row, result,index):
     username = str(row['actor_name'], 'utf-8')
@@ -39,9 +36,11 @@ columns = [
     ("عدد التصانيف", None, total_edits),
 ]
 
-tables.add_table("main_table", columns)
-
 def main(*args: str) -> int:
+    # Create an instance of the ArticleTables class
+    tables = ArticleTables()
+    tables.add_table("main_table", columns)
+
     # Create an instance of the updater and update the page
     updater = UpdatePage(query, file_path, page_name, tables)
     updater.update()

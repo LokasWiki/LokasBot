@@ -17,10 +17,6 @@ LIMIT 500;"""
 file_path = 'stub/users_by_number_of_templates_creation_with_bot.txt'
 page_name = "ويكيبيديا:إحصاءات/المستخدمين حسب عدد إنشاء القوالب (متضمنة البوتات)"
 
-# Create an instance of the ArticleTables class
-tables = ArticleTables()
-
-
 def username(row, result,index):
     username = str(row['actor_name'], 'utf-8')
     name = username.replace("__", "[LOKA]").replace("_", " ").replace("[LOKA]", "_")
@@ -39,9 +35,11 @@ columns = [
     ("عدد القوالب", None, total_edits),
 ]
 
-tables.add_table("main_table", columns)
-
 def main(*args: str) -> int:
+    # Create an instance of the ArticleTables class
+    tables = ArticleTables()
+    tables.add_table("main_table", columns)
+
     # Create an instance of the updater and update the page
     updater = UpdatePage(query, file_path, page_name, tables)
     updater.update()

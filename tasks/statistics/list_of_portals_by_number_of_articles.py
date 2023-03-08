@@ -18,10 +18,6 @@ file_path = 'stub/list_of_portals_by_number_of_articles.txt'
 page_name = "ويكيبيديا:إحصاءات/قائمة البوابات حسب عدد المقالات"
 
 
-# Create an instance of the ArticleTables class
-tables = ArticleTables()
-
-
 def portal_name(row, result,index):
     username = str(row['portal_name'], 'utf-8')
     name = username.replace("__", "[LOKA]").replace("_", " ").replace("[LOKA]", "_")
@@ -41,9 +37,11 @@ columns = [
     ("عدد المقالات",None, links_count),
 ]
 
-tables.add_table("main_table", columns)
-
 def main(*args: str) -> int:
+    # Create an instance of the ArticleTables class
+    tables = ArticleTables()
+    tables.add_table("main_table", columns)
+
     # Create an instance of the updater and update the page
     updater = UpdatePage(query, file_path, page_name, tables)
     updater.update()

@@ -11,9 +11,6 @@ WHERE pl.pl_from IS NULL AND p.page_is_redirect = 0 AND p.page_namespace = 0
 file_path = 'stub/pages_that_are_missing_internal_links.txt'
 page_name = "ويكيبيديا:إحصاءات/مقالات بدون وصلات داخلية"
 
-# Create an instance of the ArticleTables class
-tables = ArticleTables()
-
 
 def username(row, result, index):
     ll_user_name = str(row['ll_user_name'], 'utf-8')
@@ -40,9 +37,12 @@ columns = [
     ("أول مساهم", None, username),
 ]
 
-tables.add_table("main_table", columns)
 
 def main(*args: str) -> int:
+    # Create an instance of the ArticleTables class
+    tables = ArticleTables()
+    tables.add_table("main_table", columns)
+
     # Create an instance of the updater and update the page
     updater = UpdatePage(query, file_path, page_name, tables)
     updater.update()

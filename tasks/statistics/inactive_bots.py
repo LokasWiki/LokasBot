@@ -18,9 +18,6 @@ GROUP BY actor_name, user_groups"""
 file_path = 'stub/inactive_bots.txt'
 page_name = "ويكيبيديا:إحصاءات/بوتات غير نشطة"
 
-# Create an instance of the ArticleTables class
-tables = ArticleTables()
-
 
 def username(row, result,index):
     username = str(row['ll_actor_name'], 'utf-8')
@@ -42,9 +39,11 @@ columns = [
     ("الصلاحية", None, user_groups),
 ]
 
-tables.add_table("main_table", columns)
-
 def main(*args: str) -> int:
+    # Create an instance of the ArticleTables class
+    tables = ArticleTables()
+    tables.add_table("main_table", columns)
+
     # Create an instance of the updater and update the page
     updater = UpdatePage(query, file_path, page_name, tables)
     updater.update()

@@ -69,8 +69,6 @@ connection = pymysql.connect(
     port=_config.db_port,
     cursorclass=pymysql.cursors.DictCursor,
 )
-# Create an instance of the ArticleTables class
-tables = ArticleTables()
 
 
 def file_name(row, result, index):
@@ -97,9 +95,11 @@ columns = [
     ("اسم المستخدم", None, username_link)
 ]
 
-tables.add_table("main_table", columns)
-
 def main(*args: str) -> int:
+    # Create an instance of the ArticleTables class
+    tables = ArticleTables()
+    tables.add_table("main_table", columns)
+
     # Create an instance of the updater and update the page
     updater = UpdatePage(query, file_path, page_name, tables, connection=connection)
     updater.update()

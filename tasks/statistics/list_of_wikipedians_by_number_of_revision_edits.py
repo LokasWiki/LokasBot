@@ -23,10 +23,6 @@ limit 100"""
 file_path = 'stub/list_of_wikipedians_by_number_of_revision_edits.txt'
 page_name = "ويكيبيديا:قائمة الويكيبيديين حسب عدد مراجعة التعديلات"
 
-# Create an instance of the ArticleTables class
-tables = ArticleTables()
-
-
 def username(row, result,index):
     username = str(row['name'], 'utf-8')
     name = username.replace("__", "[LOKA]").replace("_", " ").replace("[LOKA]", "_")
@@ -45,9 +41,11 @@ columns = [
     ("عدد المراجعات", None, total_edits),
 ]
 
-tables.add_table("main_table", columns)
-
 def main(*args: str) -> int:
+    # Create an instance of the ArticleTables class
+    tables = ArticleTables()
+    tables.add_table("main_table", columns)
+
     # Create an instance of the updater and update the page
     updater = UpdatePage(query, file_path, page_name, tables)
     updater.update()

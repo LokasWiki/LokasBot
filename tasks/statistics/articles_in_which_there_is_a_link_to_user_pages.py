@@ -16,8 +16,6 @@ where pagelinks.pl_from_namespace = 0
 file_path = 'stub/articles_in_which_there_is_a_link_to_user_pages.txt'
 page_name = "ويكيبيديا:إحصاءات/مقالات يوجد فيها وصلة إلى صفحات المستخدمين"
 
-# Create an instance of the ArticleTables class
-tables = ArticleTables()
 
 
 def page_title(row, result, index):
@@ -41,9 +39,10 @@ columns = [
     ("الرابط المقصود",None, username),
 ]
 
-tables.add_table("main_table", columns)
-
 def main(*args: str) -> int:
+    # Create an instance of the ArticleTables class
+    tables = ArticleTables()
+    tables.add_table("main_table", columns)
 
     # Create an instance of the updater and update the page
     updater = UpdatePage(query, file_path, page_name, tables)

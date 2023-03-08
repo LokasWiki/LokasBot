@@ -16,8 +16,6 @@ HAVING live_edits >= 400
 file_path = 'stub/wikipedians_without_permission.txt'
 page_name = "ويكيبيديا:قائمة الويكيبيديين بلا صلاحيات"
 
-# Create an instance of the ArticleTables class
-tables = ArticleTables()
 
 
 def username(row, result,index):
@@ -57,9 +55,11 @@ columns = [
     ("عدد المساهمات خلال 30 يوم", None, edits_last_month),
 ]
 
-tables.add_table("main_table", columns)
-
 def main(*args: str) -> int:
+    # Create an instance of the ArticleTables class
+    tables = ArticleTables()
+    tables.add_table("main_table", columns)
+
     # Create an instance of the updater and update the page
     updater = UpdatePage(query, file_path, page_name, tables)
     updater.update()
