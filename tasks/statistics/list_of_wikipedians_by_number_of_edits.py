@@ -1,4 +1,4 @@
-from module import UpdatePage, ArticleTables,index
+from tasks.statistics.module import UpdatePage, ArticleTables, index
 
 # Set the parameters for the update
 query = """SELECT user_name, user_editcount
@@ -18,20 +18,17 @@ LIMIT 500;"""
 file_path = 'stub/list_of_wikipedians_by_number_of_edits.txt'
 page_name = "ويكيبيديا:قائمة الويكيبيديين حسب عدد التعديلات"
 
-# Create an instance of the ArticleTables class
-tables = ArticleTables()
+
+def username(row, result, index):
+    user_name = str(row['user_name'], 'utf-8')
+    name = user_name.replace("__", "[LOKA]").replace("_", " ").replace("[LOKA]", "_")
+    return "[[مستخدم:" + user_name + "|" + name + "]]"
 
 
-def username(row, result,index):
-    username = str(row['user_name'], 'utf-8')
-    name = username.replace("__", "[LOKA]").replace("_", " ").replace("[LOKA]", "_")
-    return "[[مستخدم:" + username + "|" + name + "]]"
-
-
-def total_edits(row, result,index):
-    username = str(row['user_name'], 'utf-8')
+def total_edits(row, result, index):
+    user_name = str(row['user_name'], 'utf-8')
     number = format(row['user_editcount'], ',').replace(',', '٬')
-    return "[[خاص:مساهمات/" + username + "|" + number + "]]"
+    return "[[خاص:مساهمات/" + user_name + "|" + number + "]]"
 
 
 columns = [
@@ -40,8 +37,17 @@ columns = [
     ("عدد المساهمات", None, total_edits),
 ]
 
-tables.add_table("main_table", columns)
 
-# Create an instance of the updater and update the page
-updater = UpdatePage(query, file_path, page_name, tables)
-updater.update()
+def main(*args: str) -> int:
+    # Create an instance of the ArticleTables class
+    tables = ArticleTables()
+    tables.add_table("main_table", columns)
+
+    # Create an instance of the updater and update the page
+    updater = UpdatePage(query, file_path, page_name, tables)
+    updater.update()
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

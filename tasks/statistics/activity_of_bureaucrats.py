@@ -1,6 +1,6 @@
 import pywikibot
 
-from module import UpdatePage, ArticleTables, index, Database
+from tasks.statistics.module import UpdatePage, ArticleTables, index, Database
 
 # Set the parameters for the update
 query = """select user_name,
@@ -96,9 +96,8 @@ def create_category_page_for_every_user():
 
 
 # auto call
+# todo: make that call from main def and not auto run on import
 list_of_categories = create_category_page_for_every_user()
-# Create an instance of the ArticleTables class
-tables = ArticleTables()
 
 
 def username(row, result, index):
@@ -117,7 +116,6 @@ def total_numbers_in_category(row, result, index):
 
 
 def total(row, result, index):
-    number = 0
     user_name = str(row['user_name'], 'utf-8')
     del row['user_name']
     number = sum(row.values())
@@ -143,8 +141,17 @@ columns = [
     ("المجموع", None, total),
 ]
 
-tables.add_table("main_table", columns)
 
-# Create an instance of the updater and update the page
-updater = UpdatePage(query, file_path, page_name, tables)
-updater.update()
+def main(*args: str) -> int:
+    # Create an instance of the ArticleTables class
+    tables = ArticleTables()
+    tables.add_table("main_table", columns)
+
+    # Create an instance of the updater and update the page
+    updater = UpdatePage(query, file_path, page_name, tables)
+    updater.update()
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

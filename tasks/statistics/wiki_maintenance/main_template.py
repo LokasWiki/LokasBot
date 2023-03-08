@@ -1,13 +1,7 @@
-import sys
-import os
-
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-import pywikibot
 import pymysql
 from pywikibot import config as _config
 
-from module import UpdatePage, ArticleTables, index, Database
+from tasks.statistics.module import UpdatePage, ArticleTables, index
 
 # Set the parameters for the update
 query = """select
@@ -40,9 +34,6 @@ connection = pymysql.connect(
 file_path = 'stub/wiki_maintenance/main_template.txt'
 page_name = "مستخدم:لوقا/ملعب 14"
 
-# Create an instance of the ArticleTables class
-tables = ArticleTables()
-
 
 def delete_page(row, result, index):
     page_title = str(row['deleted_page'], 'utf-8')
@@ -66,8 +57,17 @@ columns = [
     ("حذفت بتاريخ", None, date_of_delete),
 ]
 
-tables.add_table("main_table", columns)
+def main(*args: str) -> int:
+    # Create an instance of the ArticleTables class
+    tables = ArticleTables()
+    tables.add_table("main_table", columns)
 
-# Create an instance of the updater and update the page
-updater = UpdatePage(query, file_path, page_name, tables, connection=connection)
-updater.update()
+    # Create an instance of the updater and update the page
+    updater = UpdatePage(query, file_path, page_name, tables, connection=connection)
+    updater.update()
+
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

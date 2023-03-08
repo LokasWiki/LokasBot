@@ -1,4 +1,4 @@
-from module import UpdatePage, ArticleTables, index
+from tasks.statistics.module import UpdatePage, ArticleTables, index
 
 
 class IPRangeCalculator:
@@ -49,13 +49,10 @@ WHERE ipb_address LIKE '%/%';"""
 file_path = 'stub/range_blocks.txt'
 page_name = "ويكيبيديا:إحصاءات/نطاقات الأيبيهات الممنوعة"
 
-# Create an instance of the ArticleTables class
-tables = ArticleTables()
-
 
 def username(row, result, index):
-    username = str(row['actor_name'], 'utf-8')
-    return "[[User talk:" + username + "|" + username + "]]"
+    user_name = str(row['actor_name'], 'utf-8')
+    return "[[User talk:" + user_name + "|" + user_name + "]]"
 
 
 def ipb_address(row, result, index):
@@ -84,8 +81,17 @@ columns = [
     ("السبب", "comment_text"),
 ]
 
-tables.add_table("main_table", columns)
 
-# Create an instance of the updater and update the page
-updater = UpdatePage(query, file_path, page_name, tables)
-updater.update()
+def main(*args: str) -> int:
+    # Create an instance of the ArticleTables class
+    tables = ArticleTables()
+    tables.add_table("main_table", columns)
+
+    # Create an instance of the updater and update the page
+    updater = UpdatePage(query, file_path, page_name, tables)
+    updater.update()
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

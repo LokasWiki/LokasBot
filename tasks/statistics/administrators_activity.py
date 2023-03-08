@@ -1,4 +1,4 @@
-from module import UpdatePage, ArticleTables, index
+from tasks.statistics.module import UpdatePage, ArticleTables, index
 
 # Set the parameters for the update
 query = """SELECT user_name,
@@ -45,9 +45,6 @@ ORDER BY user_name ASC , delete_count DESC, restore_count DESC, revision_count D
 file_path = 'stub/administrators_activity.txt'
 page_name = "ويكيبيديا:إحصاءات/نشاط الإداريين"
 
-# Create an instance of the ArticleTables class
-tables = ArticleTables()
-
 
 def start_table(word):
     start = """<div class="NavFrame collapsed" style="text-align:right">
@@ -88,41 +85,6 @@ def total(row, result, index):
     number = sum(row.values())
     # to avoid raising any errors
     return number
-
-
-tables.add_table("delete_count_table",
-                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "delete_count"), ],
-                 start_table("حذف"), end_table(), sort_column='delete_count')
-tables.add_table("restore_count_table",
-                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "restore_count"), ],
-                 start_table("استرجاع"), end_table(), sort_column="restore_count")
-tables.add_table("revision_count_table",
-                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "revision_count"), ],
-                 start_table("إخفاء نسخة"), end_table(), sort_column="revision_count")
-tables.add_table("event_count_table",
-                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "event_count"), ],
-                 start_table("  حذف النسخة المُعدله"), end_table(), sort_column="event_count")
-tables.add_table("protect_count_table",
-                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "protect_count"), ],
-                 start_table("حماية"), end_table(), sort_column="protect_count")
-tables.add_table("unprotect_count_table",
-                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "unprotect_count"), ],
-                 start_table("  إزالة الحماية"), end_table(), sort_column="unprotect_count")
-tables.add_table("modify_count_table",
-                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "modify_count"), ],
-                 start_table("تغيير الحماية"), end_table(), sort_column="modify_count")
-tables.add_table("block_count_table",
-                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "block_count"), ],
-                 start_table("  منع "), end_table(), sort_column="block_count")
-tables.add_table("unblock_count_table",
-                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "unblock_count"), ],
-                 start_table("    رفع المنع"), end_table(), sort_column="unblock_count")
-tables.add_table("reblock_count_table",
-                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "reblock_count"), ],
-                 start_table("  تغيير مدة المنع"), end_table(), sort_column="reblock_count")
-tables.add_table("rights_count_table",
-                 [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "rights_count"), ],
-                 start_table("  تغيير صلاحيات"), end_table(), sort_column="rights_count")
 
 
 def end_row_in_main(result):
@@ -167,9 +129,54 @@ columns = [
 
 ]
 
-tables.add_table("main_table", columns, start_main_table("الإحصاءات الكاملة"), end_main_table(),
-                 end_row_text=end_row_in_main)
 
-# Create an instance of the updater and update the page
-updater = UpdatePage(query, file_path, page_name, tables)
-updater.update()
+def main(*args: str) -> int:
+    # Create an instance of the ArticleTables class
+    tables = ArticleTables()
+
+    tables.add_table("delete_count_table",
+                     [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "delete_count"), ],
+                     start_table("حذف"), end_table(), sort_column='delete_count')
+    tables.add_table("restore_count_table",
+                     [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "restore_count"), ],
+                     start_table("استرجاع"), end_table(), sort_column="restore_count")
+    tables.add_table("revision_count_table",
+                     [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "revision_count"), ],
+                     start_table("إخفاء نسخة"), end_table(), sort_column="revision_count")
+    tables.add_table("event_count_table",
+                     [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "event_count"), ],
+                     start_table("  حذف النسخة المُعدله"), end_table(), sort_column="event_count")
+    tables.add_table("protect_count_table",
+                     [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "protect_count"), ],
+                     start_table("حماية"), end_table(), sort_column="protect_count")
+    tables.add_table("unprotect_count_table",
+                     [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "unprotect_count"), ],
+                     start_table("  إزالة الحماية"), end_table(), sort_column="unprotect_count")
+    tables.add_table("modify_count_table",
+                     [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "modify_count"), ],
+                     start_table("تغيير الحماية"), end_table(), sort_column="modify_count")
+    tables.add_table("block_count_table",
+                     [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "block_count"), ],
+                     start_table("  منع "), end_table(), sort_column="block_count")
+    tables.add_table("unblock_count_table",
+                     [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "unblock_count"), ],
+                     start_table("    رفع المنع"), end_table(), sort_column="unblock_count")
+    tables.add_table("reblock_count_table",
+                     [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "reblock_count"), ],
+                     start_table("  تغيير مدة المنع"), end_table(), sort_column="reblock_count")
+    tables.add_table("rights_count_table",
+                     [("الرقم", None, index), ("المستخدم", None, username), ("العدد", "rights_count"), ],
+                     start_table("  تغيير صلاحيات"), end_table(), sort_column="rights_count")
+
+    tables.add_table("main_table", columns, start_main_table("الإحصاءات الكاملة"), end_main_table(),
+                     end_row_text=end_row_in_main)
+
+    # Create an instance of the updater and update the page
+    updater = UpdatePage(query, file_path, page_name, tables)
+    updater.update()
+
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
