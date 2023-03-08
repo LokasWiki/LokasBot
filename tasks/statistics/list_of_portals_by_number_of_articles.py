@@ -1,4 +1,4 @@
-from module import UpdatePage, ArticleTables,index
+from tasks.statistics.module import UpdatePage, ArticleTables, index
 
 # Set the parameters for the update
 query = """SELECT main.page_title as portal_name, COUNT(*) - 1 as sub_page_count,

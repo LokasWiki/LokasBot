@@ -1,4 +1,4 @@
-from module import UpdatePage, ArticleTables, index
+from tasks.statistics.module import UpdatePage, ArticleTables, index
 
 
 class IPRangeCalculator:

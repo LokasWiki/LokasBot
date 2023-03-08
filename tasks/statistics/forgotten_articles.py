@@ -1,4 +1,4 @@
-from module import UpdatePage, ArticleTables,index
+from tasks.statistics.module import UpdatePage, ArticleTables, index
 
 # Set the parameters for the update
 query = """SELECT DATE_FORMAT(MAX(rev_timestamp),'%Y-%m-%d %H:%i:%s') AS lastedit, COUNT(rev_id) AS editcount, page_title

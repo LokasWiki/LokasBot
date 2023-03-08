@@ -1,6 +1,6 @@
 import pywikibot
 
-from module import UpdatePage, ArticleTables, index, Database
+from tasks.statistics.module import UpdatePage, ArticleTables, index, Database
 
 # Set the parameters for the update
 query = """select user_name,

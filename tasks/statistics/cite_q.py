@@ -2,7 +2,7 @@ import time
 
 import pywikibot.page
 
-from module import UpdatePage, ArticleTables, index
+from tasks.statistics.module import UpdatePage, ArticleTables, index
 
 # Set the parameters for the update
 query = """select count(page.page_id) as "count_of_cites",iwlinks.iwl_title as "q_iwl_title" from page

@@ -1,4 +1,4 @@
-from module import UpdatePage, ArticleTables,index
+from tasks.statistics.module import UpdatePage, ArticleTables, index
 
 # Set the parameters for the update
 query = """select page.page_title as ll_page_title,pagelinks.pl_title as ll_page_to_title,pagelinks.pl_namespace as ll_pl_namespace

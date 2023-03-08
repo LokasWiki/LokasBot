@@ -2,7 +2,7 @@ import time
 
 import pymysql
 from pywikibot import config as _config
-from module import UpdatePage, ArticleTables, index
+from tasks.statistics.module import UpdatePage, ArticleTables, index
 
 #todo:add more languages like articles_not_found_by_number_of_language_links.py
 language = "en"

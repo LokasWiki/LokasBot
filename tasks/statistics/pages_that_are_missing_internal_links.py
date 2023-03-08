@@ -1,4 +1,4 @@
-from module import UpdatePage, ArticleTables, index
+from tasks.statistics.module import UpdatePage, ArticleTables, index
 
 # Set the parameters for the update
 query = """SELECT p.page_title as ll_page_title, p.page_len as ll_page_len, a.actor_name as ll_user_name

@@ -1,6 +1,6 @@
 import pymysql
 from pywikibot import config as _config
-from module import UpdatePage, ArticleTables, index
+from tasks.statistics.module import UpdatePage, ArticleTables, index
 
 # Set the parameters for the update
 """

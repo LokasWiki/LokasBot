@@ -1,13 +1,8 @@
-import sys
-import os
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-import pywikibot
 import pymysql
 from pywikibot import config as _config
 
-from module import UpdatePage, ArticleTables, index, Database
+from tasks.statistics.module import UpdatePage, ArticleTables, index
 
 # Set the parameters for the update
 query = """select
