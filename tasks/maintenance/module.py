@@ -18,7 +18,7 @@ from tasks.maintenance.bots.unreferenced import Unreferenced
 from tasks.maintenance.bots.unreviewed_article import UnreviewedArticle
 
 
-def get_pages(start):
+def get_pages(start, custom_query=None):
     query = """SELECT pl_2_title
 FROM (
     SELECT DISTINCT log_title AS "pl_2_title"
@@ -54,7 +54,12 @@ FROM (
     and page_id not in (select cl_from from categorylinks where cl_to like "جميع_المقالات_غير_المراجعة")
 ) AS pages_list"""
     database = Database()
-    database.query = query.replace("MINUTE_SUB_NUMBER", str(start))
+
+    if custom_query is None:
+        database.query = query.replace("MINUTE_SUB_NUMBER", str(start))
+    else:
+        database.query = custom_query
+
     database.get_content_from_database()
     gen = []
     for row in database.result:
