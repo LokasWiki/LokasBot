@@ -1,4 +1,3 @@
-
 import pymysql
 from pywikibot import config as _config
 

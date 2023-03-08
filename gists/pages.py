@@ -124,10 +124,10 @@ for item in list_of_namespace:
     where page_namespace in ({}) and
     (
     page_title like "%توغولية%"
-    or page_title like "%توغولي%" 
-    or page_title like "%كونغولية%" 
-    or page_title like "%كونغولي%" 
-    or page_title like "%بيروفية%" 
+    or page_title like "%توغولي%"
+    or page_title like "%كونغولية%"
+    or page_title like "%كونغولي%"
+    or page_title like "%بيروفية%"
     or page_title like "%بيروفي%"
     )
     and page_is_redirect = 0
