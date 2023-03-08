@@ -18,24 +18,27 @@ file_path = 'stub/list_of_portals_by_number_of_articles.txt'
 page_name = "ويكيبيديا:إحصاءات/قائمة البوابات حسب عدد المقالات"
 
 
-def portal_name(row, result,index):
-    username = str(row['portal_name'], 'utf-8')
-    name = username.replace("__", "[LOKA]").replace("_", " ").replace("[LOKA]", "_")
-    return "[[بوابة:" + username + "|" + name + "]]"
+def portal_name(row, result, index):
+    user_name = str(row['portal_name'], 'utf-8')
+    name = user_name.replace("__", "[LOKA]").replace("_", " ").replace("[LOKA]", "_")
+    return "[[بوابة:" + user_name + "|" + name + "]]"
 
-def sub_page_count(row, result,index):
-    return  format(row['sub_page_count'], ',').replace(',', '٬')
 
-def links_count(row, result,index):
-    return  format(row['links_count'], ',').replace(',', '٬')
+def sub_page_count(row, result, index):
+    return format(row['sub_page_count'], ',').replace(',', '٬')
+
+
+def links_count(row, result, index):
+    return format(row['links_count'], ',').replace(',', '٬')
 
 
 columns = [
     ("الرقم", None, index),
     ("اسم البوابة", None, portal_name),
-    ("عدد الصفحات الفرعية",None, sub_page_count),
-    ("عدد المقالات",None, links_count),
+    ("عدد الصفحات الفرعية", None, sub_page_count),
+    ("عدد المقالات", None, links_count),
 ]
+
 
 def main(*args: str) -> int:
     # Create an instance of the ArticleTables class

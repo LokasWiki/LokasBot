@@ -2,23 +2,25 @@ import pymysql
 from pywikibot import config as _config
 from tasks.statistics.module import UpdatePage, ArticleTables, index
 
+# Set the parameters for the update
+query = """SELECT page_title, count(*) as editcount
+FROM langlinks JOIN page on ll_from = page_id
+WHERE page_namespace = 0 AND page_is_redirect = 0
+AND NOT EXISTS (
+    SELECT * FROM langlinks as t
+    WHERE t.ll_lang='ar' and t.ll_from = langlinks.ll_from)
+GROUP BY ll_from
+ORDER BY count(*) DESC
+LIMIT 1000;"""
+
 
 def main(*args: str) -> int:
     languages = ['en', 'fr', 'de', 'es', 'fa', 'he', 'pt', 'tr']
     for language in languages:
-        # Set the parameters for the update
-        query = """SELECT page_title, count(*) as editcount
-    FROM langlinks JOIN page on ll_from = page_id
-    WHERE page_namespace = 0 AND page_is_redirect = 0
-      AND NOT EXISTS (
-            SELECT * FROM langlinks as t
-            WHERE t.ll_lang='ar' and t.ll_from = langlinks.ll_from)
-    GROUP BY ll_from
-    ORDER BY count(*) DESC
-    LIMIT 1000;"""
         file_path = 'stub/articles_not_found_by_number_of_language_links.txt'
         page_name = f'ويكيبيديا:إحصاءات/المقالات غير الموجودة حسب عدد وصلات اللغات/{language}'
         prefix = f'{language}wiki'
+
         connection = pymysql.connect(
             host=_config.db_hostname_format.format(prefix),
             read_default_file=_config.db_connect_file,
@@ -27,9 +29,8 @@ def main(*args: str) -> int:
             port=_config.db_port,
             cursorclass=pymysql.cursors.DictCursor,
         )
-        # Create an instance of the ArticleTables class
-        tables = ArticleTables()
 
+        # todo: edit this to make it outside main def
         def page_title(row, result, index):
             username = str(row['page_title'], 'utf-8')
             name = username
@@ -40,6 +41,9 @@ def main(*args: str) -> int:
             ("المقالة", None, page_title),
             ("عدد وصلات اللغات", "editcount"),
         ]
+
+        # Create an instance of the ArticleTables class
+        tables = ArticleTables()
 
         tables.add_table("main_table", columns)
 

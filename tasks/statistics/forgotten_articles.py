@@ -18,19 +18,21 @@ ORDER BY lastedit ASC, editcount ASC;"""
 file_path = 'stub/forgotten_articles.txt'
 page_name = "ويكيبيديا:إحصاءات/مقالات منسية"
 
+
 def page_title(row, result, index):
-    username = str(row['page_title'], 'utf-8')
-    name = username
-    return "[[" + username + "|" + name + "]]"
+    user_name = str(row['page_title'], 'utf-8')
+    return "[[" + user_name + "|" + user_name + "]]"
+
 
 def lastedit(row, result, index):
     return row['lastedit']
 
+
 columns = [
     ("الرقم", None, index),
     ("المقالة", None, page_title),
-    ("عدد التعديلات","editcount"),
-    ("أخر تعديل",None,lastedit),
+    ("عدد التعديلات", "editcount"),
+    ("أخر تعديل", None, lastedit),
 ]
 
 

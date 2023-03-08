@@ -85,15 +85,14 @@ page_name = "ويكيبيديا:إحصاءات/المستخدمين حسب عد�
 
 
 def username(row, result, index):
-    username = str(row['user_name'], 'utf-8')
-    name = username.replace("__", "[LOKA]").replace("_", " ").replace("[LOKA]", "_")
-    return "[[مستخدم:" + username + "|" + name + "]]"
+    user_name = str(row['user_name'], 'utf-8')
+    name = user_name.replace("__", "[LOKA]").replace("_", " ").replace("[LOKA]", "_")
+    return "[[مستخدم:" + user_name + "|" + name + "]]"
 
 
 def first_edit_date_str(row, result, index):
     first_edit_date = str(row['first_edit_date'], 'utf-8')
     return "{{نسخ:#time:j F Y|" + first_edit_date + "}}"
-
 
 
 columns = [
@@ -107,6 +106,7 @@ columns = [
     ("بوابة", "portals_created"),
     ("تحويلة", "redirect_created"),
 ]
+
 
 def main(*args: str) -> int:
     # Create an instance of the ArticleTables class

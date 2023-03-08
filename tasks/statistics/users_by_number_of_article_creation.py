@@ -24,15 +24,15 @@ file_path = 'stub/users_by_number_of_article_creation.txt'
 page_name = "ويكيبيديا:إحصاءات/المستخدمين حسب عدد إنشاء المقالات"
 
 def username(row, result,index):
-    username = str(row['actor_name'], 'utf-8')
-    name = username.replace("__", "[LOKA]").replace("_", " ").replace("[LOKA]", "_")
-    return "[[مستخدم:" + username + "|" + name + "]]"
+    user_name = str(row['actor_name'], 'utf-8')
+    name = user_name.replace("__", "[LOKA]").replace("_", " ").replace("[LOKA]", "_")
+    return "[[مستخدم:" + user_name + "|" + name + "]]"
 
 
 def total_edits(row, result,index):
-    username = str(row['actor_name'], 'utf-8')
+    user_name = str(row['actor_name'], 'utf-8')
     number = format(row['q_user_editcount'], ',').replace(',', '٬')
-    return "[[خاص:مساهمات/" + username + "|" + number + "]]"
+    return "[[خاص:مساهمات/" + user_name + "|" + number + "]]"
 
 
 columns = [

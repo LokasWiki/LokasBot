@@ -87,10 +87,11 @@ LIMIT 500;"""
 file_path = 'stub/users_with_bots_by_the_number_of_pages_created.txt'
 page_name = "ويكيبيديا:إحصاءات/المستخدمين حسب عدد إنشاء الصفحات (متضمنة البوتات)"
 
+
 def username(row, result, index):
-    username = str(row['user_name'], 'utf-8')
-    name = username.replace("__", "[LOKA]").replace("_", " ").replace("[LOKA]", "_")
-    return "[[مستخدم:" + username + "|" + name + "]]"
+    user_name = str(row['user_name'], 'utf-8')
+    name = user_name.replace("__", "[LOKA]").replace("_", " ").replace("[LOKA]", "_")
+    return "[[مستخدم:" + user_name + "|" + name + "]]"
 
 
 def first_edit_date_str(row, result, index):
@@ -112,8 +113,7 @@ columns = [
 ]
 
 
-
-def main(*args: str) -> int
+def main(*args: str) -> int:
     # Create an instance of the ArticleTables class
     tables = ArticleTables()
     tables.add_table("main_table", columns)

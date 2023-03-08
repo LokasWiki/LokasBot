@@ -19,9 +19,9 @@ file_path = 'stub/inactive_users.txt'
 page_name = "ويكيبيديا:إحصاءات/المستخدمين غير النشطين"
 
 def username(row, result,index):
-    username = str(row['ll_actor_name'], 'utf-8')
-    name = username.replace("__", "[LOKA]").replace("_", " ").replace("[LOKA]", "_")
-    return "[[مستخدم:" + username + "|" + name + "]]"
+    user_name = str(row['ll_actor_name'], 'utf-8')
+    name = user_name.replace("__", "[LOKA]").replace("_", " ").replace("[LOKA]", "_")
+    return "[[مستخدم:" + user_name + "|" + name + "]]"
 
 def user_groups(row, result,index):
     return str(row['user_groups'], 'utf-8').replace("autoreview","مراجع تلقائي").replace("editor","محرر").replace("uploader","رافع ملفات")

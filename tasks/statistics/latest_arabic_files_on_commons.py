@@ -76,16 +76,14 @@ def file_name(row, result, index):
     return f"[https://commons.wikimedia.org/wiki/File:{name} {name}]"
 
 
-
 def file_image(row, result, index):
     name = str(row['file'], 'utf-8')
     return "[[File:" + name + "|150px]]"
 
 
 def username_link(row, result, index):
-    username = str(row['username'], 'utf-8').replace(" ","_")
+    username = str(row['username'], 'utf-8').replace(" ", "_")
     return f"[https://commons.wikimedia.org/w/index.php?title=User:{username} {username}]"
-
 
 
 columns = [
@@ -95,7 +93,8 @@ columns = [
     ("اسم المستخدم", None, username_link)
 ]
 
-def main(*args: str) -> int:
+
+def main() -> int:
     # Create an instance of the ArticleTables class
     tables = ArticleTables()
     tables.add_table("main_table", columns)

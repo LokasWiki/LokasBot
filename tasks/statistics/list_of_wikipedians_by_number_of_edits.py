@@ -19,16 +19,16 @@ file_path = 'stub/list_of_wikipedians_by_number_of_edits.txt'
 page_name = "ويكيبيديا:قائمة الويكيبيديين حسب عدد التعديلات"
 
 
-def username(row, result,index):
-    username = str(row['user_name'], 'utf-8')
-    name = username.replace("__", "[LOKA]").replace("_", " ").replace("[LOKA]", "_")
-    return "[[مستخدم:" + username + "|" + name + "]]"
+def username(row, result, index):
+    user_name = str(row['user_name'], 'utf-8')
+    name = user_name.replace("__", "[LOKA]").replace("_", " ").replace("[LOKA]", "_")
+    return "[[مستخدم:" + user_name + "|" + name + "]]"
 
 
-def total_edits(row, result,index):
-    username = str(row['user_name'], 'utf-8')
+def total_edits(row, result, index):
+    user_name = str(row['user_name'], 'utf-8')
     number = format(row['user_editcount'], ',').replace(',', '٬')
-    return "[[خاص:مساهمات/" + username + "|" + number + "]]"
+    return "[[خاص:مساهمات/" + user_name + "|" + number + "]]"
 
 
 columns = [
@@ -36,6 +36,7 @@ columns = [
     ("المستخدم", None, username),
     ("عدد المساهمات", None, total_edits),
 ]
+
 
 def main(*args: str) -> int:
     # Create an instance of the ArticleTables class

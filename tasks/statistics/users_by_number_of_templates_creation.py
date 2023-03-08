@@ -24,16 +24,16 @@ file_path = 'stub/users_by_number_of_templates_creation.txt'
 page_name = "ويكيبيديا:إحصاءات/المستخدمين حسب عدد إنشاء القوالب"
 
 
-def username(row, result,index):
-    username = str(row['actor_name'], 'utf-8')
-    name = username.replace("__", "[LOKA]").replace("_", " ").replace("[LOKA]", "_")
-    return "[[مستخدم:" + username + "|" + name + "]]"
+def username(row, result, index):
+    user_name = str(row['actor_name'], 'utf-8')
+    name = user_name.replace("__", "[LOKA]").replace("_", " ").replace("[LOKA]", "_")
+    return "[[مستخدم:" + user_name + "|" + name + "]]"
 
 
-def total_edits(row, result,index):
-    username = str(row['actor_name'], 'utf-8')
+def total_edits(row, result, index):
+    user_name = str(row['actor_name'], 'utf-8')
     number = format(row['q_user_editcount'], ',').replace(',', '٬')
-    return "[[خاص:مساهمات/" + username + "|" + number + "]]"
+    return "[[خاص:مساهمات/" + user_name + "|" + number + "]]"
 
 
 columns = [
@@ -41,6 +41,7 @@ columns = [
     ("المستخدم", None, username),
     ("عدد القوالب", None, total_edits),
 ]
+
 
 def main(*args: str) -> int:
     # Create an instance of the ArticleTables class

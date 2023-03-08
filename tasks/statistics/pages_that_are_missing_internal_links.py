@@ -14,14 +14,12 @@ page_name = "ويكيبيديا:إحصاءات/مقالات بدون وصلات 
 
 def username(row, result, index):
     ll_user_name = str(row['ll_user_name'], 'utf-8')
-    # name = username.replace("__", "[LOKA]").replace("_", " ").replace("[LOKA]", "_")
     return f"[[مستخدم:{ll_user_name}|{ll_user_name}]] ([[نقاش المستخدم:{ll_user_name}|نقاش]])"
 
 
 def page_title(row, result, index):
-    username = str(row['ll_page_title'], 'utf-8')
-    name = username
-    return "[[" + username + "|" + name + "]]"
+    user_name = str(row['ll_page_title'], 'utf-8')
+    return "[[" + user_name + "|" + user_name + "]]"
 
 
 def page_history(row, result, index):

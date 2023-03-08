@@ -51,8 +51,8 @@ page_name = "ويكيبيديا:إحصاءات/نطاقات الأيبيهات �
 
 
 def username(row, result, index):
-    username = str(row['actor_name'], 'utf-8')
-    return "[[User talk:" + username + "|" + username + "]]"
+    user_name = str(row['actor_name'], 'utf-8')
+    return "[[User talk:" + user_name + "|" + user_name + "]]"
 
 
 def ipb_address(row, result, index):

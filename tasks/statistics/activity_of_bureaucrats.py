@@ -96,7 +96,9 @@ def create_category_page_for_every_user():
 
 
 # auto call
+# todo: make that call from main def and not auto run on import
 list_of_categories = create_category_page_for_every_user()
+
 
 def username(row, result, index):
     username = str(row['user_name'], 'utf-8')
@@ -114,7 +116,6 @@ def total_numbers_in_category(row, result, index):
 
 
 def total(row, result, index):
-    number = 0
     user_name = str(row['user_name'], 'utf-8')
     del row['user_name']
     number = sum(row.values())
@@ -139,6 +140,7 @@ columns = [
     ("[[:تصنيف:خلاصة بيروقراط|خ.ب]]", None, total_numbers_in_category),
     ("المجموع", None, total),
 ]
+
 
 def main(*args: str) -> int:
     # Create an instance of the ArticleTables class
