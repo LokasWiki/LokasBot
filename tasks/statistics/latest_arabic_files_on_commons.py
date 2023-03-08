@@ -99,6 +99,12 @@ columns = [
 
 tables.add_table("main_table", columns)
 
-# Create an instance of the updater and update the page
-updater = UpdatePage(query, file_path, page_name, tables, connection=connection)
-updater.update()
+def main(*args: str) -> int:
+    # Create an instance of the updater and update the page
+    updater = UpdatePage(query, file_path, page_name, tables, connection=connection)
+    updater.update()
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

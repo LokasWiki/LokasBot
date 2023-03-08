@@ -170,6 +170,14 @@ columns = [
 tables.add_table("main_table", columns, start_main_table("الإحصاءات الكاملة"), end_main_table(),
                  end_row_text=end_row_in_main)
 
-# Create an instance of the updater and update the page
-updater = UpdatePage(query, file_path, page_name, tables)
-updater.update()
+def main(*args: str) -> int:
+
+    # Create an instance of the updater and update the page
+    updater = UpdatePage(query, file_path, page_name, tables)
+    updater.update()
+
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
