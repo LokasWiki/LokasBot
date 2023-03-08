@@ -1,4 +1,4 @@
-from module import UpdatePage, ArticleTables,index
+from tasks.statistics.module import UpdatePage, ArticleTables, index
 
 # Set the parameters for the update
 query = """SELECT main.page_title as portal_name, COUNT(*) - 1 as sub_page_count,
@@ -18,31 +18,38 @@ file_path = 'stub/list_of_portals_by_number_of_articles.txt'
 page_name = "ويكيبيديا:إحصاءات/قائمة البوابات حسب عدد المقالات"
 
 
-# Create an instance of the ArticleTables class
-tables = ArticleTables()
+def portal_name(row, result, index):
+    user_name = str(row['portal_name'], 'utf-8')
+    name = user_name.replace("__", "[LOKA]").replace("_", " ").replace("[LOKA]", "_")
+    return "[[بوابة:" + user_name + "|" + name + "]]"
 
 
-def portal_name(row, result,index):
-    username = str(row['portal_name'], 'utf-8')
-    name = username.replace("__", "[LOKA]").replace("_", " ").replace("[LOKA]", "_")
-    return "[[بوابة:" + username + "|" + name + "]]"
+def sub_page_count(row, result, index):
+    return format(row['sub_page_count'], ',').replace(',', '٬')
 
-def sub_page_count(row, result,index):
-    return  format(row['sub_page_count'], ',').replace(',', '٬')
 
-def links_count(row, result,index):
-    return  format(row['links_count'], ',').replace(',', '٬')
+def links_count(row, result, index):
+    return format(row['links_count'], ',').replace(',', '٬')
 
 
 columns = [
     ("الرقم", None, index),
     ("اسم البوابة", None, portal_name),
-    ("عدد الصفحات الفرعية",None, sub_page_count),
-    ("عدد المقالات",None, links_count),
+    ("عدد الصفحات الفرعية", None, sub_page_count),
+    ("عدد المقالات", None, links_count),
 ]
 
-tables.add_table("main_table", columns)
 
-# Create an instance of the updater and update the page
-updater = UpdatePage(query, file_path, page_name, tables)
-updater.update()
+def main(*args: str) -> int:
+    # Create an instance of the ArticleTables class
+    tables = ArticleTables()
+    tables.add_table("main_table", columns)
+
+    # Create an instance of the updater and update the page
+    updater = UpdatePage(query, file_path, page_name, tables)
+    updater.update()
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

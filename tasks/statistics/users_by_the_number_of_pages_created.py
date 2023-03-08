@@ -1,4 +1,4 @@
-from module import UpdatePage, ArticleTables, index
+from tasks.statistics.module import UpdatePage, ArticleTables, index
 
 # Set the parameters for the update
 query = """SELECT u.user_name as user_name,
@@ -83,20 +83,16 @@ LIMIT 500;"""
 file_path = 'stub/users_by_the_number_of_pages_created.txt'
 page_name = "ويكيبيديا:إحصاءات/المستخدمين حسب عدد إنشاء الصفحات"
 
-# Create an instance of the ArticleTables class
-tables = ArticleTables()
-
 
 def username(row, result, index):
-    username = str(row['user_name'], 'utf-8')
-    name = username.replace("__", "[LOKA]").replace("_", " ").replace("[LOKA]", "_")
-    return "[[مستخدم:" + username + "|" + name + "]]"
+    user_name = str(row['user_name'], 'utf-8')
+    name = user_name.replace("__", "[LOKA]").replace("_", " ").replace("[LOKA]", "_")
+    return "[[مستخدم:" + user_name + "|" + name + "]]"
 
 
 def first_edit_date_str(row, result, index):
     first_edit_date = str(row['first_edit_date'], 'utf-8')
     return "{{نسخ:#time:j F Y|" + first_edit_date + "}}"
-
 
 
 columns = [
@@ -111,8 +107,17 @@ columns = [
     ("تحويلة", "redirect_created"),
 ]
 
-tables.add_table("main_table", columns)
 
-# Create an instance of the updater and update the page
-updater = UpdatePage(query, file_path, page_name, tables)
-updater.update()
+def main(*args: str) -> int:
+    # Create an instance of the ArticleTables class
+    tables = ArticleTables()
+    tables.add_table("main_table", columns)
+
+    # Create an instance of the updater and update the page
+    updater = UpdatePage(query, file_path, page_name, tables)
+    updater.update()
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

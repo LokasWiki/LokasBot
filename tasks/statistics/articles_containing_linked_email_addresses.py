@@ -1,4 +1,4 @@
-from module import UpdatePage, ArticleTables,index
+from tasks.statistics.module import UpdatePage, ArticleTables, index
 
 # Set the parameters for the update
 query = """SELECT
@@ -14,9 +14,6 @@ LIMIT
 file_path = 'stub/articles_containing_linked_email_addresses.txt'
 page_name = "ويكيبيديا:إحصاءات/مقالات بها وصلات بريد إلكتروني"
 
-# Create an instance of the ArticleTables class
-tables = ArticleTables()
-
 
 def page_title(row, result, index):
     username = str(row['page_title'], 'utf-8')
@@ -30,8 +27,16 @@ columns = [
     ("الرابط المقصود", "el_index"),
 ]
 
-tables.add_table("main_table", columns)
+def main(*args: str) -> int:
+    # Create an instance of the ArticleTables class
+    tables = ArticleTables()
+    tables.add_table("main_table", columns)
 
-# Create an instance of the updater and update the page
-updater = UpdatePage(query, file_path, page_name, tables)
-updater.update()
+    # Create an instance of the updater and update the page
+    updater = UpdatePage(query, file_path, page_name, tables)
+    updater.update()
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -12,6 +12,7 @@ python3  "$HOME"/repos/tasks/requests/template_distribution/read.py
 python3  "$HOME"/repos/tasks/requests/add_category/read.py
 python3  "$HOME"/repos/tasks/requests/cite/read.py
 python3  "$HOME"/repos/tasks/check_usernames/check/check.py
+python3  "$HOME"/repos/tasks/statistics/auto_update/cite_q.py
 
 # Exit the script after running all the Python files
 exit 0

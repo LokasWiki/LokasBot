@@ -1,6 +1,6 @@
 import pymysql
 from pywikibot import config as _config
-from module import UpdatePage, ArticleTables, index
+from tasks.statistics.module import UpdatePage, ArticleTables, index
 
 # Set the parameters for the update
 """
@@ -69,14 +69,11 @@ connection = pymysql.connect(
     port=_config.db_port,
     cursorclass=pymysql.cursors.DictCursor,
 )
-# Create an instance of the ArticleTables class
-tables = ArticleTables()
 
 
 def file_name(row, result, index):
     name = str(row['file'], 'utf-8')
     return f"[https://commons.wikimedia.org/wiki/File:{name} {name}]"
-
 
 
 def file_image(row, result, index):
@@ -85,9 +82,8 @@ def file_image(row, result, index):
 
 
 def username_link(row, result, index):
-    username = str(row['username'], 'utf-8').replace(" ","_")
+    username = str(row['username'], 'utf-8').replace(" ", "_")
     return f"[https://commons.wikimedia.org/w/index.php?title=User:{username} {username}]"
-
 
 
 columns = [
@@ -97,8 +93,17 @@ columns = [
     ("اسم المستخدم", None, username_link)
 ]
 
-tables.add_table("main_table", columns)
 
-# Create an instance of the updater and update the page
-updater = UpdatePage(query, file_path, page_name, tables, connection=connection)
-updater.update()
+def main() -> int:
+    # Create an instance of the ArticleTables class
+    tables = ArticleTables()
+    tables.add_table("main_table", columns)
+
+    # Create an instance of the updater and update the page
+    updater = UpdatePage(query, file_path, page_name, tables, connection=connection)
+    updater.update()
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

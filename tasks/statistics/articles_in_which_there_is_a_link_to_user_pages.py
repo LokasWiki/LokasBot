@@ -1,4 +1,4 @@
-from module import UpdatePage, ArticleTables,index
+from tasks.statistics.module import UpdatePage, ArticleTables, index
 
 # Set the parameters for the update
 query = """select page.page_title as ll_page_title,pagelinks.pl_title as ll_page_to_title,pagelinks.pl_namespace as ll_pl_namespace
@@ -16,8 +16,6 @@ where pagelinks.pl_from_namespace = 0
 file_path = 'stub/articles_in_which_there_is_a_link_to_user_pages.txt'
 page_name = "ويكيبيديا:إحصاءات/مقالات يوجد فيها وصلة إلى صفحات المستخدمين"
 
-# Create an instance of the ArticleTables class
-tables = ArticleTables()
 
 
 def page_title(row, result, index):
@@ -41,8 +39,17 @@ columns = [
     ("الرابط المقصود",None, username),
 ]
 
-tables.add_table("main_table", columns)
+def main(*args: str) -> int:
+    # Create an instance of the ArticleTables class
+    tables = ArticleTables()
+    tables.add_table("main_table", columns)
 
-# Create an instance of the updater and update the page
-updater = UpdatePage(query, file_path, page_name, tables)
-updater.update()
+    # Create an instance of the updater and update the page
+    updater = UpdatePage(query, file_path, page_name, tables)
+    updater.update()
+
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
