@@ -16,6 +16,8 @@
 ```
 # Toolforge setup
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/fe50441a790e42a3aeb12f40e44e182e)](https://app.codacy.com/gh/loka1/LokasBot?utm_source=github.com&utm_medium=referral&utm_content=loka1/LokasBot&utm_campaign=Badge_Grade_Settings)
+
 Toolforge setup and job management
 
 - ### Clone and setup virtual environments
