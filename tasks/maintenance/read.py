@@ -1,8 +1,16 @@
+import logging
 import sys
+from database.engine import engine
+from tasks.webcite.module import get_pages
+from sqlalchemy.orm import Session
+from database.models import Page, TaskName, Status
 
-from core.utils.sqlite import create_database_table, maintenance_db_name, save_pages_to_db
-from module import get_pages
-import traceback
+
+def is_page_present(session: Session, page_title: str, task_name: TaskName) -> bool:
+    """
+    Checks if a page with the given title is already present in the database
+    """
+    return session.query(Page).where(Page.title == page_title).where(Page.task_name == task_name).count() > 0
 
 
 def main(*args: str) -> int:
@@ -15,13 +23,22 @@ def main(*args: str) -> int:
         elif time_before_start == 500:
             thread_number = 2
         pages = get_pages(time_before_start)
-        conn, cursor = create_database_table(maintenance_db_name)
-        save_pages_to_db(pages, conn, cursor, thread_number=thread_number)
-        conn.close()
+        with Session(engine) as session:
+            for page_title in pages:
+                if not is_page_present(session, page_title=page_title, task_name=TaskName.WEBCITE):
+                    logging.info("add : " + page_title)
+                    temp_model = Page(
+                        title=page_title,
+                        thread_number=thread_number,
+                        task_name=TaskName.WEBCITE,
+                    )
+                    session.add(temp_model)
+            session.commit()
+        logging.info("Added pages to the database successfully.")
+
     except Exception as e:
-        print(f"An error occurred: {e}")
-        just_the_string = traceback.format_exc()
-        print(just_the_string)
+        logging.error("Error occurred while adding pages to the database.")
+        logging.exception(e)
     return 0
 
 

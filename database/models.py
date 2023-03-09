@@ -33,7 +33,7 @@ class Page(Base):
     status: Mapped[Status] = mapped_column(insert_default=Status.PENDING)
     create_date: Mapped[datetime] = mapped_column(insert_default=func.now())
     update_date: Mapped[datetime] = mapped_column(server_default=func.now(), onupdate=func.current_timestamp())
-    task_name: Mapped[Status] = mapped_column(insert_default=TaskName.MAINTENANCE)
+    task_name: Mapped[TaskName] = mapped_column(insert_default=TaskName.MAINTENANCE)
 
     def __repr__(self) -> str:
         return f"pages(id={self.id!r}, title={self.title!r})"
@@ -44,6 +44,9 @@ class Statistic(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     key: Mapped[str] = mapped_column(String(255), unique=True)
     value: Mapped[str] = mapped_column(String(255), nullable=True)
+
+    def __repr__(self) -> str:
+        return f"pages(id={self.id!r}, key={self.key!r}), value={self.value!r})"
 
 
 Base.metadata.create_all(engine)
