@@ -10,6 +10,7 @@ export PYTHONPATH="${PYTHONPATH}:$HOME/repos"
 
 python3  "$HOME"/repos/tasks/maintenance/task/portal_aliases.py
 python3  "$HOME"/repos/tasks/maintenance/task/awb/template_redirects.py
+python3  "$HOME"/repos/tasks/maintenance/task/skip/ignore_pages.py
 python3  "$HOME"/repos/tasks/maintenance/check.py
 python3  "$HOME"/repos/tasks/maintenance/task/portals_merge.py
 
