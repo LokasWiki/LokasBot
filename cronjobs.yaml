@@ -53,10 +53,10 @@
   image: tf-python39
   emails: onfailure
   <<: *defaults
-- name: save-pages-to-db-12
+- name: maintenance-10
   no-filelog: false
-  command: $HOME/repos/jobs/save_pages_to_db.sh 20
-  schedule: '*/12 * * * *'
+  command: $HOME/repos/jobs/maintenance_read.sh 20
+  schedule: '*/10 * * * *'
   image: tf-python39
   emails: onfailure
   <<: *defaults
@@ -68,17 +68,24 @@
   emails: onfailure
   continuous: true
   <<: *defaults
-- name: save-pages-to-db-120
+- name: maintenance-120
   no-filelog: false
-  command: $HOME/repos/jobs/save_pages_to_db.sh 500
+  command: $HOME/repos/jobs/maintenance_read.sh 500
   schedule: '0 */6 * * *'
   image: tf-python39
   emails: onfailure
   <<: *defaults
-- name: save-pages-to-db-24h
+- name: maintenance-24h
   no-filelog: false
-  command: $HOME/repos/jobs/save_pages_to_db.sh 2540
+  command: $HOME/repos/jobs/maintenance_read.sh 2540
   schedule: '0 3 * * *'
+  image: tf-python39
+  emails: onfailure
+  <<: *defaults
+- name: webcite-10
+  no-filelog: false
+  command: $HOME/repos/jobs/webcite_read.sh 20
+  schedule: '*/10 * * * *'
   image: tf-python39
   emails: onfailure
   <<: *defaults
@@ -90,7 +97,20 @@
   emails: onfailure
   continuous: true
   <<: *defaults
-
+- name: webcite-120
+  no-filelog: false
+  command: $HOME/repos/jobs/webcite_read.sh 500
+  schedule: '0 */6 * * *'
+  image: tf-python39
+  emails: onfailure
+  <<: *defaults
+- name: webcite-24h
+  no-filelog: false
+  command: $HOME/repos/jobs/webcite_read.sh 2540
+  schedule: '0 3 * * *'
+  image: tf-python39
+  emails: onfailure
+  <<: *defaults
 #- name: month-statistics
 #  no-filelog: false
 #  command: $HOME/repos/jobs/month_statistics.sh
