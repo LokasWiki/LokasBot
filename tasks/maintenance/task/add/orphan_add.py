@@ -11,9 +11,9 @@ def main(*args: str) -> int:
         thread_number = 1
         time_before_start = 1
         # https://quarry.wmcloud.org/query/72149 @ASammour
-        custom_query = """SELECT page_title  AS "pl_2_title",(select count(distinct pl_from) 
-                from pagelinks 
-                where pl_from_namespace = 0 
+        custom_query = """SELECT page_title  AS "pl_2_title",(select count(distinct pl_from)
+                from pagelinks
+                where pl_from_namespace = 0
                 and pl_title in (
                        select page_title from redirect inner join page on rd_from = page_id where page_namespace = 0 and rd_title = p.page_title
                 and rd_namespace = 0)
@@ -24,8 +24,8 @@ def main(*args: str) -> int:
                                 and page_namespace = 0
                                 and page_is_redirect = 0)
                 and pl_from not in (select (pl_from)
-                from pagelinks 
-                where pl_from_namespace = 0 
+                from pagelinks
+                where pl_from_namespace = 0
                 and pl_title = page_title
                 and pl_namespace = 0
                 and pl_from in (select page_id
@@ -33,12 +33,12 @@ def main(*args: str) -> int:
                                 where page_id = pl_from
                                 and page_namespace = 0
                                 and page_is_redirect = 0))
-               and pl_from <> page_id   
+               and pl_from <> page_id
                )
 				+
 				(select count(distinct pl_from)
-                from pagelinks 
-                where pl_from_namespace = 0 
+                from pagelinks
+                where pl_from_namespace = 0
                 and pl_title = page_title
                 and pl_namespace = 0
                 and pl_from in (select page_id
@@ -46,7 +46,7 @@ def main(*args: str) -> int:
                                 where page_id = pl_from
                                 and page_namespace = 0
                                 and page_is_redirect = 0)
-                 and pl_from <> page_id 
+                 and pl_from <> page_id
                )
                as counts
 FROM page p
