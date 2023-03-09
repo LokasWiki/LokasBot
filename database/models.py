@@ -1,9 +1,8 @@
-from sqlalchemy import String, func
+from sqlalchemy import String, func, INTEGER
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from datetime import datetime
-
 
 import enum
 
@@ -22,8 +21,7 @@ class Status(enum.Enum):
 
 class TaskName(enum.Enum):
     MAINTENANCE = "maintenance"
-    RECEIVED = "received"
-    COMPLETED = "completed"
+    WEBCITE = "webcite"
 
 
 class Page(Base):
@@ -31,6 +29,7 @@ class Page(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(String(255))
+    thread_number: Mapped[int] = mapped_column(INTEGER)
     status: Mapped[Status] = mapped_column(insert_default=Status.PENDING)
     create_date: Mapped[datetime] = mapped_column(insert_default=func.now())
     update_date: Mapped[datetime] = mapped_column(server_default=func.now(), onupdate=func.current_timestamp())
@@ -38,6 +37,13 @@ class Page(Base):
 
     def __repr__(self) -> str:
         return f"pages(id={self.id!r}, title={self.title!r})"
+
+
+class Statistic(Base):
+    __tablename__ = "statistics"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    key: Mapped[str] = mapped_column(String(255), unique=True)
+    value: Mapped[str] = mapped_column(String(255), nullable=True)
 
 
 Base.metadata.create_all(engine)
