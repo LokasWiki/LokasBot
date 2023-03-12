@@ -82,7 +82,7 @@ def header_page(result):
     tem_header = """{{معاجم وقواميس وأطالس}}
 يوجد في صفحة المعاجم أكثر من COUNT_OF_REF معجماً متنوعاً تغطي قرابة 25 فرعاً من فروع المعرفة البشرية.
 
-بدأنا في عام 2023 بتتبع إحصاءات الاستشهادات التي تستعمل قالب {{قا|استشهاد بويكي بيانات}}، وبلغ عددها في شهر {{نسخ:#time:j F Y}} أكثر من COUNT_OF_CITES استشهاد، وكان المعجم الذي اُستشهد به أكثر عدد من المرات هو {{وصلة ويكي بيانات|Q_IWL_TITLE}} بعدد إجمالي من الاستشهادات بلغ TOP_CITE_ROW_COUNT.
+بدأنا في عام 2023 بتتبع إحصاءات الاستشهادات التي تستعمل قالب {{قا|استشهاد بويكي بيانات}}، وبلغ عددها في {{نسخ:#time:j F Y}} أكثر من COUNT_OF_CITES استشهاد، وكان المعجم الذي اُستشهد به أكثر عدد من المرات هو {{وصلة ويكي بيانات|Q_IWL_TITLE}} بعدد إجمالي من الاستشهادات بلغ TOP_CITE_ROW_COUNT.
 
 يُحدِّث '''BOT_USER_NAME''' محتويات هذه الصفحة آلياً مرة كل أسبوع.
 {{تحديد}}
@@ -110,7 +110,7 @@ columns = [
 
 def main(*args: str) -> int:
     # Check if it's fri
-    if not day_of_week == 3:
+    if  day_of_week == 3:
         # Create an instance of the ArticleTables class
         tables = ArticleTables()
         tables.add_table("main_table", columns, header_text=header_page, end_row_text=end_row_in_main)
