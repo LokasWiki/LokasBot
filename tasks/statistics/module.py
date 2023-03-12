@@ -115,24 +115,18 @@ class File:
 class ArticleTable:
     def __init__(self):
         self.columns = []
-        self.header_text = ""
-        self.footer_text = ""
+        self.add_header_text = None
+        self.add_footer_text = None
         self.add_end_row_to_table = None
         self.sort_column = None
 
     def add_column(self, name, value_index, clause=None):
         self.columns.append((name, value_index, clause))
 
-    def add_header(self, text):
-        self.header_text = text
-
-    def add_footer(self, text):
-        self.footer_text = text
-
     def set_sort_column(self, column_name):
         self.sort_column = column_name
 
-    def build_table(self, result, end_row_in_table=None):
+    def build_table(self, result, end_row_in_table=None, header_text=None, footer_text=None):
         if self.sort_column:
             result = sorted(result, key=lambda x: x[self.sort_column], reverse=True)
 
@@ -143,6 +137,10 @@ class ArticleTable:
 
         # create the table body
         body = ''
+
+        if header_text is not None:
+            body += header_text(result)
+
         for index, row in enumerate(result):
             body += '|-\n'
             for _, value_index, clause in self.columns:
@@ -161,8 +159,11 @@ class ArticleTable:
         # create the table footer
         footer = '|}\n'
 
+        if footer_text is not None:
+            body += footer_text(result)
+
         # return the full table
-        return self.header_text + header + body + footer + self.footer_text
+        return header + body + footer
 
 
 class UpdatePage:
@@ -185,7 +186,7 @@ class UpdatePage:
         content = self.file.contents
         table_body = ""
         for table in self.tables.tables:
-            table_body += table.build_table(self.database.result,table.add_end_row_to_table)
+            table_body += table.build_table(result=self.database.result, end_row_in_table=table.add_end_row_to_table,header_text=table.add_header_text,footer_text=table.add_footer_text)
 
         content = content.replace("BOT_TABLE_BODY", table_body)
         self.page.set_contents(content)
@@ -196,13 +197,13 @@ class ArticleTables:
     def __init__(self):
         self.tables = []
 
-    def add_table(self, name, columns, header_text=None, footer_text=None, end_row_text=None,sort_column = None):
+    def add_table(self, name, columns, header_text=None, footer_text=None, end_row_text=None, sort_column=None):
         table = ArticleTable()
         if header_text is not None:
-            table.add_header(header_text)
+            table.add_header_text = header_text
 
         if footer_text is not None:
-            table.add_footer(footer_text)
+            table.add_footer_text = footer_text
 
         if end_row_text is not None:
             table.add_end_row_to_table = end_row_text
