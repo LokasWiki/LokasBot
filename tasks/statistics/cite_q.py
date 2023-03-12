@@ -110,7 +110,7 @@ columns = [
 
 def main(*args: str) -> int:
     # Check if it's fri
-    if not day_of_week == 3:
+    if  day_of_week == 3:
         # Create an instance of the ArticleTables class
         tables = ArticleTables()
         tables.add_table("main_table", columns, header_text=header_page, end_row_text=end_row_in_main)

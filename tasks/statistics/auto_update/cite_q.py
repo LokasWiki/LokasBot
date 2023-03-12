@@ -1,7 +1,7 @@
 import pywikibot
 import wikitextparser as wtp
 
-from tasks.statistics.cite_q import page_name, columns, end_row_in_main, query, file_path
+from tasks.statistics.cite_q import page_name, columns, end_row_in_main, query, file_path, header_page
 from core.utils.helpers import prepare_str
 from tasks.statistics.module import ArticleTables, UpdatePage
 
@@ -26,10 +26,10 @@ def check(page_title):
 
 def main(*args: str) -> int:
     if check(page_name):
-        # todo:make this as def and call it from main
+
         # Create an instance of the ArticleTables class
         tables = ArticleTables()
-        tables.add_table("main_table", columns, end_row_text=end_row_in_main)
+        tables.add_table("main_table", columns, header_text=header_page, end_row_text=end_row_in_main)
         # Create an instance of the updater and update the page
         updater = UpdatePage(query, file_path, page_name, tables)
         updater.update()
