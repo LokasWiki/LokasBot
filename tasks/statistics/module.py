@@ -130,6 +130,10 @@ class ArticleTable:
         if self.sort_column:
             result = sorted(result, key=lambda x: x[self.sort_column], reverse=True)
 
+        table_header = ""
+        if header_text is not None:
+            table_header += header_text(result)
+
         # create the table header
         header = '{| class="wikitable sortable"\n'
         for column_name, _, _ in self.columns:
@@ -137,9 +141,6 @@ class ArticleTable:
 
         # create the table body
         body = ''
-
-        if header_text is not None:
-            body += header_text(result)
 
         for index, row in enumerate(result):
             body += '|-\n'
@@ -163,7 +164,7 @@ class ArticleTable:
             body += footer_text(result)
 
         # return the full table
-        return header + body + footer
+        return table_header + header + body + footer
 
 
 class UpdatePage:
