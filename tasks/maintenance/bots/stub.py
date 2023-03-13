@@ -12,6 +12,7 @@ class Stub:
         self.page = page
         self.text = text
         self.summary = summary
+        self.parsed = wtp.parse(self.text)
 
     def __call__(self):
         disambiguation = Disambiguation(self.page.title(), self.text)
@@ -29,35 +30,53 @@ class Stub:
         This method adds the {{بذرة}} template to the page if it doesn't already exist.
         """
         print("add Stub")
-        # found = False
-        # for needed_template in self.templates:
-        #     for template in self.parsed.templates:
-        #         if prepare_str(template.name) == prepare_str(needed_template):
-        #             found = True
-        #             break
-        #
-        # if not found:
-        #     new_text = "{{نهاية مسدودة|تاريخ ={{نسخ:شهر وسنة}}}}"
-        #     new_text += "\n"
-        #     new_text += self.text
-        #
-        #     self.text = new_text
-        #     self.summary += "، أضاف  وسم [[:تصنيف:مقالات نهاية مسدودة|نهاية مسدودة]]"
+        text = self.text
+        found = False
+        for template in self.parsed.templates:
+            if prepare_str(template.name).startswith("بذرة"):
+                    found = True
+                    break
+
+        if not found:
+            template_name = "{{بذرة}}"
+            added = False
+            if not added:
+                for template in self.parsed.templates:
+                    if prepare_str(template.name) == prepare_str("شريط بوابات"):
+                        text = self.text.replace(str(template), str(template) + '\n' + template_name, 1)
+                        added = True
+                        break
+
+            if not added:
+                for template in self.parsed.templates:
+                    if prepare_str(template.name) == prepare_str("مقالات بحاجة لشريط بوابات"):
+                        text = self.text.replace(str(template), str(template) + '\n' + template_name, 1)
+                        added = True
+                        break
+
+            if not added:
+                category_template = '[[تصنيف:'
+                if category_template in self.text:
+                    text = self.text.replace(category_template, template_name + '\n' + category_template, 1)
+                else:
+                    text = self.text + '\n' + template_name
+
+            self.text = text
+            self.summary += "،  أضاف [[ويكيبيديا:بذرة|بذرة]]"
 
     def remove_template(self):
         """
            This method removes the {{بذرة}} template from the page if it exists.
            """
-        print("remove Stub")
-        # new_text = self.text
-        # for needed_template in self.templates:
-        #     for template in self.parsed.templates:
-        #         if prepare_str(template.name) == prepare_str(needed_template):
-        #             new_text = str(new_text).replace(str(template), "")
-        #
-        # if new_text != self.text:
-        #     self.text = new_text
-        #     self.summary += "، حذف  وسم [[:تصنيف:مقالات نهاية مسدودة|نهاية مسدودة]]"
+        new_text = self.text
+
+        for template in self.parsed.templates:
+            if prepare_str(template.name).startswith("بذرة"):
+                new_text = str(new_text).replace(str(template), "")
+
+        if new_text != self.text:
+            self.text = new_text
+            self.summary += "، أزال [[ويكيبيديا:بذرة|بذرة]]"
 
     def check(self):
         status = True
