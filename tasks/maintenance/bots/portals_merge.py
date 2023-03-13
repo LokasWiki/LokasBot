@@ -1,3 +1,5 @@
+import logging
+
 import pywikibot
 import wikitextparser as wtp
 
@@ -94,15 +96,21 @@ class PortalsMerge:
         portal_page = pywikibot.Page(self.page.site, f"بوابة:{portal_name}")
         name = portal_name
         status = False
-        if portal_page.exists() and portal_page.namespace() == 100:
-            if portal_page.isRedirectPage():
-                target_page = portal_page.getRedirectTarget()
-                if target_page.exists() and target_page.namespace() == 100:
-                    status = True
-                    name = target_page.title(with_ns=False)
-            else:
-                status = True
-                name = portal_page.title(with_ns=False)
+
+        try:
+            if portal_page.exists():
+                if portal_page.namespace() == 100:
+                    if portal_page.isRedirectPage():
+                        target_page = portal_page.getRedirectTarget()
+                        if target_page.exists():
+                            if target_page.namespace() == 100:
+                                status = True
+                                name = target_page.title(with_ns=False)
+                    else:
+                        status = True
+                        name = portal_page.title(with_ns=False)
+        except Exception as e:
+            logging.exception(e)
 
         if not status:
             search_staus = self.ltp.search(portal_name)

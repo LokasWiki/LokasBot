@@ -1,3 +1,5 @@
+import logging
+
 import pywikibot
 import wikitextparser as wtp
 from core.utils.disambiguation import Disambiguation
@@ -15,6 +17,7 @@ class DeadEnd:
             "Dead end",
             "Internallinks"
         ]
+        self.parsed = wtp.parse(self.text)
 
     def __call__(self):
         disambiguation = Disambiguation(self.page.title(), self.text)
@@ -31,10 +34,9 @@ class DeadEnd:
         """
         This method adds the {{نهاية مسدودة}} template to the page if it doesn't already exist.
         """
-        parsed = wtp.parse(self.text)
         found = False
         for needed_template in self.templates:
-            for template in parsed.templates:
+            for template in self.parsed.templates:
                 if prepare_str(template.name) == prepare_str(needed_template):
                     found = True
                     break
@@ -51,10 +53,9 @@ class DeadEnd:
         """
            This method removes the {{نهاية مسدودة}} template from the page if it exists.
            """
-        parsed = wtp.parse(self.text)
         new_text = self.text
         for needed_template in self.templates:
-            for template in parsed.templates:
+            for template in self.parsed.templates:
                 if prepare_str(template.name) == prepare_str(needed_template):
                     new_text = str(new_text).replace(str(template), "")
 
@@ -64,18 +65,21 @@ class DeadEnd:
 
     def check(self):
         number_of_link = 0
-        parsed = wtp.parse(self.text)
-        links = parsed.wikilinks
+        links = self.parsed.wikilinks
         for link in links:
-            temp_page = pywikibot.Page(self.page.site, link.title)
-            if temp_page.exists() and temp_page.namespace() == 0:
-                if temp_page.isRedirectPage():
-                    temp_page_redirect = temp_page.getRedirectTarget()
-                    if temp_page_redirect.exists() and temp_page_redirect.namespace() == 0:
-                        number_of_link = 1
-                        break
-                else:
-                    number_of_link = 1
-                    break
+            try:
+                temp_page = pywikibot.Page(self.page.site, link.title)
+                if temp_page.exists():
+                    if temp_page.namespace() == 0:
+                        if temp_page.isRedirectPage():
+                            temp_page_redirect = temp_page.getRedirectTarget()
+                            if temp_page_redirect.exists() and temp_page_redirect.namespace() == 0:
+                                number_of_link = 1
+                                break
+                        else:
+                            number_of_link = 1
+                            break
+            except Exception as e:
+                logging.exception(e)
 
         return bool(number_of_link)
