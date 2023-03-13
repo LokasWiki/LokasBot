@@ -1,4 +1,5 @@
 import logging
+import re
 
 import pywikibot
 import wikitextparser as wtp
@@ -11,14 +12,13 @@ class Stub:
         self.page = page
         self.text = text
         self.summary = summary
-        self.parsed = wtp.parse(self.text)
 
     def __call__(self):
         disambiguation = Disambiguation(self.page.title(), self.text)
         if disambiguation.check("or"):
             return self.text, self.summary
 
-        if not self.check():
+        if self.check():
             self.add_template()
         else:
             self.remove_template()
@@ -60,6 +60,38 @@ class Stub:
         #     self.summary += "، حذف  وسم [[:تصنيف:مقالات نهاية مسدودة|نهاية مسدودة]]"
 
     def check(self):
-       status = True
+        status = True
 
-       return  status
+        tem_text = self.page.text
+
+        parsed = wtp.parse(tem_text)
+        # remove tables
+        for table in parsed.tables:
+            tem_text = tem_text.replace(str(table), "")
+        # remove template
+        for template in parsed.templates:
+            tem_text = tem_text.replace(str(template), "")
+        # remove html tag include ref tags
+        for tag in parsed.get_tags():
+            tem_text = tem_text.replace(str(tag), "")
+        # remove cat links
+        for link in parsed.wikilinks:
+            if link.title.startswith("تصنيف:"):
+                tem_text = tem_text.replace(str(link), "")
+        # remove all comments
+        for comment in parsed.comments:
+            tem_text = tem_text.replace(str(comment), "")
+        # remove all external links
+        for external_link in parsed.external_links:
+            tem_text = tem_text.replace(str(external_link), "")
+        # replace all wikilinks to be like  [from|some text ] to from
+        for wikilink in parsed.wikilinks:
+            tem_text = tem_text.replace(str(wikilink), str(wikilink.title))
+
+        # get counts of words
+        result = len(re.findall(r'\w+', tem_text))
+        if result >= 500:
+            # start remove template
+            status = False
+
+        return status
