@@ -49,7 +49,7 @@ for cat in categories_names:
         try:
             if page.exists() and (not page.isRedirectPage()):
                 text = page.text
-                summary = "بوت:صيانة V5.5.0"
+                summary = "بوت:صيانة V5.5.1"
                 pipeline = Pipeline(page, text, summary, steps, extra_steps)
                 processed_text, processed_summary = pipeline.process()
                 # write processed text back to the page

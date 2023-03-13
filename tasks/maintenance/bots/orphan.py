@@ -14,6 +14,7 @@ class Orphan:
             "Orphan",
             "يتيم",
         ]
+        self.parsed = wtp.parse(self.text)
 
     def __call__(self):
         disambiguation = Disambiguation(self.page.title(), self.text)
@@ -34,10 +35,9 @@ class Orphan:
         """
         This method adds the {{يتيمة}} template to the page if it doesn't already exist.
         """
-        parsed = wtp.parse(self.text)
         found = False
         for needed_template in self.templates:
-            for template in parsed.templates:
+            for template in self.parsed.templates:
                 if prepare_str(template.name) == prepare_str(needed_template):
                     found = True
                     break
@@ -54,10 +54,9 @@ class Orphan:
         """
            This method removes the {{يتيمة}} template from the page if it exists.
            """
-        parsed = wtp.parse(self.text)
         new_text = self.text
         for needed_template in self.templates:
-            for template in parsed.templates:
+            for template in self.parsed.templates:
                 if prepare_str(template.name) == prepare_str(needed_template):
                     new_text = str(new_text).replace(str(template), "")
 

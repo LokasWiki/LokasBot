@@ -28,6 +28,7 @@ class Unreferenced:
         self.extra_templates = [
             "مصدر وحيد"
         ]
+        self.parsed = wtp.parse(self.text)
 
     def __call__(self):
         disambiguation = Disambiguation(self.page.title(), self.text)
@@ -49,10 +50,9 @@ class Unreferenced:
         """
         This method adds the {{لا مصدر}} template to the page if it doesn't already exist.
         """
-        parsed = wtp.parse(self.text)
         found = False
         for needed_template in self.templates:
-            for template in parsed.templates:
+            for template in self.parsed.templates:
                 if prepare_str(template.name) == prepare_str(needed_template):
                     found = True
                     break
@@ -69,10 +69,10 @@ class Unreferenced:
         """
            This method removes the {{لا مصدر}} template from the page if it exists.
            """
-        parsed = wtp.parse(self.text)
+
         new_text = self.text
         for needed_template in self.templates:
-            for template in parsed.templates:
+            for template in self.parsed.templates:
                 if prepare_str(template.name) == prepare_str(needed_template):
                     new_text = str(new_text).replace(str(template), "")
 
@@ -112,8 +112,8 @@ class Unreferenced:
         return skip
 
     def check(self):
-        parsed = wtp.parse(self.text)
-        tags = parsed.get_tags()
+
+        tags = self.parsed.get_tags()
         num_of_ref_tags = 0
         # check tags
         for tag in tags:
@@ -122,7 +122,7 @@ class Unreferenced:
                 break
         #   check template
         if num_of_ref_tags == 0:
-            templates = parsed.templates
+            templates = self.parsed.templates
             list_of_cites_template = ['sfn']
             for needed_template in list_of_cites_template:
                 for template in templates:

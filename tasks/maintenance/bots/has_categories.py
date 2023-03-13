@@ -1,3 +1,5 @@
+import logging
+
 import pywikibot
 from core.utils.disambiguation import Disambiguation
 import wikitextparser as wtp
@@ -69,21 +71,25 @@ class HasCategories:
         has_category = False
         seen_categories = set()
         for category in categories:
-            tem = pywikibot.Category(self.page.site, category.title())
-            if not tem.isHiddenCategory() and tem.exists():
-                if tem.isCategoryRedirect():
-                    target_cat = tem.getCategoryRedirectTarget()
-                    if not target_cat.isHiddenCategory() and target_cat.exists():
+
+            try:
+                tem = pywikibot.Category(self.page.site, category.title())
+                if not tem.isHiddenCategory() and tem.exists():
+                    if tem.isCategoryRedirect():
+                        target_cat = tem.getCategoryRedirectTarget()
+                        if not target_cat.isHiddenCategory() and target_cat.exists():
+                            if len(seen_categories) == 1:
+                                break
+                            if category.title() not in seen_categories:
+                                seen_categories.add(category.title())
+                                has_category = True
+                    else:
                         if len(seen_categories) == 1:
                             break
                         if category.title() not in seen_categories:
                             seen_categories.add(category.title())
                             has_category = True
-                else:
-                    if len(seen_categories) == 1:
-                        break
-                    if category.title() not in seen_categories:
-                        seen_categories.add(category.title())
-                        has_category = True
+            except Exception as e:
+                logging.exception(e)
 
         return has_category

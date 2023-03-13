@@ -1,5 +1,6 @@
 import copy
 import json
+import logging
 import os
 
 from core.utils.file import File
@@ -49,7 +50,11 @@ class RenameTemplateParameters:
             for template in parsed.templates:
                 if prepare_str(template.name) == prepare_str(need_template[0]):
                     for saved_new_parameter in need_template[1]:
-                        from_str = saved_new_parameter[0]
-                        to_str = saved_new_parameter[1]
-                        text = str(text).replace(str(template), str(replace_to([from_str], to_str, template)))
+                        try:
+                            from_str = saved_new_parameter[0]
+                            to_str = saved_new_parameter[1]
+                            text = str(text).replace(str(template), str(replace_to([from_str], to_str, template)))
+                        except Exception as e:
+                            logging.exception(e)
+
         self.text = text
