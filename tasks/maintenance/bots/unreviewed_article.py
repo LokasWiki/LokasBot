@@ -56,7 +56,6 @@ class UnreviewedArticle:
             self.text = new_text
             self.summary += "، حذف وسم مقالة غير مراجعة"
 
-
     def check(self):
         """
         The check() method is used to check if the current page has been reviewed or not. It does this by making an API
