@@ -54,7 +54,7 @@ class Page:
         self.site = pywikibot.Site()
         self._page_name = ""
         self.contents = ""
-        self._summary = "تحديث (beta)"
+        self._summary = "بوت:إحصاءات V2.1.2"
 
     @property
     def page_name(self):
@@ -117,6 +117,7 @@ class ArticleTable:
         self.columns = []
         self.add_header_text = None
         self.add_footer_text = None
+        self.add_table_name = None
         self.add_end_row_to_table = None
         self.sort_column = None
 
@@ -140,7 +141,7 @@ class ArticleTable:
             header += f'!style="background-color:#808080" align="center"|{column_name}\n'
 
         # create the table body
-        body = ''
+        body = header
 
         for index, row in enumerate(result):
             body += '|-\n'
@@ -161,10 +162,10 @@ class ArticleTable:
         footer = '|}\n'
 
         if footer_text is not None:
-            body += footer_text(result)
+            footer += footer_text(result)
 
         # return the full table
-        return table_header + header + body + footer
+        return str(table_header + body + footer).replace("TABLE_NAME", str(self.add_table_name))
 
 
 class UpdatePage:
@@ -187,7 +188,8 @@ class UpdatePage:
         content = self.file.contents
         table_body = ""
         for table in self.tables.tables:
-            table_body += table.build_table(result=self.database.result, end_row_in_table=table.add_end_row_to_table,header_text=table.add_header_text,footer_text=table.add_footer_text)
+            table_body += table.build_table(result=self.database.result, end_row_in_table=table.add_end_row_to_table,
+                                            header_text=table.add_header_text, footer_text=table.add_footer_text)
 
         content = content.replace("BOT_TABLE_BODY", table_body)
         self.page.set_contents(content)
@@ -208,6 +210,9 @@ class ArticleTables:
 
         if end_row_text is not None:
             table.add_end_row_to_table = end_row_text
+
+        if name is not None:
+            table.add_table_name = name
 
         if sort_column is not None:
             table.set_sort_column(sort_column)
