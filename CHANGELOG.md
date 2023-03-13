@@ -7,10 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.2.0] - 2023-03-13
 ### Added
-- -إضافة قالب لا للوصلات قليلة لتخطي مهمة (إضافة/ إزالة قالب وصلات قليلة) (مهمة الصيانة)  ([#116](https://github.com/LokasWiki/LokasBot/pull/116))
-- -اضاففة تعريب الوسائط بالاعتماد علي (ويكيبيديا:AutoWikiBrowser/Rename template parameters) (مهمة الصيانة)  ([#125](https://github.com/LokasWiki/LokasBot/pull/125))
-- -اضافة (مستخدم:LokasBot/تجاهل مهمة صيانة المقالات) لحل مشكل تضارب البوتات (مهمة الصيانة)  ([#120](https://github.com/LokasWiki/LokasBot/pull/120))
-- -اضافة التحديث التلقائي لمهمة (ويكيبيديا:مصادر موثوقة/معاجم وقواميس وأطالس/إحصائيات) حسب طلب الزميل مشيل  ([#117](https://github.com/LokasWiki/LokasBot/pull/117))
+- إضافة قالب لا للوصلات قليلة لتخطي مهمة (إضافة/ إزالة قالب وصلات قليلة) (مهمة الصيانة)  ([#116](https://github.com/LokasWiki/LokasBot/pull/116))
+- اضافة تعريب الوسائط بالاعتماد علي (ويكيبيديا:AutoWikiBrowser/Rename template parameters) (مهمة الصيانة)  ([#125](https://github.com/LokasWiki/LokasBot/pull/125))
+- اضافة (مستخدم:LokasBot/تجاهل مهمة صيانة المقالات) لحل مشكل تضارب البوتات (مهمة الصيانة)  ([#120](https://github.com/LokasWiki/LokasBot/pull/120))
+- اضافة التحديث التلقائي لمهمة (ويكيبيديا:مصادر موثوقة/معاجم وقواميس وأطالس/إحصائيات) حسب طلب الزميل مشيل  ([#117](https://github.com/LokasWiki/LokasBot/pull/117))
 
 ### Changed
 - تغير وصف بوت:إحصاءات حتي يشمل رقم الاصدار لمزيد من التتبع
