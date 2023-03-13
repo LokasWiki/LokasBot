@@ -38,5 +38,7 @@ class TemplateRedirects:
                 if prepare_str(template.name) == prepare_str(need_template[0]):
                     temp_template = copy.deepcopy(template)
                     temp_template.name = need_template[1]
+
                     text = str(text).replace(str(template), str(temp_template))
+
         self.text = text
