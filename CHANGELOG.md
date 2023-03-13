@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.2.0] - 2023-03-13
+## [1.3.0] - 2023-03-13
 ### Added
 - إضافة قالب لا للوصلات قليلة لتخطي مهمة (إضافة/ إزالة قالب وصلات قليلة) (مهمة الصيانة)  ([#116](https://github.com/LokasWiki/LokasBot/pull/116))
 - اضافة تعريب الوسائط بالاعتماد علي (ويكيبيديا:AutoWikiBrowser/Rename template parameters) (مهمة الصيانة)  ([#125](https://github.com/LokasWiki/LokasBot/pull/125))
