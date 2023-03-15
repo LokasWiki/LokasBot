@@ -1,8 +1,18 @@
-import sys
+import logging
 
-from core.utils.sqlite import create_database_table, maintenance_db_name, save_pages_to_db
 from tasks.maintenance.module import get_pages
-import traceback
+from database.engine import maintenance_engine
+from sqlalchemy.orm import Session
+from database.models import Page, TaskName, Status
+
+
+# def is_page_present(session: Session, page_title: str, task_name: TaskName) -> bool:
+def is_page_present(session: Session, page_title: str) -> bool:
+    """
+    Checks if a page with the given title is already present in the database
+    """
+    # return session.query(Page).where(Page.title == page_title).where(Page.task_name == task_name).count() > 0
+    return session.query(Page).where(Page.title == page_title).count() > 0
 
 
 def main(*args: str) -> int:
@@ -55,14 +65,23 @@ and page_is_redirect = 0
 and page_id  in (select cl_from from categorylinks where cl_to like "%جميع_المقالات_اليتيمة%" and cl_from = page_id)
 and page_id not in (select cl_from from categorylinks where cl_to like "%صفحات_توضيح%" and cl_from = page_id)
 having counts >= 3;"""
+
         pages = get_pages(time_before_start,custom_query=custom_query)
-        conn, cursor = create_database_table(maintenance_db_name)
-        save_pages_to_db(pages, conn, cursor, thread_number=thread_number)
-        conn.close()
+
+        with Session(maintenance_engine) as session:
+            for page_title in pages:
+                if not is_page_present(session, page_title=page_title):
+                    logging.info("add : " + page_title)
+                    temp_model = Page(
+                        title=page_title,
+                        thread=thread_number,
+                    )
+                    session.add(temp_model)
+            session.commit()
+        logging.info("Added pages to the database successfully.")
     except Exception as e:
-        print(f"An error occurred: {e}")
-        just_the_string = traceback.format_exc()
-        print(just_the_string)
+        logging.error("Error occurred while adding pages to the database.")
+        logging.exception(e)
     return 0
 
 
