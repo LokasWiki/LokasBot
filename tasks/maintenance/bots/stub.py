@@ -34,6 +34,7 @@ class Stub:
         found = False
         for template in self.parsed.templates:
             if prepare_str(template.name).startswith("بذرة"):
+                if not (prepare_str(template.name) == prepare_str("بذرة غير مصنفة")):
                     found = True
                     break
 
@@ -72,7 +73,9 @@ class Stub:
 
         for template in self.parsed.templates:
             if prepare_str(template.name).startswith("بذرة"):
-                new_text = str(new_text).replace(str(template), "")
+                if not (prepare_str(template.name) == prepare_str("بذرة غير مصنفة")):
+                    new_text = str(new_text).replace(str(template), "")
+
 
         if new_text != self.text:
             self.text = new_text
