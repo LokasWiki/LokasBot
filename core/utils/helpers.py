@@ -12,4 +12,5 @@ def check_status(name):
 
 
 def prepare_str(string):
-    return str(string).strip().lower().replace(" ", "_")
+    #.replace("  ", "_")  with two space to fix many space in name like  {{فنانون      تشكيليون سعوديون}}
+    return str(string).strip().lower().replace("  ", "_").replace(" ", "_")
