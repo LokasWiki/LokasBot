@@ -91,7 +91,7 @@ class Stub:
 
         # remove cat links
         for link in parsed.wikilinks:
-            if link.title.startswith("تصنيف:"):
+            if ":" in link.title:
                 tem_text = tem_text.replace(str(link), "")
         parsed = wtp.parse(tem_text)
         # remove tables
