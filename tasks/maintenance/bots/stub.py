@@ -108,8 +108,15 @@ class Stub:
         for wikilink in parsed.wikilinks:
             tem_text = tem_text.replace(str(wikilink), str(wikilink.title))
 
+        # remove tables like this "{| |}"
+        tem_text = re.sub(r"{|\|[.|\w|\W]*?\|}", "", tem_text)
+
+        # remove numbers in string"
+        tem_text = re.sub(r"\d+", "", tem_text)
+
         # get counts of words
         result = len(re.findall(r'\w+', tem_text))
+        self.count_words = result
         if result >= 500:
             # start remove template
             status = False
