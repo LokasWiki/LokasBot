@@ -93,6 +93,7 @@ class Stub:
         for link in parsed.wikilinks:
             if ":" in link.title:
                 tem_text = tem_text.replace(str(link), "")
+
         parsed = wtp.parse(tem_text)
         # remove tables
         # remove template
