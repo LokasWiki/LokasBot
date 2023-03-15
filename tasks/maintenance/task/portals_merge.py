@@ -42,7 +42,7 @@ for cat in categories_names:
             UnderLinked,
             PortalsMerge,
             PortalsBar,
-            Stub
+            # Stub
         ]
         extra_steps = [
             TemplateRedirects,
@@ -51,7 +51,7 @@ for cat in categories_names:
         try:
             if page.exists() and (not page.isRedirectPage()):
                 text = page.text
-                summary = "بوت:صيانة V5.6.0"
+                summary = "بوت:صيانة V5.6.3"
                 pipeline = Pipeline(page, text, summary, steps, extra_steps)
                 processed_text, processed_summary = pipeline.process()
                 # write processed text back to the page
