@@ -124,7 +124,7 @@ def process_article(site, cursor, conn, id, title, thread_number):
                             Orphan,
                             DeadEnd,
                             UnderLinked,
-                            Stub
+                            # Stub
                         ]
                         extra_steps = [
                             PortalsMerge,
@@ -134,7 +134,7 @@ def process_article(site, cursor, conn, id, title, thread_number):
                         ]
                         if page.exists() and (not page.isRedirectPage()):
                             text = page.text
-                            summary = "بوت:صيانة V5.6.2"
+                            summary = "بوت:صيانة V5.6.3"
                             pipeline = Pipeline(page, text, summary, steps, extra_steps)
                             processed_text, processed_summary = pipeline.process()
                             # write processed text back to the page
