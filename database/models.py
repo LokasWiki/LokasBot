@@ -14,9 +14,9 @@ class Base(DeclarativeBase):
 
 
 class Status(enum.Enum):
-    PENDING = 0
-    # RECEIVED = "received"
-    COMPLETED = 1
+    PENDING = "pending"
+    RECEIVED = "received"
+    COMPLETED = "completed"
 
 
 class TaskName(enum.Enum):
@@ -31,7 +31,8 @@ class Page(Base):
     title: Mapped[str] = mapped_column(String(255))
     # thread_number: Mapped[int] = mapped_column(INTEGER)
     thread: Mapped[int] = mapped_column(INTEGER)
-    status: Mapped[Status] = mapped_column(insert_default=Status.PENDING)
+    # status: Mapped[Status] = mapped_column(insert_default=Status.PENDING)
+    status: Mapped[int] = mapped_column(insert_default=0)
     date: Mapped[datetime] = mapped_column(insert_default=func.now())
     # create_date: Mapped[datetime] = mapped_column(insert_default=func.now())
     # update_date: Mapped[datetime] = mapped_column(server_default=func.now(), onupdate=func.current_timestamp())
