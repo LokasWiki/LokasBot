@@ -21,6 +21,7 @@ from tasks.maintenance.bots.template_redirects import TemplateRedirects
 from tasks.maintenance.bots.underlinked import UnderLinked
 from tasks.maintenance.bots.unreferenced import Unreferenced
 from tasks.maintenance.bots.unreviewed_article import UnreviewedArticle
+from tasks.maintenance.bots.stub import Stub
 
 
 def get_pages(start, custom_query=None):
@@ -122,7 +123,8 @@ def process_article(site, cursor, conn, id, title, thread_number):
                             Unreferenced,
                             Orphan,
                             DeadEnd,
-                            UnderLinked
+                            UnderLinked,
+                            Stub
                         ]
                         extra_steps = [
                             PortalsMerge,
