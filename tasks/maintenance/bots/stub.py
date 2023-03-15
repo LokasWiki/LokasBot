@@ -13,7 +13,7 @@ class Stub:
         self.text = text
         self.summary = summary
         self.parsed = wtp.parse(self.text)
-
+        self.count_words = 0
     def __call__(self):
         disambiguation = Disambiguation(self.page.title(), self.text)
         if disambiguation.check("or"):
@@ -63,7 +63,7 @@ class Stub:
                     text = self.text + '\n' + template_name
 
             self.text = text
-            self.summary += "،  أضاف [[ويكيبيديا:بذرة|بذرة]]"
+            self.summary += "،  أضاف [[ويكيبيديا:بذرة|بذرة]] ("+str(self.count_words)+" كلمة)"
 
     def remove_template(self):
         """
@@ -79,7 +79,7 @@ class Stub:
 
         if new_text != self.text:
             self.text = new_text
-            self.summary += "، أزال [[ويكيبيديا:بذرة|بذرة]]"
+            self.summary += "، أزال [[ويكيبيديا:بذرة|بذرة]] ("+str(self.count_words)+" كلمة)"
 
     def check(self):
         status = True
