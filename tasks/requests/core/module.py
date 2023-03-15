@@ -99,7 +99,7 @@ class RequestsPage:
 
         if tem_page_text.strip().lower() != self._header_text.strip().lower():
             talk_page.save(f" طلب جديد عبر البوت من المستخدم {self.lasteditUser}")
-            self._page.save(f"نقل طلب جديد غير مصرح به من المستخدم الي الارشيف{self.lasteditUser}")
+            self._page.save(f"نقل طلب جديد غير مصرح به من المستخدم إلي الأرشيف{self.lasteditUser}")
 
     def start_request(self):
         self._page.text = self._header_text + "\n\n"
