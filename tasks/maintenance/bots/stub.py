@@ -4,7 +4,7 @@ import re
 import pywikibot
 import wikitextparser as wtp
 from core.utils.disambiguation import Disambiguation
-from core.utils.helpers import prepare_str
+from core.utils.helpers import prepare_str, check_status
 
 
 class Stub:
@@ -13,16 +13,18 @@ class Stub:
         self.text = text
         self.summary = summary
         self.parsed = wtp.parse(self.text)
+        self.count_words = 0
 
     def __call__(self):
-        disambiguation = Disambiguation(self.page.title(), self.text)
-        if disambiguation.check("or"):
-            return self.text, self.summary
+        if check_status("مستخدم:LokasBot/إيقاف بوت البذرة"):
+            disambiguation = Disambiguation(self.page.title(), self.text)
+            if disambiguation.check("or"):
+                return self.text, self.summary
 
-        if self.check():
-            self.add_template()
-        else:
-            self.remove_template()
+            if self.check():
+                self.add_template()
+            else:
+                self.remove_template()
         return self.text, self.summary
 
     def add_template(self):
@@ -34,6 +36,7 @@ class Stub:
         found = False
         for template in self.parsed.templates:
             if prepare_str(template.name).startswith("بذرة"):
+                if not (prepare_str(template.name) == prepare_str("بذرة غير مصنفة")):
                     found = True
                     break
 
@@ -62,7 +65,7 @@ class Stub:
                     text = self.text + '\n' + template_name
 
             self.text = text
-            self.summary += "،  أضاف [[ويكيبيديا:بذرة|بذرة]]"
+            self.summary += "،  أضاف [[ويكيبيديا:بذرة|بذرة]] (" + str(self.count_words) + " كلمة)"
 
     def remove_template(self):
         """
@@ -72,11 +75,12 @@ class Stub:
 
         for template in self.parsed.templates:
             if prepare_str(template.name).startswith("بذرة"):
-                new_text = str(new_text).replace(str(template), "")
+                if not (prepare_str(template.name) == prepare_str("بذرة غير مصنفة")):
+                    new_text = str(new_text).replace(str(template), "")
 
         if new_text != self.text:
             self.text = new_text
-            self.summary += "، أزال [[ويكيبيديا:بذرة|بذرة]]"
+            self.summary += "، أزال [[ويكيبيديا:بذرة|بذرة]] (" + str(self.count_words) + " كلمة)"
 
     def check(self):
         status = True
@@ -84,25 +88,22 @@ class Stub:
         tem_text = self.page.text
 
         parsed = wtp.parse(tem_text)
-        # remove tables
-        for table in parsed.tables:
-            tem_text = tem_text.replace(str(table), "")
-        # remove template
-        for template in parsed.templates:
-            tem_text = tem_text.replace(str(template), "")
-        # remove html tag include ref tags
-        for tag in parsed.get_tags():
-            tem_text = tem_text.replace(str(tag), "")
+
         # remove cat links
         for link in parsed.wikilinks:
             if link.title.startswith("تصنيف:"):
                 tem_text = tem_text.replace(str(link), "")
+        parsed = wtp.parse(tem_text)
+        # remove tables
+        # remove template
+        # remove html tag include ref tags
         # remove all comments
-        for comment in parsed.comments:
-            tem_text = tem_text.replace(str(comment), "")
         # remove all external links
-        for external_link in parsed.external_links:
-            tem_text = tem_text.replace(str(external_link), "")
+        tem_text = parsed.plain_text(
+            replace_wikilinks=False,
+            replace_bolds_and_italics=False
+        )
+        parsed = wtp.parse(tem_text)
         # replace all wikilinks to be like  [from|some text ] to from
         for wikilink in parsed.wikilinks:
             tem_text = tem_text.replace(str(wikilink), str(wikilink.title))
