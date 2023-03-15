@@ -4,7 +4,7 @@ import re
 import pywikibot
 import wikitextparser as wtp
 from core.utils.disambiguation import Disambiguation
-from core.utils.helpers import prepare_str
+from core.utils.helpers import prepare_str, check_status
 
 
 class Stub:
@@ -14,15 +14,17 @@ class Stub:
         self.summary = summary
         self.parsed = wtp.parse(self.text)
         self.count_words = 0
-    def __call__(self):
-        disambiguation = Disambiguation(self.page.title(), self.text)
-        if disambiguation.check("or"):
-            return self.text, self.summary
 
-        if self.check():
-            self.add_template()
-        else:
-            self.remove_template()
+    def __call__(self):
+        if check_status("مستخدم:LokasBot/إيقاف بوت البذرة"):
+            disambiguation = Disambiguation(self.page.title(), self.text)
+            if disambiguation.check("or"):
+                return self.text, self.summary
+
+            if self.check():
+                self.add_template()
+            else:
+                self.remove_template()
         return self.text, self.summary
 
     def add_template(self):
@@ -63,7 +65,7 @@ class Stub:
                     text = self.text + '\n' + template_name
 
             self.text = text
-            self.summary += "،  أضاف [[ويكيبيديا:بذرة|بذرة]] ("+str(self.count_words)+" كلمة)"
+            self.summary += "،  أضاف [[ويكيبيديا:بذرة|بذرة]] (" + str(self.count_words) + " كلمة)"
 
     def remove_template(self):
         """
@@ -76,10 +78,9 @@ class Stub:
                 if not (prepare_str(template.name) == prepare_str("بذرة غير مصنفة")):
                     new_text = str(new_text).replace(str(template), "")
 
-
         if new_text != self.text:
             self.text = new_text
-            self.summary += "، أزال [[ويكيبيديا:بذرة|بذرة]] ("+str(self.count_words)+" كلمة)"
+            self.summary += "، أزال [[ويكيبيديا:بذرة|بذرة]] (" + str(self.count_words) + " كلمة)"
 
     def check(self):
         status = True
