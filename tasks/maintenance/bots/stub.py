@@ -87,25 +87,22 @@ class Stub:
         tem_text = self.page.text
 
         parsed = wtp.parse(tem_text)
-        # remove tables
-        for table in parsed.tables:
-            tem_text = tem_text.replace(str(table), "")
-        # remove template
-        for template in parsed.templates:
-            tem_text = tem_text.replace(str(template), "")
-        # remove html tag include ref tags
-        for tag in parsed.get_tags():
-            tem_text = tem_text.replace(str(tag), "")
+
         # remove cat links
         for link in parsed.wikilinks:
             if link.title.startswith("تصنيف:"):
                 tem_text = tem_text.replace(str(link), "")
+        parsed = wtp.parse(tem_text)
+        # remove tables
+        # remove template
+        # remove html tag include ref tags
         # remove all comments
-        for comment in parsed.comments:
-            tem_text = tem_text.replace(str(comment), "")
         # remove all external links
-        for external_link in parsed.external_links:
-            tem_text = tem_text.replace(str(external_link), "")
+        tem_text = parsed.plain_text(
+            replace_wikilinks=False,
+            replace_bolds_and_italics=False
+        )
+        parsed = wtp.parse(tem_text)
         # replace all wikilinks to be like  [from|some text ] to from
         for wikilink in parsed.wikilinks:
             tem_text = tem_text.replace(str(wikilink), str(wikilink.title))
