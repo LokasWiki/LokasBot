@@ -6,11 +6,12 @@ from datetime import datetime
 
 import enum
 
-from .engine import maintenance_engine, webcite_engine
+from .engine import maintenance_engine, webcite_engine, statistics_engine
 
 
 class Base(DeclarativeBase):
     pass
+
 
 # todo: for now it will mere in one database with all tables
 class BaseS(DeclarativeBase):
@@ -59,4 +60,4 @@ class Statistic(BaseS):
 
 Base.metadata.create_all(webcite_engine)
 Base.metadata.create_all(maintenance_engine)
-BaseS.metadata.create_all(maintenance_engine)
+BaseS.metadata.create_all(statistics_engine)
