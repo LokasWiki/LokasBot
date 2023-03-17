@@ -5,7 +5,7 @@ import datetime
 from sqlalchemy.orm import Session
 
 from core.utils.helpers import check_status, check_edit_age
-from database.models import Page
+from database.models import Page,Status,TaskName
 
 
 from tasks.webcite.modules.parsed import Parsed
@@ -40,7 +40,7 @@ def process_article(site: pywikibot.Site, session: Session, id: int, title: str,
         page = pywikibot.Page(site, title)
 
         # Check if the page has already been processed
-        page_query = session.query(Page).filter_by(id=id, status=0).one_or_none()
+        page_query = session.query(Page).filter_by(id=id, status=Status.RECEIVED).one_or_none()
         if page_query is not None:
             # Update the status of the page to indicate that it is being processed
             page_query.status = 1
@@ -70,7 +70,7 @@ def process_article(site: pywikibot.Site, session: Session, id: int, title: str,
                     # Update the status of the page to indicate that it needs to be processed again later
                     delta = datetime.timedelta(hours=1)
                     new_date = datetime.datetime.now() + delta
-                    page_query.status = 0
+                    page_query.status = Status.PENDING
                     page_query.date = new_date
                     session.commit()
             else:
@@ -84,6 +84,6 @@ def process_article(site: pywikibot.Site, session: Session, id: int, title: str,
         # Update the status of the page to indicate that it needs to be processed again later
         delta = datetime.timedelta(hours=1)
         new_date = datetime.datetime.now() + delta
-        page_query.status = 0
+        page_query.status = Status.PENDING
         page_query.date = new_date
         session.commit()
