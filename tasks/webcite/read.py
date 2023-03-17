@@ -3,20 +3,12 @@ import random
 from datetime import datetime
 
 from database.engine import webcite_engine, statistics_engine
+from database.helpers import is_page_present
 from tasks.webcite.module import get_pages
 from sqlalchemy.orm import Session
-from database.models import Page, TaskName, Status, Statistic
+from database.models import Page, Statistic
 
 LAST_QUERY_KEY = "webcite_last_query_time"  # Unique key for the last query time statistic
-
-
-# def is_page_present(session: Session, page_title: str, task_name: TaskName) -> bool:
-def is_page_present(session: Session, page_title: str) -> bool:
-    """
-    Checks if a page with the given title is already present in the database
-    """
-    # return session.query(Page).where(Page.title == page_title).where(Page.task_name == task_name).count() > 0
-    return session.query(Page).where(Page.title == page_title).count() > 0
 
 
 def main(*args: str) -> int:
@@ -30,7 +22,6 @@ def main(*args: str) -> int:
             last_query = session.query(Statistic).filter(Statistic.key == LAST_QUERY_KEY).first()
             last_query_time = datetime.fromisoformat(last_query.value) if last_query else now
             logging.info(f"Last query time: {last_query_time}")
-
 
             # Calculate the time difference in minutes
             time_diff = (now - last_query_time).seconds // 60

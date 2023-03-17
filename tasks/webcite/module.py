@@ -1,13 +1,16 @@
-from threading import Timer
-from datetime import timedelta
+import logging
 import pywikibot
-from pywikibot import Timestamp
 import datetime
-import traceback
 
-from core.utils.helpers import check_status
+from sqlalchemy.orm import Session
+
+from core.utils.helpers import check_status, check_edit_age
+from database.models import Page
+
+
 from tasks.webcite.modules.parsed import Parsed
 from core.utils.wikidb import Database
+from tasks.webcite.modules.request_limiter import RequestLimiter
 
 
 def get_pages(start):
@@ -31,77 +34,56 @@ FROM (
     return gen
 
 
-def process_article(site, cursor, conn, id, title, thread_number, limiter):
-    def handle_timeout():
-        print(f"Timeout while processing {title}")
-        raise TimeoutError()
-
+def process_article(site, session: Session, id: int, title: str, thread_number: int, limiter: RequestLimiter):
     try:
-        cursor.execute("SELECT status FROM pages WHERE id = ? LIMIT 1", (id,))
-        row = cursor.fetchone()
-        if row is not None:
-            status = row[0]
-            if status == 0:
-                cursor.execute("UPDATE pages SET status = 1 WHERE id = ?", (id,))
-                conn.commit()
-                page = pywikibot.Page(site, title)
+        # get page object
+        page = pywikibot.Page(site, title)
 
-                if page.exists() and (not page.isRedirectPage()):
-                    summary = ""
+        # Check if the page has already been processed
+        page_query = session.query(Page).filter_by(id=id, status=0).one_or_none()
+        if page_query is not None:
+            # Update the status of the page to indicate that it is being processed
+            page_query.status = 1
+            session.commit()
+            if page.exists() and (not page.isRedirectPage()):
+                # if status true can edit
+                if check_edit_age(page=page):
+
+                    summary = "بوت:الإبلاغ عن رابط معطوب أو مؤرشف V1.4.0"
+
                     bot = Parsed(page.text, summary, limiter)
 
-                    # get first revision
-                    revisions = page.revisions(reverse=True, total=1)
-                    first_edit = None
-                    for revision in revisions:
-                        first_edit = revision['timestamp']
-                        break
-                    status = False
+                    new_text, new_summary = bot()
 
-                    # Get the current time
-                    current_time = Timestamp.utcnow()
-
-                    # Calculate the difference between the timestamp and the current time
-                    time_difference = current_time - first_edit
-
-                    # Check if the time difference is less than 3 hours
-                    if time_difference > timedelta(hours=3):
-                        status = True
-
-                    # if status true can edit
-                    if status:
-                        new_text, new_summary = bot()
-                        # write processed text back to the page
-                        if new_text != page.text and check_status("مستخدم:LokasBot/الإبلاغ عن رابط معطوب أو مؤرشف"):
-                            print("start save " + page.title())
-                            page.text = new_text
-                            page.save(new_summary)
-                        else:
-                            print("page not changed " + page.title())
-                        # todo add option to not update page if have one or more links not archived
-                        cursor.execute("DELETE FROM pages WHERE id = ?", (id,))
-                        conn.commit()
+                    # write processed text back to the page
+                    if new_text != page.text and check_status("مستخدم:LokasBot/الإبلاغ عن رابط معطوب أو مؤرشف"):
+                        logging.info("start save " + page.title())
+                        page.text = new_text
+                        page.save(new_summary)
                     else:
-                        print("skip need more time to edit it")
-                        # todo:move it to one function
-                        delta = datetime.timedelta(hours=1)
-                        new_date = datetime.datetime.now() + delta
-                        cursor.execute("UPDATE pages SET status = 0, date = ? WHERE id = ?",
-                                       (new_date, id))
-                        conn.commit()
-
-    except TimeoutError:
-        delta = datetime.timedelta(hours=3)
-        new_date = datetime.datetime.now() + delta
-        cursor.execute("UPDATE pages SET status = 0, date = ? WHERE id = ?",
-                       (new_date, id))
-        conn.commit()
+                        logging.info("page not changed " + page.title())
+                    # Delete the page from the database
+                    session.delete(page_query)
+                    session.commit()
+                else:
+                    logging.info("skip need more time to edit it")
+                    # Update the status of the page to indicate that it needs to be processed again later
+                    delta = datetime.timedelta(hours=1)
+                    new_date = datetime.datetime.now() + delta
+                    page_query.status = 0
+                    page_query.date = new_date
+                    session.commit()
+            else:
+                # Delete the page from the database
+                session.delete(page_query)
+                session.commit()
     except Exception as e:
-        print(f"An error occurred while processing {title}: {e}")
-        just_the_string = traceback.format_exc()
-        print(just_the_string)
+        logging.error(f"An error occurred while processing {title}: {e}")
+        logging.exception(e)
+
+        # Update the status of the page to indicate that it needs to be processed again later
         delta = datetime.timedelta(hours=1)
         new_date = datetime.datetime.now() + delta
-        cursor.execute("UPDATE pages SET status = 0, date = ? WHERE id = ?",
-                       (new_date, id))
-        conn.commit()
+        page_query.status = 0
+        page_query.date = new_date
+        session.commit()

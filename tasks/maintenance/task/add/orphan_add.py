@@ -1,8 +1,12 @@
-import sys
+import logging
+from random import random
 
-from core.utils.sqlite import create_database_table, maintenance_db_name, save_pages_to_db
+from sqlalchemy.orm import Session
+
+from database.engine import maintenance_engine
+from database.helpers import is_page_present
+from database.models import Page
 from tasks.maintenance.module import get_pages
-import traceback
 
 
 def main(*args: str) -> int:
@@ -56,13 +60,23 @@ and page_id  not in (select cl_from from categorylinks where cl_to like "%جمي
 and page_id not in (select cl_from from categorylinks where cl_to like "%صفحات_توضيح%" and cl_from = page_id)
 having counts < 3;"""
         pages = get_pages(time_before_start,custom_query=custom_query)
-        conn, cursor = create_database_table(maintenance_db_name)
-        save_pages_to_db(pages, conn, cursor, thread_number=thread_number)
-        conn.close()
+
+        with Session(maintenance_engine) as maintenance_session:
+            for page_title in pages:
+                if not is_page_present(maintenance_session, page_title=page_title):
+                    logging.info("add : " + page_title)
+
+                    temp_model = Page(
+                        title=page_title,
+                        thread=random.randint(1, 3),
+                    )
+                    maintenance_session.add(temp_model)
+
+            maintenance_session.commit()
+
     except Exception as e:
-        print(f"An error occurred: {e}")
-        just_the_string = traceback.format_exc()
-        print(just_the_string)
+        logging.error("Error occurred while adding pages to the database.")
+        logging.exception(e)
     return 0
 
 

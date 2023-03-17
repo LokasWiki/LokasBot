@@ -1,13 +1,12 @@
-import sqlite3
-import time
-import traceback
+import logging
 import threading
 
 import pywikibot
+from sqlalchemy.orm import Session
 
-from core.utils.helpers import check_status
-from core.utils.sqlite import create_database_table, webcite_db_name, get_articles
-from tasks.webcite.module import  process_article
+from database.engine import webcite_engine
+from database.helpers import get_articles
+from tasks.webcite.module import process_article
 from tasks.webcite.modules.request_limiter import RequestLimiter
 
 
@@ -16,20 +15,13 @@ def read(thread_number):
         print(thread_number)
         limiter = RequestLimiter()
         site = pywikibot.Site()
-        conn, cursor = create_database_table(webcite_db_name)
+        with Session(webcite_engine) as webcite_session:
+            for row in get_articles(webcite_session, thread_number):
+                process_article(site, id=row[0], title=row[1], thread_number=thread_number, limiter=limiter)
 
-        rows = get_articles(cursor, thread_number)
-        if len(rows) > 0 and check_status("مستخدم:LokasBot/الإبلاغ عن رابط معطوب أو مؤرشف"):
-            for row in rows:
-                print(row)
-                process_article(site, cursor, conn, id=row[0], title=row[1], thread_number=thread_number, limiter=limiter)
-
-        conn.close()
-    except sqlite3.Error as e:
-        print(f"An error occurred while interacting with the database: {e}")
-        just_the_string = traceback.format_exc()
-        print(just_the_string)
-
+    except Exception as e:
+        logging.error("Error occurred while adding pages to the database.")
+        logging.exception(e)
 
 
 def run_threads():

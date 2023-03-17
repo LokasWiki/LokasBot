@@ -1,16 +1,17 @@
 import json
+import logging
 import os
-
 import pywikibot
 import datetime
-import traceback
-from datetime import timedelta
-from pywikibot import Timestamp
+
+from sqlalchemy.orm import Session
 
 from core.utils.file import File
-from core.utils.helpers import check_status, prepare_str
+from core.utils.helpers import check_status, prepare_str, check_edit_age
 from core.utils.pipeline import Pipeline
 from core.utils.wikidb import Database
+from database.models import Page
+
 from tasks.maintenance.bots.dead_end import DeadEnd
 from tasks.maintenance.bots.has_categories import HasCategories
 from tasks.maintenance.bots.orphan import Orphan
@@ -23,6 +24,8 @@ from tasks.maintenance.bots.unreferenced import Unreferenced
 from tasks.maintenance.bots.unreviewed_article import UnreviewedArticle
 from tasks.maintenance.bots.stub import Stub
 
+
+TASK_SUMMARY = "بوت:صيانة V5.6.5"
 
 def get_pages(start, custom_query=None):
     query = """SELECT pl_2_title
@@ -86,88 +89,103 @@ def get_skip_pages():
     return templates
 
 
-def process_article(site, cursor, conn, id, title, thread_number):
+class PipelineTasks:
+    steps = [
+        UnreviewedArticle,
+        HasCategories,
+        PortalsBar,
+        Unreferenced,
+        Orphan,
+        DeadEnd,
+        UnderLinked,
+        # Stub
+    ]
+
+    extra_steps = [
+        PortalsMerge,
+        PortalsBar,
+        TemplateRedirects,
+        RenameTemplateParameters
+    ]
+
+    portals_merge_steps = [
+        UnreviewedArticle,
+        HasCategories,
+        PortalsBar,
+        Unreferenced,
+        Orphan,
+        DeadEnd,
+        UnderLinked,
+        PortalsMerge,
+        PortalsBar,
+        # Stub
+    ]
+
+    @staticmethod
+    def method1():
+        pass
+
+
+def clean_summary(processed_summary):
+    temp_summary = processed_summary
     try:
-        cursor.execute("SELECT status FROM pages WHERE id = ? LIMIT 1", (id,))
-        row = cursor.fetchone()
-        if row is not None:
-            status = row[0]
-            if status == 0:
-                cursor.execute("UPDATE pages SET status = 1 WHERE id = ?", (id,))
-                conn.commit()
-                page = pywikibot.Page(site, title)
+        # to remove duplicate summary
+        if str(temp_summary).count("، تعريب"):
+            temp_summary = str(temp_summary).replace("، تعريب", "")
+            temp_summary += "، تعريب"
+    except Exception as e:
+        logging.error(f"An error occurred while clean_summary processing {processed_summary}: {e}")
+        logging.exception(e)
+    return temp_summary
 
-                if page.title() not in get_skip_pages():
-                    # get first revision
-                    revisions = page.revisions(reverse=True, total=1)
-                    first_edit = None
-                    for revision in revisions:
-                        first_edit = revision['timestamp']
-                        break
-                    status = False
 
-                    # Get the current time
-                    current_time = Timestamp.utcnow()
+def process_article(site, session: Session, id: int, title: str, thread_number: int):
+    try:
+        # get page object
+        page = pywikibot.Page(site, title)
 
-                    # Calculate the difference between the timestamp and the current time
-                    time_difference = current_time - first_edit
+        # Check if the page has already been processed
+        page_query = session.query(Page).filter_by(id=id, status=0).one_or_none()
+        if page_query is not None:
+            # Update the status of the page to indicate that it is being processed
+            page_query.status = 1
+            session.commit()
 
-                    # Check if the time difference is less than 3 hours
-                    if time_difference > timedelta(hours=3):
-                        status = True
-                    if status:
-                        steps = [
-                            UnreviewedArticle,
-                            HasCategories,
-                            PortalsBar,
-                            Unreferenced,
-                            Orphan,
-                            DeadEnd,
-                            UnderLinked,
-                            # Stub
-                        ]
-                        extra_steps = [
-                            PortalsMerge,
-                            PortalsBar,
-                            TemplateRedirects,
-                            RenameTemplateParameters
-                        ]
-                        if page.exists() and (not page.isRedirectPage()):
-                            text = page.text
-                            summary = "بوت:صيانة V5.6.4"
-                            pipeline = Pipeline(page, text, summary, steps, extra_steps)
-                            processed_text, processed_summary = pipeline.process()
-                            # write processed text back to the page
-                            if pipeline.hasChange() and check_status("مستخدم:LokasBot/إيقاف مهمة صيانة المقالات"):
-                                print("start save " + page.title())
-                                page.text = processed_text
-                                # to remove duplicate summary
-                                if str(processed_summary).count("، تعريب"):
-                                    processed_summary = str(processed_summary).replace("، تعريب", "")
-                                    processed_summary += "، تعريب"
+            # todo:make it same with prepare_str
+            if page.title() not in get_skip_pages():
+                # todo:need more refactor
+                # todo: add is isRedirectPage for single bots
+                if page.exists() and (not page.isRedirectPage()):
+                    if check_edit_age(page=page):
 
-                                page.save(summary=processed_summary)
-                            else:
-                                print("page not changed " + page.title())
-
-                        cursor.execute("DELETE FROM pages WHERE id = ?", (id,))
-                        conn.commit()
+                        pipeline = Pipeline(page, page.text, TASK_SUMMARY, PipelineTasks.steps, PipelineTasks.extra_steps)
+                        processed_text, processed_summary = pipeline.process()
+                        # write processed text back to the page
+                        if pipeline.hasChange() and check_status("مستخدم:LokasBot/إيقاف مهمة صيانة المقالات"):
+                            logging.info("start save " + page.title())
+                            page.text = processed_text
+                            page.save(summary=clean_summary(processed_summary))
+                        else:
+                            logging.info("page not changed " + page.title())
                     else:
-                        print("skip need more time to edit it")
-                        # todo:move it to one function
+                        logging.info("skip need more time to edit it")
+                        # Update the status of the page to indicate that it needs to be processed again later
                         delta = datetime.timedelta(hours=1)
                         new_date = datetime.datetime.now() + delta
-                        cursor.execute("UPDATE pages SET status = 0, date = ? WHERE id = ?",
-                                       (new_date, id))
-                        conn.commit()
+                        page_query.status = 0
+                        page_query.date = new_date
+                        session.commit()
                 else:
-                    print("skip page because it in skip list")
+                    # Delete the page from the database
+                    session.delete(page_query)
+                    session.commit()
     except Exception as e:
-        print(f"An error occurred while processing {title}: {e}")
-        just_the_string = traceback.format_exc()
-        print(just_the_string)
+        logging.error(f"An error occurred while processing {title}: {e}")
+        logging.exception(e)
+
+        # Update the status of the page to indicate that it needs to be processed again later
         delta = datetime.timedelta(hours=1)
         new_date = datetime.datetime.now() + delta
-        cursor.execute("UPDATE pages SET status = 0, date = ? WHERE id = ?",
-                       (new_date, id))
-        conn.commit()
+        page_query.status = 0
+        page_query.date = new_date
+        session.commit()

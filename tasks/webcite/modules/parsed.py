@@ -11,7 +11,6 @@ class Parsed:
 
     def __init__(self, text, summary, limiter):
         self.text = text
-        self.old_text = text
         self.cite_templates = []
         self.list_of_templates = list_of_template
         self.summary = summary
@@ -22,8 +21,6 @@ class Parsed:
     def __call__(self):
         if self.check():
             self.start_replace()
-        if self.text != self.old_text:
-            self.summary += "بوت:الإبلاغ عن رابط معطوب أو مؤرشف V1.4.0*"
         return self.text, self.summary
 
     def check(self):
