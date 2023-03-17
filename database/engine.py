@@ -1,16 +1,35 @@
+import configparser
 import os
-
 from sqlalchemy import create_engine
 
 home_path = os.path.expanduser("~")
-# todo : merge it in one database
-maintenance_database_path = os.path.join(home_path, "maintenance.db")
-webcite_database_path = os.path.join(home_path, "webcite.db")
-statistics_database_path = os.path.join(home_path, "statistics.db")
 
-maintenance_engine = create_engine(f"sqlite+pysqlite:////{maintenance_database_path}", echo=False)
+""""
+config.ini example
 
-webcite_engine = create_engine(f"sqlite+pysqlite:////{webcite_database_path}", echo=False)
+[mysql]
+username=your_username
+password=your_password
+host=your_host
+port=your_port
+database=your_database
 
-statistics_engine = create_engine(f"sqlite+pysqlite:////{statistics_database_path}", echo=False)
+"""
+
+config_path = os.path.join(home_path, 'config.ini')
+
+
+# Read the configuration file
+config = configparser.ConfigParser()
+config.read(config_path)
+
+# Get the MySQL connection details from the configuration file
+username = config.get('mysql', 'username')
+password = config.get('mysql', 'password')
+host = config.get('mysql', 'host')
+port = config.get('mysql', 'port')
+database = config.get('mysql', 'database')
+
+# Create the database engine
+engine = create_engine(f'mysql+pymysql://{username}:{password}@{host}:{port}/{database}')
 
