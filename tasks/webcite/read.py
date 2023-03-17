@@ -10,6 +10,7 @@ from database.models import Page, Statistic
 
 LAST_QUERY_KEY = "webcite_last_query_time"  # Unique key for the last query time statistic
 
+
 def main(*args: str) -> int:
     try:
         # todo: mereg with read.py in maintenance task
@@ -21,7 +22,6 @@ def main(*args: str) -> int:
             last_query = session.query(Statistic).filter(Statistic.key == LAST_QUERY_KEY).first()
             last_query_time = datetime.fromisoformat(last_query.value) if last_query else now
             logging.info(f"Last query time: {last_query_time}")
-
 
             # Calculate the time difference in minutes
             time_diff = (now - last_query_time).seconds // 60
