@@ -25,6 +25,8 @@ from tasks.maintenance.bots.unreviewed_article import UnreviewedArticle
 from tasks.maintenance.bots.stub import Stub
 
 
+TASK_SUMMARY = "بوت:صيانة V5.6.5"
+
 def get_pages(start, custom_query=None):
     query = """SELECT pl_2_title
 FROM (
@@ -106,6 +108,19 @@ class PipelineTasks:
         RenameTemplateParameters
     ]
 
+    portals_merge_steps = [
+        UnreviewedArticle,
+        HasCategories,
+        PortalsBar,
+        Unreferenced,
+        Orphan,
+        DeadEnd,
+        UnderLinked,
+        PortalsMerge,
+        PortalsBar,
+        # Stub
+    ]
+
     @staticmethod
     def method1():
         pass
@@ -142,8 +157,8 @@ def process_article(site, session: Session, id: int, title: str, thread_number: 
                 # todo: add is isRedirectPage for single bots
                 if page.exists() and (not page.isRedirectPage()):
                     if check_edit_age(page=page):
-                        summary = "بوت:صيانة V5.6.5"
-                        pipeline = Pipeline(page, page.text, summary, PipelineTasks.steps, PipelineTasks.extra_steps)
+
+                        pipeline = Pipeline(page, page.text, TASK_SUMMARY, PipelineTasks.steps, PipelineTasks.extra_steps)
                         processed_text, processed_summary = pipeline.process()
                         # write processed text back to the page
                         if pipeline.hasChange() and check_status("مستخدم:LokasBot/إيقاف مهمة صيانة المقالات"):
