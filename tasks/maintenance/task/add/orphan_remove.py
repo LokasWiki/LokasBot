@@ -2,7 +2,7 @@ import logging
 
 from database.helpers import is_page_present
 from tasks.maintenance.module import get_pages
-from database.engine import maintenance_engine
+from database.engine import engine
 from sqlalchemy.orm import Session
 from database.models import Page, TaskName, Status
 
@@ -59,13 +59,14 @@ having counts >= 3;"""
 
         pages = get_pages(time_before_start,custom_query=custom_query)
 
-        with Session(maintenance_engine) as session:
+        with Session(engine) as session:
             for page_title in pages:
-                if not is_page_present(session, page_title=page_title):
+                if not is_page_present(session, page_title=page_title, task_type=TaskName.MAINTENANCE):
                     logging.info("add : " + page_title)
                     temp_model = Page(
                         title=page_title,
-                        thread=thread_number,
+                        thread_number=1,
+                        task_name=TaskName.MAINTENANCE
                     )
                     session.add(temp_model)
             session.commit()

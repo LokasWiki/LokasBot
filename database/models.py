@@ -36,7 +36,6 @@ class Page(Base):
     title: Mapped[str] = mapped_column(String(255))
     thread_number: Mapped[int] = mapped_column(INTEGER)
     status: Mapped[Status] = mapped_column(insert_default=Status.PENDING)
-    date: Mapped[datetime] = mapped_column(insert_default=func.now())
 
     create_date: Mapped[datetime] = mapped_column(insert_default=func.now())
     update_date: Mapped[datetime] = mapped_column(server_default=func.now(), onupdate=func.current_timestamp())

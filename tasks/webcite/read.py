@@ -2,11 +2,11 @@ import logging
 import random
 from datetime import datetime
 
-from database.engine import webcite_engine, statistics_engine
+from database.engine import engine
 from database.helpers import is_page_present
 from tasks.webcite.module import get_pages
 from sqlalchemy.orm import Session
-from database.models import Page, Statistic
+from database.models import Page, Statistic, TaskName
 
 LAST_QUERY_KEY = "webcite_last_query_time"  # Unique key for the last query time statistic
 
@@ -18,7 +18,7 @@ def main(*args: str) -> int:
         now = datetime.now()
 
         # Get the last query time from the statistics table, if it exists
-        with Session(statistics_engine) as session:
+        with Session(engine) as session:
             last_query = session.query(Statistic).filter(Statistic.key == LAST_QUERY_KEY).first()
             last_query_time = datetime.fromisoformat(last_query.value) if last_query else now
             logging.info(f"Last query time: {last_query_time}")
@@ -28,17 +28,17 @@ def main(*args: str) -> int:
             logging.info(f"time_diff: {time_diff}")
             pages = get_pages(time_diff + 3)
 
-            with Session(webcite_engine) as webcite_session:
-                for page_title in pages:
-                    if not is_page_present(webcite_session, page_title=page_title):
-                        logging.info("add : " + page_title)
-                        temp_model = Page(
-                            title=page_title,
-                            thread=random.randint(1, 3),
-                        )
-                        webcite_session.add(temp_model)
+            for page_title in pages:
+                if not is_page_present(session, page_title=page_title, task_type=TaskName.WEBCITE):
+                    logging.info("add : " + page_title)
+                    temp_model = Page(
+                        title=page_title,
+                        thread_number=random.randint(1, 3),
+                        task_name=TaskName.WEBCITE
+                    )
+                    session.add(temp_model)
 
-                webcite_session.commit()
+            session.commit()
 
             # Update the last query time in the statistics table
             if last_query:

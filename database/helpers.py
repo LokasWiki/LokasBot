@@ -1,13 +1,13 @@
 from sqlalchemy.orm import Session
 
-from database.models import Page
+from database.models import Page,TaskName
 
 
-def is_page_present(session: Session, page_title: str) -> bool:
+def is_page_present(session: Session, page_title: str,task_type:TaskName) -> bool:
     """
     Checks if a page with the given title is already present in the database
     """
-    return session.query(Page).where(Page.title == page_title).count() > 0
+    return session.query(Page).where(Page.title == page_title).where(Page.task_name == task_type).count() > 0
 
 
 def get_articles(session, thread_number):
