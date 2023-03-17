@@ -25,7 +25,7 @@ from tasks.maintenance.bots.unreviewed_article import UnreviewedArticle
 from tasks.maintenance.bots.stub import Stub
 
 
-TASK_SUMMARY = "بوت:صيانة V5.6.5"
+TASK_SUMMARY = "بوت:صيانة V5.7.0"
 
 def get_pages(start, custom_query=None):
     query = """SELECT pl_2_title
@@ -139,7 +139,7 @@ def clean_summary(processed_summary):
     return temp_summary
 
 
-def process_article(site, session: Session, id: int, title: str, thread_number: int):
+def process_article(site: pywikibot.Site, session: Session, id: int, title: str, thread_number: int):
     try:
         # get page object
         page = pywikibot.Page(site, title)

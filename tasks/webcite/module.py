@@ -34,7 +34,7 @@ FROM (
     return gen
 
 
-def process_article(site, session: Session, id: int, title: str, thread_number: int, limiter: RequestLimiter):
+def process_article(site: pywikibot.Site, session: Session, id: int, title: str, thread_number: int, limiter: RequestLimiter):
     try:
         # get page object
         page = pywikibot.Page(site, title)
@@ -49,7 +49,7 @@ def process_article(site, session: Session, id: int, title: str, thread_number: 
                 # if status true can edit
                 if check_edit_age(page=page):
 
-                    summary = "بوت:الإبلاغ عن رابط معطوب أو مؤرشف V1.4.0"
+                    summary = "بوت:الإبلاغ عن رابط معطوب أو مؤرشف V1.5.0"
 
                     bot = Parsed(page.text, summary, limiter)
 

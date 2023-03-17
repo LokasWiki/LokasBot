@@ -17,7 +17,7 @@ def read(thread_number):
         site = pywikibot.Site()
         with Session(webcite_engine) as webcite_session:
             for row in get_articles(webcite_session, thread_number):
-                process_article(site, id=row[0], title=row[1], thread_number=thread_number, limiter=limiter)
+                process_article(site=site,session=webcite_session, id=row[0], title=row[1], thread_number=thread_number, limiter=limiter)
 
     except Exception as e:
         logging.error("Error occurred while adding pages to the database.")
