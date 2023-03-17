@@ -111,6 +111,19 @@ class PipelineTasks:
         pass
 
 
+def clean_summary(processed_summary):
+    temp_summary = processed_summary
+    try:
+        # to remove duplicate summary
+        if str(temp_summary).count("، تعريب"):
+            temp_summary = str(temp_summary).replace("، تعريب", "")
+            temp_summary += "، تعريب"
+    except Exception as e:
+        logging.error(f"An error occurred while clean_summary processing {processed_summary}: {e}")
+        logging.exception(e)
+    return temp_summary
+
+
 def process_article(site, session: Session, id: int, title: str, thread_number: int):
     try:
         # get page object
@@ -126,36 +139,30 @@ def process_article(site, session: Session, id: int, title: str, thread_number: 
             # todo:make it same with prepare_str
             if page.title() not in get_skip_pages():
                 # todo:need more refactor
-                if check_edit_age(page=page):
-                    if page.exists() and (not page.isRedirectPage()):
-                        text = page.text
+                # todo: add is isRedirectPage for single bots
+                if page.exists() and (not page.isRedirectPage()):
+                    if check_edit_age(page=page):
                         summary = "بوت:صيانة V5.6.5"
-                        pipeline = Pipeline(page, text, summary, PipelineTasks.steps, PipelineTasks.extra_steps)
+                        pipeline = Pipeline(page, page.text, summary, PipelineTasks.steps, PipelineTasks.extra_steps)
                         processed_text, processed_summary = pipeline.process()
                         # write processed text back to the page
                         if pipeline.hasChange() and check_status("مستخدم:LokasBot/إيقاف مهمة صيانة المقالات"):
                             logging.info("start save " + page.title())
                             page.text = processed_text
-                            # to remove duplicate summary
-                            if str(processed_summary).count("، تعريب"):
-                                processed_summary = str(processed_summary).replace("، تعريب", "")
-                                processed_summary += "، تعريب"
-
-                            page.save(summary=processed_summary)
+                            page.save(summary=clean_summary(processed_summary))
                         else:
                             logging.info("page not changed " + page.title())
-
+                    else:
+                        logging.info("skip need more time to edit it")
+                        # Update the status of the page to indicate that it needs to be processed again later
+                        delta = datetime.timedelta(hours=1)
+                        new_date = datetime.datetime.now() + delta
+                        page_query.status = 0
+                        page_query.date = new_date
+                        session.commit()
+                else:
                     # Delete the page from the database
                     session.delete(page_query)
-                    session.commit()
-
-                else:
-                    logging.info("skip need more time to edit it")
-                    # Update the status of the page to indicate that it needs to be processed again later
-                    delta = datetime.timedelta(hours=1)
-                    new_date = datetime.datetime.now() + delta
-                    page_query.status = 0
-                    page_query.date = new_date
                     session.commit()
     except Exception as e:
         logging.error(f"An error occurred while processing {title}: {e}")
