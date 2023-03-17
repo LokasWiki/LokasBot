@@ -43,7 +43,7 @@ def process_article(site: pywikibot.Site, session: Session, id: int, title: str,
         page_query = session.query(Page).filter_by(id=id, status=Status.PENDING).one_or_none()
         if page_query is not None:
             # Update the status of the page to indicate that it is being processed
-            page_query.status = 1
+            page_query.status = Status.RECEIVED
             session.commit()
             if page.exists() and (not page.isRedirectPage()):
                 # if status true can edit
