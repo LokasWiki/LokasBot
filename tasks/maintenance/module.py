@@ -148,6 +148,7 @@ def process_article(site, session: Session, id: int, title: str, thread_number: 
                     # Delete the page from the database
                     session.delete(page_query)
                     session.commit()
+
                 else:
                     logging.info("skip need more time to edit it")
                     # Update the status of the page to indicate that it needs to be processed again later
