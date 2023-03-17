@@ -14,6 +14,7 @@ def read(thread_number):
         site = pywikibot.Site()
         with Session(engine) as session:
             for row in get_articles(session, thread_number,pages_type=TaskName.MAINTENANCE):
+                print(row)
                 process_article(site=site,session=session, id=row[0], title=row[1], thread_number=thread_number)
 
     except Exception as e:
