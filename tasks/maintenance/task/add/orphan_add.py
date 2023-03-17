@@ -3,7 +3,7 @@ from random import random
 
 from sqlalchemy.orm import Session
 
-from database.engine import maintenance_engine
+from database.engine import engine
 from database.helpers import is_page_present
 from database.models import Page
 from tasks.maintenance.module import get_pages
@@ -61,7 +61,7 @@ and page_id not in (select cl_from from categorylinks where cl_to like "%صفح�
 having counts < 3;"""
         pages = get_pages(time_before_start,custom_query=custom_query)
 
-        with Session(maintenance_engine) as maintenance_session:
+        with Session(engine) as maintenance_session:
             for page_title in pages:
                 if not is_page_present(maintenance_session, page_title=page_title):
                     logging.info("add : " + page_title)

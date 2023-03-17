@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from database.models import Page,TaskName
+from database.models import Page, TaskName, Status
 
 
 def is_page_present(session: Session, page_title: str,task_type:TaskName) -> bool:
@@ -10,22 +10,22 @@ def is_page_present(session: Session, page_title: str,task_type:TaskName) -> boo
     return session.query(Page).where(Page.title == page_title).where(Page.task_name == task_type).count() > 0
 
 
-def get_articles(session, thread_number):
+def get_articles(session, thread_number,pages_type):
     if thread_number == 1:
         thread_number = 0
 
-    query1 = session.query(Page.id, Page.title, Page.thread). \
-        filter_by(status=0, thread=1). \
+    query1 = session.query(Page.id, Page.title, Page.thread_number). \
+        filter_by(status=Status.PENDING,task_name=pages_type, thread_number=1). \
         order_by(Page.date). \
         limit(200).offset(thread_number)
 
-    query2 = session.query(Page.id, Page.title, Page.thread). \
-        filter_by(status=0, thread=2). \
+    query2 = session.query(Page.id, Page.title, Page.thread_number). \
+        filter_by(status=Status.PENDING,task_name=pages_type, thread_number=2). \
         order_by(Page.date). \
         limit(200).offset(thread_number)
 
-    query3 = session.query(Page.id, Page.title, Page.thread). \
-        filter_by(status=0, thread=3). \
+    query3 = session.query(Page.id, Page.title, Page.thread_number). \
+        filter_by(status=Status.PENDING,task_name=pages_type, thread_number=3). \
         order_by(Page.date). \
         limit(200).offset(thread_number)
 
