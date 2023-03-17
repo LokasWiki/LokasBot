@@ -62,7 +62,7 @@ having counts >= 3;"""
         with Session(engine) as session:
             for page_title in pages:
                 if not is_page_present(session, page_title=page_title, task_type=TaskName.MAINTENANCE):
-                    logging.info("add : " + page_title)
+                    print("add : " + page_title)
                     temp_model = Page(
                         title=page_title,
                         thread_number=1,
@@ -70,7 +70,7 @@ having counts >= 3;"""
                     )
                     session.add(temp_model)
             session.commit()
-        logging.info("Added pages to the database successfully.")
+        print("Added pages to the database successfully.")
     except Exception as e:
         logging.error("Error occurred while adding pages to the database.")
         logging.exception(e)

@@ -64,7 +64,7 @@ having counts < 3;"""
         with Session(engine) as maintenance_session:
             for page_title in pages:
                 if not is_page_present(maintenance_session, page_title=page_title):
-                    logging.info("add : " + page_title)
+                    print("add : " + page_title)
 
                     temp_model = Page(
                         title=page_title,

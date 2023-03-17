@@ -21,16 +21,16 @@ def main(*args: str) -> int:
         with Session(engine) as session:
             last_query = session.query(Statistic).filter(Statistic.key == LAST_QUERY_KEY).first()
             last_query_time = datetime.fromisoformat(last_query.value) if last_query else now
-            logging.info(f"Last query time: {last_query_time}")
+            print(f"Last query time: {last_query_time}")
 
             # Calculate the time difference in minutes
             time_diff = (now - last_query_time).seconds // 60
-            logging.info(f"time_diff: {time_diff}")
+            print(f"time_diff: {time_diff}")
             pages = get_pages(time_diff + 3)
 
             for page_title in pages:
                 if not is_page_present(session, page_title=page_title, task_type=TaskName.MAINTENANCE):
-                    logging.info("add : " + page_title)
+                    print("add : " + page_title)
 
                     temp_model = Page(
                         title=page_title,
@@ -49,7 +49,7 @@ def main(*args: str) -> int:
                 session.add(last_query)
             session.commit()
 
-        logging.info("Added pages to the database successfully.")
+        print("Added pages to the database successfully.")
     except Exception as e:
         logging.error("Error occurred while adding pages to the database.")
         logging.exception(e)

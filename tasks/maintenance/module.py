@@ -163,13 +163,13 @@ def process_article(site: pywikibot.Site, session: Session, id: int, title: str,
                         processed_text, processed_summary = pipeline.process()
                         # write processed text back to the page
                         if pipeline.hasChange() and check_status("مستخدم:LokasBot/إيقاف مهمة صيانة المقالات"):
-                            logging.info("start save " + page.title())
+                            print("start save " + page.title())
                             page.text = processed_text
                             page.save(summary=clean_summary(processed_summary))
                         else:
-                            logging.info("page not changed " + page.title())
+                            print("page not changed " + page.title())
                     else:
-                        logging.info("skip need more time to edit it")
+                        print("skip need more time to edit it")
                         # Update the status of the page to indicate that it needs to be processed again later
                         delta = datetime.timedelta(hours=1)
                         new_date = datetime.datetime.now() + delta

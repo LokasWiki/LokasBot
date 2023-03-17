@@ -57,16 +57,16 @@ def process_article(site: pywikibot.Site, session: Session, id: int, title: str,
 
                     # write processed text back to the page
                     if new_text != page.text and check_status("مستخدم:LokasBot/الإبلاغ عن رابط معطوب أو مؤرشف"):
-                        logging.info("start save " + page.title())
+                        print("start save " + page.title())
                         page.text = new_text
                         page.save(new_summary)
                     else:
-                        logging.info("page not changed " + page.title())
+                        print("page not changed " + page.title())
                     # Delete the page from the database
                     session.delete(page_query)
                     session.commit()
                 else:
-                    logging.info("skip need more time to edit it")
+                    print("skip need more time to edit it")
                     # Update the status of the page to indicate that it needs to be processed again later
                     delta = datetime.timedelta(hours=1)
                     new_date = datetime.datetime.now() + delta

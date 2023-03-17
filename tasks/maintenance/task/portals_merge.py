@@ -28,11 +28,11 @@ for cat in categories_names:
                 processed_text, processed_summary = pipeline.process()
                 # write processed text back to the page
                 if pipeline.hasChange() and check_status("مستخدم:LokasBot/إيقاف مهمة صيانة المقالات"):
-                    logging.info("start save " + page.title())
+                    print("start save " + page.title())
                     page.text = processed_text
                     page.save(summary=clean_summary(processed_summary))
                 else:
-                    logging.info("page not changed " + page.title())
+                    print("page not changed " + page.title())
 
         except Exception as e:
             logging.error(f"An error occurred while processing: {e}")
