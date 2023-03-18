@@ -16,7 +16,7 @@ database=your_database
 
 """
 
-config_path = os.path.join(home_path, 'config.ini')
+config_path = os.path.join(home_path, 'config1.ini')
 
 
 # Read the configuration file

@@ -6,50 +6,45 @@ from database.engine import engine
 from sqlalchemy.orm import Session
 from database.models import Page, TaskName, Status
 
-def main(*args: str) -> int:
-    # todo: mereg with read.py in webcite task
-    try:
-        thread_number = 1
-        time_before_start = 1
-        # https://quarry.wmcloud.org/query/72148 @ASammour
-        custom_query = """SELECT page_title AS "pl_2_title",(select count(distinct pl_from) 
-                from pagelinks 
-                where pl_from_namespace = 0 
-                and pl_title in (
-                       select page_title from redirect inner join page on rd_from = page_id where page_namespace = 0 and rd_title = p.page_title
-                and rd_namespace = 0)
-                and pl_namespace = 0
-                and pl_from in (select page_id
-                                from page
-                                where page_id = pl_from
-                                and page_namespace = 0
-                                and page_is_redirect = 0)
-                and pl_from not in (select (pl_from)
-                from pagelinks 
-                where pl_from_namespace = 0 
-                and pl_title = page_title
-                and pl_namespace = 0
-                and pl_from in (select page_id
-                                from page
-                                where page_id = pl_from
-                                and page_namespace = 0
-                                and page_is_redirect = 0))
-               and pl_from <> page_id   
-               )
-				+
-				(select count(distinct pl_from)
-                from pagelinks 
-                where pl_from_namespace = 0 
-                and pl_title = page_title
-                and pl_namespace = 0
-                and pl_from in (select page_id
-                                from page
-                                where page_id = pl_from
-                                and page_namespace = 0
-                                and page_is_redirect = 0)
-                 and pl_from <> page_id 
-               )
-               as counts
+# https://quarry.wmcloud.org/query/72148 @ASammour
+custom_query = """SELECT page_title AS "pl_2_title",(select count(distinct pl_from) 
+from pagelinks 
+where pl_from_namespace = 0 
+and pl_title in (
+       select page_title from redirect inner join page on rd_from = page_id where page_namespace = 0 and rd_title = p.page_title
+and rd_namespace = 0)
+and pl_namespace = 0
+and pl_from in (select page_id
+                from page
+                where page_id = pl_from
+                and page_namespace = 0
+                and page_is_redirect = 0)
+and pl_from not in (select (pl_from)
+from pagelinks 
+where pl_from_namespace = 0 
+and pl_title = page_title
+and pl_namespace = 0
+and pl_from in (select page_id
+                from page
+                where page_id = pl_from
+                and page_namespace = 0
+                and page_is_redirect = 0))
+and pl_from <> page_id   
+)
++
+(select count(distinct pl_from)
+from pagelinks 
+where pl_from_namespace = 0 
+and pl_title = page_title
+and pl_namespace = 0
+and pl_from in (select page_id
+                from page
+                where page_id = pl_from
+                and page_namespace = 0
+                and page_is_redirect = 0)
+ and pl_from <> page_id 
+)
+as counts
 FROM page p
 where page_namespace = 0
 and page_is_redirect = 0
@@ -57,15 +52,19 @@ and page_id  in (select cl_from from categorylinks where cl_to like "%جميع_�
 and page_id not in (select cl_from from categorylinks where cl_to like "%صفحات_توضيح%" and cl_from = page_id)
 having counts >= 3;"""
 
-        pages = get_pages(time_before_start,custom_query=custom_query)
 
+def main(*args: str) -> int:
+    # todo: mereg with read.py in webcite task
+    try:
+        thread_number = 1
+        time_before_start = 1
         with Session(engine) as session:
-            for page_title in pages:
+            for page_title in get_pages(time_before_start, custom_query=custom_query):
                 if not is_page_present(session, page_title=page_title, task_type=TaskName.MAINTENANCE):
                     print("add : " + page_title)
                     temp_model = Page(
                         title=page_title,
-                        thread_number=1,
+                        thread_number=thread_number,
                         task_name=TaskName.MAINTENANCE
                     )
                     session.add(temp_model)
