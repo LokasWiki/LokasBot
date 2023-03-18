@@ -5,17 +5,19 @@ from sqlalchemy.orm import Session
 
 from database.engine import engine
 from database.helpers import get_articles
-from module import process_article
-from database.models import  TaskName
+from module import ProcessArticle
+from database.models import TaskName
+
 
 def read(thread_number):
     try:
         print(thread_number)
         site = pywikibot.Site()
         with Session(engine) as session:
-            for row in get_articles(session, thread_number,pages_type=TaskName.MAINTENANCE):
-                print(row)
-                process_article(site=site,session=session, id=row[0], title=row[1], thread_number=thread_number)
+            for row in get_articles(session, thread_number, pages_type=TaskName.MAINTENANCE):
+                process_article = ProcessArticle(site=site, session=session, id=row[0], title=row[1],
+                                                 thread_number=thread_number)
+                process_article.start()
 
     except Exception as e:
         logging.error("Error occurred while adding pages to the database.")

@@ -24,7 +24,7 @@ from tasks.maintenance.bots.unreferenced import Unreferenced
 from tasks.maintenance.bots.unreviewed_article import UnreviewedArticle
 from tasks.maintenance.bots.stub import Stub
 
-TASK_SUMMARY = "بوت:صيانة V5.7.0"
+TASK_SUMMARY = "بوت:صيانة V5.8.0"
 
 
 def get_pages(start, custom_query=None):
@@ -136,10 +136,8 @@ def clean_summary(processed_summary):
     return temp_summary
 
 
-
-
 class ProcessArticle:
-    def __init__(self,site: pywikibot.Site, session: Session, id: int, title: str, thread_number: int):
+    def __init__(self, site: pywikibot.Site, session: Session, id: int, title: str, thread_number: int):
         # init base
         self.site = site
         self.session = session
@@ -169,7 +167,7 @@ class ProcessArticle:
                         try:
 
                             self.pipeline = Pipeline(self.page, self.page.text, TASK_SUMMARY, PipelineTasks.steps,
-                                                PipelineTasks.extra_steps)
+                                                     PipelineTasks.extra_steps)
                             processed_text, processed_summary = self.pipeline.process()
                             # write processed text back to the page
                             if self.pipeline.hasChange() and check_status("مستخدم:LokasBot/إيقاف مهمة صيانة المقالات"):
@@ -197,7 +195,7 @@ class ProcessArticle:
         except Exception as e:
             logging.error(f"An error occurred while processing {self.title}: {e}")
             logging.exception(e)
-            if self.page_query is not  None:
+            if self.page_query is not None:
                 self._delay_page(hours=1)
 
     def _delete_page(self):
@@ -205,7 +203,7 @@ class ProcessArticle:
         self.session.delete(self.page_query)
         self.session.commit()
 
-    def _delay_page(self,hours=1):
+    def _delay_page(self, hours=1):
         # Update the status of the page to indicate that it needs to be processed again later
 
         delta = datetime.timedelta(hours=hours)
@@ -213,4 +211,3 @@ class ProcessArticle:
         self.page_query.status = Status.PENDING
         self.page_query.date = new_date
         self.session.commit()
-
