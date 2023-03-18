@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from core.utils.helpers import check_status, check_edit_age
 from core.utils.wikidb import Database
-from database.models import Page, Status
+from database.models import Page, Status as Model_Status
 from tasks.webcite.modules.parsed import Parsed
 from tasks.webcite.modules.request_limiter import RequestLimiter
 
@@ -45,18 +45,14 @@ class ProcessArticle:
             # get page object
             self.page = pywikibot.Page(self.site, self.title)
             # Check if the page has already been processed
-            self.page_query = self.session.query(Page).filter_by(id=self.id, status=Status.PENDING).one_or_none()
-
-            # Update the status of the page to indicate that it is being processed
-            self.page_query.status = Status.RECEIVED
-            self.session.commit()
+            self.page_query = self.session.query(Page).filter_by(id=self.id, status=Model_Status.PENDING).one_or_none()
 
             if self.page is None:
                 self._delete_page()
             else:
                 if self.page_query is not None:
                     # Update the status of the page to indicate that it is being processed
-                    self.page_query.status = Status.RECEIVED
+                    self.page_query.status = Model_Status.RECEIVED
                     self.session.commit()
 
                     if self.page.exists() and (not self.page.isRedirectPage()):
@@ -108,6 +104,6 @@ class ProcessArticle:
         if self.page_query is not None:
             delta = datetime.timedelta(hours=hours)
             new_date = datetime.datetime.now() + delta
-            self.page_query.status = Status.PENDING
+            self.page_query.status = Model_Status.PENDING
             self.page_query.date = new_date
             self.session.commit()
