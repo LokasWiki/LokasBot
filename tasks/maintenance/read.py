@@ -26,9 +26,7 @@ def main(*args: str) -> int:
             # Calculate the time difference in minutes
             time_diff = (now - last_query_time).seconds // 60
             print(f"time_diff: {time_diff}")
-            pages = get_pages(time_diff + 3)
-
-            for page_title in pages:
+            for page_title in get_pages(time_diff + 3):
                 if not is_page_present(session, page_title=page_title, task_type=TaskName.MAINTENANCE):
                     print("add : " + page_title)
 
