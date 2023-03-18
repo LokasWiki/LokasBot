@@ -10,7 +10,7 @@ from core.utils.file import File
 from core.utils.helpers import check_status, prepare_str, check_edit_age
 from core.utils.pipeline import Pipeline
 from core.utils.wikidb import Database
-from database.models import Page,Status,TaskName
+from database.models import Page, Status, TaskName
 
 from tasks.maintenance.bots.dead_end import DeadEnd
 from tasks.maintenance.bots.has_categories import HasCategories
@@ -24,9 +24,8 @@ from tasks.maintenance.bots.unreferenced import Unreferenced
 from tasks.maintenance.bots.unreviewed_article import UnreviewedArticle
 from tasks.maintenance.bots.stub import Stub
 
-
-
 TASK_SUMMARY = "بوت:صيانة V5.7.0"
+
 
 def get_pages(start, custom_query=None):
     query = """SELECT pl_2_title
@@ -71,13 +70,10 @@ FROM (
         database.query = custom_query
 
     database.get_content_from_database()
-    gen = []
+
     for row in database.result:
         title = str(row['pl_2_title'], 'utf-8')
-        gen.append(title)
-
-    gen = set(gen)
-    return gen
+        yield title
 
 
 def get_skip_pages():
@@ -159,7 +155,8 @@ def process_article(site: pywikibot.Site, session: Session, id: int, title: str,
                 if page.exists() and (not page.isRedirectPage()):
                     if check_edit_age(page=page):
 
-                        pipeline = Pipeline(page, page.text, TASK_SUMMARY, PipelineTasks.steps, PipelineTasks.extra_steps)
+                        pipeline = Pipeline(page, page.text, TASK_SUMMARY, PipelineTasks.steps,
+                                            PipelineTasks.extra_steps)
                         processed_text, processed_summary = pipeline.process()
                         # write processed text back to the page
                         if pipeline.hasChange() and check_status("مستخدم:LokasBot/إيقاف مهمة صيانة المقالات"):

@@ -25,13 +25,10 @@ FROM (
     database = Database()
     database.query = query.replace("MINUTE_SUB_NUMBER", str(start))
     database.get_content_from_database()
-    gen = []
+
     for row in database.result:
         title = str(row['pl_2_title'], 'utf-8')
-        gen.append(title)
-
-    gen = set(gen)
-    return gen
+        yield title
 
 
 def process_article(site: pywikibot.Site, session: Session, id: int, title: str, thread_number: int, limiter: RequestLimiter):
