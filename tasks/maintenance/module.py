@@ -136,54 +136,81 @@ def clean_summary(processed_summary):
     return temp_summary
 
 
-def process_article(site: pywikibot.Site, session: Session, id: int, title: str, thread_number: int):
-    try:
-        # get page object
-        page = pywikibot.Page(site, title)
 
-        # Check if the page has already been processed
-        page_query = session.query(Page).filter_by(id=id, status=Status.PENDING).one_or_none()
-        if page_query is not None:
+
+class ProcessArticle:
+    def __init__(self,site: pywikibot.Site, session: Session, id: int, title: str, thread_number: int):
+        # init base
+        self.site = site
+        self.session = session
+        self.id = id
+        self.title = title
+        self.thread_number = thread_number
+        self.summary = TASK_SUMMARY
+
+    def start(self):
+        try:
+            # get page object
+            self.page = pywikibot.Page(self.site, self.title)
+            # Check if the page has already been processed
+            self.page_query = self.session.query(Page).filter_by(id=self.id, status=Status.PENDING).one_or_none()
+
             # Update the status of the page to indicate that it is being processed
-            page_query.status = Status.RECEIVED
-            session.commit()
+            self.page_query.status = Status.RECEIVED
+            self.session.commit()
 
-            # todo:make it same with prepare_str
-            if page.title() not in get_skip_pages():
-                # todo:need more refactor
-                # todo: add is isRedirectPage for single bots
-                if page.exists() and (not page.isRedirectPage()):
-                    if check_edit_age(page=page):
+            if self.page is None:
+                self._delete_page()
+            else:
+                if self.page.exists() and (not self.page.isRedirectPage()):
+                    # if status true can edit
+                    if check_edit_age(page=self.page):
 
-                        pipeline = Pipeline(page, page.text, TASK_SUMMARY, PipelineTasks.steps,
-                                            PipelineTasks.extra_steps)
-                        processed_text, processed_summary = pipeline.process()
-                        # write processed text back to the page
-                        if pipeline.hasChange() and check_status("مستخدم:LokasBot/إيقاف مهمة صيانة المقالات"):
-                            print("start save " + page.title())
-                            page.text = processed_text
-                            page.save(summary=clean_summary(processed_summary))
-                        else:
-                            print("page not changed " + page.title())
+                        try:
+
+                            self.pipeline = Pipeline(self.page, self.page.text, TASK_SUMMARY, PipelineTasks.steps,
+                                                PipelineTasks.extra_steps)
+                            processed_text, processed_summary = self.pipeline.process()
+                            # write processed text back to the page
+                            if self.pipeline.hasChange() and check_status("مستخدم:LokasBot/إيقاف مهمة صيانة المقالات"):
+                                print("start save " + self.page.title())
+                                self.page.text = processed_text
+                                self.page.save(summary=clean_summary(processed_summary))
+                            else:
+                                print("page not changed " + self.page.title())
+
+                            self._delete_page()
+
+                        except Exception as e:
+                            logging.error(f"An error occurred while processing {self.title}: {e}")
+                            logging.exception(e)
+                            if self.page_query is not None:
+                                self._delay_page(hours=1)
+
                     else:
-                        print("skip need more time to edit it")
-                        # Update the status of the page to indicate that it needs to be processed again later
-                        delta = datetime.timedelta(hours=1)
-                        new_date = datetime.datetime.now() + delta
-                        page_query.status = Status.PENDING
-                        page_query.date = new_date
-                        session.commit()
-                else:
-                    # Delete the page from the database
-                    session.delete(page_query)
-                    session.commit()
-    except Exception as e:
-        logging.error(f"An error occurred while processing {title}: {e}")
-        logging.exception(e)
+                        self._delay_page(hours=1)
 
+                else:
+                    self._delete_page()
+
+
+        except Exception as e:
+            logging.error(f"An error occurred while processing {self.title}: {e}")
+            logging.exception(e)
+            if self.page_query is not  None:
+                self._delay_page(hours=1)
+
+    def _delete_page(self):
+        # Delete the page from the database
+        self.session.delete(self.page_query)
+        self.session.commit()
+
+    def _delay_page(self,hours=1):
         # Update the status of the page to indicate that it needs to be processed again later
-        delta = datetime.timedelta(hours=1)
+
+        delta = datetime.timedelta(hours=hours)
         new_date = datetime.datetime.now() + delta
-        page_query.status = Status.PENDING
-        page_query.date = new_date
-        session.commit()
+        self.page_query.status = Status.PENDING
+        self.page_query.date = new_date
+        self.session.commit()
+

@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from database.engine import engine
 from database.helpers import get_articles
 from database.models import TaskName
-from tasks.webcite.module import process_article
+from tasks.webcite.module import  ProcessArticle
 from tasks.webcite.modules.request_limiter import RequestLimiter
 
 
@@ -18,7 +18,8 @@ def read(thread_number):
         site = pywikibot.Site()
         with Session(engine) as session:
             for row in get_articles(session, thread_number,pages_type=TaskName.WEBCITE):
-                process_article(site=site,session=session, id=row[0], title=row[1], thread_number=thread_number, limiter=limiter)
+                process_article = ProcessArticle(site=site,session=session, id=row[0], title=row[1], thread_number=thread_number, limiter=limiter)
+                process_article.start()
 
     except Exception as e:
         logging.error("Error occurred while adding pages to the database.")

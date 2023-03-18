@@ -29,56 +29,78 @@ FROM (
         yield title
 
 
-def process_article(site: pywikibot.Site, session: Session, id: int, title: str, thread_number: int, limiter: RequestLimiter):
-    try:
-        # get page object
-        page = pywikibot.Page(site, title)
+class ProcessArticle:
+    def __init__(self,site: pywikibot.Site, session: Session, id: int, title: str, thread_number: int, limiter: RequestLimiter):
+        # init base
+        self.site = site
+        self.session = session
+        self.id = id
+        self.title = title
+        self.thread_number = thread_number
+        self.limiter = limiter
+        self.summary = "بوت:الإبلاغ عن رابط معطوب أو مؤرشف V1.5.0"
 
-        # Check if the page has already been processed
-        page_query = session.query(Page).filter_by(id=id, status=Status.PENDING).one_or_none()
-        if page_query is not None:
+    def start(self):
+        try:
+            # get page object
+            self.page = pywikibot.Page(self.site, self.title)
+            # Check if the page has already been processed
+            self.page_query = self.session.query(Page).filter_by(id=self.id, status=Status.PENDING).one_or_none()
+
             # Update the status of the page to indicate that it is being processed
-            page_query.status = Status.RECEIVED
-            session.commit()
-            if page.exists() and (not page.isRedirectPage()):
-                # if status true can edit
-                if check_edit_age(page=page):
+            self.page_query.status = Status.RECEIVED
+            self.session.commit()
 
-                    summary = "بوت:الإبلاغ عن رابط معطوب أو مؤرشف V1.5.0"
-
-                    bot = Parsed(page.text, summary, limiter)
-
-                    new_text, new_summary = bot()
-
-                    # write processed text back to the page
-                    if new_text != page.text and check_status("مستخدم:LokasBot/الإبلاغ عن رابط معطوب أو مؤرشف"):
-                        print("start save " + page.title())
-                        page.text = new_text
-                        page.save(new_summary)
-                    else:
-                        print("page not changed " + page.title())
-                    # Delete the page from the database
-                    session.delete(page_query)
-                    session.commit()
-                else:
-                    print("skip need more time to edit it")
-                    # Update the status of the page to indicate that it needs to be processed again later
-                    delta = datetime.timedelta(hours=1)
-                    new_date = datetime.datetime.now() + delta
-                    page_query.status = Status.PENDING
-                    page_query.date = new_date
-                    session.commit()
+            if self.page is None:
+                self._delete_page()
             else:
-                # Delete the page from the database
-                session.delete(page_query)
-                session.commit()
-    except Exception as e:
-        logging.error(f"An error occurred while processing {title}: {e}")
-        logging.exception(e)
+                if self.page.exists() and (not self.page.isRedirectPage()):
+                    # if status true can edit
+                    if check_edit_age(page=self.page):
 
+                        try:
+                            bot = Parsed(self.page.text, self.summary, self.limiter)
+                            new_text, new_summary = bot()
+                            # write processed text back to the page
+                            if new_text != self.page.text and check_status(
+                                    "مستخدم:LokasBot/الإبلاغ عن رابط معطوب أو مؤرشف"):
+                                print("start save " + self.page.title())
+                                self.page.text = new_text
+                                self.page.save(new_summary)
+                            else:
+                                print("page not changed " + self.page.title())
+
+                            self._delete_page()
+
+                        except Exception as e:
+                            logging.error(f"An error occurred while processing {self.title}: {e}")
+                            logging.exception(e)
+                            if self.page_query is not None:
+                                self._delay_page(hours=1)
+
+                    else:
+                        self._delay_page(hours=1)
+
+                else:
+                    self._delete_page()
+
+
+        except Exception as e:
+            logging.error(f"An error occurred while processing {self.title}: {e}")
+            logging.exception(e)
+            if self.page_query is not  None:
+                self._delay_page(hours=1)
+
+    def _delete_page(self):
+        # Delete the page from the database
+        self.session.delete(self.page_query)
+        self.session.commit()
+
+    def _delay_page(self,hours=1):
         # Update the status of the page to indicate that it needs to be processed again later
-        delta = datetime.timedelta(hours=1)
+
+        delta = datetime.timedelta(hours=hours)
         new_date = datetime.datetime.now() + delta
-        page_query.status = Status.PENDING
-        page_query.date = new_date
-        session.commit()
+        self.page_query.status = Status.PENDING
+        self.page_query.date = new_date
+        self.session.commit()
