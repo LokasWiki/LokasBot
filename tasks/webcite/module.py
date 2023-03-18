@@ -54,35 +54,40 @@ class ProcessArticle:
             if self.page is None:
                 self._delete_page()
             else:
-                if self.page.exists() and (not self.page.isRedirectPage()):
-                    # if status true can edit
-                    if check_edit_age(page=self.page):
+                if self.page_query is not None:
+                    # Update the status of the page to indicate that it is being processed
+                    self.page_query.status = Status.RECEIVED
+                    self.session.commit()
 
-                        try:
-                            bot = Parsed(self.page.text, self.summary, self.limiter)
-                            new_text, new_summary = bot()
-                            # write processed text back to the page
-                            if new_text != self.page.text and check_status(
-                                    "مستخدم:LokasBot/الإبلاغ عن رابط معطوب أو مؤرشف"):
-                                print("start save " + self.page.title())
-                                self.page.text = new_text
-                                self.page.save(new_summary)
-                            else:
-                                print("page not changed " + self.page.title())
+                    if self.page.exists() and (not self.page.isRedirectPage()):
+                        # if status true can edit
+                        if check_edit_age(page=self.page):
 
-                            self._delete_page()
+                            try:
+                                bot = Parsed(self.page.text, self.summary, self.limiter)
+                                new_text, new_summary = bot()
+                                # write processed text back to the page
+                                if new_text != self.page.text and check_status(
+                                        "مستخدم:LokasBot/الإبلاغ عن رابط معطوب أو مؤرشف"):
+                                    print("start save " + self.page.title())
+                                    self.page.text = new_text
+                                    self.page.save(new_summary)
+                                else:
+                                    print("page not changed " + self.page.title())
 
-                        except Exception as e:
-                            logging.error(f"An error occurred while processing {self.title}: {e}")
-                            logging.exception(e)
-                            if self.page_query is not None:
-                                self._delay_page(hours=1)
+                                self._delete_page()
+
+                            except Exception as e:
+                                logging.error(f"An error occurred while processing {self.title}: {e}")
+                                logging.exception(e)
+                                if self.page_query is not None:
+                                    self._delay_page(hours=1)
+
+                        else:
+                            self._delay_page(hours=1)
 
                     else:
-                        self._delay_page(hours=1)
-
-                else:
-                    self._delete_page()
+                        self._delete_page()
 
 
         except Exception as e:
@@ -91,16 +96,18 @@ class ProcessArticle:
             if self.page_query is not  None:
                 self._delay_page(hours=1)
 
+
     def _delete_page(self):
-        # Delete the page from the database
-        self.session.delete(self.page_query)
-        self.session.commit()
+        if self.page_query is not None:
+            # Delete the page from the database
+            self.session.delete(self.page_query)
+            self.session.commit()
 
-    def _delay_page(self,hours=1):
+    def _delay_page(self, hours=1):
         # Update the status of the page to indicate that it needs to be processed again later
-
-        delta = datetime.timedelta(hours=hours)
-        new_date = datetime.datetime.now() + delta
-        self.page_query.status = Status.PENDING
-        self.page_query.date = new_date
-        self.session.commit()
+        if self.page_query is not None:
+            delta = datetime.timedelta(hours=hours)
+            new_date = datetime.datetime.now() + delta
+            self.page_query.status = Status.PENDING
+            self.page_query.date = new_date
+            self.session.commit()
