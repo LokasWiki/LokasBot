@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.1] - 2023-03-18
+### Fixed
+-  تم اصلاح مشكله عدم حذف الصفحات بعد اجراء الفحص عليها   ([#136](https://github.com/LokasWiki/LokasBot/pull/136)) ([#137](https://github.com/LokasWiki/LokasBot/pull/137))
+
+
+## [1.4.0] - 2023-03-17
+
+### Fixed
+- إصلاح الأخطاء الإملائية  ([#123](https://github.com/LokasWiki/LokasBot/pull/123))
+
+### Added
+
+- بوت إضافة/إزالة قالب بذرة (مهمة الصيانة)  ([#127](https://github.com/LokasWiki/LokasBot/pull/127)) ([#130](https://github.com/LokasWiki/LokasBot/pull/130))
+
+### Changed
+- حذف كود sqlite واستخدام مكتبه sqlalchemy 
+- أصبح كود مهمة الصيانة وأرشفه المراجع يعتمد علي قاعدة بيانات mysql بدلا من sqlite لحل مشكلة الاتصالات المتعددة
+- تم تعديل  طريقة  جلب الصفحات الجديدة بالاعتماد علي آخر موعد تم إجراء البحث السابق فيه لحل مشكلة تكرر الصفحات ولزيادة أداء البوت وتقليل النطاق الترددي
+
+
 ## [1.3.0] - 2023-03-13
 ### Added
 - إضافة قالب لا للوصلات قليلة لتخطي مهمة (إضافة/ إزالة قالب وصلات قليلة) (مهمة الصيانة)  ([#116](https://github.com/LokasWiki/LokasBot/pull/116))
