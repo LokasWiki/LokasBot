@@ -31,5 +31,5 @@ port = config.get('mysql', 'port')
 database = config.get('mysql', 'database')
 
 # Create the database engine
-engine = create_engine(f'mysql+pymysql://{username}:{password}@{host}:{port}/{database}')
+engine = create_engine(f'mysql+pymysql://{username}:{password}@{host}:{port}/{database}',echo=False)
 
