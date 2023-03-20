@@ -24,7 +24,7 @@ from tasks.maintenance.bots.unreferenced import Unreferenced
 from tasks.maintenance.bots.unreviewed_article import UnreviewedArticle
 from tasks.maintenance.bots.stub import Stub
 
-TASK_SUMMARY = "بوت:صيانة V5.8.0"
+TASK_SUMMARY = "بوت:صيانة V5.8.1"
 
 
 def get_pages(start, custom_query=None):
