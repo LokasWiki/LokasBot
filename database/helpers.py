@@ -40,3 +40,15 @@ def get_articles(session, thread_number, pages_type):
     yield from query2.all()
     yield from query3.all()
 
+
+def get_page_count(session, pages_type):
+
+    now = func.now()
+
+    query1 = session.query(func.count(Page.id)). \
+        filter_by(status=Status.PENDING, task_name=pages_type). \
+        filter(Page.update_date < now)
+
+    count = query1.scalar()
+
+    return count
