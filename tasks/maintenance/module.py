@@ -212,5 +212,5 @@ class ProcessArticle:
             delta = datetime.timedelta(hours=hours)
             new_date = datetime.datetime.now() + delta
             self.page_query.status = Model_Status.PENDING
-            self.page_query.date = new_date
+            self.page_query.update_date = new_date
             self.session.commit()
