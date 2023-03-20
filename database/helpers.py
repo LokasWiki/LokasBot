@@ -1,3 +1,6 @@
+import datetime
+
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from database.models import Page, TaskName, Status
@@ -14,21 +17,26 @@ def get_articles(session, thread_number, pages_type):
     if thread_number == 1:
         thread_number = 0
 
+    now = func.now()
+
     query1 = session.query(Page.id, Page.title, Page.thread_number). \
         filter_by(status=Status.PENDING, task_name=pages_type, thread_number=1). \
-        order_by(Page.create_date). \
+        filter(Page.update_date < now). \
+        order_by(Page.update_date). \
         limit(200).offset(thread_number)
-
     query2 = session.query(Page.id, Page.title, Page.thread_number). \
         filter_by(status=Status.PENDING, task_name=pages_type, thread_number=2). \
-        order_by(Page.create_date). \
+        filter(Page.update_date < now). \
+        order_by(Page.update_date). \
         limit(200).offset(thread_number)
 
     query3 = session.query(Page.id, Page.title, Page.thread_number). \
         filter_by(status=Status.PENDING, task_name=pages_type, thread_number=3). \
-        order_by(Page.create_date). \
+        filter(Page.update_date < now). \
+        order_by(Page.update_date). \
         limit(200).offset(thread_number)
 
     yield from query1.all()
     yield from query2.all()
     yield from query3.all()
+
