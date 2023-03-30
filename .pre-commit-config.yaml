@@ -91,7 +91,6 @@ repos:
       - id: mypy
         args: []
         additional_dependencies:
-          - pywikibot-extensions
           - types-pymysql
           - types-python-dateutil
           - types-requests
