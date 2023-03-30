@@ -13,7 +13,9 @@ password=your_password
 host=your_host
 port=your_port
 database=your_database
-
+[ai_api]
+key = my_key
+url= ai_flask_url
 """
 
 config_path = os.path.join(home_path, 'config.ini')
