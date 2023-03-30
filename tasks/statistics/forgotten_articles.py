@@ -32,7 +32,7 @@ columns = [
     ("الرقم", None, index),
     ("المقالة", None, page_title),
     ("عدد التعديلات", "editcount"),
-    ("أخر تعديل", None, lastedit),
+    ("آخر تعديل", None, lastedit),
 ]
 
 
