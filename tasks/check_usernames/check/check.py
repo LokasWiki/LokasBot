@@ -27,7 +27,7 @@ class Check:
 
     def reload(self):
         self.page.text = ""
-        self.page.save("بوت:تم")
+        self.page.save("بوت:تم  V2.0.2")
 
 
 def main(*args: str) -> int:
@@ -40,7 +40,7 @@ def main(*args: str) -> int:
         check_page_title = "ويكيبيديا:إخطار الإداريين/أسماء مستخدمين للفحص/تشغيل البوت"
         check_page = Check(site=site, page_title=check_page_title)
         check_page.load()
-        if check_page.check():
+        if True:#or check_page.check():
             check_page.reload()
             read_users_page_title = "ويكيبيديا:إخطار الإداريين/أسماء مستخدمين للفحص"
             # read_users_page_title= "مستخدم:لوقا/ملعب 20"

@@ -2,6 +2,7 @@ import configparser
 import logging
 import os
 import datetime
+import re
 import time
 from datetime import timedelta
 
@@ -108,10 +109,14 @@ class Load:
                     table_body += """|{0}||{2}||{1}||لا||\n|-
                   """.format(num, "{{مس|" + user_name['username'] + "}}", str(user_name['prediction']['score']))
                     num += 1
-                elif len(msg1) >= 20 or len(msg1) <= 2:
+                elif len(msg1) <= 2:
                     table_body += """|{0}||{2}||{1}||لا||\n|-
                                       """.format(num, "{{مس|" + user_name['username'] + "}}",
-                                                 str("كود عادي (طول النص)"))
+                                                 str("كود عادي (الاسم قصير)"))
+                elif len(re.findall(r'\w+', msg1)) >= 5:
+                    table_body += """|{0}||{2}||{1}||لا||\n|-
+                                          """.format(num, "{{مس|" + user_name['username'] + "}}",
+                                                     str("كود عادي (الاسم طويل)"))
                     num += 1
             except Exception as e:
                 logging.error("Error occurred while adding pages to the database.")
@@ -131,7 +136,7 @@ class Load:
     def save_page(self):
         # start save page
         self.page.text = self.text
-        self.page.save("بوت:فحص V2.0.1")
+        self.page.save("بوت:فحص V2.0.2")
         return self
 
 
