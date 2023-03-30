@@ -136,7 +136,7 @@ class Load:
     def save_page(self):
         # start save page
         self.page.text = self.text
-        self.page.save("بوت:فحص V2.0.2")
+        self.page.save("بوت:فحص V2.1.0")
         return self
 
 
