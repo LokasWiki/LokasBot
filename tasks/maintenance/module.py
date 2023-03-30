@@ -24,7 +24,7 @@ from tasks.maintenance.bots.unreferenced import Unreferenced
 from tasks.maintenance.bots.unreviewed_article import UnreviewedArticle
 from tasks.maintenance.bots.stub import Stub
 
-TASK_SUMMARY = "بوت:صيانة V5.8.1"
+TASK_SUMMARY = "بوت:صيانة V5.8.2"
 
 
 def get_pages(start, custom_query=None):
@@ -76,14 +76,23 @@ FROM (
         yield title
 
 
-def get_skip_pages():
+# todo: call it from bot task
+def get_skip_pages(name_of_page = None):
     home_path = os.path.expanduser("~")
     file = File(script_dir=home_path)
     file_path = prepare_str('maintenance_skip.txt')
     file.set_stub_path(file_path)
     file.get_json_content()
     templates = json.loads(file.contents)
-    return templates
+    if name_of_page is None:
+        return templates
+    else:
+        found = False
+        for page in templates:
+            if prepare_str(page) == prepare_str(name_of_page):
+                found = True
+                break
+        return  found
 
 
 class PipelineTasks:
@@ -164,8 +173,7 @@ class ProcessArticle:
 
                     if self.page.exists() and (not self.page.isRedirectPage()):
                         # if status true can edit
-                        if check_edit_age(page=self.page):
-
+                        if check_edit_age(page=self.page) and not get_skip_pages(name_of_page=self.page.title(with_ns=False)):
                             try:
 
                                 self.pipeline = Pipeline(self.page, self.page.text, TASK_SUMMARY, PipelineTasks.steps,
@@ -212,5 +220,5 @@ class ProcessArticle:
             delta = datetime.timedelta(hours=hours)
             new_date = datetime.datetime.now() + delta
             self.page_query.status = Model_Status.PENDING
-            self.page_query.date = new_date
+            self.page_query.update_date = new_date
             self.session.commit()

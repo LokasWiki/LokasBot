@@ -4,6 +4,7 @@ import pywikibot.flow
 from datetime import datetime
 from pywikibot.data.api import Request
 
+
 # todo: move this class to core and move tests files
 class DateFormatter:
     """
@@ -58,6 +59,7 @@ class Category:
     def __init__(self, site):
         self.site = site
         self.cat_name = None
+
     def create(self):
         try:
             formatter = DateFormatter("ar")
@@ -67,13 +69,13 @@ class Category:
             self.cat_name = f"تصنيف:أسماء مستخدمين مخالفة مرشحة للمنع منذ {cat_date}"
             cat = pywikibot.Category(self.site, self.cat_name)
             cat.text = "{{تصنيف تهذيب شهري}}"
-            cat.save("إنشاء تصنيف صيانة")
+            cat.save("بوت:فحص (إنشاء تصنيف صيانة) V2.0.2")
         except:
             print("failed to create category")
 
 
 class SendAlert:
-    def __init__(self, user_name, has_reason, reason, site,cat_name):
+    def __init__(self, user_name, has_reason, reason, site, cat_name):
         self.user_name = user_name
         self.has_reason = has_reason
         self.cat_name = cat_name
@@ -81,8 +83,9 @@ class SendAlert:
         self.site = site
         self.header = ""
         self.revisionId = None
-        self.token= None
-        self.page_title =None
+        self.token = None
+        self.page_title = None
+
     def start_send(self):
         # Retrieve the user talk page
         user = pywikibot.User(self.site, self.user_name)
@@ -105,7 +108,8 @@ class SendAlert:
                 # add category to header
                 self.get_header_text()
 
-                self.header += """\n[[تصنيف:أسماء مستخدمين مخالفة مرشحة للمنع]]\n[[CAT_NAME|{{اسم_الصفحة_الأساسي}}]]\n""".replace("CAT_NAME",self.cat_name)
+                self.header += """\n[[تصنيف:أسماء مستخدمين مخالفة مرشحة للمنع]]\n[[CAT_NAME|{{اسم_الصفحة_الأساسي}}]]\n""".replace(
+                    "CAT_NAME", self.cat_name)
                 self.token = self.site.tokens["csrf"]
                 self.save_flow_header()
 
@@ -185,9 +189,8 @@ class SendAlert:
         # todo:add check error here
 
 
-
 class ReadUsers:
-    def __init__(self, site, page_title,cat_name):
+    def __init__(self, site, page_title, cat_name):
         self.page = None
         self.cat_name = cat_name
         self.parsed = None
@@ -221,7 +224,8 @@ class ReadUsers:
         for user in self.users:
             try:
                 # if str(user['username']).strip().lower() == str("Lokas7755").strip().lower():
-                send_obj = SendAlert(user['username'], user['has_reason'], user['reason'], site=self.site,cat_name=self.cat_name)
+                send_obj = SendAlert(user['username'], user['has_reason'], user['reason'], site=self.site,
+                                     cat_name=self.cat_name)
                 send_obj.start_send()
             except:
                 print("can`t send  alert")
