@@ -3,10 +3,12 @@ import os
 import pywikibot
 
 from core.utils.file import File
+from core.utils.helpers import prepare_str
 from modules import ReadUsers, Category
 from tasks.check_usernames.load.load import Load
 
 
+# todo:move to core
 class Check:
     def __init__(self, site, page_title):
         self.page_title = page_title
@@ -21,7 +23,7 @@ class Check:
 
     def check(self):
         if self.text is not None:
-            if self.text.strip().lower() == "نعم".strip().lower():
+            if prepare_str(self.text) == prepare_str("نعم"):
                 return True
         return False
 
@@ -40,7 +42,7 @@ def main(*args: str) -> int:
         check_page_title = "ويكيبيديا:إخطار الإداريين/أسماء مستخدمين للفحص/تشغيل البوت"
         check_page = Check(site=site, page_title=check_page_title)
         check_page.load()
-        if True:#or check_page.check():
+        if check_page.check():
             check_page.reload()
             read_users_page_title = "ويكيبيديا:إخطار الإداريين/أسماء مستخدمين للفحص"
             # read_users_page_title= "مستخدم:لوقا/ملعب 20"
