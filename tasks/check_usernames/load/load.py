@@ -1,19 +1,19 @@
 import configparser
+import datetime
 import logging
 import os
-import datetime
 import re
 import time
 from datetime import timedelta
 
 import pywikibot
-from pywikibot import Timestamp
+import requests
 import wikitextparser as wtp
+from pywikibot import Timestamp
 
 from core.utils.file import File
+from core.utils.helpers import check_status
 from core.utils.wikidb import Database
-
-import requests
 
 home_path = os.path.expanduser("~")
 """"
@@ -179,77 +179,78 @@ class LastCheck:
 
 def main(*args: str) -> int:
     try:
+        if check_status("مستخدم:LokasBot/إخطار الإداريين/أسماء مستخدمين للفحص"):
+            script_dir = os.path.dirname(__file__)
 
-        script_dir = os.path.dirname(__file__)
+            # text stub
+            file = File(script_dir=script_dir)
+            file_path = 'stub/load.txt'
+            file.set_stub_path(file_path)
+            file.get_file_content()
+            content = file.contents
 
-        # text stub
-        file = File(script_dir=script_dir)
-        file_path = 'stub/load.txt'
-        file.set_stub_path(file_path)
-        file.get_file_content()
-        content = file.contents
+            # database users list
+            db = Database()
+            # Get yesterday's date
+            yesterday = datetime.date.today() - datetime.timedelta(days=1)
 
-        # database users list
-        db = Database()
-        # Get yesterday's date
-        yesterday = datetime.date.today() - datetime.timedelta(days=1)
+            # Get start time for yesterday
+            start_time = datetime.datetime.combine(yesterday, datetime.time.min)
 
-        # Get start time for yesterday
-        start_time = datetime.datetime.combine(yesterday, datetime.time.min)
+            # Get last time for yesterday
+            last_time = datetime.datetime.combine(yesterday, datetime.time.max)
 
-        # Get last time for yesterday
-        last_time = datetime.datetime.combine(yesterday, datetime.time.max)
+            # Format dates for SQL query
+            start_time_sql = start_time.strftime("%Y%m%d%H%M%S")
+            # start_time_sql = 20221207000000
+            last_time_sql = last_time.strftime("%Y%m%d%H%M%S")
+            # last_time_sql = 20230322235959
 
-        # Format dates for SQL query
-        start_time_sql = start_time.strftime("%Y%m%d%H%M%S")
-        # start_time_sql = 20221207000000
-        last_time_sql = last_time.strftime("%Y%m%d%H%M%S")
-        # last_time_sql = 20230322235959
+            print(start_time_sql)
+            print(last_time_sql)
 
-        print(start_time_sql)
-        print(last_time_sql)
+            db.query = """
+            select log_title as "q_log_title"
+            from logging 
+            where log_type in ("newusers") 
+            and log_timestamp BETWEEN {} AND {}
+            and log_title not in (
+              select page.page_title from categorylinks 
+              inner join page on page.page_id = categorylinks.cl_from
+              where cl_to like "أسماء_مستخدمين_مخالفة_مرشحة_للمنع" 
+              and cl_type in ("page")
+            )
+            and log_title not in (
+                select replace(user.user_name," ","_") as "user_name_temp" from ipblocks
+                inner join user on ipblocks.ipb_user = user.user_id
+            )
+            """.format(start_time_sql, last_time_sql)
+            db.get_content_from_database()
+            names = []
+            for row in db.result:
+                name = str(row['q_log_title'], 'utf-8')
+                names.append(name)
 
-        db.query = """
-        select log_title as "q_log_title"
-        from logging 
-        where log_type in ("newusers") 
-        and log_timestamp BETWEEN {} AND {}
-        and log_title not in (
-          select page.page_title from categorylinks 
-          inner join page on page.page_id = categorylinks.cl_from
-          where cl_to like "أسماء_مستخدمين_مخالفة_مرشحة_للمنع" 
-          and cl_type in ("page")
-        )
-        and log_title not in (
-            select replace(user.user_name," ","_") as "user_name_temp" from ipblocks
-            inner join user on ipblocks.ipb_user = user.user_id
-        )
-        """.format(start_time_sql, last_time_sql)
-        db.get_content_from_database()
-        names = []
-        for row in db.result:
-            name = str(row['q_log_title'], 'utf-8')
-            names.append(name)
+            page_title = "ويكيبيديا:إخطار الإداريين/أسماء مستخدمين للفحص"
+            # page_title = "مستخدم:لوقا/أسماء مستخدمين للفحص"
+            # page_title = "مستخدم:لوقا/ملعب 20"
 
-        page_title = "ويكيبيديا:إخطار الإداريين/أسماء مستخدمين للفحص"
-        # page_title = "مستخدم:لوقا/أسماء مستخدمين للفحص"
-        # page_title = "مستخدم:لوقا/ملعب 20"
+            site = pywikibot.Site()
 
-        site = pywikibot.Site()
+            users = []
+            try:
+                last_check_obj = LastCheck(site)
+                if last_check_obj.check():
+                    last_check_obj.get_users_from_table()
+                    users = last_check_obj.users
+            except Exception as e:
+                print(f"An error occurred while init last_check_obj : {e}")
 
-        users = []
-        try:
-            last_check_obj = LastCheck(site)
-            if last_check_obj.check():
-                last_check_obj.get_users_from_table()
-                users = last_check_obj.users
-        except Exception as e:
-            print(f"An error occurred while init last_check_obj : {e}")
-
-        load_obj = Load(content_text=content, names=names, page_title=page_title, site=site,
-                        users=users)
-        load_obj.load_page().build_table().save_page()
-
+            load_obj = Load(content_text=content, names=names, page_title=page_title, site=site,
+                            users=users)
+            load_obj.load_page().build_table().save_page()
+        else:
+            print("check wiki site")
     except Exception as e:
         print(f"An error occurred: {e}")
     return 0
