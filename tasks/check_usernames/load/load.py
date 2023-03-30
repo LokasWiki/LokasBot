@@ -1,23 +1,80 @@
+import configparser
+import logging
 import os
 import datetime
+import time
 from datetime import timedelta
 
 import pywikibot
 from pywikibot import Timestamp
 import wikitextparser as wtp
-import antispam
 
 from core.utils.file import File
 from core.utils.wikidb import Database
 
+import requests
+
+home_path = os.path.expanduser("~")
+""""
+config.ini example
+
+[mysql]
+username=your_username
+password=your_password
+host=your_host
+port=your_port
+database=your_database
+[ai_api]
+key = my_key
+url= ai_flask_url
+"""
+
+config_path = os.path.join(home_path, 'config.ini')
+
+
+# Read the configuration file
+config = configparser.ConfigParser()
+config.read(config_path)
+
+def get_spam_predictions(usernames):
+    # Define the API endpoint URL
+    url = config.get('ai_api', "url")
+
+    # Set the request headers
+    headers = {"X-Api-Key": config.get('ai_api', "key"), "Content-Type": "application/json"}
+
+    # Replace underscores with spaces in the usernames
+    usernames = [username.replace("_", " ") for username in usernames]
+
+    # Split the list of usernames into batches of 100
+    batches = [usernames[i:i + 100] for i in range(0, len(usernames), 100)]
+
+    # Create a list to store the results from each batch
+    results = []
+    num = 0
+    # Loop over the batches and send a POST request to the API endpoint for each batch
+    for batch in batches:
+        # Create the request data as a dictionary
+        data = {"usernames": batch}
+        print(num)
+        num += 1
+        # Send the POST request to the API endpoint
+        response = requests.post(url, headers=headers, json=data)
+
+        # Parse the response JSON and append it to the results list
+        batch_results = response.json()["results"]
+        results.extend(batch_results)
+        time.sleep(5)
+    # Return the list of usernames and their spam predictions
+    return results
+
 
 class Load:
-    def __init__(self, content_text, ai_model, names, page_title, site, users=None):
+    def __init__(self, content_text, names, page_title, site, users=None):
         if users is None:
             users = []
         self.stub_content = content_text
-        self.ai_model = ai_model
-        self.list_of_names = names
+        self.list_of_names = get_spam_predictions(names)
         self.page_title = page_title
         self.site = site
         self.username_bot = self.site.username()
@@ -43,18 +100,25 @@ class Load:
 
         for user_name in self.list_of_names:
 
+            user_name['prediction']['score']
             try:
-                msg1 = user_name.strip().lower().replace(" ", "_")
+                msg1 = user_name['username'].strip().lower().replace(" ", "_")
 
-                if self.ai_model.score(msg1) >= 0.9 or len(msg1) >= 20 or len(msg1) <= 2:
+                if user_name['prediction']['label'] == "LABEL_1":
                     table_body += """|{0}||{2}||{1}||لا||\n|-
-                  """.format(num, "{{مس|" + user_name + "}}", str(self.ai_model.score(msg1)))
+                  """.format(num, "{{مس|" + user_name['username'] + "}}", str(user_name['prediction']['score']))
                     num += 1
-            except:
+                elif len(msg1) >= 20 or len(msg1) <= 2:
+                    table_body += """|{0}||{2}||{1}||لا||\n|-
+                                      """.format(num, "{{مس|" + user_name['username'] + "}}",
+                                                 str("كود عادي (طول النص)"))
+                    num += 1
+            except Exception as e:
+                logging.error("Error occurred while adding pages to the database.")
+                logging.exception(e)
                 table_body += """|{0}||{2}||{1}||لا||\n|-
-                      """.format(num, "{{مس|" + user_name + "}}", "غير معروف")
+                      """.format(num, "{{مس|" + user_name['username'] + "}}", "غير معروف")
                 num += 1
-
 
         # start add data to text stub
         self.text = self.stub_content.replace("BOT_TABLE_BODY", table_body).replace(
@@ -67,7 +131,7 @@ class Load:
     def save_page(self):
         # start save page
         self.page.text = self.text
-        self.page.save("بوت:تحديث")
+        self.page.save("بوت:فحص V2.0.1")
         return self
 
 
@@ -120,13 +184,6 @@ def main(*args: str) -> int:
         file.get_file_content()
         content = file.contents
 
-        # model file
-        model = File(script_dir=script_dir)
-        model_path = 'ai/models/v1/my_model.dat'
-        model.set_stub_path(model_path)
-
-        ai_model = antispam.Detector(model.file_path)
-
         # database users list
         db = Database()
         # Get yesterday's date
@@ -140,13 +197,29 @@ def main(*args: str) -> int:
 
         # Format dates for SQL query
         start_time_sql = start_time.strftime("%Y%m%d%H%M%S")
+        # start_time_sql = 20221207000000
         last_time_sql = last_time.strftime("%Y%m%d%H%M%S")
+        # last_time_sql = 20230322235959
 
-        db.query = """select logging.log_title as "q_log_title" from logging
-        inner join user on user.user_name = logging.log_title
-        where log_type in ("newusers")
+        print(start_time_sql)
+        print(last_time_sql)
+
+        db.query = """
+        select log_title as "q_log_title"
+        from logging 
+        where log_type in ("newusers") 
         and log_timestamp BETWEEN {} AND {}
-        and user.user_id NOT IN (SELECT ipb_user FROM ipblocks)""".format(start_time_sql, last_time_sql)
+        and log_title not in (
+          select page.page_title from categorylinks 
+          inner join page on page.page_id = categorylinks.cl_from
+          where cl_to like "أسماء_مستخدمين_مخالفة_مرشحة_للمنع" 
+          and cl_type in ("page")
+        )
+        and log_title not in (
+            select replace(user.user_name," ","_") as "user_name_temp" from ipblocks
+            inner join user on ipblocks.ipb_user = user.user_id
+        )
+        """.format(start_time_sql, last_time_sql)
         db.get_content_from_database()
         names = []
         for row in db.result:
@@ -154,6 +227,7 @@ def main(*args: str) -> int:
             names.append(name)
 
         page_title = "ويكيبيديا:إخطار الإداريين/أسماء مستخدمين للفحص"
+        # page_title = "مستخدم:لوقا/أسماء مستخدمين للفحص"
         # page_title = "مستخدم:لوقا/ملعب 20"
 
         site = pywikibot.Site()
@@ -165,9 +239,9 @@ def main(*args: str) -> int:
                 last_check_obj.get_users_from_table()
                 users = last_check_obj.users
         except Exception as e:
-                print(f"An error occurred while init last_check_obj : {e}")
+            print(f"An error occurred while init last_check_obj : {e}")
 
-        load_obj = Load(content_text=content, ai_model=ai_model, names=names, page_title=page_title, site=site,
+        load_obj = Load(content_text=content, names=names, page_title=page_title, site=site,
                         users=users)
         load_obj.load_page().build_table().save_page()
 
