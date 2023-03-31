@@ -1,5 +1,6 @@
-import os
 import datetime
+import os
+
 import pywikibot
 
 from core.utils.file import File
@@ -10,7 +11,7 @@ site = pywikibot.Site()
 
 # Define the month you want to query
 # todo: make it dynamic
-month = datetime.date(2023, 2, 1)
+month = datetime.date(2023, 3, 1)
 
 # Calculate the first and last days of the month
 first_day_of_month = month.replace(day=1)
