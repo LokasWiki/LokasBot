@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from database.engine import engine
 from database.helpers import is_page_present
-from database.models import Page
+from database.models import Page, TaskName
 from tasks.maintenance.module import get_pages
 
 
@@ -63,12 +63,13 @@ having counts < 3;"""
 
         with Session(engine) as maintenance_session:
             for page_title in pages:
-                if not is_page_present(maintenance_session, page_title=page_title):
+                if not is_page_present(maintenance_session, page_title=page_title, task_type=TaskName.MAINTENANCE):
                     print("add : " + page_title)
 
                     temp_model = Page(
                         title=page_title,
                         thread=random.randint(1, 3),
+                        task_name=TaskName.MAINTENANCE
                     )
                     maintenance_session.add(temp_model)
 
