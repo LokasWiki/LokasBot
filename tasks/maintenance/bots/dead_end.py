@@ -2,6 +2,7 @@ import logging
 
 import pywikibot
 import wikitextparser as wtp
+
 from core.utils.disambiguation import Disambiguation
 from core.utils.helpers import prepare_str
 
@@ -20,7 +21,7 @@ class DeadEnd:
         self.parsed = wtp.parse(self.text)
 
     def __call__(self):
-        disambiguation = Disambiguation(self.page.title(), self.text)
+        disambiguation = Disambiguation(self.page, self.page.title(), self.text)
         if disambiguation.check("or"):
             return self.text, self.summary
 

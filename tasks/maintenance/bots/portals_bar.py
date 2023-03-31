@@ -1,4 +1,3 @@
-import re
 import wikitextparser as wtp
 
 from core.utils.disambiguation import Disambiguation
@@ -30,7 +29,7 @@ class PortalsBar:
         ]
 
     def __call__(self):
-        disambiguation = Disambiguation(self.page.title(), self.text)
+        disambiguation = Disambiguation(self.page, self.page.title(), self.text)
         if disambiguation.check("or"):
             return self.text, self.summary
         #  if true start remove template

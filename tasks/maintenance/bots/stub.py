@@ -1,8 +1,7 @@
-import logging
 import re
 
-import pywikibot
 import wikitextparser as wtp
+
 from core.utils.disambiguation import Disambiguation
 from core.utils.helpers import prepare_str, check_status
 
@@ -17,7 +16,7 @@ class Stub:
 
     def __call__(self):
         if check_status("مستخدم:LokasBot/إيقاف بوت البذرة"):
-            disambiguation = Disambiguation(self.page.title(), self.text)
+            disambiguation = Disambiguation(self.page, self.page.title(), self.text)
             if disambiguation.check("or"):
                 return self.text, self.summary
 
