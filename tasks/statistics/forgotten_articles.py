@@ -21,7 +21,7 @@ page_name = "ويكيبيديا:إحصاءات/مقالات منسية"
 
 def page_title(row, result, index):
     user_name = str(row['page_title'], 'utf-8')
-    return "[[" + user_name + "|" + user_name + "]]"
+    return "[[" + user_name + "]]"
 
 
 def lastedit(row, result, index):
@@ -32,7 +32,7 @@ columns = [
     ("الرقم", None, index),
     ("المقالة", None, page_title),
     ("عدد التعديلات", "editcount"),
-    ("أخر تعديل", None, lastedit),
+    ("آخر تعديل", None, lastedit),
 ]
 
 

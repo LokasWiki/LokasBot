@@ -13,7 +13,9 @@ password=your_password
 host=your_host
 port=your_port
 database=your_database
-
+[ai_api]
+key = my_key
+url= ai_flask_url
 """
 
 config_path = os.path.join(home_path, 'config.ini')
@@ -31,5 +33,5 @@ port = config.get('mysql', 'port')
 database = config.get('mysql', 'database')
 
 # Create the database engine
-engine = create_engine(f'mysql+pymysql://{username}:{password}@{host}:{port}/{database}')
+engine = create_engine(f'mysql+pymysql://{username}:{password}@{host}:{port}/{database}',echo=False)
 

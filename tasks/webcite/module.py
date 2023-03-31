@@ -2,6 +2,7 @@ import datetime
 import logging
 
 import pywikibot
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from core.utils.helpers import check_status, check_edit_age
@@ -105,5 +106,5 @@ class ProcessArticle:
             delta = datetime.timedelta(hours=hours)
             new_date = datetime.datetime.now() + delta
             self.page_query.status = Model_Status.PENDING
-            self.page_query.date = new_date
+            self.page_query.update_date = new_date
             self.session.commit()

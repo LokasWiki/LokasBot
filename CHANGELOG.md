@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2023-03-30
+
+### Fixed
+- إصلاح الأخطاء الإملائية
+### Changed
+- تحديث بوت (مهمة ويكيبيديا:إخطار الإداريين/أسماء مستخدمين للفحص) ليعمل علي النسخه الجديده من الموديل ([#141](https://github.com/LokasWiki/LokasBot/pull/141))  
+
+### Added
+ - اضافة استلام (اضافة استعلام بوت الصيانة - مقالات بحاجة لإضافة وسم يتيمة) حتي يجلب قائمة الصفحات ويضعها في البوت ([تم كتابه الاستلام الاساسي بواسطه الزميل ASammour](https://quarry.wmcloud.org/query/72149)) ([#140](https://github.com/LokasWiki/LokasBot/pull/140)) 
+
+
+
 ## [1.4.1] - 2023-03-18
 ### Fixed
 -  تم إصلاح مشكلة عدم حذف الصفحات بعد إجراء الفحص عليها   ([#136](https://github.com/LokasWiki/LokasBot/pull/136)) ([#137](https://github.com/LokasWiki/LokasBot/pull/137))
