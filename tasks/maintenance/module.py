@@ -1,9 +1,9 @@
+import datetime
 import json
 import logging
 import os
-import pywikibot
-import datetime
 
+import pywikibot
 from sqlalchemy.orm import Session
 
 from core.utils.file import File
@@ -11,20 +11,19 @@ from core.utils.helpers import check_status, prepare_str, check_edit_age
 from core.utils.pipeline import Pipeline
 from core.utils.wikidb import Database
 from database.models import Page, Status as Model_Status
-
 from tasks.maintenance.bots.dead_end import DeadEnd
 from tasks.maintenance.bots.has_categories import HasCategories
 from tasks.maintenance.bots.orphan import Orphan
 from tasks.maintenance.bots.portals_bar import PortalsBar
 from tasks.maintenance.bots.portals_merge import PortalsMerge
+from tasks.maintenance.bots.protection import Protection
 from tasks.maintenance.bots.rename_template_parameters import RenameTemplateParameters
 from tasks.maintenance.bots.template_redirects import TemplateRedirects
 from tasks.maintenance.bots.underlinked import UnderLinked
 from tasks.maintenance.bots.unreferenced import Unreferenced
 from tasks.maintenance.bots.unreviewed_article import UnreviewedArticle
-from tasks.maintenance.bots.stub import Stub
 
-TASK_SUMMARY = "بوت:صيانة V5.8.1"
+TASK_SUMMARY = "بوت:صيانة V5.9.0"
 
 
 def get_pages(start, custom_query=None):
@@ -95,6 +94,7 @@ class PipelineTasks:
         Orphan,
         DeadEnd,
         UnderLinked,
+        Protection
         # Stub
     ]
 
@@ -115,6 +115,7 @@ class PipelineTasks:
         UnderLinked,
         PortalsMerge,
         PortalsBar,
+        Protection
         # Stub
     ]
 
