@@ -16,7 +16,6 @@ from tasks.maintenance.bots.has_categories import HasCategories
 from tasks.maintenance.bots.orphan import Orphan
 from tasks.maintenance.bots.portals_bar import PortalsBar
 from tasks.maintenance.bots.portals_merge import PortalsMerge
-from tasks.maintenance.bots.protection import Protection
 from tasks.maintenance.bots.rename_template_parameters import RenameTemplateParameters
 from tasks.maintenance.bots.template_redirects import TemplateRedirects
 from tasks.maintenance.bots.underlinked import UnderLinked
@@ -94,7 +93,7 @@ class PipelineTasks:
         Orphan,
         DeadEnd,
         UnderLinked,
-        Protection
+        # Protection
         # Stub
     ]
 
@@ -115,7 +114,7 @@ class PipelineTasks:
         UnderLinked,
         PortalsMerge,
         PortalsBar,
-        Protection
+        # Protection
         # Stub
     ]
 
