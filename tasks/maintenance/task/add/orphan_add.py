@@ -1,5 +1,4 @@
 import logging
-from random import random
 
 from sqlalchemy.orm import Session
 
@@ -68,7 +67,7 @@ having counts < 3;"""
 
                     temp_model = Page(
                         title=page_title,
-                        thread=random.randint(1, 3),
+                        thread_number=thread_number,
                         task_name=TaskName.MAINTENANCE
                     )
                     maintenance_session.add(temp_model)
