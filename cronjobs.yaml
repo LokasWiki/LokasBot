@@ -71,16 +71,16 @@
 - name: webcite-check-10
   no-filelog: false
   command: $HOME/repos/jobs/webcite_check.sh
-#  schedule: '*/10 * * * *'
+  #  schedule: '*/10 * * * *'
   image: tf-python39
   emails: onfailure
   continuous: true
   <<: *defaults
 
-- name: month-statistics
-  no-filelog: false
-  command: $HOME/repos/jobs/month_statistics.sh
-  schedule: '5 0 * * *'
-  image: tf-python39
-  emails: onfailure
-  <<: *defaults
+#- name: month-statistics
+#  no-filelog: false
+#  command: $HOME/repos/jobs/month_statistics.sh
+#  schedule: '5 0 * * *'
+#  image: tf-python39
+#  emails: onfailure
+#  <<: *defaults
