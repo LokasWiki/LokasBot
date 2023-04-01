@@ -28,6 +28,7 @@ class Protection:
             "صفحة محمية",
             "Semi-protection",
             "Pp-semi-indef",
+            "محمية/تحويلة",
             "شبه محمي",
             "حماية تخريب"
         ]

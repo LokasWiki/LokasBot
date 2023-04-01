@@ -33,3 +33,17 @@ class Pipeline:
 
     def hasChange(self):
         return self.text != self.oldText
+
+
+class PipelineWithExtraSteps(Pipeline):
+    def process(self):
+        for step in self.steps:
+
+            try:
+                # to skip if some one bot not all
+                obj = step(self.page, self.text, self.summary)
+                self.text, self.summary = obj()
+            except Exception as e:
+                logging.exception(e)
+
+        return self.text, self.summary
