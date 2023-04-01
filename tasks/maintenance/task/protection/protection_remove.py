@@ -3,7 +3,7 @@ import logging
 import pywikibot
 
 from core.utils.helpers import check_status
-from core.utils.pipeline import Pipeline
+from core.utils.pipeline import PipelineWithExtraSteps
 from tasks.maintenance.module import get_pages, TASK_SUMMARY, PipelineTasks, clean_summary
 
 custom_query = """select page.page_title as "pl_2_title" from templatelinks
@@ -21,6 +21,7 @@ where lt_namespace = 10 and lt_title in (
             "pp-semi-protected",
             "pp-move-indef",
             "pp-protected",
+            "محمية/تحويلة",
             "حماية_كلية",
             "حماية_حرب",
             "حماية_جزئية",
@@ -46,8 +47,8 @@ def main(*args: str) -> int:
             try:
                 page = pywikibot.Page(site, title=page_title, ns=0)
                 if page.exists():
-                    pipeline = Pipeline(page, page.text, TASK_SUMMARY, PipelineTasks.protection_steps,
-                                        PipelineTasks.extra_steps)
+                    pipeline = PipelineWithExtraSteps(page, page.text, TASK_SUMMARY, PipelineTasks.protection_steps,
+                                                      PipelineTasks.extra_steps)
                     processed_text, processed_summary = pipeline.process()
                     # write processed text back to the page
                     if pipeline.hasChange() and check_status("مستخدم:LokasBot/إيقاف مهمة صيانة المقالات"):

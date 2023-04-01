@@ -3,12 +3,15 @@ import logging
 import pywikibot
 
 from core.utils.helpers import check_status
-from core.utils.pipeline import Pipeline
+from core.utils.pipeline import PipelineWithExtraSteps
 from tasks.maintenance.module import get_pages, TASK_SUMMARY, PipelineTasks, clean_summary
 
 custom_query = """select distinct page.page_title as "pl_2_title"  from page_restrictions 
 inner join page on page_restrictions.pr_page = page.page_id
-where page.page_namespace in (0) and  pr_page  not in (
+where page.page_namespace in (0) 
+and page.page_is_redirect = 1
+and page.page_id not in (46)
+and  pr_page  not in (
 select page.page_id from templatelinks
 inner join page on templatelinks.tl_from = page.page_id
 inner join linktarget on templatelinks.tl_target_id = linktarget.lt_id
@@ -33,9 +36,10 @@ where lt_namespace = 10 and lt_title in (
             "صفحة_محمية",
             "semi-protection",
             "pp-semi-indef",
+            "محمية/تحويلة",
             "شبه_محمي",
             "حماية_تخريب"
-) and tl_from_namespace in(0))"""
+) and tl_from_namespace in(0)) limit 3"""
 
 
 def main(*args: str) -> int:
@@ -47,8 +51,8 @@ def main(*args: str) -> int:
             try:
                 page = pywikibot.Page(site, title=page_title, ns=0)
                 if page.exists():
-                    pipeline = Pipeline(page, page.text, TASK_SUMMARY, PipelineTasks.protection_steps,
-                                        PipelineTasks.extra_steps)
+                    pipeline = PipelineWithExtraSteps(page, page.text, TASK_SUMMARY, PipelineTasks.protection_steps,
+                                                      PipelineTasks.extra_steps)
                     processed_text, processed_summary = pipeline.process()
                     # write processed text back to the page
                     if pipeline.hasChange() and check_status("مستخدم:LokasBot/إيقاف مهمة صيانة المقالات"):
