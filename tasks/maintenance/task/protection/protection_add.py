@@ -35,7 +35,7 @@ where lt_namespace = 10 and lt_title in (
             "pp-semi-indef",
             "شبه_محمي",
             "حماية_تخريب"
-) and tl_from_namespace in(0)) limit 10"""
+) and tl_from_namespace in(0))"""
 
 
 def main(*args: str) -> int:
