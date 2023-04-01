@@ -9,7 +9,6 @@ from tasks.maintenance.module import get_pages, TASK_SUMMARY, PipelineTasks, cle
 custom_query = """select distinct page.page_title as "pl_2_title"  from page_restrictions 
 inner join page on page_restrictions.pr_page = page.page_id
 where page.page_namespace in (0) 
-and page.page_is_redirect = 1
 and page.page_id not in (46)
 and  pr_page  not in (
 select page.page_id from templatelinks
@@ -39,7 +38,7 @@ where lt_namespace = 10 and lt_title in (
             "محمية/تحويلة",
             "شبه_محمي",
             "حماية_تخريب"
-) and tl_from_namespace in(0)) limit 3"""
+) and tl_from_namespace in(0))"""
 
 
 def main(*args: str) -> int:
