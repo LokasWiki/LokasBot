@@ -1,19 +1,12 @@
 import logging
 
-from sqlalchemy.orm import Session
+import pywikibot
 
-from database.engine import engine
-from database.helpers import is_page_present
-from database.models import Page, TaskName
-from tasks.maintenance.module import get_pages
+from core.utils.helpers import check_status
+from core.utils.pipeline import Pipeline
+from tasks.maintenance.module import get_pages, TASK_SUMMARY, PipelineTasks, clean_summary
 
-
-def main(*args: str) -> int:
-    # todo: mereg with read.py in webcite task
-    try:
-        thread_number = 1
-        time_before_start = 1
-        custom_query = """select distinct page.page_title as "pl_2_title"  from page_restrictions 
+custom_query = """select distinct page.page_title as "pl_2_title"  from page_restrictions 
 inner join page on page_restrictions.pr_page = page.page_id
 where page.page_namespace in (0) and  pr_page  not in (
 select page.page_id from templatelinks
@@ -42,25 +35,35 @@ where lt_namespace = 10 and lt_title in (
             "pp-semi-indef",
             "شبه_محمي",
             "حماية_تخريب"
-) and tl_from_namespace in(0))"""
-        pages = get_pages(time_before_start, custom_query=custom_query)
+) and tl_from_namespace in(0)) limit 10"""
 
-        with Session(engine) as maintenance_session:
-            for page_title in pages:
-                if not is_page_present(maintenance_session, page_title=page_title, task_type=TaskName.MAINTENANCE):
-                    print("add : " + page_title)
 
-                    temp_model = Page(
-                        title=page_title,
-                        thread_number=thread_number,
-                        task_name=TaskName.MAINTENANCE
-                    )
-                    maintenance_session.add(temp_model)
+def main(*args: str) -> int:
+    try:
+        site = pywikibot.Site()
+        time_before_start = 1
+        for page_title in get_pages(time_before_start, custom_query=custom_query):
+            print("add : " + page_title)
+            try:
+                page = pywikibot.Page(site, title=page_title, ns=0)
+                if page.exists():
+                    pipeline = Pipeline(page, page.text, TASK_SUMMARY, PipelineTasks.protection_steps,
+                                        PipelineTasks.extra_steps)
+                    processed_text, processed_summary = pipeline.process()
+                    # write processed text back to the page
+                    if pipeline.hasChange() and check_status("مستخدم:LokasBot/إيقاف مهمة صيانة المقالات"):
+                        print("start save " + page.title())
+                        page.text = processed_text
+                        page.save(summary=clean_summary(processed_summary))
+                    else:
+                        print("page not changed " + page.title())
 
-            maintenance_session.commit()
+            except Exception as e:
+                logging.error(f"An error occurred while processing: {e}")
+                logging.exception(e)
 
     except Exception as e:
-        logging.error("Error occurred while adding pages to the database.")
+        logging.error("Error occurred while geting pages to the database.")
         logging.exception(e)
     return 0
 
