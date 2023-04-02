@@ -1,9 +1,9 @@
 import pywikibot
 from sqlalchemy.orm import Session
 
-from tasks.requests.core.module import PageProcessor, RequestsPage, RequestsScanner
 from tasks.requests.core.database.engine import engine
-from tasks.requests.core.database.models import Request, Status
+from tasks.requests.core.database.models import Request
+from tasks.requests.core.module import RequestsPage, RequestsScanner
 
 # Create an instance of the RequestsPage class
 site = pywikibot.Site()
@@ -18,7 +18,7 @@ try:
 
     requests_page.load_page()
 
-    if requests_page.check_user_edits(1):
+    if requests_page.check_user_edits(3000):
         scanner = RequestsScanner()
         scanner.pattern = r"\*\s*\[\[:(?P<namespace>.*\:)?(?P<source>.*)\]\]"
         scanner.scan(requests_page.get_page_text())
