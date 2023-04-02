@@ -1,14 +1,15 @@
 import traceback
 
 import pywikibot
-from sqlalchemy.orm import Session
 from sqlalchemy import select
+from sqlalchemy.orm import Session
 
-from tasks.requests.core.database.engine import engine
-from tasks.requests.core.database.models import Request, Status, Page
 from core.utils.wikidb import Database
-
-from tasks.webcite.module import create_database_table, get_pages, save_pages_to_db
+from database.engine import engine as engine_webcite
+from database.helpers import is_page_present
+from database.models import Page as PageWebCite, TaskName
+from tasks.requests.core.database.engine import engine
+from tasks.requests.core.database.models import Request, Status
 
 # Create an instance of the RequestsPage class
 site = pywikibot.Site()
@@ -27,12 +28,19 @@ try:
             if request.to_namespace == 0:
                 to_page = pywikibot.Page(site, request.from_name)
                 if to_page.exists():
-                    page = to_page.title(with_ns=False)
                     try:
-                        thread_number = 1
-                        conn, cursor = create_database_table()
-                        save_pages_to_db([page], conn, cursor, thread_number=thread_number)
-                        conn.close()
+                        with Session(engine_webcite) as session_webcite:
+                            if not is_page_present(session_webcite, page_title=to_page.title(with_ns=False),
+                                                   task_type=TaskName.WEBCITE):
+                                print("add : " + to_page.title(with_ns=False))
+                                temp_model = PageWebCite(
+                                    title=to_page.title(with_ns=False),
+                                    thread_number=1,
+                                    task_name=TaskName.WEBCITE
+                                )
+                            session_webcite.add(temp_model)
+                            session_webcite.commit()
+
                     except Exception as e:
                         print(f"An error occurred: {e}")
             else:
@@ -51,13 +59,21 @@ and page.page_namespace = 0""".format(from_page.pageid)
                         page_title = str(row['prt_title'], 'utf-8')
                         pages.append(page_title)
 
-                    try:
-                        thread_number = 1
-                        conn, cursor = create_database_table()
-                        save_pages_to_db(pages, conn, cursor, thread_number=thread_number)
-                        conn.close()
-                    except Exception as e:
-                        print(f"An error occurred: {e}")
+                    for page in pages:
+                        try:
+                            with Session(engine_webcite) as session_webcite:
+                                if not is_page_present(session_webcite, page_title=page,
+                                                       task_type=TaskName.WEBCITE):
+                                    print("add : " + page)
+                                    temp_model = PageWebCite(
+                                        title=page,
+                                        thread_number=1,
+                                        task_name=TaskName.WEBCITE
+                                    )
+                                session_webcite.add(temp_model)
+                                session_webcite.commit()
+                        except Exception as e:
+                            print(f"An error occurred: {e}")
 
             request.status = Status.COMPLETED
             session.commit()
