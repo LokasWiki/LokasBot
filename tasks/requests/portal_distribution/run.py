@@ -45,7 +45,7 @@ try:
                     processed_text, processed_summary = pipeline.process()
 
                     p.text = processed_text
-                    p.save(summary="بوت:إضافة بوابة")
+                    p.save(summary=f"بوت:إضافة بوابة ({page_new_title}) ")
                     page.status = Status.COMPLETED
                     session.commit()
             except Exception as e:
