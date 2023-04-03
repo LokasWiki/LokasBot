@@ -1,4 +1,5 @@
 import logging
+import random
 
 from sqlalchemy.orm import Session
 
@@ -25,7 +26,7 @@ def main(*args: str) -> int:
                     print("add : " + page_title)
                     temp_model = Page(
                         title=page_title,
-                        thread_number=thread_number,
+                        thread_number=random.randint(1, 3),
                         task_name=TaskName.MAINTENANCE
                     )
                     session.add(temp_model)

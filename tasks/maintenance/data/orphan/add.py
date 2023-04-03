@@ -1,4 +1,5 @@
 import logging
+import random
 
 from sqlalchemy.orm import Session
 
@@ -57,6 +58,7 @@ where page_namespace = 0
 and page_is_redirect = 0
 and page_id  not in (select cl_from from categorylinks where cl_to like "%جميع_المقالات_اليتيمة%" and cl_from = page_id)
 and page_id not in (select cl_from from categorylinks where cl_to like "%صفحات_توضيح%" and cl_from = page_id)
+and page_id not in (select cl_from from categorylinks where cl_to like "%جميع_مقالات_المجموعات_المفهرسة%" and cl_from = page_id)
 having counts < 3;"""
         pages = get_pages(time_before_start,custom_query=custom_query)
 
@@ -67,7 +69,7 @@ having counts < 3;"""
 
                     temp_model = Page(
                         title=page_title,
-                        thread_number=thread_number,
+                        thread_number=random.randint(1, 3),
                         task_name=TaskName.MAINTENANCE
                     )
                     maintenance_session.add(temp_model)
