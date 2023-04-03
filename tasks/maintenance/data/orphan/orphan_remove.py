@@ -1,10 +1,11 @@
 import logging
 
-from database.helpers import is_page_present
-from tasks.maintenance.module import get_pages
-from database.engine import engine
 from sqlalchemy.orm import Session
-from database.models import Page, TaskName, Status
+
+from database.engine import engine
+from database.helpers import is_page_present
+from database.models import Page, TaskName
+from tasks.maintenance.module import get_pages
 
 # https://quarry.wmcloud.org/query/72148 @ASammour
 custom_query = """SELECT page_title AS "pl_2_title",(select count(distinct pl_from) 
