@@ -1,7 +1,7 @@
 {{إحصاء}}
 <div style="background: #E5E4E2; padding: 0.5em; font-family: Traditional Arabic; font-size: 130%;  -moz-border-radius: 0.3em; border-radius: 0.3em;">
 <center>
-تعرض هذه الصفحة قائمة التصانيف غير الموجودة في ويكيبديا العربية.
+تعرض هذه الصفحة قائمة تصنيفات ويكيبيديا الإنجليزية غير الموجودة في ويكيبديا العربية.
 
 كود الاستعلام موجود [https://github.com/LokasWiki/LokasBot/blob/main/tasks/statistics/categories_not_found_by_number_of_language_links.py هنا].
 
