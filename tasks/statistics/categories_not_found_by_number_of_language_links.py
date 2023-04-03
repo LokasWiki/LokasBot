@@ -73,7 +73,7 @@ def page_title(row, result, index):
 
 columns = [
     ("الرقم", None, index),
-    ("التصانيف غير الموجودة", None, page_title),
+    ("التصنيفات غير الموجودة", None, page_title),
     ("عدد المقالات", "editcount"),
 ]
 
