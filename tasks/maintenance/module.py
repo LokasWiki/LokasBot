@@ -28,39 +28,14 @@ TASK_SUMMARY = "بوت:صيانة V5.9.2"
 
 def get_pages(start, custom_query=None):
     query = """SELECT pl_2_title
-FROM (
-    SELECT DISTINCT log_title AS "pl_2_title"
-    FROM logging
-    WHERE log_type IN ("review")
-    AND log_namespace IN (0)
-    AND log_timestamp > DATE_SUB( now(), INTERVAL MINUTE_SUB_NUMBER MINUTE )
-    UNION
-    SELECT DISTINCT page.page_title AS "pl_2_title"
-    FROM revision
-    INNER JOIN page ON revision.rev_page = page.page_id
-    WHERE page.page_namespace IN (0)
-    AND rev_timestamp > DATE_SUB( now(), INTERVAL MINUTE_SUB_NUMBER MINUTE ) and page_is_redirect = 0
-    UNION
-    select page.page_title AS "pl_2_title" from categorylinks
-    inner join page on page.page_id = categorylinks.cl_from
-    # تصنيف:مقالات تحتوي بوابات مكررة
-    # تصنيف:صفحات_تحتوي_بوابات_مكررة_باستخدام_قالب_بوابة
-    where cl_to in (select page.page_title from page where page_id in (6202012,6009002))
-    and cl_type = "page"
-    and page.page_namespace = 0
-    UNION
-    select page_title as "pl_2_title" from page
-    where page.page_is_redirect = 0
-    and page.page_namespace = 0
-    and page_id in (select fp_page_id from flaggedpages where fp_page_id = page_id)
-    and page_id in (select cl_from from categorylinks where cl_to like "جميع_المقالات_غير_المراجعة")
-    UNION
-    select page_title as "pl_2_title" from page
-    where page.page_is_redirect = 0
-    and page.page_namespace = 0
-    and page_id not in (select fp_page_id from flaggedpages where fp_page_id = page_id)
-    and page_id not in (select cl_from from categorylinks where cl_to like "جميع_المقالات_غير_المراجعة")
-) AS pages_list"""
+    FROM (
+        SELECT DISTINCT page.page_title AS "pl_2_title"
+        FROM revision
+        INNER JOIN page ON revision.rev_page = page.page_id
+        WHERE page.page_namespace IN (0)
+        AND rev_timestamp > DATE_SUB( now(), INTERVAL MINUTE_SUB_NUMBER MINUTE ) and page_is_redirect = 0
+    ) AS pages_list"""
+
     database = Database()
 
     if custom_query is None:
