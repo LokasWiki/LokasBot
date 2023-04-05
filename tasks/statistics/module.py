@@ -1,7 +1,8 @@
-import pywikibot
-import pymysql
-from pywikibot import config as _config
 import os
+
+import pymysql
+import pywikibot
+from pywikibot import config as _config
 
 
 class Database:
@@ -54,7 +55,7 @@ class Page:
         self.site = pywikibot.Site()
         self._page_name = ""
         self.contents = ""
-        self._summary = "بوت:إحصاءات V2.1.2"
+        self._summary = "بوت:إحصاءات V2.2.0"
 
     @property
     def page_name(self):

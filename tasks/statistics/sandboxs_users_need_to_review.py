@@ -20,8 +20,8 @@ AND article.page_title LIKE "%/ملعب%"
 GROUP BY article.page_id
 ORDER BY MIN(revision.rev_id) DESC;
 """
-file_path = 'stub/latest_arabic_files_on_commons.txt'
-page_name = f'مستخدم:لوقا/ملاعب مستخدمين تحتاج لمراجعة'
+file_path = 'stub/sandboxs_users_need_to_review.txt'
+page_name = f'ويكيبيديا:ملاعب مستخدمين تحتاج لمراجعة'
 
 
 def page_sandbox_name(row, result, index):
