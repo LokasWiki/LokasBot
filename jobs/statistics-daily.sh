@@ -11,6 +11,7 @@ export PYTHONPATH="${PYTHONPATH}:$HOME/repos"
 myArrayFiles=( "$HOME"/repos/tasks/statistics/activity_of_bureaucrats.py \
   "$HOME"/repos/tasks/check_usernames/load/load.py \
   "$HOME"/repos/tasks/statistics/list_of_wikipedians_by_number_of_revision_edits.py \
+  "$HOME"/repos/tasks/statistics/sandboxs_users_need_to_review.py \
   "$HOME"/repos/tasks/statistics/users_by_number_of_help_pages_creation_with_bot.py \
   "$HOME"/repos/tasks/statistics/administrators_activity.py \
   "$HOME"/repos/tasks/statistics/users_by_number_of_portals_creation.py \
