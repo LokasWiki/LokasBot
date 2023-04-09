@@ -16,7 +16,7 @@ where iwlinks.iwl_title in  (select iwl_title from iwlinks  where iwl_from = 912
   "Citeq",
   "Cite_Q"
 )
-and page.page_namespace = 0
+and page.page_namespace = 0 and  lt_namespace = 10
 GROUP BY q_iwl_title;"""
 file_path = 'stub/cite_q.txt'
 page_name = "ويكيبيديا:مصادر موثوقة/معاجم وقواميس وأطالس/إحصائيات"
