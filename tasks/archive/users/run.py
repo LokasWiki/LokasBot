@@ -8,6 +8,6 @@ template = pywikibot.Page(site, template_name)
 
 gen = template.embeddedin(filter_redirects=False, namespaces=3)
 
-for user_take in gen:
-    if user_take.depth == 0:
-        print(user_take)
+for user_talk in gen:
+    if user_talk.depth == 0 and user_talk.has_permission(action='edit'):
+        print(user_talk)
