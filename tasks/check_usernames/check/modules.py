@@ -5,6 +5,8 @@ import pywikibot.flow
 import wikitextparser as wtp
 from pywikibot.data.api import Request
 
+from core.utils.helpers import prepare_str
+
 
 # todo: move this class to core and move tests files
 class DateFormatter:
@@ -118,23 +120,29 @@ class SendAlert:
                 print(f'Error saving page: {error}')
 
         else:
-            pass
-            # Add a new section to the page
-            text = talk_page.text
-            text += '\n'
-            if self.has_reason:
-                text += "{{نسخ:تنبيه اسم مستخدم|REASON}}----[[مستخدم:Dr-Taher|Dr-Taher]] ([[نقاش المستخدم:Dr-Taher|نقاش]]) {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)".replace(
-                    "REASON", str(self.reason).strip())
-            else:
-                text += "{{نسخ:تنبيه اسم مستخدم}}----[[مستخدم:Dr-Taher|Dr-Taher]] ([[نقاش المستخدم:Dr-Taher|نقاش]]) {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)"
+            cat_name = "تصنيف:أسماء مستخدمين مخالفة مرشحة للمنع"
+            found = False
+            for cat in talk_page.categories():
+                if prepare_str(cat.title(with_ns=True)) == prepare_str(cat_name):
+                    found = True
+                    break
+            if not found:
+                # Add a new section to the page
+                text = talk_page.text
+                text += '\n'
+                if self.has_reason:
+                    text += "{{نسخ:تنبيه اسم مستخدم|REASON}}----[[مستخدم:Dr-Taher|Dr-Taher]] ([[نقاش المستخدم:Dr-Taher|نقاش]]) {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)".replace(
+                        "REASON", str(self.reason).strip())
+                else:
+                    text += "{{نسخ:تنبيه اسم مستخدم}}----[[مستخدم:Dr-Taher|Dr-Taher]] ([[نقاش المستخدم:Dr-Taher|نقاش]]) {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)"
 
-            try:
-                # Save the edited page
-                talk_page.text = text
-                # Save the page
-                talk_page.save(summary="بوت:تنبيه اسم مخالف", minor=False)
-            except Exception as error:
-                print(f'Error saving page: {error}')
+                try:
+                    # Save the edited page
+                    talk_page.text = text
+                    # Save the page
+                    talk_page.save(summary="بوت:تنبيه اسم مخالف", minor=False)
+                except Exception as error:
+                    print(f'Error saving page: {error}')
 
     def get_header_text(self):
 
