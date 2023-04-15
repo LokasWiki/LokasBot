@@ -4,6 +4,7 @@ import pywikibot
 from sqlalchemy import select, func, distinct
 from sqlalchemy.orm import Session
 
+from core.utils.helpers import prepare_str
 from core.utils.pipeline import PipelineWithExtraSteps
 from tasks.maintenance.bots.portals_bar import PortalsBar
 from tasks.maintenance.bots.portals_merge import PortalsMerge
@@ -33,19 +34,30 @@ try:
             try:
                 p = pywikibot.Page(site, title=str(page.page_name), ns=0)
                 if p.exists():
-                    text = p.text
-                    text += "\n"
-                    text += "{{شريط بوابات|" + page_new_title + "}}"
+                    # check if portal is found in page with different name
+                    gen = p.linkedPages(namespaces=100, content=False)
+                    found = False
+                    for p in gen:
+                        if prepare_str(p.title(with_ns=False)) == prepare_str(page_new_title):
+                            found = True
+                            break
+                    if not found:
+                        # if not found start add portal to page
+                        text = p.text
+                        text += "\n"
+                        text += "{{شريط بوابات|" + page_new_title + "}}"
 
-                    pipeline = PipelineWithExtraSteps(p, text, "", [
-                        PortalsMerge,
-                        PortalsBar,
-                    ], [])
+                        pipeline = PipelineWithExtraSteps(p, text, "", [
+                            PortalsMerge,
+                            PortalsBar,
+                        ], [])
 
-                    processed_text, processed_summary = pipeline.process()
+                        processed_text, processed_summary = pipeline.process()
 
-                    p.text = processed_text
-                    p.save(summary=f"بوت:إضافة بوابة ({page_new_title}) ")
+                        p.text = processed_text
+                        p.save(summary=f"بوت:إضافة بوابة ({page_new_title}) ")
+
+                    # start change page status in database
                     page.status = Status.COMPLETED
                     session.commit()
             except Exception as e:
