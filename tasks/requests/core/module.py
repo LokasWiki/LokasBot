@@ -1,6 +1,7 @@
 import re
 
 import pywikibot
+from core.utils.helpers import prepare_str
 
 
 class RequestsScanner:
@@ -78,6 +79,15 @@ class RequestsPage:
         return user.editCount() >= number
         # return True
 
+    def check_user_groups(self, group):
+        user = pywikibot.User(self.site, self.lasteditUser)
+        found = False
+        for g in user.groups():
+            if prepare_str(g) == prepare_str(group):
+                found = True
+                break
+        return found
+
     def get_page_text(self):
         if self._page is None:
             self.load_page()
@@ -90,15 +100,17 @@ class RequestsPage:
         tem_page_text = self._page.text
 
         text = talk_page.text
-        text += f"\n\n== طلب جديد عبر البوت من المستخدم {self.lasteditUser} ==\n\n"
+        text += "\n\n== طلب جديد عبر البوت من المستخدم " + self.lasteditUser + "==\n\n"
+        text += "{{ر|Dr-Taher|" + self.lasteditUser + "}}"
         text += str(self._page.text).replace(self._header_text, "")
         text += "\n~~~~"
         talk_page.text = text
         self._page.text = self._header_text + "\n\n"
 
         if tem_page_text.strip().lower() != self._header_text.strip().lower():
-            talk_page.save(f" طلب جديد عبر البوت من المستخدم {self.lasteditUser}")
-            self._page.save(f"نقل طلب جديد غير مصرح به من المستخدم إلي الأرشيف{self.lasteditUser}")
+            talk_page.save(summary=" طلب جديد عبر البوت من المستخدم " + str(self.lasteditUser), minor=False)
+            self._page.save(summary=" نقل طلب جديد غير مصرح به من المستخدم إلي الأرشيف " + str(self.lasteditUser),
+                            minor=False)
 
     def start_request(self):
         self._page.text = self._header_text + "\n\n"
