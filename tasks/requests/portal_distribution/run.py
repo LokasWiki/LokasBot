@@ -21,24 +21,23 @@ try:
 
     stmt = select(Request).join(Page).filter(Request.status == Status.RECEIVED, Page.status == Status.PENDING,
                                              Request.request_type == type_of_request).group_by(Request).having(
-        func.count(Page.id) == func.count(distinct(Page.id))).limit(100)
+        func.count(Page.id) == func.count(distinct(Page.id))).limit(1)
 
     for request in session.scalars(stmt):
 
         page_title = request.from_title
         page_new_title = request.to_title
 
-        pages = session.query(Page).filter(Page.request == request, Page.status == Status.PENDING).limit(100).all()
+        pages = session.query(Page).filter(Page.request == request, Page.status == Status.PENDING).limit(1000).all()
 
         for page in pages:
             try:
                 p = pywikibot.Page(site, title=str(page.page_name), ns=0)
                 if p.exists():
                     # check if portal is found in page with different name
-                    gen = p.linkedPages(namespaces=100, content=False)
                     found = False
-                    for p in gen:
-                        if prepare_str(p.title(with_ns=False)) == prepare_str(page_new_title):
+                    for p2 in p.linkedPages(namespaces=100, content=False):
+                        if prepare_str(p2.title(with_ns=False)) == prepare_str(page_new_title):
                             found = True
                             break
                     if not found:
@@ -55,7 +54,7 @@ try:
                         processed_text, processed_summary = pipeline.process()
 
                         p.text = processed_text
-                        p.save(summary=f"بوت:إضافة بوابة ({page_new_title}) ")
+                        p.save(summary=f"بوت:[[ويكيبيديا:طلبات توزيع بوابة]] أضاف ([[بوابة:{page_new_title}]] )")
 
                     # start change page status in database
                     page.status = Status.COMPLETED

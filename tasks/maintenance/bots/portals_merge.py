@@ -121,15 +121,17 @@ class PortalsMerge:
 
     def add_portal(self, template_name):
 
-        stub_template = '{{بذرة'
-        if stub_template in self.text:
-            text = self.text.replace(stub_template, template_name + '\n' + stub_template, 1)
+        if '{{تصنيف' in self.text:
+            text = self.text.replace('{{تصنيف', template_name + '\n' + '{{تصنيف', 1)
         else:
-            category_template = '[[تصنيف:'
-            if category_template in self.text:
-                text = self.text.replace(category_template, template_name + '\n' + category_template, 1)
+            if '{{بذرة' in self.text:
+                text = self.text.replace('{{بذرة', template_name + '\n' + '{{بذرة', 1)
             else:
-                text = self.text + '\n' + template_name
+                category_template = '[[تصنيف:'
+                if category_template in self.text:
+                    text = self.text.replace(category_template, template_name + '\n' + category_template, 1)
+                else:
+                    text = self.text + '\n' + template_name
         self.text = text
 
     def check(self):
