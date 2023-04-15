@@ -7,7 +7,7 @@ export PYWIKIBOT_DIR="$HOME/repos"
 export PYTHONPATH="${PYTHONPATH}:$HOME/repos"
 
 
-#python3  "$HOME"/repos/tasks/requests/link_replacement/read.py
+python3  "$HOME"/repos/tasks/requests/link_replacement/read.py
 python3  "$HOME"/repos/tasks/requests/template_distribution/read.py
 python3  "$HOME"/repos/tasks/requests/add_category/read.py
 python3  "$HOME"/repos/tasks/requests/portal_distribution/read.py
