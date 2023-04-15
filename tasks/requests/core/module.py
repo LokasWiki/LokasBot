@@ -1,7 +1,6 @@
-import sqlite3
+import re
 
 import pywikibot
-import re
 
 
 class RequestsScanner:
@@ -76,8 +75,8 @@ class RequestsPage:
 
     def check_user_edits(self, number=3000):
         user = pywikibot.User(self.site, self.lasteditUser)
-        # return user.editCount() >= number
-        return True
+        return user.editCount() >= number
+        # return True
 
     def get_page_text(self):
         if self._page is None:
