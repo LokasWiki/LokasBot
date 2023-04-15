@@ -1,7 +1,6 @@
 import re
 
 import pywikibot
-
 from core.utils.helpers import prepare_str
 
 
