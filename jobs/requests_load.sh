@@ -11,6 +11,7 @@ python3  "$HOME"/repos/tasks/requests/link_replacement/load.py
 python3  "$HOME"/repos/tasks/requests/template_distribution/load.py
 python3  "$HOME"/repos/tasks/requests/add_category/load.py
 python3  "$HOME"/repos/tasks/requests/portal_distribution/load.py
+python3  "$HOME"/repos/tasks/requests/replace_template/load.py
 python3  "$HOME"/repos/tasks/requests/cite/load.py
 
 
