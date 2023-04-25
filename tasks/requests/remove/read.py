@@ -18,7 +18,7 @@ try:
 
     requests_page.load_page()
 
-    if requests_page.check_user_edits(3000) and requests_page.check_user_groups(group='sysop'):
+    if requests_page.check_user_edits(3000):
         scanner = RequestsScanner()
         scanner.pattern = r"\* \[\[:(?P<namespace>بوابة|تصنيف|قالب):(?P<source>.*)\]\](?P<extra>.*)>\[\[:(?P<namespace2>بوابة|تصنيف|قالب):(?P<destination>.*)\]\]\n*"
         scanner.scan(requests_page.get_page_text())
@@ -28,15 +28,27 @@ try:
             try:
                 with Session(engine) as session:
                     for request in scanner.requests:
+                        from_namespace = 14
+                        if request['namespace'] == "قالب":
+                            from_namespace = 10
+                        elif request['namespace'] == "بوابة":
+                            from_namespace = 100
+
+                        to_namespace = 14
+                        if request['namespace2'] == "قالب":
+                            to_namespace = 10
+                        elif request['namespace2'] == "بوابة":
+                            to_namespace = 100
+
                         # source_page = pywikibot.Page(site, f"{request['source']}",ns=0)
                         # destination_page = pywikibot.Page(site, f"{request['destination']}",ns=0)
                         # if source_page.exists() and destination_page.exists() and source_page.namespace() == 0 and destination_page.namespace() == 0:
                         # todo:add check if template exists with send content to talk page
                         request_model = Request(
                             from_title=request['source'],
-                            from_namespace=request['namespace'],
+                            from_namespace=from_namespace,
                             to_title=request['destination'],
-                            to_namespace=request['namespace2'],
+                            to_namespace=to_namespace,
                             request_type=type_of_request,
                             extra=request['extra']
                         )
