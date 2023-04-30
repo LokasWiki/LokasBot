@@ -2,7 +2,6 @@ import datetime
 import logging
 
 import pywikibot
-from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from core.utils.helpers import check_status, check_edit_age
