@@ -76,7 +76,6 @@
   emails: onfailure
   continuous: true
   <<: *defaults
-
 - name: month-statistics
   no-filelog: false
   command: $HOME/repos/jobs/month_statistics.sh
@@ -84,8 +83,7 @@
   image: tf-python39
   emails: onfailure
   <<: *defaults
-
-- name: month-statistics
+- name: read-last-day
   no-filelog: false
   command: $HOME/repos/jobs/read_last_day.sh
   schedule: '10 0 * * *'
