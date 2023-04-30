@@ -83,10 +83,4 @@
   image: tf-python39
   emails: onfailure
   <<: *defaults
-- name: read-last-day
-  no-filelog: false
-  command: $HOME/repos/jobs/read_last_day.sh
-  schedule: '10 0 * * *'
-  image: tf-python39
-  emails: onfailure
-  <<: *defaults
+
