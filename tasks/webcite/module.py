@@ -2,7 +2,6 @@ import datetime
 import logging
 
 import pywikibot
-from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from core.utils.helpers import check_status, check_edit_age
@@ -39,7 +38,7 @@ class ProcessArticle:
         self.title = title
         self.thread_number = thread_number
         self.limiter = limiter
-        self.summary = "بوت:الإبلاغ عن رابط معطوب أو مؤرشف V1.6.1"
+        self.summary = "بوت:الإبلاغ عن رابط معطوب أو مؤرشف V1.6.2"
 
     def start(self):
         try:
