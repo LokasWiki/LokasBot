@@ -1,5 +1,6 @@
 import configparser
 import os
+
 from sqlalchemy import create_engine
 
 home_path = os.path.expanduser("~")
@@ -18,7 +19,7 @@ key = my_key
 url= ai_flask_url
 """
 
-config_path = os.path.join(home_path, 'config.ini')
+config_path = os.path.join(home_path, 'config1.ini')
 
 
 # Read the configuration file
