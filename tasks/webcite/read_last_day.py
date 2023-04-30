@@ -35,7 +35,7 @@ def main(*args: str) -> int:
                     print("add : " + page_title)
                     temp_model = Page(
                         title=page_title,
-                        thread_number=random.randint(3),
+                        thread_number=3,
                         task_name=TaskName.WEBCITE
                     )
                     session.add(temp_model)
