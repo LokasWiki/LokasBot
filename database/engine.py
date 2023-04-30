@@ -19,7 +19,7 @@ key = my_key
 url= ai_flask_url
 """
 
-config_path = os.path.join(home_path, 'config1.ini')
+config_path = os.path.join(home_path, 'config.ini')
 
 
 # Read the configuration file
