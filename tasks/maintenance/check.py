@@ -6,9 +6,9 @@ import pywikibot
 from sqlalchemy.orm import Session
 
 from database.engine import engine
-from database.helpers import get_articles, get_page_count
-from module import ProcessArticle
+from database.helpers import get_articles, get_page_count, update_page_statuses_to_pending
 from database.models import TaskName
+from module import ProcessArticle
 
 
 def read(thread_number):
@@ -55,6 +55,8 @@ def main():
         time.sleep(600)
     else:
         run_threads()
+    with Session(engine) as session:
+        update_page_statuses_to_pending(session, TaskName.MAINTENANCE)
     return 0
 
 

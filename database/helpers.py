@@ -1,5 +1,3 @@
-import datetime
-
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
@@ -11,6 +9,15 @@ def is_page_present(session: Session, page_title: str, task_type: TaskName) -> b
     Checks if a page with the given title is already present in the database
     """
     return session.query(Page).where(Page.title == page_title).where(Page.task_name == task_type).count() > 0
+
+
+def update_page_statuses_to_pending(session: Session, task_name: TaskName):
+    session.query(Page). \
+        filter(Page.status != Status.PENDING). \
+        filter(Page.task_name == task_name). \
+        update({Page.status: Status.PENDING})
+
+    session.commit()
 
 
 def get_articles(session, thread_number, pages_type):
@@ -42,7 +49,6 @@ def get_articles(session, thread_number, pages_type):
 
 
 def get_page_count(session, pages_type):
-
     now = func.now()
 
     query1 = session.query(func.count(Page.id)). \

@@ -6,9 +6,9 @@ import pywikibot
 from sqlalchemy.orm import Session
 
 from database.engine import engine
-from database.helpers import get_articles, get_page_count
+from database.helpers import get_articles, get_page_count, update_page_statuses_to_pending
 from database.models import TaskName
-from tasks.webcite.module import  ProcessArticle
+from tasks.webcite.module import ProcessArticle
 from tasks.webcite.modules.request_limiter import RequestLimiter
 
 
@@ -65,6 +65,8 @@ def main():
         limiter = RequestLimiter()
         run_threads()
         limiter.clear_old_requests()
+    with Session(engine) as session:
+        update_page_statuses_to_pending(session, TaskName.WEBCITE)
     return 0
 
 
