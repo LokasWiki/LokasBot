@@ -38,7 +38,7 @@ class ProcessArticle:
         self.title = title
         self.thread_number = thread_number
         self.limiter = limiter
-        self.summary = "بوت:الإبلاغ عن رابط معطوب أو مؤرشف V1.6.2"
+        self.summary = "بوت:الإبلاغ عن رابط معطوب أو مؤرشف V1.6.3"
 
     def start(self):
         try:

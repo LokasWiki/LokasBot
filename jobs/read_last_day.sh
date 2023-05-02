@@ -7,8 +7,7 @@ export PYWIKIBOT_DIR="$HOME/repos"
 
 export PYTHONPATH="${PYTHONPATH}:$HOME/repos"
 
-
-python3  "$HOME"/repos/tasks/webcite/read_last_day.py
+python3  "$HOME"/repos/tasks/webcite/read_last_day.py "$1"
 
 # Exit the script after running all the Python files
 exit 0
