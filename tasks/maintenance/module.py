@@ -23,7 +23,7 @@ from tasks.maintenance.bots.underlinked import UnderLinked
 from tasks.maintenance.bots.unreferenced import Unreferenced
 from tasks.maintenance.bots.unreviewed_article import UnreviewedArticle
 
-TASK_SUMMARY = "بوت:صيانة V5.9.2"
+TASK_SUMMARY = "بوت:صيانة V5.9.3"
 
 
 def get_pages(start, custom_query=None):
