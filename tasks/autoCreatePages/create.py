@@ -18,6 +18,8 @@ my_pages_list = [
     {"name": "تصنيف:مقالات مطلوب توسيعها منذ MONTH YEAR", "template": "{{تصنيف تهذيب شهري}}"},
     {"name": "تصنيف:مقالات يتيمة منذ MONTH YEAR", "template": "{{تصنيف تهذيب شهري}}"},
     {"name": "تصنيف:تصنيفات تهذيب منذ MONTH YEAR", "template": "{{تصنيف تهذيب شهري}}"},
+    {"name": "تصنيف:تصنيفات تهذيب منذ MONTH YEAR", "template": "{{تصنيف تهذيب شهري}}"},
+    {"name": "تصنيف:مقالات غير مصنفة منذ MONTH YEAR", "template": "{{تصنيف تهذيب شهري}}"},
 ]
 # todo:make it dynimic and add acts of check_usernames task here
 year = 2023
@@ -28,4 +30,4 @@ for item in my_pages_list:
     page = pywikibot.Page(site, page_title)
     if not page.exists():
         page.text = item['template']
-        page.save("بوت:إنشاء صفحات مطلوبة V1.0.1")
+        page.save("بوت:إنشاء صفحات مطلوبة V1.0.2")
