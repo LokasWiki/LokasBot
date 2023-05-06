@@ -1,13 +1,11 @@
-import re
 import traceback
 
 import pywikibot
-from sqlalchemy.orm import Session
 from sqlalchemy import select, func, distinct
+from sqlalchemy.orm import Session
 
 from tasks.requests.core.database.engine import engine
-from tasks.requests.core.database.models import Request, Status,Page
-
+from tasks.requests.core.database.models import Request, Status, Page
 
 # Create an instance of the RequestsPage class
 site = pywikibot.Site()
@@ -26,7 +24,7 @@ try:
         page_title = request.from_title
         page_new_title = request.to_title
 
-        added_category = pywikibot.Category(site,request.from_name)
+        added_category = pywikibot.Category(site, request.from_name)
 
         pages = session.query(Page).filter(Page.request == request, Page.status == Status.PENDING).limit(100).all()
 
@@ -44,9 +42,9 @@ try:
 
                     if not has_category:
                         text = p.text
-                        text += "\n[["+added_category.title(with_ns=True)+"]]"
+                        text += "\n[[" + added_category.title(with_ns=True) + "]]"
                         p.text = text
-                        p.save( summary="بوت:إضافة تصنيف")
+                        p.save(summary="بوت:إضافة تصنيف")
 
                     page.status = Status.COMPLETED
                     session.commit()

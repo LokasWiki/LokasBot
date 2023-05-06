@@ -1,7 +1,9 @@
 import datetime
+import json
 import os
 
 import pywikibot
+import requests
 
 from core.utils.file import File
 from core.utils.wikidb import Database
@@ -36,8 +38,8 @@ file.set_stub_path(file_path)
 file.get_file_content()
 content = file.contents
 
-page_title = "ويكيبيديا:إحصاءات الشهر"
-# page_title = "مستخدم:لوقا/ملعب 21"
+# page_title = "ويكيبيديا:إحصاءات الشهر"
+page_title = "مستخدم:لوقا/إحصاءات الشهر"
 
 page = pywikibot.Page(site, page_title)
 
@@ -111,9 +113,32 @@ for row in db.result:
 
 for npcbn in new_pages_count_by_namespace:
     text = str(text).replace(str(npcbn[0].upper().strip()), str(npcbn[1]))
+
+total_views = 0
+
+try:
+    # Set the URL for the Wikimedia API and the parameters for the pageviews request
+    url = "https://wikimedia.org/api/rest_v1/metrics/pageviews/aggregate/ar.wikipedia.org/all-access/user/daily/" + first_day_of_month.strftime(
+        "%Y%m%d") + "00/" + last_day_of_month.strftime("%Y%m%d") + "00"
+    print(url)
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"}
+
+    response = requests.get(url, headers=headers)
+
+    # Convert the response content to a JSON object
+    data = json.loads(response.content)
+    # Print the pageviews data for each day in April 2023
+    for item in data['items']:
+        total_views += item['views']
+except:
+    pass
+
+text = str(text).replace("TOTAL_VIEWS", str(total_views))
+
 # print(new_pages_count_by_namespace)
 # print(db.query)
 page.text = text
 
-page.save("تحديث")
+page.save("v2.0.0 تحديث")
 # todo:add main def
