@@ -38,8 +38,8 @@ file.set_stub_path(file_path)
 file.get_file_content()
 content = file.contents
 
-# page_title = "ويكيبيديا:إحصاءات الشهر"
-page_title = "مستخدم:لوقا/إحصاءات الشهر"
+page_title = "ويكيبيديا:إحصاءات الشهر"
+# page_title = "مستخدم:لوقا/إحصاءات الشهر"
 
 page = pywikibot.Page(site, page_title)
 
