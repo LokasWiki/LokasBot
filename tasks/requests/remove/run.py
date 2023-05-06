@@ -9,9 +9,9 @@ from core.utils.helpers import prepare_str
 from core.utils.pipeline import Pipeline
 from tasks.requests.core.database.engine import engine
 from tasks.requests.core.database.models import Request, Status, Page
-from tasks.requests.remove.core.portals_bar import PortalsBar
-from tasks.requests.remove.core.portals_merge import PortalsMerge
-from tasks.requests.remove.core.remove_portal import RemovePortal
+from tasks.requests.remove.bot.portals_bar import PortalsBar
+from tasks.requests.remove.bot.portals_merge import PortalsMerge
+from tasks.requests.remove.bot.remove_portal import RemovePortal
 
 # Create an instance of the RequestsPage class
 site = pywikibot.Site()
@@ -45,6 +45,7 @@ try:
                                 temp_text = temp_text.replace(str(template), str(""))
 
                     if request.from_namespace == 100:
+
                         step_one = RemovePortal(p.text, template_from)
                         step_one.start_remove()
                         if p.namespace() == 0:
@@ -55,8 +56,7 @@ try:
                             processed_text, processed_summary = pipeline.process()
                             temp_text = processed_text
                         else:
-                            temp_text = processed_text
-
+                            temp_text = step_one.tem_text
                     p.text = temp_text
 
                     word = "تصنيف"
