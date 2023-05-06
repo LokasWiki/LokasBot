@@ -6,8 +6,12 @@ from sqlalchemy import select, func, distinct
 from sqlalchemy.orm import Session
 
 from core.utils.helpers import prepare_str
+from core.utils.pipeline import Pipeline
 from tasks.requests.core.database.engine import engine
 from tasks.requests.core.database.models import Request, Status, Page
+from tasks.requests.remove.core.portals_bar import PortalsBar
+from tasks.requests.remove.core.portals_merge import PortalsMerge
+from tasks.requests.remove.core.remove_portal import RemovePortal
 
 # Create an instance of the RequestsPage class
 site = pywikibot.Site()
@@ -35,14 +39,34 @@ try:
                     temp_text = p.text
                     parsed = wtp.parse(p.text)
                     # for remove template
-                    if request.to_namespace == 10:
+                    if request.from_namespace == 10:
                         for template in parsed.templates:
                             if prepare_str(template.name) == prepare_str(template_from):
                                 temp_text = temp_text.replace(str(template), str(""))
 
+                    if request.from_namespace == 100:
+                        step_one = RemovePortal(p.text, template_from)
+                        step_one.start_remove()
+                        if p.namespace() == 0:
+                            pipeline = Pipeline(p, step_one.tem_text, str("remove"), [
+                                PortalsMerge,
+                                PortalsBar,
+                            ], [])
+                            processed_text, processed_summary = pipeline.process()
+                            temp_text = processed_text
+                        else:
+                            temp_text = processed_text
+
                     p.text = temp_text
+
+                    word = "تصنيف"
+                    if request.from_namespace == 10:
+                        word = "قالب"
+                    elif request.from_namespace == 100:
+                        word = "بوابة"
+
                     p.save(
-                        summary="بوت:[[ويكيبيديا:طلبات إزالة (بوابة، تصنيف، قالب)]] حذف [[قالب:" + template_from + "]] "
+                        summary="بوت:[[ويكيبيديا:طلبات إزالة (بوابة، تصنيف، قالب)]] حذف [[" + word + ":" + template_from + "]] "
                     )
                     page.status = Status.COMPLETED
                     session.commit()

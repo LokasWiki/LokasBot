@@ -19,7 +19,11 @@ and  linktarget.lt_title in (select page_title from page where page_id in (FROM_
 """
 
 category_query = """"""
-portal_query = """"""
+portal_query = """select page_from.page_title as "prt_title",page_from.page_namespace as "prt_namespace"  from pagelinks
+inner join page page_from on page_from.page_id = pagelinks.pl_from
+where pagelinks.pl_from_namespace in (0,14) 
+and pagelinks.pl_namespace in (100)
+and  pagelinks.pl_title in (select page_title from page where page_id in (FROM_ID))"""
 
 try:
     session = Session(engine)
@@ -37,6 +41,10 @@ try:
                     # template
                     if to_page.namespace() == 10:
                         database.query = template_query.replace("FROM_ID", str(from_id))
+                        database.get_content_from_database()
+                        gen = database.result
+                    elif to_page.namespace() == 100:
+                        database.query = portal_query.replace("FROM_ID", str(from_id))
                         database.get_content_from_database()
                         gen = database.result
             except Exception as e:
