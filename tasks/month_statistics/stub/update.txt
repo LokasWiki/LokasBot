@@ -1,6 +1,6 @@
 [[File:Information Management - The Noun Project.svg|20px|alt=]] '''إحصاءات'''
 {{قائمة أعمدة|عدد الأعمدة=2|الأعمدة=
-:* عدد الزيارات: {{Formatnum:0}}
+:* عدد الزيارات: {{Formatnum:TOTAL_VIEWS}}
 :* عدد التعديلات: {{Formatnum:TOTAL_EDITS}}
 :* عدد المقالات الجديدة: {{Formatnum:NEW_PAGES_COUNT_0}}
 :* عدد المقالات المحذوفة: {{Formatnum:DELETED_COUNT_0}}
