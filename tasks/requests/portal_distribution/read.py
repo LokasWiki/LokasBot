@@ -19,7 +19,7 @@ try:
 
     requests_page.load_page()
 
-    if requests_page.check_user_edits(3000):
+    if requests_page.check_user_edits(3000) and requests_page.check_user_groups(group='sysop'):
         scanner = RequestsScanner()
         scanner.pattern = r"\*\s*\[\[:?(?P<namespace>بوابة|تصنيف|قالب)?:(?P<source>.*)\]\](?P<extra>.*)>\s*\[\[:بوابة:(?P<destination>.*)\]\]\n*"
         scanner.scan(requests_page.get_page_text())
