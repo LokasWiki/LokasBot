@@ -14,6 +14,7 @@ function setup-venv {
     # shellcheck disable=SC2086
     python3 -m pip install $2
     deactivate
+    echo "=========================\end setup $1\n========================="
 }
 
 setup-venv lokas-bot-scripts "-U -r $HOME/repos/requirements.txt"

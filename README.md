@@ -21,8 +21,17 @@ Toolforge setup and job management
 - ### Clone and setup virtual environments
 
     ``` bash
-    rm -fdr $HOME/repos && git clone --recurse-submodules https://github.com/LokasWiki/LokasBot.git $HOME/repos && chmod ug+x $HOME/repos/bin/setup-venvs.sh && toolforge-jobs run setup-venvs --command $HOME/repos/bin/setup-venvs.sh --image tf-python39 --wait && chmod -R ug+x $HOME/repos/*
+    rm -fdr $HOME/repos && git clone --recurse-submodules https://github.com/LokasWiki/LokasBot.git $HOME/repos && chmod ug+x $HOME/repos/bin/setup-venvs.sh
     ```
+    ``` bash
+    toolforge-jobs run setup-venvs --command $HOME/repos/bin/setup-venvs.sh --image tf-python39
+     ```
+  ``` bash
+  tail -f $HOME/setup-venvs.*
+  ```
+   ``` bash
+   chmod -R ug+x $HOME/repos/*
+  ```
 - ### copy user-config.py and user-password.py  from home to repos
     ``` bash
     cp $HOME/user-config.py  $HOME/repos
