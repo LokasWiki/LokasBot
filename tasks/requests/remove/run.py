@@ -44,6 +44,12 @@ try:
                             if prepare_str(template.name) == prepare_str(template_from):
                                 temp_text = temp_text.replace(str(template), str(""))
 
+                    if request.from_namespace == 14:
+                        for link in parsed.wikilinks:
+                            if link.title.startswith("تصنيف:"):
+                                if prepare_str(link.title.replace("تصنيف:", "")) == prepare_str(template_from):
+                                    temp_text = str(temp_text).replace(str(link), "")
+
                     if request.from_namespace == 100:
 
                         step_one = RemovePortal(p.text, template_from)

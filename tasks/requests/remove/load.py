@@ -10,20 +10,25 @@ from tasks.requests.core.database.models import Request, Status, Page
 site = pywikibot.Site()
 
 type_of_request = 7
-
+# todo:add page_namespace to in select
 template_query = """select page_from.page_title as "prt_title",page_from.page_namespace as "prt_namespace" from templatelinks
 inner join linktarget on linktarget.lt_id = templatelinks.tl_target_id
 inner join page page_from on page_from.page_id = templatelinks.tl_from
 where templatelinks.tl_from_namespace in (0,14) 
-and  linktarget.lt_title in (select page_title from page where page_id in (FROM_ID))
+and  linktarget.lt_title in (select page_title from page where page_id in (FROM_ID) and page_namespace = 10)
 """
 
-category_query = """"""
+category_query = """SELECT  page_from.page_title as "prt_title",page_from.page_namespace as "prt_namespace"  FROM  categorylinks 
+inner join page page_from on page_from.page_id = categorylinks.cl_from
+where cl_type  like "page"
+and page_from.page_namespace in (0,14) 
+and categorylinks.cl_to in (select page_title from page where page_id in (FROM_ID) and page_namespace = 14)
+"""
 portal_query = """select page_from.page_title as "prt_title",page_from.page_namespace as "prt_namespace"  from pagelinks
 inner join page page_from on page_from.page_id = pagelinks.pl_from
 where pagelinks.pl_from_namespace in (0,14) 
 and pagelinks.pl_namespace in (100)
-and  pagelinks.pl_title in (select page_title from page where page_id in (FROM_ID))"""
+and  pagelinks.pl_title in (select page_title from page where page_id in (FROM_ID) and page_namespace = 100)"""
 
 try:
     session = Session(engine)
@@ -45,6 +50,10 @@ try:
                         gen = database.result
                     elif to_page.namespace() == 100:
                         database.query = portal_query.replace("FROM_ID", str(from_id))
+                        database.get_content_from_database()
+                        gen = database.result
+                    elif to_page.namespace() == 14:
+                        database.query = category_query.replace("FROM_ID", str(from_id))
                         database.get_content_from_database()
                         gen = database.result
             except Exception as e:
