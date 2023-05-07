@@ -47,6 +47,7 @@ try:
     for request in session.scalars(stmt):
         try:
             gen = []
+            pages = []
             database = Database()
             from_page = pywikibot.Page(site, title=request.from_name)
             to_page = pywikibot.Page(site, title=request.to_name)
@@ -68,8 +69,12 @@ try:
                     database.query = portal_query.replace("FROM_ID", str(from_id)).replace("TO_ID", str(to_id))
                     database.get_content_from_database()
                     gen = database.result
+                elif request.from_namespace == 0:
+                    pages.append(Page(
+                        title=request.from_name,
+                        namespace=0
+                    ))
 
-            pages = []
             for row in gen:
                 page_title = str(row['prt_title'], 'utf-8')
                 pages.append(Page(
