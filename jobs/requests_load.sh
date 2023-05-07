@@ -13,6 +13,7 @@ python3  "$HOME"/repos/tasks/requests/add_category/load.py
 python3  "$HOME"/repos/tasks/requests/portal_distribution/load.py
 python3  "$HOME"/repos/tasks/requests/replace_template/load.py
 python3  "$HOME"/repos/tasks/requests/cite/load.py
+python3  "$HOME"/repos/tasks/requests/remove/load.py
 
 
 # Exit the script after running all the Python files
