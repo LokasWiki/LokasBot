@@ -21,7 +21,7 @@ try:
 
     if requests_page.check_user_edits(3000):
         scanner = RequestsScanner()
-        scanner.pattern = r"\* \[\[:(?P<namespace>بوابة|تصنيف|قالب):(?P<source>.*)\]\](?P<extra>.*)>\[\[:بوابة:(?P<destination>.*)\]\]\n*"
+        scanner.pattern = r"\*\s*\[\[:?(?P<namespace>بوابة|تصنيف|قالب)?:(?P<source>.*)\]\](?P<extra>.*)>\s*\[\[:بوابة:(?P<destination>.*)\]\]\n*"
         scanner.scan(requests_page.get_page_text())
 
         if scanner.have_requests:
@@ -33,9 +33,14 @@ try:
                         # destination_page = pywikibot.Page(site, f"{request['destination']}",ns=0)
                         # if source_page.exists() and destination_page.exists() and source_page.namespace() == 0 and destination_page.namespace() == 0:
                         # todo:add check if template exists with send content to talk page
+
+                        from_namespace = 0
+                        if request['namespace'] is not None:
+                            from_namespace = get_namespace_id(request['namespace'])
+
                         request_model = Request(
                             from_title=request['source'],
-                            from_namespace=get_namespace_id(request['namespace']),
+                            from_namespace=from_namespace,
                             to_title=request['destination'],
                             to_namespace=100,
                             request_type=type_of_request,
