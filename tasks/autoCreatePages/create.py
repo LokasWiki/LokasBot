@@ -30,4 +30,4 @@ for item in my_pages_list:
     page = pywikibot.Page(site, page_title)
     if not page.exists():
         page.text = item['template']
-        page.save("بوت:إنشاء صفحات مطلوبة V1.0.2")
+        page.save("بوت:إنشاء صفحات مطلوبة V1.1.0")

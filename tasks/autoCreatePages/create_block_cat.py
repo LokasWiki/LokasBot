@@ -14,6 +14,6 @@ try:
     cat = pywikibot.Category(site, cat_name)
     if not cat.isEmptyCategory():
         cat.text = "{{تصنيف تهذيب شهري}}"
-        cat.save("بوت:إنشاء صفحات مطلوبة V1.0.2")
+        cat.save("بوت:إنشاء صفحات مطلوبة V1.1.0")
 except:
     print("failed to create category")
