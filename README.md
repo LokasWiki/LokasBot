@@ -21,10 +21,10 @@ Toolforge setup and job management
 - ### Clone and setup virtual environments
 
     ``` bash
-    rm -fdr $HOME/repos && git clone --recurse-submodules https://github.com/LokasWiki/LokasBot.git $HOME/repos && chmod ug+x $HOME/repos/bin/setup-venvs.sh
+    rm -fdr $HOME/repos && git clone --recurse-submodules https://github.com/LokasWiki/LokasBot.git $HOME/repos && chmod ug+x $HOME/repos/.toolforge/bin/setup-venvs.sh
     ```
     ``` bash
-    toolforge-jobs run setup-venvs --command $HOME/repos/bin/setup-venvs.sh --image tf-python39
+    toolforge-jobs run setup-venvs --command $HOME/repos/.toolforge/bin/setup-venvs.sh --image tf-python39
      ```
   ``` bash
   tail -f $HOME/setup-venvs.*
@@ -40,12 +40,12 @@ Toolforge setup and job management
 - ### Load jobs
 
     ``` bash
-    toolforge-jobs load $HOME/repos/cronjobs.yaml
+    toolforge-jobs load $HOME/repos/.toolforge/cronjobs.yaml
     ```
 
 - ### run job for one time (timed out 300 seconds)
     ```` bash
-    toolforge-jobs run script --command $HOME/repos/jobs/statistics-daily.sh --image tf-python39 --wait
+    toolforge-jobs run script --command $HOME/repos/.toolforge/jobs/statistics-daily.sh --image tf-python39 --wait
     ````
 - ### run tool-bot on web
   https://github.com/LokasWiki/LokasBot-web
