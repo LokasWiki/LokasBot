@@ -6,70 +6,70 @@
   no-filelog: false
 - name: statistics-daily
   no-filelog: false
-  command: $HOME/repos/.toolforge/jobs/statistics-daily.sh
+  command: $HOME/repos/toolforge/jobs/statistics-daily.sh
   schedule: '0 1 * * *'
   image: tf-python39
   emails: onfailure
   <<: *defaults
 - name: utw-daily
   no-filelog: false
-  command: $HOME/repos/.toolforge/jobs/users_this_week-daily.sh
+  command: $HOME/repos/toolforge/jobs/users_this_week-daily.sh
   schedule: '0 2 * * *'
   image: tf-python39
   emails: onfailure
   <<: *defaults
 - name: utw-weekly
   no-filelog: false
-  command: $HOME/repos/.toolforge/jobs/users_this_week-weekly.sh
+  command: $HOME/repos/toolforge/jobs/users_this_week-weekly.sh
   schedule: '0 2 * * 1'
   image: tf-python39
   emails: onfailure
   <<: *defaults
 - name: clear-sandbox
   no-filelog: false
-  command: $HOME/repos/.toolforge/jobs/clear_sandbox.sh
+  command: $HOME/repos/toolforge/jobs/clear_sandbox.sh
   schedule: '0 */12 * * *'
   image: tf-python39
   emails: onfailure
   <<: *defaults
 - name: auto-create-pages-6h
   no-filelog: false
-  command: $HOME/repos/.toolforge/jobs/auto_create_pages_6h.sh
+  command: $HOME/repos/toolforge/jobs/auto_create_pages_6h.sh
   schedule: '0 */6 * * *'
   image: tf-python39
   emails: onfailure
   <<: *defaults
 - name: requests-raed
   no-filelog: false
-  command: $HOME/repos/.toolforge/jobs/requests_read.sh
+  command: $HOME/repos/toolforge/jobs/requests_read.sh
   schedule: '*/5 * * * *'
   image: tf-python39
   emails: onfailure
   <<: *defaults
 - name: requests-load
   no-filelog: false
-  command: $HOME/repos/.toolforge/jobs/requests_load.sh
+  command: $HOME/repos/toolforge/jobs/requests_load.sh
   schedule: '*/10 * * * *'
   image: tf-python39
   emails: onfailure
   <<: *defaults
 - name: requests-run
   no-filelog: false
-  command: $HOME/repos/.toolforge/jobs/requests_run.sh
+  command: $HOME/repos/toolforge/jobs/requests_run.sh
   schedule: '*/15 * * * *'
   image: tf-python39
   emails: onfailure
   <<: *defaults
 - name: read-new-page-20
   no-filelog: false
-  command: $HOME/repos/.toolforge/jobs/read.sh
+  command: $HOME/repos/toolforge/jobs/read.sh
   schedule: '*/20 * * * *'
   image: tf-python39
   emails: onfailure
   <<: *defaults
 - name: maintenance-check-10
   no-filelog: false
-  command: $HOME/repos/.toolforge/jobs/maintenance_check.sh
+  command: $HOME/repos/toolforge/jobs/maintenance_check.sh
 #  schedule: '*/10 * * * *'
   image: tf-python39
   emails: onfailure
@@ -77,7 +77,7 @@
   <<: *defaults
 - name: webcite-check-10
   no-filelog: false
-  command: $HOME/repos/.toolforge/jobs/webcite_check.sh
+  command: $HOME/repos/toolforge/jobs/webcite_check.sh
   #  schedule: '*/10 * * * *'
   image: tf-python39
   emails: onfailure
@@ -86,7 +86,7 @@
 
 - name: webcite-24h
   no-filelog: false
-  command: $HOME/repos/.toolforge/jobs/read_last_day.sh 1540
+  command: $HOME/repos/toolforge/jobs/read_last_day.sh 1540
   schedule: '10 0 * * *'
   image: tf-python39
   emails: onfailure
@@ -94,7 +94,7 @@
 #
 #- name: month-statistics
 #  no-filelog: false
-#  command: $HOME/repos/.toolforge/jobs/month_statistics.sh
+#  command: $HOME/repos/toolforge/jobs/month_statistics.sh
 #  schedule: '5 0 * * *'
 #  image: tf-python39
 #  emails: onfailure

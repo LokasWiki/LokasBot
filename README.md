@@ -21,10 +21,10 @@ Toolforge setup and job management
 - ### Clone and setup virtual environments
 
     ``` bash
-    rm -fdr $HOME/repos && git clone --recurse-submodules https://github.com/LokasWiki/LokasBot.git $HOME/repos && chmod ug+x $HOME/repos/.toolforge/bin/setup-venvs.sh
+    rm -fdr $HOME/repos && git clone --recurse-submodules https://github.com/LokasWiki/LokasBot.git $HOME/repos && chmod ug+x $HOME/repos/toolforge/bin/setup-venvs.sh
     ```
     ``` bash
-    toolforge-jobs run setup-venvs --command $HOME/repos/.toolforge/bin/setup-venvs.sh --image tf-python39
+    toolforge-jobs run setup-venvs --command $HOME/repos/toolforge/bin/setup-venvs.sh --image tf-python39
      ```
   ``` bash
   tail -f $HOME/setup-venvs.*
@@ -40,12 +40,12 @@ Toolforge setup and job management
 - ### Load jobs
 
     ``` bash
-    toolforge-jobs load $HOME/repos/.toolforge/cronjobs.yaml
+    toolforge-jobs load $HOME/repos/toolforge/cronjobs.yaml
     ```
 
 - ### run job for one time (timed out 300 seconds)
     ```` bash
-    toolforge-jobs run script --command $HOME/repos/.toolforge/jobs/statistics-daily.sh --image tf-python39 --wait
+    toolforge-jobs run script --command $HOME/repos/toolforge/jobs/statistics-daily.sh --image tf-python39 --wait
     ````
 - ### run tool-bot on web
   https://github.com/LokasWiki/LokasBot-web
@@ -98,6 +98,6 @@ Toolforge setup and job management
 
 - ### الاتصال بقاعدة البيانات
     ```
-    ssh -N -L 4711:arwiki.analytics.db.svc.wikimedia.cloud:3306 yourusername@login.toolforge.org -i /home/username/.ssh/filename_id   -v
+    ssh -N -L 4711:arwiki.analytics.db.svc.wikimedia.cloud:3306 yourusername@logintoolforge.org -i /home/username/.ssh/filename_id   -v
     ```
 
