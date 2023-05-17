@@ -2,7 +2,10 @@ import pywikibot
 import requests
 import wikitextparser as wtp
 
+from core.utils.wikidb import Database
+
 site = pywikibot.Site()
+
 
 username_bot = site.username()
 # todo: call this from text file and remove from here
@@ -29,67 +32,19 @@ TABLE_BODY
 
    """
 
-#  todo:get this list from database ref https://quarry.wmcloud.org/query/73698
-list_of_pages = [
-    "ألمانيا",
-    "إسرائيل",
-    "إسلام",
-    "إلحاد",
-    "إيران",
-    "الأردن",
-    "الإمارات_العربية_المتحدة",
-    "البحرين",
-    "الجزائر",
-    "السعودية",
-    "السودان",
-    "الصين",
-    "العراق",
-    "الكويت",
-    "المغرب",
-    "المملكة_المتحدة",
-    "الهند",
-    "الولايات_المتحدة",
-    "اليابان",
-    "اليمن",
-    "باكستان",
-    "بوذية",
-    "تاريخ",
-    "تركيا",
-    "تقانة",
-    "تلفاز",
-    "تونس",
-    "الجاينية",
-    "جغرافيا",
-    "حوسبة",
-    "روسيا",
-    "رياضيات",
-    "الزرادشتية",
-    "سلطنة_عمان",
-    "سوريا",
-    "سيارات",
-    "سياسة",
-    "السيخية",
-    "طب",
-    "طيران",
-    "علم_الأحياء",
-    "علم_الاقتصاد",
-    "علم_الفلك",
-    "فرنسا",
-    "فلسطين",
-    "فلسفة",
-    "فيزياء",
-    "قانون",
-    "قطر",
-    "كيمياء",
-    "لبنان",
-    "لعبة_كرة_القدم",
-    "ليبيا",
-    "المسيحية",
-    "مصر",
-    "موريتانيا",
-    "هندوسية",
-    "اليهودية",
-]
+db = Database()
+db.query = """select replace(pl_title,"مقالات_مطلوبة_حسب_الاختصاص/","") as page_title from pagelinks 
+where pl_from in (676775)
+and pl_namespace in (4)
+and pl_from_namespace in (4)
+and pl_title not like "%وصلة_حمراء%"
+order by pl_title
+"""
+db.get_content_from_database()
+
+list_of_pages = []
+for row in db.result:
+    list_of_pages.append(str(row['page_title'], "utf-8"))
 
 for type in list_of_pages:
     type = type.replace("_", " ")
@@ -125,7 +80,7 @@ for type in list_of_pages:
                                                                             f"[[مستخدم:{username_bot}|{username_bot}]]").replace(
                 "BOT_TIME_NOW", "{{نسخ:#time:H:i، j F Y}}").replace("TYPE", type)
 
-            page.save("بوت:تحديث مقالات مطلوبة حسب الاختصاص v1.0.3")
+            page.save("بوت:تحديث مقالات مطلوبة حسب الاختصاص v1.1.0")
         except:
             # todo: add more log here
             print(f"cand`t work with this page {type}")
