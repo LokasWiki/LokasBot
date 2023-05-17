@@ -72,7 +72,7 @@ class Category:
             self.cat_name = f"تصنيف:أسماء مستخدمين مخالفة مرشحة للمنع منذ {cat_date}"
             cat = pywikibot.Category(self.site, self.cat_name)
             cat.text = "{{تصنيف تهذيب شهري}}"
-            cat.save("بوت:فحص (إنشاء تصنيف صيانة) V2.1.0")
+            cat.save("بوت:فحص (إنشاء تصنيف صيانة) V2.2.0")
         except:
             print("failed to create category")
 

@@ -1,0 +1,12 @@
+{{ويكيبيديا:إخطار الإداريين/أسماء مستخدمين للفحص/رسالة للإداري}}
+<div style="background: #E5E4E2; padding: 0.5em; -moz-border-radius: 0.3em; border-radius: 0.3em;">
+<center>
+'''حَدَّث BOT_USER_NAME هذه القائمة في :  BOT_TIME_NOW (ت ع م) '''
+{| class="wikitable sortable"
+!style="background-color:#808080" align="center"|الرقم!!style="background-color:#808080" align="center"|نسبة التنبؤ!!style="background-color:#808080" align="center"|المستخدم!!style="background-color:#808080" align="center"|حالة المراجعة!!style="background-color:#808080" align="center"|السبب
+|-
+BOT_TABLE_BODY
+|}
+</div>
+</center>
+[[تصنيف:إدارة ويكيبيديا]]
