@@ -12,8 +12,9 @@ try:
     cat_date = formatter.format_timestamp(start_time_str)
     cat_name = f"تصنيف:أسماء مستخدمين مخالفة مرشحة للمنع منذ {cat_date}"
     cat = pywikibot.Category(site, cat_name)
-    if not cat.isEmptyCategory():
-        cat.text = "{{تصنيف تهذيب شهري}}"
-        cat.save("بوت:إنشاء صفحات مطلوبة V1.1.0")
+    if not cat.exists():
+        if not cat.isEmptyCategory():
+            cat.text = "{{تصنيف تهذيب شهري}}"
+            cat.save("بوت:إنشاء صفحات مطلوبة V1.1.0")
 except:
     print("failed to create category")
