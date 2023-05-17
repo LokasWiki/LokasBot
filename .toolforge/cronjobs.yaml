@@ -32,6 +32,13 @@
   image: tf-python39
   emails: onfailure
   <<: *defaults
+- name: auto-create-pages-6h
+  no-filelog: false
+  command: $HOME/repos/.toolforge/jobs/auto_create_pages_6h.sh
+  schedule: '0 */6 * * *'
+  image: tf-python39
+  emails: onfailure
+  <<: *defaults
 - name: requests-raed
   no-filelog: false
   command: $HOME/repos/.toolforge/jobs/requests_read.sh
