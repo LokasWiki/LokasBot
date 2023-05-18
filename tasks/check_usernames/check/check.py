@@ -29,7 +29,7 @@ class Check:
 
     def reload(self):
         self.page.text = ""
-        self.page.save("بوت:تم  V2.1.0")
+        self.page.save("بوت:تم  V2.1.1")
 
 
 def main(*args: str) -> int:

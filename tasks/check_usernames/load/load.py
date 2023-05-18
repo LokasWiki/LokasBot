@@ -95,8 +95,7 @@ class Load:
         num = 1
         # add old users if found
         for user in self.users:
-            table_body += """|{}||{}||{}||{}||\n|-
-                                      """.format(num, user[1], user[2], user[3], user[4])
+            table_body += """\n|{}||{}||{}||{}||\n|-""".format(num, user[1], user[2], user[3], user[4])
             num += 1
 
         for user_name in self.list_of_names:
@@ -106,23 +105,21 @@ class Load:
                 msg1 = user_name['username'].strip().lower().replace(" ", "_")
 
                 if user_name['prediction']['label'] == "LABEL_1":
-                    table_body += """|{0}||{2}||{1}||لا||\n|-
-                  """.format(num, "{{مس|" + user_name['username'] + "}}", str(user_name['prediction']['score']))
+                    table_body += """\n|{0}||{2}||{1}||لا||\n|-""".format(num, "{{مس|" + user_name['username'] + "}}",
+                                                                          str(user_name['prediction']['score']))
                     num += 1
                 elif len(msg1) <= 2:
-                    table_body += """|{0}||{2}||{1}||لا||\n|-
-                                      """.format(num, "{{مس|" + user_name['username'] + "}}",
-                                                 str("كود عادي (الاسم قصير)"))
+                    table_body += """\n|{0}||{2}||{1}||لا||\n|-""".format(num, "{{مس|" + user_name['username'] + "}}",
+                                                                          str("كود عادي (الاسم قصير)"))
                 elif len(re.findall(r'\w+', msg1)) >= 5:
-                    table_body += """|{0}||{2}||{1}||لا||\n|-
-                                          """.format(num, "{{مس|" + user_name['username'] + "}}",
-                                                     str("كود عادي (الاسم طويل)"))
+                    table_body += """\n|{0}||{2}||{1}||لا||\n|-""".format(num, "{{مس|" + user_name['username'] + "}}",
+                                                                          str("كود عادي (الاسم طويل)"))
                     num += 1
             except Exception as e:
                 logging.error("Error occurred while adding pages to the database.")
                 logging.exception(e)
-                table_body += """|{0}||{2}||{1}||لا||\n|-
-                      """.format(num, "{{مس|" + user_name['username'] + "}}", "غير معروف")
+                table_body += """\n|{0}||{2}||{1}||لا||\n|-""".format(num, "{{مس|" + user_name['username'] + "}}",
+                                                                      "غير معروف")
                 num += 1
 
         # start add data to text stub
@@ -136,7 +133,7 @@ class Load:
     def save_page(self):
         # start save page
         self.page.text = self.text
-        self.page.save("بوت:فحص V2.2.0")
+        self.page.save("بوت:فحص V2.2.1")
         return self
 
 
@@ -232,14 +229,14 @@ def main(*args: str) -> int:
                 names.append(name)
 
             page_title = "ويكيبيديا:إخطار الإداريين/أسماء مستخدمين للفحص"
-            # page_title = "مستخدم:لوقا/أسماء مستخدمين للفحص"
-            # page_title = "مستخدم:لوقا/ملعب 20"
+            # page_title = "مستخدم:لوقا/أسماء مستخدمين للفحص 2"
 
             site = pywikibot.Site()
 
             users = []
             try:
                 last_check_obj = LastCheck(site)
+
                 if last_check_obj.check():
                     last_check_obj.get_users_from_table()
                     users = last_check_obj.users
