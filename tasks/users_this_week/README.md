@@ -67,9 +67,11 @@ select actor_name as name, COUNT(*) as score
 from logging
 INNER JOIN actor on logging.log_actor = actor_id
 where log_timestamp BETWEEN START_WEEK_DATE AND END_WEEK_DATE
-and log_type in ("block", "protect", "delete", "rights")
-and actor_name IN (SELECT user_name FROM user_groups INNER JOIN user ON user_id = ug_user WHERE ug_group = 'sysop')
-and actor_name not in (SELECT replace(pl_title,"_"," ")
+  and log_type in ("block", "protect", "delete", "rights")
+  and actor_name IN (SELECT user_name FROM user_groups INNER JOIN user ON user_id = ug_user WHERE ug_group = 'sysop')
+  and actor_name not in (SELECT replace(pl_title, "_", " ")
+									and actor_user
+	not null
 FROM pagelinks
 where pagelinks.pl_from = 7352181
 and pl_namespace = 2)
@@ -116,18 +118,20 @@ INNER JOIN comment_revision on rev.rev_comment_id = comment_id
 JOIN page
 ON page_id = parent.rev_page
 WHERE page_namespace = 0
-and comment_text not like "%رجوع%"
-and comment_text not like "%استرجاع%"
-AND rev.rev_timestamp BETWEEN START_WEEK_DATE AND END_WEEK_DATE
-AND parent.rev_timestamp BETWEEN START_WEEK_DATE AND END_WEEK_DATE
+  and comment_text not like "%رجوع%"
+  and comment_text not like "%استرجاع%"
+  AND rev.rev_timestamp BETWEEN START_WEEK_DATE AND END_WEEK_DATE
+  AND parent.rev_timestamp BETWEEN START_WEEK_DATE AND END_WEEK_DATE
   and ucase(actor_name) not like ucase("%BOT") COLLATE utf8mb4_general_ci
   and actor_name not like "%بوت%" collate utf8mb4_general_ci
   and actor_name Not IN (SELECT user_name
                          FROM user_groups
                                   INNER JOIN user ON user_id = ug_user
                          WHERE ug_group = "bot")
-and actor_name IN (SELECT user_name FROM user_groups INNER JOIN user ON user_id = ug_user WHERE ug_group = 'editor' or 'autoreview')
-and actor_name not in (SELECT replace(pl_title,"_"," ")
+  and actor_name IN (SELECT user_name FROM user_groups INNER JOIN user ON user_id = ug_user WHERE ug_group = 'editor' or 'autoreview')
+  and actor_name not in (SELECT replace(pl_title, "_", " ")
+									and actor_user
+	not null
 FROM pagelinks
 where pagelinks.pl_from = 7352181
 and pl_namespace = 2)
@@ -145,14 +149,16 @@ LIMIT 10;
 select actor_name as name, COUNT(*) as score
     from logging
     INNER JOIN actor ON actor.actor_id = logging.log_actor
-    where log_timestamp BETWEEN START_WEEK_DATE AND END_WEEK_DATE
-    and log_action = "approve"
-    and log_namespace = 0
+where log_timestamp BETWEEN START_WEEK_DATE AND END_WEEK_DATE
+  and log_action = "approve"
+  and log_namespace = 0
 
-    and actor_name Not IN (SELECT user_name FROM user_groups INNER JOIN user ON user_id = ug_user WHERE ug_group = 'bot')
-     and ucase(actor_name) not like ucase("%BOT") COLLATE utf8mb4_general_ci
+  and actor_name Not IN (SELECT user_name FROM user_groups INNER JOIN user ON user_id = ug_user WHERE ug_group = 'bot')
+  and ucase(actor_name) not like ucase("%BOT") COLLATE utf8mb4_general_ci
   and actor_name not like "%بوت%" collate utf8mb4_general_ci
-and actor_name not in (SELECT replace(pl_title,"_"," ")
+  and actor_name not in (SELECT replace(pl_title, "_", " ")
+									and actor_user
+	not null
 FROM pagelinks
 where pagelinks.pl_from = 7352181
 and pl_namespace = 2)
@@ -180,7 +186,8 @@ AND rev.rev_timestamp BETWEEN START_WEEK_DATE AND END_WEEK_DATE
 AND ucase(actor_name) NOT LIKE ucase("%BOT") COLLATE utf8mb4_general_ci
 AND actor_name NOT LIKE "%بوت%" collate utf8mb4_general_ci
 AND actor_name NOT IN (SELECT user_name FROM user_groups INNER JOIN user ON user_id = ug_user WHERE ug_group = "bot")
-and actor_name not in (SELECT replace(pl_title,"_"," ")
+	and actor_name not in (SELECT replace(pl_title, "_", " ")
+									  and actor_user not null
 FROM pagelinks
 where pagelinks.pl_from = 7352181
 and pl_namespace = 2)
@@ -204,24 +211,29 @@ LIMIT 10;
 ~~~~sql
 SELECT actor_name as name, COUNT(revision.rev_id) AS score
 FROM user
-INNER JOIN actor ON user_id = actor_user
-INNER JOIN revision ON rev_actor = actor_id
-INNER JOIN page ON page.page_id = revision.rev_page
-LEFT JOIN ipblocks ON actor_user = ipb_user
+		 INNER JOIN actor ON user_id = actor_user
+		 INNER JOIN revision ON rev_actor = actor_id
+		 INNER JOIN page ON page.page_id = revision.rev_page
+		 LEFT JOIN ipblocks ON actor_user = ipb_user
 WHERE rev_timestamp BETWEEN START_WEEK_DATE AND END_WEEK_DATE
-AND user_registration BETWEEN DATE_BEFORE_30_DAYS and START_WEEK_DATE
-AND page.page_namespace = 0
-AND ipb_user IS NULL
-AND ucase(actor_name) NOT LIKE ucase("%BOT") COLLATE utf8mb4_general_ci
-AND actor_name NOT LIKE "%بوت%" collate utf8mb4_general_ci
-and actor_name NOT IN (SELECT user_name FROM user_groups INNER JOIN user ON user_id = ug_user WHERE ug_group = 'editor' or 'autoreview' or 'bot')
-and actor_name not in (SELECT replace(pl_title,"_"," ")
+  AND user_registration BETWEEN DATE_BEFORE_30_DAYS and START_WEEK_DATE
+  AND page.page_namespace = 0
+  AND ipb_user IS NULL
+  AND ucase(actor_name) NOT LIKE ucase("%BOT") COLLATE utf8mb4_general_ci
+  AND actor_name NOT LIKE "%بوت%" collate utf8mb4_general_ci
+  and actor_name NOT IN (SELECT user_name
+						 FROM user_groups
+								  INNER JOIN user ON user_id = ug_user
+						 WHERE ug_group = 'editor'
+							or 'autoreview'
+							or 'bot')
+  and actor_name not in (SELECT replace(pl_title, "_", " "
+	and actor_user not null
 FROM pagelinks
 where pagelinks.pl_from = 7352181
 and pl_namespace = 2)
 GROUP BY actor_name
-ORDER BY score DESC,name
-LIMIT 10;
+ORDER BY score DESC, name LIMIT 10;
 ~~~~
 يقوم هذا الاستعلام بحسب عدد التعديلات في نطاق المقالات فقط للمستخدمين الذين لا يملكون صلاحية محرر أو بوت أو مراجع تلقائي
 ويظهر فقط المستخدمين الذي قاموا بإنشاء الحساب قبل فترة أقصاها شهرا من وقت تشغيل الاستعلام
