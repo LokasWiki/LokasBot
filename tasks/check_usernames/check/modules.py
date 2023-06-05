@@ -102,9 +102,9 @@ class SendAlert:
             # Add a new section to the page
             title = 'اسم المستخدم مخالف'
             if self.has_reason:
-                content = "{{نسخ:تنبيه اسم مستخدم|REASON|with_title=no}}".replace("REASON", str(self.reason).strip())
+                content = "{{نسخ:تنبيه اسم مخالف|REASON|with_title=no}}".replace("REASON", str(self.reason).strip())
             else:
-                content = "{{نسخ:تنبيه اسم مستخدم|with_title=no}}"
+                content = "{{نسخ:تنبيه اسم مخالف|with_title=no}}"
 
             try:
                 topic = board.new_topic(title, content)
@@ -131,10 +131,10 @@ class SendAlert:
                 text = talk_page.text
                 text += '\n'
                 if self.has_reason:
-                    text += "{{نسخ:تنبيه اسم مستخدم|REASON}}----[[مستخدم:Dr-Taher|Dr-Taher]] ([[نقاش المستخدم:Dr-Taher|نقاش]]) {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)".replace(
+                    text += "{{نسخ:تنبيه اسم مخالف|REASON}}----[[مستخدم:Dr-Taher|Dr-Taher]] ([[نقاش المستخدم:Dr-Taher|نقاش]]) {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)".replace(
                         "REASON", str(self.reason).strip())
                 else:
-                    text += "{{نسخ:تنبيه اسم مستخدم}}----[[مستخدم:Dr-Taher|Dr-Taher]] ([[نقاش المستخدم:Dr-Taher|نقاش]]) {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)"
+                    text += "{{نسخ:تنبيه اسم مخالف}}----[[مستخدم:Dr-Taher|Dr-Taher]] ([[نقاش المستخدم:Dr-Taher|نقاش]]) {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)"
 
                 try:
                     # Save the edited page
