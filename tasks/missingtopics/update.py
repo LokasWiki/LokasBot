@@ -56,7 +56,6 @@ and pl_namespace in (4)
 and pl_from_namespace in (4)
 and pl_title not like "%وصلة_حمراء%"
 order by pl_title
-limit 1
 """
 db.get_content_from_database()
 
@@ -89,7 +88,7 @@ for type in list_of_pages:
             This means that the SQL query, including all its components (such as the query text, parameters, and overhead),
             cannot exceed this limit.
             """
-            patch_size = 100
+            patch_size = 50
             found_pages = []
             for i in range(0, len(data), patch_size):
                 try:
@@ -114,8 +113,8 @@ for type in list_of_pages:
                         read_default_file=_config.db_connect_file,
                         db=_config.db_name_format.format("enwiki"),
                         charset='utf8mb4',
-                        # port=_config.db_port,
-                        port=4701,
+                        port=_config.db_port,
+                        #port=4701,
                         cursorclass=pymysql.cursors.DictCursor,
                     )
                     en_db.query = "select page.page_title as 'p_title' from page where page.page_title in ({}) and page.page_namespace in (0)".format(
