@@ -1,33 +1,53 @@
+import datetime
+import os
 import random
 import re
 
-import pywikibot
 import pymysql
-from pywikibot import config as _config
-import os
-import datetime
+import pywikibot
 import pywikibot.flow
+from pywikibot import config as _config
 
 
 class Base:
     def __init__(self):
         # for test only
         #
-        # first_day = datetime.datetime(2022, 12, 1)
-        # last_day = datetime.datetime(2023, 1, 31)
+        # first_day = datetime.datetime(2023, 1, 2)
+        # last_day = datetime.datetime(2023, 1, 8)
         #
         # # for real
-        #  well run every day
-        first_day = datetime.datetime.now() - datetime.timedelta(days=1)
-        last_day = datetime.datetime.now()
+        first_day = None
+        last_day = None
 
-        self.first_day_of_week = first_day
-        # self.last_day_of_week = last_day
-        # self.last_day_of_week = self.first_day_of_week + datetime.timedelta(days=6)
-        self.last_day_of_week = last_day
+        # Set the first and last day of the week to the current week if not specified
+        if first_day is None or last_day is None:
+            # Get the current date and time
+            self.now = datetime.datetime.now() - datetime.timedelta(days=1)
+            # Get the ISO year, week number, and day of the week
+            self.year, self.week, self.day = self.now.isocalendar()
+            # Get the first day of the week as Monday
+            self.first_day_of_week = self.now - datetime.timedelta(days=self.now.weekday())
+            # if self.now.weekday() == 6:
+            #     self.first_day_of_week -= datetime.timedelta(days=6)
+            # Get the last day of the week
+            self.last_day_of_week = self.first_day_of_week + datetime.timedelta(days=6)
+        else:
+            self.first_day_of_week = first_day
+            # self.last_day_of_week = last_day
+            self.last_day_of_week = self.first_day_of_week + datetime.timedelta(days=6)
+            self.year, self.week, self.day = first_day.isocalendar()
 
-        self.year, self.week, self.day = first_day.isocalendar()
+        # Get the directory of the script
+        self.script_dir = os.path.dirname(__file__)
+        self.domain_name = "ويكيبيديا:"
+        # self.domain_name = "مستخدم:لوقا/"
 
+        # Format the first and last day of the week in the desired format
+        self.date_before_30_days = self.first_day_of_week - datetime.timedelta(days=30)
+
+        self.date_before_30_days_formatted = self.date_before_30_days.replace(hour=0, minute=0, second=0).strftime(
+            "%Y%m%d%H%M%S")
         start_of_day = datetime.time(hour=0, minute=0, second=0)
         self.first_day_of_week_formatted = datetime.datetime.combine(self.first_day_of_week, start_of_day).strftime(
             "%Y%m%d%H%M%S")
@@ -238,8 +258,8 @@ class SendTemplate(Base):
                     # Save the edited page
                     print("start send to " + name)
                     talk_page.text = text
-
+                    summary = str("بوت:[[ويكيبيديا:توزيع أوسمة|توزيع أوسمة]] (NUMBER_COUNT تعديل) (v1.2)").replace('NUMBER_COUNT', str(self.input_dict['number']))
                     # Save the page
-                    talk_page.save("بوت:[[ويكيبيديا:توزيع أوسمة|توزيع أوسمة]]")
+                    talk_page.save(summary=summary,minor=False)
                 except Exception as error:
                     print(f'Error saving page: {error}')
