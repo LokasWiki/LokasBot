@@ -238,8 +238,8 @@ class SendTemplate(Base):
                     # Save the edited page
                     print("start send to " + name)
                     talk_page.text = text
-
+                    summary = str("بوت:[[ويكيبيديا:توزيع أوسمة|توزيع أوسمة]] (NUMBER_COUNT تعديل) (v1.2)").replace('NUMBER_COUNT', str(self.input_dict['number']))
                     # Save the page
-                    talk_page.save("بوت:[[ويكيبيديا:توزيع أوسمة|توزيع أوسمة]]")
+                    talk_page.save(summary=summary,minor=False)
                 except Exception as error:
                     print(f'Error saving page: {error}')
