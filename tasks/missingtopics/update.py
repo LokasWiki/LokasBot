@@ -66,8 +66,8 @@ for row in db.result:
 
 for type in list_of_pages:
     type = type.replace("_", " ")
-    # page_name = f"ويكيبيديا:مقالات مطلوبة حسب الاختصاص/{type}"
-    page_name = "مستخدم:لوقا/ملعب 34"
+    page_name = f"ويكيبيديا:مقالات مطلوبة حسب الاختصاص/{type}"
+    # page_name = "مستخدم:لوقا/ملعب 34"
 
     url = f"https://missingtopics.toolforge.org/?language=ar&project=wikipedia&article=&category={type}&depth=1&wikimode=1&nosingles=1&limitnum=1&doit=Run"
     headers = {
@@ -100,8 +100,9 @@ for type in list_of_pages:
                         # to remove [[ and ]]
                         # title = item[1][2: -2].replace(" ", "_")
                         title = item[1].replace(" ", "_").replace("[[", "").replace("]]", "")
-
-                        if not has_arabic_chars(title):
+                        # max title len 100 to skip title that have len >= 100 like "Primeval Beech Forests of the
+                        # Carpathians and the Ancient Beech Forests of Germany aaaaaa aaaaaaaa"
+                        if not has_arabic_chars(title) and len(title) <= 100:
                             titles.append(title)
                     # Escape and join the titles
                     escaped_titles = [escape_string(title) for title in titles]
@@ -129,7 +130,6 @@ for type in list_of_pages:
                     print(e)
                 time.sleep(3)
 
-            # todo: if title in en try to get page in en wiki and create that by sql query not by api cos every page will have 2000 link
             table_body = ""
             for index, row in enumerate(data):
                 en_title = ""
@@ -151,7 +151,7 @@ for type in list_of_pages:
                                                                             f"[[مستخدم:{username_bot}|{username_bot}]]").replace(
                 "BOT_TIME_NOW", "{{نسخ:#time:H:i، j F Y}}").replace("TYPE", type)
 
-            page.save("بوت:تحديث مقالات مطلوبة حسب الاختصاص v1.1.0")
+            page.save("بوت:تحديث مقالات مطلوبة حسب الاختصاص v2.0.0")
         except:
             # todo: add more log here
             print(f"cand`t work with this page {type}")
