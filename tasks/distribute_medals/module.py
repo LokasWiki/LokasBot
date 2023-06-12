@@ -201,8 +201,21 @@ class SignatureScanner:
             self._have_requests = False
 
 
+class SignatureManager:
+    def __init__(self, signature_list):
+        self.signature_list = signature_list
+
+    def get_random_signature(self, name):
+        filtered_list = [sig for sig in self.signature_list if sig['user_name'] != name]
+        if filtered_list:
+            signature = str(random.choice(filtered_list)['signature'])
+            return signature
+        else:
+            return "[[مستخدم:لوقا|لوقا]] ([[نقاش المستخدم:لوقا|نقاش]])"
+
+
 class SendTemplate(Base):
-    def __init__(self, input_dict,signature_list):
+    def __init__(self, input_dict, signature_list):
         """
         Initialize a SendTemplate object with a dictionary of input parameters.
         :param input_dict: A dictionary of input parameters with keys:
@@ -233,14 +246,16 @@ class SendTemplate(Base):
 
             # Get the user page for the user
             talk_page = user.getUserTalkPage()
-            signature = str(random.choice(self.signature_list)['signature'])
+            signature_manager = SignatureManager(self.signature_list)
+            random_signature = signature_manager.get_random_signature(name)
+
             if talk_page.is_flow_page():
                 board = pywikibot.flow.Board(talk_page)
 
                 # Add a new section to the page
                 title = 'وسام NUMBER تعديل!'.replace('NUMBER', str(self.input_dict['number']))
                 content = self.input_dict['template_stub'].replace('NUMBER', str(self.input_dict['number'])).replace(
-                    "SIGNATURE", signature).replace("USERNAME", name)
+                    "SIGNATURE", random_signature).replace("USERNAME", name)
 
                 try:
                     print("start send to " + name)
@@ -254,7 +269,7 @@ class SendTemplate(Base):
                 text = talk_page.text
                 text += '\n\n== وسام NUMBER تعديل! ==\n\n'.replace('NUMBER', str(self.input_dict['number']))
                 text += self.input_dict['template_stub'].replace('NUMBER', str(self.input_dict['number'])).replace(
-                    "SIGNATURE", signature).replace("USERNAME", name)
+                    "SIGNATURE", random_signature).replace("USERNAME", name)
 
                 try:
                     # Save the edited page
