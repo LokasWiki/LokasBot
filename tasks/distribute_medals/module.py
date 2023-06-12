@@ -1,4 +1,5 @@
 import datetime
+import logging
 import os
 import random
 import re
@@ -201,8 +202,41 @@ class SignatureScanner:
             self._have_requests = False
 
 
+class SignatureManager:
+    """
+    A class for managing signatures and retrieving random signatures for a given name.
+    """
+
+    def __init__(self, signature_list):
+        """
+        Initialize the SignatureManager with a list of signatures.
+
+        Args:
+          signature_list (list): A list of dictionaries containing signature information.
+              Each dictionary should have 'signature' and 'user_name' keys.
+        """
+        self.signature_list = signature_list
+
+    def get_random_signature(self, name):
+        """
+          Get a random signature for the given name, excluding the matching user_name.
+
+          Args:
+              name (str): The name for which to retrieve a random signature.
+
+          Returns:
+              str: A random signature for the given name, or a default signature if no match found.
+          """
+        filtered_list = [sig for sig in self.signature_list if sig['user_name'] != name]
+        if filtered_list:
+            signature = str(random.choice(filtered_list)['signature'])
+            return signature
+        else:
+            return "[[مستخدم:لوقا|لوقا]] ([[نقاش المستخدم:لوقا|نقاش]])"
+
+
 class SendTemplate(Base):
-    def __init__(self, input_dict,signature_list):
+    def __init__(self, input_dict, signature_list):
         """
         Initialize a SendTemplate object with a dictionary of input parameters.
         :param input_dict: A dictionary of input parameters with keys:
@@ -223,7 +257,13 @@ class SendTemplate(Base):
         site = pywikibot.Site()
 
         for member in self.database.result:
-            name = str(member['actor_name'], 'utf-8')
+
+            try:
+                name = str(member['actor_name'], 'utf-8')
+            except Exception as e:
+                print(f"An error occurred while processing : {e}")
+                logging.exception(e)
+                name = member['actor_name']
 
             # Retrieve the user talk page
             user = pywikibot.User(site, name)
@@ -233,13 +273,16 @@ class SendTemplate(Base):
 
             # Get the user page for the user
             talk_page = user.getUserTalkPage()
-            signature = str(random.choice(self.signature_list)['signature'])
+            signature_manager = SignatureManager(self.signature_list)
+            random_signature = signature_manager.get_random_signature(name)
+
             if talk_page.is_flow_page():
                 board = pywikibot.flow.Board(talk_page)
 
                 # Add a new section to the page
-                title = 'تهانينا'
-                content = self.input_dict['template_stub'].replace('NUMBER', str(self.input_dict['number'])).replace("SIGNATURE",signature).replace("USERNAME",name)
+                title = 'وسام NUMBER تعديل!'.replace('NUMBER', str(self.input_dict['number']))
+                content = self.input_dict['template_stub'].replace('NUMBER', str(self.input_dict['number'])).replace(
+                    "SIGNATURE", random_signature).replace("USERNAME", name)
 
                 try:
                     print("start send to " + name)
@@ -251,14 +294,16 @@ class SendTemplate(Base):
                 pass
                 # Add a new section to the page
                 text = talk_page.text
-                text += '\n\n== تهانينا ==\n\n'
-                text += self.input_dict['template_stub'].replace('NUMBER', str(self.input_dict['number'])).replace("SIGNATURE",signature).replace("USERNAME",name)
+                text += '\n\n== وسام NUMBER تعديل! ==\n\n'.replace('NUMBER', str(self.input_dict['number']))
+                text += self.input_dict['template_stub'].replace('NUMBER', str(self.input_dict['number'])).replace(
+                    "SIGNATURE", random_signature).replace("USERNAME", name)
 
                 try:
                     # Save the edited page
                     print("start send to " + name)
                     talk_page.text = text
-                    summary = str("بوت:[[ويكيبيديا:توزيع أوسمة|توزيع أوسمة]] (NUMBER_COUNT تعديل) (v1.2)").replace('NUMBER_COUNT', str(self.input_dict['number']))
+                    summary = str("بوت:[[ويكيبيديا:توزيع أوسمة|توزيع أوسمة]] (NUMBER_COUNT تعديل) (v1.3.0)").replace(
+                        'NUMBER_COUNT', str(self.input_dict['number']))
                     # Save the page
                     talk_page.save(summary=summary,minor=False)
                 except Exception as error:
