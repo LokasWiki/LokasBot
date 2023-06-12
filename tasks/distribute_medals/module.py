@@ -1,4 +1,5 @@
 import datetime
+import logging
 import os
 import random
 import re
@@ -202,10 +203,30 @@ class SignatureScanner:
 
 
 class SignatureManager:
+    """
+    A class for managing signatures and retrieving random signatures for a given name.
+    """
+
     def __init__(self, signature_list):
+        """
+        Initialize the SignatureManager with a list of signatures.
+
+        Args:
+          signature_list (list): A list of dictionaries containing signature information.
+              Each dictionary should have 'signature' and 'user_name' keys.
+        """
         self.signature_list = signature_list
 
     def get_random_signature(self, name):
+        """
+          Get a random signature for the given name, excluding the matching user_name.
+
+          Args:
+              name (str): The name for which to retrieve a random signature.
+
+          Returns:
+              str: A random signature for the given name, or a default signature if no match found.
+          """
         filtered_list = [sig for sig in self.signature_list if sig['user_name'] != name]
         if filtered_list:
             signature = str(random.choice(filtered_list)['signature'])
@@ -236,7 +257,13 @@ class SendTemplate(Base):
         site = pywikibot.Site()
 
         for member in self.database.result:
-            name = str(member['actor_name'], 'utf-8')
+
+            try:
+                name = str(member['actor_name'], 'utf-8')
+            except Exception as e:
+                print(f"An error occurred while processing : {e}")
+                logging.exception(e)
+                name = member['actor_name']
 
             # Retrieve the user talk page
             user = pywikibot.User(site, name)
