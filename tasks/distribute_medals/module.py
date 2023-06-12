@@ -238,8 +238,9 @@ class SendTemplate(Base):
                 board = pywikibot.flow.Board(talk_page)
 
                 # Add a new section to the page
-                title = 'تهانينا'
-                content = self.input_dict['template_stub'].replace('NUMBER', str(self.input_dict['number'])).replace("SIGNATURE",signature).replace("USERNAME",name)
+                title = 'وسام NUMBER تعديل!'.replace('NUMBER', str(self.input_dict['number']))
+                content = self.input_dict['template_stub'].replace('NUMBER', str(self.input_dict['number'])).replace(
+                    "SIGNATURE", signature).replace("USERNAME", name)
 
                 try:
                     print("start send to " + name)
@@ -251,14 +252,16 @@ class SendTemplate(Base):
                 pass
                 # Add a new section to the page
                 text = talk_page.text
-                text += '\n\n== تهانينا ==\n\n'
-                text += self.input_dict['template_stub'].replace('NUMBER', str(self.input_dict['number'])).replace("SIGNATURE",signature).replace("USERNAME",name)
+                text += '\n\n== وسام NUMBER تعديل! ==\n\n'.replace('NUMBER', str(self.input_dict['number']))
+                text += self.input_dict['template_stub'].replace('NUMBER', str(self.input_dict['number'])).replace(
+                    "SIGNATURE", signature).replace("USERNAME", name)
 
                 try:
                     # Save the edited page
                     print("start send to " + name)
                     talk_page.text = text
-                    summary = str("بوت:[[ويكيبيديا:توزيع أوسمة|توزيع أوسمة]] (NUMBER_COUNT تعديل) (v1.2)").replace('NUMBER_COUNT', str(self.input_dict['number']))
+                    summary = str("بوت:[[ويكيبيديا:توزيع أوسمة|توزيع أوسمة]] (NUMBER_COUNT تعديل) (v1.3.0)").replace(
+                        'NUMBER_COUNT', str(self.input_dict['number']))
                     # Save the page
                     talk_page.save(summary=summary,minor=False)
                 except Exception as error:
