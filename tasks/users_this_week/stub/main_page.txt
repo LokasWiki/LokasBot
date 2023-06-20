@@ -5,34 +5,27 @@
 <onlyinclude>
 {{بداية أعمدة متعددة}}
 <!-- مقالات -->
-[https://quarry.wmflabs.org/query/14719 تحديث]
 {{DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER/مقالات}}
 {{فاصل أعمدة متعددة}}
 <!-- تعديلات-->
-[https://quarry.wmflabs.org/query/14723 تحديث]
 {{DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER/تعديلات}}
 {{فاصل أعمدة متعددة}}
 <!-- مراجعة المقالات -->
-[https://quarry.wmflabs.org/query/14722 تحديث]
 {{DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER/مراجعة المقالات}}
 {{نهاية أعمدة متعددة}}
 <onlyinclude>
 {{بداية أعمدة متعددة}}
 <!-- إدارة-->
-[http://tools.wmflabs.org/xtools/adminstats/?project=ar.wikipedia.org&begin=YEAR_NUMBER-12-05&end=YEAR_NUMBER-12-12 تحديث]
 {{DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER/إدارة}}
 {{فاصل أعمدة متعددة}}
 <!-- إضافة نصوص -->
-[https://quarry.wmflabs.org/query/14721 تحديث]
 {{DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER/إضافة نصوص}}
 {{فاصل أعمدة متعددة}}
 <!-- مراجعة التعديلات -->
-[https://quarry.wmflabs.org/query/21823 تحديث]
 {{DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER/مراجعة التعديلات}}
 {{نهاية أعمدة متعددة}}
 {{بداية أعمدة متعددة}}
 <!-- جدد-->
-[https://quarry.wmflabs.org/query/14720 تحديث]
 {{DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER/جدد}}
 {{فاصل أعمدة متعددة}}
 <!-- بوتات-->

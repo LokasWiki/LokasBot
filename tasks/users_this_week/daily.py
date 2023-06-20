@@ -7,8 +7,8 @@ After all of the sub pages have been generated and saved, the code creates insta
 
 The read_file method reads the contents of a text file and sets the text attribute of the MainPage instance to the contents of the file. The save_page method connects to the Wikipedia site, gets a Page object for the page specified in the title_of_page attribute, sets the text of the page to the contents of the text attribute, and saves the page with the summary specified in the summary attribute.
 """
-from module import SubPage, MainPage
 from data import list_page_sub_pages
+from module import SubPage, MainPage
 
 
 def main_page():
@@ -16,7 +16,7 @@ def main_page():
         # Create a MainPage object for the main page
         temp = MainPage(
             title_of_page="DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا",
-            summary="update",
+            summary="بوت:تحديث [[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مشروع مستخدمو الأسبوع الأكثر نشاطًا]] (V1.1.0)",
             stub="stub/main_page.txt",
         )
         # Read the file for the main page
@@ -32,7 +32,7 @@ def archive_page():
         # Create a MainPage object for the archive page
         temp = MainPage(
             title_of_page="DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER",
-            summary="update",
+            summary="بوت:تحديث [[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مشروع مستخدمو الأسبوع الأكثر نشاطًا]] (V1.1.0)",
             stub="stub/archive.txt",
         )
         # Read the file for the archive page
