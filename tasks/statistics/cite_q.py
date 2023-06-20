@@ -1,5 +1,3 @@
-import time
-
 import pywikibot.page
 
 from tasks.statistics.module import UpdatePage, ArticleTables, index
@@ -17,13 +15,12 @@ where iwlinks.iwl_title in  (select iwl_title from iwlinks  where iwl_from = 912
   "Cite_Q"
 )
 and page.page_namespace = 0 and  lt_namespace = 10
-GROUP BY q_iwl_title;"""
+GROUP BY q_iwl_title
+order by count_of_cites desc;"""
 file_path = 'stub/cite_q.txt'
 page_name = "ويكيبيديا:مصادر موثوقة/معاجم وقواميس وأطالس/إحصائيات"
 # page_name = "مستخدم:لوقا/ملعب 25"
-# Get the current time and day of the week
-current_time = time.localtime()
-day_of_week = current_time.tm_wday
+
 
 
 def item(row, result, index):
@@ -109,14 +106,12 @@ columns = [
 
 
 def main(*args: str) -> int:
-    # Check if it's fri
-    if  day_of_week == 3:
-        # Create an instance of the ArticleTables class
-        tables = ArticleTables()
-        tables.add_table("main_table", columns, header_text=header_page, end_row_text=end_row_in_main)
-        # Create an instance of the updater and update the page
-        updater = UpdatePage(query, file_path, page_name, tables)
-        updater.update()
+    # Create an instance of the ArticleTables class
+    tables = ArticleTables()
+    tables.add_table("main_table", columns, header_text=header_page, end_row_text=end_row_in_main)
+    # Create an instance of the updater and update the page
+    updater = UpdatePage(query, file_path, page_name, tables)
+    updater.update()
     return 0
 
 

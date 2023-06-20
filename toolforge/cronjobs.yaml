@@ -11,6 +11,12 @@
   image: tf-python39
   emails: onfailure
   <<: *defaults
+- name: statistics-weekly
+  no-filelog: false
+  command: $HOME/repos/toolforge/jobs/statistics-weekly.sh
+  schedule: '0 2 * * 1'
+  image: tf-python39
+  emails: onfailure
 - name: utw-daily
   no-filelog: false
   command: $HOME/repos/toolforge/jobs/users_this_week-daily.sh
