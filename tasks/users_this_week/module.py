@@ -1,9 +1,10 @@
-import pywikibot
-import pymysql
-from pywikibot import config as _config
-import os
 import datetime
+import os
+
+import pymysql
+import pywikibot
 import pywikibot.flow
+from pywikibot import config as _config
 
 
 class Translator:
@@ -378,7 +379,7 @@ class SendTemplate(Base):
 
                     # Save the page
                     talk_page.save(
-                        "بوت:[[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مستخدمو الأسبوع الأكثر نشاطا]]",
+                        "بوت: توزيع أوسمة [[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مشروع مستخدمو الأسبوع الأكثر نشاطًا]] (V1.1.0)",
                         minor=False
                     )
                 except Exception as error:
