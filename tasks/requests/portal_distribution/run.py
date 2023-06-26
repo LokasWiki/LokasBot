@@ -28,7 +28,8 @@ try:
         page_title = request.from_title
         page_new_title = request.to_title
 
-        pages = session.query(Page).filter(Page.request == request, Page.status == Status.PENDING).limit(1000).all()
+        pages = session.query(Page).filter(Page.request == request, Page.status == Status.PENDING).order_by(
+            Page.namespace.desc()).limit(1000).all()
 
         for page in pages:
             try:

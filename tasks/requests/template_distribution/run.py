@@ -1,8 +1,8 @@
 import traceback
 
 import pywikibot
-from sqlalchemy.orm import Session
 from sqlalchemy import select, func, distinct
+from sqlalchemy.orm import Session
 
 from tasks.requests.core.database.engine import engine
 from tasks.requests.core.database.models import Request, Status, Page
@@ -21,7 +21,8 @@ try:
 
     for request in session.scalars(stmt):
 
-        pages = session.query(Page).filter(Page.request == request, Page.status == Status.PENDING).limit(100).all()
+        pages = session.query(Page).filter(Page.request == request, Page.status == Status.PENDING).order_by(
+            Page.namespace.desc()).limit(100).all()
 
         for page in pages:
             try:

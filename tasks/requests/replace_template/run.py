@@ -37,6 +37,7 @@ try:
                     p = pywikibot.Page(site, title=str(page.page_name), ns=page.namespace)
                     if p.exists() and check_status("ويكيبيديا:طلبات استبدال القوالب/إيقاف"):
                         temp_text = p.text
+                        temo_text2 = copy.deepcopy(p.text)
                         parsed = wtp.parse(p.text)
                         for template in parsed.templates:
                             if prepare_str(template.name) == prepare_str(template_from):
@@ -45,9 +46,12 @@ try:
                                 temp_text = temp_text.replace(str(template), str(temp_template))
 
                         p.text = temp_text
-                        p.save(
-                            summary="بوت:[[ويكيبيديا:طلبات استبدال القوالب]] استبدال [[قالب:" + template_from + "]] ب [[قالب:" + template_to + "]]  (v2.0.0)"
-                        )
+                        if temo_text2 != p.text:
+                            p.save(
+                                summary="بوت:[[ويكيبيديا:طلبات استبدال القوالب]] استبدال [[قالب:" + template_from + "]] ب [[قالب:" + template_to + "]]  (v2.0.0)"
+                            )
+                        else:
+                            print("skip " + p.title())
                         page.status = Status.COMPLETED
                         session.commit()
                 except Exception as e:
