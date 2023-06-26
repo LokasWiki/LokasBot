@@ -8,8 +8,11 @@ def check_status(name):
     site = pywikibot.Site()
     title = name
     page = pywikibot.Page(site, title)
-    text = page.text
-    if text == "لا":
+    if page.exists():
+        text = page.text
+        if text == "لا":
+            return True
+    else:
         return True
     return False
 
