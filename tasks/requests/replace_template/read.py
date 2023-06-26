@@ -18,7 +18,7 @@ try:
 
     requests_page.load_page()
 
-    if requests_page.check_user_edits(3000):
+    if requests_page.check_user_edits(3000) and requests_page.check_user_groups(group='editor'):
         scanner = RequestsScanner()
         scanner.pattern = r"\*\s*?\[\[:قالب:(?P<source>.*?)\]\]\s*>\s*\[\[:قالب:(?P<destination>.*?)\]\](?:\s*>\s*\[\[:تصنيف:(?P<extra>.*?)\]\])?\n*"
         scanner.scan(requests_page.get_page_text())
