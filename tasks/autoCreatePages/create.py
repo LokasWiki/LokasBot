@@ -8,7 +8,9 @@ import logging
 import pywikibot
 
 """
-The my_pages_list variable is a list of dictionaries that contains the page titles and templates to be used for monthly maintenance tasks on a wiki site. Each dictionary in the list has two keys: "name" and "template". The "name" key contains the page title with placeholders for the current month and year, which will be replaced with the current month and year when the script is run. The "template" key contains the template to be used for the corresponding page title.
+The my_pages_list variable is a list of dictionaries that contains the page titles and templates to be used for monthly maintenance tasks on a wiki site.
+Each dictionary in the list has two keys: "name" and "template". The "name" key contains the page title with placeholders for the current month and year,
+which will be replaced with the current month and year when the script is run. The "template" key contains the template to be used for the corresponding page title.
 
 Example:
 my_pages_list = [
@@ -16,7 +18,10 @@ my_pages_list = [
     {"name": "Category:Pages to be deleted since MONTH YEAR", "template": "{{Monthly cleanup category}}"}
 ]
 
-In the above example, the first dictionary in the list has a "name" key of "Category:Pages needing translation review since MONTH YEAR" and a "template" key of "{{Translation review monthly category}}". When the script is run, the "MONTH" and "YEAR" placeholders in the "name" key will be replaced with the current month and year, and a page with the resulting title will be created with the template "{{Translation review monthly category}}".
+In the above example, the first dictionary in the list has a "name" key of "Category:Pages needing translation review 
+since MONTH YEAR" and a "template" key of "{{Translation review monthly category}}". When the script is run, the "MONTH" and "YEAR" placeholders 
+in the "name" key will be replaced with the current month and year, and a page with the resulting title will be created 
+with the template "{{Translation review monthly category}}".
 """
 my_pages_list = [
     {"name": "تصنيف:صفحات تحتاج إلى مراجعة الترجمة منذ MONTH YEAR", "template": "{{تصنيف تهذيب شهري}}"},
