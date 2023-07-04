@@ -4,11 +4,12 @@
 
 انظر أيضا: [[ويكيبيديا:إحصاءات/المستخدمين حسب عدد إنشاء الصفحات|هذه الإحصاءات بدون احتساب البوتات]]
 
-'''حَدَّث BOT_USER_NAME هذه القائمة في :  BOT_TIME_NOW (ت ع م) '''
+'''حَدَّث BOT_USER_NAME هذه القائمة في : BOT_TIME_NOW (ت ع م) '''
 </div>
 <center>
 <div style="background: #E5E4E2; padding: 0.5em; -moz-border-radius: 0.3em; border-radius: 0.3em;">
 BOT_TABLE_BODY
 </div>
 </center>
+
 [[تصنيف:إحصاءات ويكيبيديا]]
