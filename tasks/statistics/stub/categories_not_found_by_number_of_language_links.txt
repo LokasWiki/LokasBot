@@ -5,7 +5,7 @@
 
 كود الاستعلام موجود [https://github.com/LokasWiki/LokasBot/blob/main/tasks/statistics/categories_not_found_by_number_of_language_links.py هنا].
 
-'''حَدَّث BOT_USER_NAME هذه القائمة في :  BOT_TIME_NOW (ت ع م) '''
+'''حَدَّث BOT_USER_NAME هذه القائمة في : BOT_TIME_NOW (ت ع م) '''
 </center>
 </div>
 <center>
@@ -13,4 +13,5 @@
 BOT_TABLE_BODY
 </div>
 </center>
+
 [[تصنيف:إحصاءات ويكيبيديا]]
