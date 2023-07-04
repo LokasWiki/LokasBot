@@ -1,7 +1,23 @@
+# This script creates a list of page titles with corresponding templates to be used for monthly maintenance tasks on a wiki site.
+# The script checks if the current day is the first day of the month and gets the current month and year to be used in the page titles.
+# It then creates the pages with the specified templates if they do not already exist on the wiki site.
+# The list of page titles and templates to be used are defined in the my_pages_list variable.
 import datetime
+import logging
 
 import pywikibot
 
+"""
+The my_pages_list variable is a list of dictionaries that contains the page titles and templates to be used for monthly maintenance tasks on a wiki site. Each dictionary in the list has two keys: "name" and "template". The "name" key contains the page title with placeholders for the current month and year, which will be replaced with the current month and year when the script is run. The "template" key contains the template to be used for the corresponding page title.
+
+Example:
+my_pages_list = [
+    {"name": "Category:Pages needing translation review since MONTH YEAR", "template": "{{Translation review monthly category}}"},
+    {"name": "Category:Pages to be deleted since MONTH YEAR", "template": "{{Monthly cleanup category}}"}
+]
+
+In the above example, the first dictionary in the list has a "name" key of "Category:Pages needing translation review since MONTH YEAR" and a "template" key of "{{Translation review monthly category}}". When the script is run, the "MONTH" and "YEAR" placeholders in the "name" key will be replaced with the current month and year, and a page with the resulting title will be created with the template "{{Translation review monthly category}}".
+"""
 my_pages_list = [
     {"name": "تصنيف:صفحات تحتاج إلى مراجعة الترجمة منذ MONTH YEAR", "template": "{{تصنيف تهذيب شهري}}"},
     {"name": "تصنيف:صفحات للحذف منذ MONTH YEAR", "template": "{{تصنيف تهذيب شهري}}"},
@@ -25,7 +41,6 @@ my_pages_list = [
 ]
 
 
-# create class to get arbic month name by number of month
 class MonthName:
     def __init__(self, month):
         self.month = month
@@ -59,37 +74,58 @@ class MonthName:
             return None
 
 
-#  get current day
-current_day = datetime.datetime.now()
+class Create:
+    def __init__(self):
+        #  get current day
+        self.current_day = datetime.datetime.now()
+        # get current month
+        self.current_month = self.current_day.month
+        # get current year
+        self.current_year = self.current_day.year
+        # get arabic month name
+        self.month_name = MonthName(self.current_month).get_month_name()
 
-# stop this script if current day not 1
-if current_day.day != 1:
-    print("Current day is not 1")
-    exit()
+        self.site = pywikibot.Site()
 
-# get current month
-current_month = current_day.month
-# get current year
-current_year = current_day.year
-# get arabic month name
-month_name = MonthName(current_month).get_month_name()
+    def check_day_and_month(self):
+        # stop this script if current day not 1
+        if self.current_day.day != 1:
+            raise Exception("Current day is not 1")
+        # stop this script month name is None
+        if self.month_name is None:
+            raise Exception("Month name is None")
 
-#  stop this script month name is None
-if month_name is None:
-    print("Month name is None")
-    exit()
+    def page_exists(self, page_title):
+        page = pywikibot.Page(self.site, page_title)
+        return page.exists()
 
-#  debug print
-print("Current month is: " + str(current_month))
-print("Current year is: " + str(current_year))
-print("Month name is: " + month_name)
+    def get_page_title(self, page_name_template):
+        return page_name_template.replace("YEAR", str(self.current_year)).replace("MONTH", str(self.month_name))
 
-exit()
+    def create_pages(self, my_pages_list):
 
-site = pywikibot.Site()
-for item in my_pages_list:
-    page_title = item['name'].replace("YEAR", str(current_year)).replace("MONTH", str(current_month))
-    page = pywikibot.Page(site, page_title)
-    if not page.exists():
-        page.text = item['template']
-        page.save("بوت:إنشاء صفحات مطلوبة V1.1.0")
+        self.check_day_and_month()
+
+        # debug print
+        print("Current month is: " + str(self.current_month))
+        print("Current year is: " + str(self.current_year))
+        print("Month name is: " + self.month_name)
+
+        for item in my_pages_list:
+            page_title = self.get_page_title(item['name'])
+            page = pywikibot.Page(self.site, page_title)
+            if not self.page_exists(page_title):
+                page.text = item['template']
+                page.save("بوت:إنشاء صفحات مطلوبة V2.0.0")
+            else:
+                print("Page " + page_title + " is exists")
+                logging.info("Page " + page_title + " is exists")
+
+
+def main():
+    create = Create()
+    create.create_pages(my_pages_list)
+
+
+if __name__ == '__main__':
+    main()
