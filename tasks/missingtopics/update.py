@@ -30,7 +30,7 @@ text = """
 <div style="background: #E5E4E2; padding: 0.5em; font-family: Traditional Arabic; font-size: 130%;  -moz-border-radius: 0.3em; border-radius: 0.3em;">
 تعرض هذه الصفحة قائمة وصلات حمراء مطلوبة حسب الموضوع ([[TYPE]]).<br/>
 
-'''حَدَّث BOT_USER_NAME هذه القائمة في :  BOT_TIME_NOW (ت ع م) '''
+'''حَدَّث BOT_USER_NAME هذه القائمة في : BOT_TIME_NOW (ت ع م) '''
 </div>
 </center>
 <center>
