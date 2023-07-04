@@ -1,5 +1,9 @@
+# todo: make it run every week and in the end of the month
+# todo: covert it to class
+# todo : add main function
 import datetime
 import json
+import logging
 import os
 
 import pywikibot
@@ -11,25 +15,32 @@ from core.utils.wikidb import Database
 script_dir = os.path.dirname(__file__)
 site = pywikibot.Site()
 
-# Define the month you want to query
-# todo: make it dynamic
-month = datetime.date(2023, 6, 1)
+#  get current day
+current_day = datetime.datetime.now()
+#  if current day is 1 then get previous month else get current month
+if current_day.day == 1:
+    month = current_day - datetime.timedelta(days=1)
+    #  if month is 1 then get previous year else get current year
+    if month.month == 1:
+        current_month = datetime.date(month.year, 12, 1)
+    else:
+        current_month = datetime.date(month.year, month.month, 1)
+else:
+    current_month = datetime.date(current_day.year, current_day.month, 1)
+
+# stop this script if current day not 1
+if current_day.day != 1:
+    print("Current day is not 1")
+    exit()
 
 # Calculate the first and last days of the month
-first_day_of_month = month.replace(day=1)
+first_day_of_month = current_month.replace(day=1)
 last_day_of_month = first_day_of_month.replace(day=28) + datetime.timedelta(days=4)
 last_day_of_month = last_day_of_month - datetime.timedelta(days=last_day_of_month.day)
 
 # Format the start and end times for the month in the format "%Y%m%d%H%M%S"
 start_time = first_day_of_month.strftime("%Y%m%d") + '000000'
 end_time = last_day_of_month.strftime("%Y%m%d") + '235959'
-
-
-print("start_time,end_time")
-print(start_time,end_time)
-
-# Use these values in your SQL query
-sql_query = f"SELECT * FROM my_table WHERE date BETWEEN '{start_time}' AND '{end_time}'"
 
 # text stub
 file = File(script_dir=script_dir)
@@ -131,8 +142,12 @@ try:
     # Print the pageviews data for each day in April 2023
     for item in data['items']:
         total_views += item['views']
-except:
-    pass
+#  add exception with log
+except Exception as e:
+    print("Error in getting pageviews data")
+    print(e)
+    logging.error("Error in getting pageviews data")
+    logging.error(e)
 
 text = str(text).replace("TOTAL_VIEWS", str(total_views))
 
@@ -140,5 +155,4 @@ text = str(text).replace("TOTAL_VIEWS", str(total_views))
 # print(db.query)
 page.text = text
 
-page.save("v2.0.0 تحديث")
-# todo:add main def
+page.save("v3.0.0 تحديث")
