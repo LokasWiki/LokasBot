@@ -4,22 +4,38 @@ from pywikibot import config as _config
 from tasks.statistics.module import UpdatePage, ArticleTables, index
 
 # Set the parameters for the update
-query = """SELECT page_title, count(ll_lang) as editcount
-FROM langlinks JOIN page on ll_from = page_id
-WHERE page_namespace = 0 AND page_is_redirect = 0
+query = """
+select page_title, count(ll_lang) as editcount  from langlinks
+inner join page on page.page_id = langlinks.ll_from
+where page.page_namespace = 10
 AND NOT EXISTS (
     SELECT * FROM langlinks as t
-    WHERE t.ll_lang='ar' and t.ll_from = langlinks.ll_from)
+    WHERE t.ll_lang='ar' and t.ll_from = langlinks.ll_from
+)    
 GROUP BY ll_from
 ORDER BY count(ll_lang) DESC
-LIMIT 1000;"""
+LIMIT 1000;
+"""
+
+
+# todo: edit this to make it outside main def
+def en_template_name(row, result, index):
+    name = str(row['page_title'], 'utf-8')
+    language = 'en'
+    return "[[:" + language + ":Template:" + name + "|" + name + "]]"
+
+
+def ar_template_name(row, result, index):
+    name = str(row['page_title'], 'utf-8')
+    language = 'ar'
+    return "[[:" + language + ":قالب:" + name + "|" + name + "]]"
 
 
 def main(*args: str) -> int:
-    languages = ['en', 'fr', 'de', 'es', 'fa', 'he', 'pt', 'tr']
+    languages = ['en']
     for language in languages:
-        file_path = 'stub/articles_not_found_by_number_of_language_links.txt'
-        page_name = f'ويكيبيديا:إحصاءات/المقالات غير الموجودة حسب عدد وصلات اللغات/{language}'
+        file_path = 'stub/templates_not_found_by_number_of_language_links.txt'
+        page_name = f'ويكيبيديا:إحصاءات/القوالب غير الموجودة حسب عدد وصلات اللغات/{language}'
         prefix = f'{language}wiki'
 
         connection = pymysql.connect(
@@ -31,15 +47,10 @@ def main(*args: str) -> int:
             cursorclass=pymysql.cursors.DictCursor,
         )
 
-        # todo: edit this to make it outside main def
-        def page_title(row, result, index):
-            username = str(row['page_title'], 'utf-8')
-            name = username
-            return "[[:" + language + ":" + username + "|" + name + "]]"
-
         columns = [
             ("الرقم", None, index),
-            ("المقالة", None, page_title),
+            ("القالب بالإنجليزية", None, en_template_name),
+            ("القالب بالعربية", None, ar_template_name),
             ("عدد وصلات اللغات", "editcount"),
         ]
 
