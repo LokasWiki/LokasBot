@@ -54,7 +54,7 @@ for row in rows:
 
         # get added urls
         addedUrls = list(set(newUrls) - set(oldUrls))
-
+        print("id of page {}", row[0])
         for url in addedUrls:
             # insert the url and the source id
             try:
