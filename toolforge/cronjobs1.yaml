@@ -1,0 +1,29 @@
+- &defaults
+  name: dummy-defaults-job
+  command: echo this is a dummy job to set defaults
+  emails: onfailure
+  image: tf-python39
+  no-filelog: false
+- name: maintenance-check-10
+  no-filelog: false
+  command: $HOME/repos/toolforge/jobs/maintenance_check.sh
+  #  schedule: '*/10 * * * *'
+  image: tf-python39
+  emails: onfailure
+  continuous: true
+  <<: *defaults
+- name: webcite-check-10
+  no-filelog: false
+  command: $HOME/repos/toolforge/jobs/webcite_check.sh
+  #  schedule: '*/10 * * * *'
+  image: tf-python39
+  emails: onfailure
+  continuous: true
+  <<: *defaults
+- name: webcite-24h
+  no-filelog: false
+  command: $HOME/repos/toolforge/jobs/read_last_day.sh 1540
+  schedule: '10 0 * * *'
+  image: tf-python39
+  emails: onfailure
+  <<: *defaults
