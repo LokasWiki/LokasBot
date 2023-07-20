@@ -76,7 +76,7 @@
 - name: maintenance-check-10
   no-filelog: false
   command: $HOME/repos/toolforge/jobs/maintenance_check.sh
-  #  schedule: '*/10 * * * *'
+#  schedule: '*/10 * * * *'
   image: tf-python39
   emails: onfailure
   continuous: true
@@ -105,4 +105,3 @@
   image: tf-python39
   emails: onfailure
   <<: *defaults
-
