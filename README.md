@@ -19,34 +19,56 @@
 Toolforge setup and job management
 
 - ### Clone and setup virtual environments
-
+- #### remove old repos and clone new repos and setup permissions
     ``` bash
     rm -fdr $HOME/repos && git clone --recurse-submodules https://github.com/LokasWiki/LokasBot.git $HOME/repos && chmod ug+x $HOME/repos/toolforge/bin/setup-venvs.sh
     ```
+- #### run setup-venvs.sh to setup virtual environments
     ``` bash
     toolforge-jobs run setup-venvs --command $HOME/repos/toolforge/bin/setup-venvs.sh --image tf-python39
      ```
+- #### to check setup-venvs.sh logs (bot setup will finish when see "====\end setup lokas-bot-scripts\n=====" in logs)
   ``` bash
-  tail -f $HOME/setup-venvs.*
+  rm -fdr $HOME/setup-venvs.* && tail -f $HOME/setup-venvs.*
   ```
+  - #### set permissions for all files in repos directory
    ``` bash
    chmod -R ug+x $HOME/repos/*
   ```
-- ### copy user-config.py and user-password.py  from home to repos
+- ### copy user-config.py and user-password.py  from home to repos directory
     ``` bash
     cp $HOME/user-config.py  $HOME/repos
     cp $HOME/user-password.py $HOME/repos
+    ``` 
+- ### to run bot on **many servers** (Load jobs)
+- #### for server one
+    ``` bash  
+    ``` bash
+    toolforge-jobs load $HOME/repos/toolforge/cronjobs1.yaml
     ```
-- ### Load jobs
 
+- #### for server two
+    ``` bash
+    toolforge-jobs load $HOME/repos/toolforge/cronjobs2.yaml
+    ```
+- ### to run bot on **one server** (Load jobs)
     ``` bash
     toolforge-jobs load $HOME/repos/toolforge/cronjobs.yaml
     ```
+
 
 - ### run job for one time (timed out 300 seconds)
     ```` bash
     toolforge-jobs run script --command $HOME/repos/toolforge/jobs/statistics-daily.sh --image tf-python39 --wait
     ````
+
+
+- ### run job for one time (without timed out)
+    ```` bash
+    toolforge-jobs run script --command $HOME/repos/toolforge/jobs/statistics-daily.sh --image tf-python39
+    ````
+
+
 - ### run tool-bot on web
   https://github.com/LokasWiki/LokasBot-web
 
@@ -55,7 +77,7 @@ Toolforge setup and job management
 # خطوات تثبيت البوت علي الجهاز المحلي
 
 - ### تثبيت إطار العمل والمكتبات الأساسية والبايثون
-    https://www.mediawiki.org/wiki/Manual:Pywikibot/Installation#Install_Python
+  https://www.mediawiki.org/wiki/Manual:Pywikibot/Installation#Install_Python
 - ### تثبيت mediawiki
     ```
     # MediaWiki with MariaDB
