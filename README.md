@@ -43,7 +43,6 @@ Toolforge setup and job management
 - ### to run bot on **many servers** (Load jobs)
 - #### for server one
     ``` bash  
-    ``` bash
     toolforge-jobs load $HOME/repos/toolforge/cronjobs1.yaml
     ```
 
