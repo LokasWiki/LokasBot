@@ -29,7 +29,6 @@ myArrayFiles=( "$HOME"/repos/tasks/statistics/activity_of_bureaucrats.py \
   "$HOME"/repos/tasks/statistics/users_by_number_of_templates_creation_with_bot.py \
   "$HOME"/repos/tasks/statistics/inactive_users.py \
   "$HOME"/repos/tasks/statistics/users_by_number_of_article_creation.py \
-  "$HOME"/repos/tasks/statistics/users_with_bots_by_the_number_of_pages_created.py \
   "$HOME"/repos/tasks/statistics/list_of_portals_by_number_of_articles.py \
   "$HOME"/repos/tasks/statistics/users_by_number_of_categories_creation.py \
   "$HOME"/repos/tasks/statistics/list_of_wikipedians_by_number_of_edits.py \
