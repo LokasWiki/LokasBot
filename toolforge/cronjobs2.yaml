@@ -66,13 +66,6 @@
   image: tf-python39
   emails: onfailure
   <<: *defaults
-- name: read-new-page-20
-  no-filelog: false
-  command: $HOME/repos/toolforge/jobs/read.sh
-  schedule: '*/20 * * * *'
-  image: tf-python39
-  emails: onfailure
-  <<: *defaults
 - name: month-statistics
   no-filelog: false
   command: $HOME/repos/toolforge/jobs/month_statistics.sh

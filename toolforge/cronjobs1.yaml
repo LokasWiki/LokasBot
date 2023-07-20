@@ -20,6 +20,13 @@
   emails: onfailure
   continuous: true
   <<: *defaults
+- name: read-new-page-20
+  no-filelog: false
+  command: $HOME/repos/toolforge/jobs/read.sh
+  schedule: '*/20 * * * *'
+  image: tf-python39
+  emails: onfailure
+  <<: *defaults
 - name: webcite-24h
   no-filelog: false
   command: $HOME/repos/toolforge/jobs/read_last_day.sh 1540
