@@ -18,7 +18,7 @@ page_name = "ويكيبيديا:إحصاءات/مقالات بها وصلات ب
 def page_title(row, result, index):
     username = str(row['page_title'], 'utf-8')
     name = username
-    return "[[" + username + "|" + name + "]]"
+    return "[[" + username + "]]"
 
 
 columns = [
