@@ -29,7 +29,7 @@ Toolforge setup and job management
      ```
 - #### to check setup-venvs.sh logs (bot setup will finish when see "====\end setup lokas-bot-scripts\n=====" in logs)
   ``` bash
-  rm -fdr $HOME/setup-venvs.* && tail -f $HOME/setup-venvs.*
+ tail -f $HOME/setup-venvs.*
   ```
   - #### set permissions for all files in repos directory
    ``` bash
