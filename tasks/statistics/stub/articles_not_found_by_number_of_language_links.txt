@@ -1,6 +1,6 @@
 {{إحصاء}}
 <center>
-<div style="background: #E5E4E2; padding: 0.5em;   -moz-border-radius: 0.3em; border-radius: 0.3em;">
+<div style="background: #E5E4E2; padding: 0.5em; -moz-border-radius: 0.3em; border-radius: 0.3em;">
 '''تعرض هذه الصفحة قائمة المقالات غير الموجودة في ويكيبديا العربية حسب عدد وصلات اللغات''' .
 
 {{ويكيبيديا:إحصاءات/مقالات غير الموجودة حسب عدد وصلات اللغات/لغات}}

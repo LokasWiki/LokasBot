@@ -1,5 +1,5 @@
 {{إحصاء}}
-<div style="background: #E5E4E2; padding: 0.5em; font-family: Traditional Arabic; font-size: 130%;  -moz-border-radius: 0.3em; border-radius: 0.3em;">
+<div style="background: #E5E4E2; padding: 0.5em; font-family: Traditional Arabic; font-size: 130%; -moz-border-radius: 0.3em; border-radius: 0.3em;">
 <center>
 تعرض هذه الصفحة قائمة البوابات.<br/>
 
@@ -7,7 +7,7 @@
 </center>
 </div>
 <center>
-<div style="background: #E5E4E2; padding: 0.5em;   -moz-border-radius: 0.3em; border-radius: 0.3em;">
+<div style="background: #E5E4E2; padding: 0.5em; -moz-border-radius: 0.3em; border-radius: 0.3em;">
 BOT_TABLE_BODY
 </div>
 </center>
