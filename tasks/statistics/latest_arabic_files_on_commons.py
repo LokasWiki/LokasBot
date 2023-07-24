@@ -78,7 +78,7 @@ def file_name(row, result, index):
 
 def file_image(row, result, index):
     name = str(row['file'], 'utf-8')
-    return "[[File:" + name + "|150px]]"
+    return "[[ملف:" + name + "|150px]]"
 
 
 def username_link(row, result, index):
