@@ -19,7 +19,7 @@ def username(row, result, index):
 
 def page_title(row, result, index):
     user_name = str(row['ll_page_title'], 'utf-8')
-    return "[[" + user_name + "|" + user_name + "]]"
+    return "[[" + user_name + "]]"
 
 
 def page_history(row, result, index):
