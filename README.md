@@ -41,12 +41,12 @@ Toolforge setup and job management
     cp $HOME/user-password.py $HOME/repos
     ``` 
 - ### to run bot on **many servers** (Load jobs)
-- #### for server one
+- #### for server one  (maintenance and webcite)
     ``` bash  
     toolforge-jobs load $HOME/repos/toolforge/cronjobs1.yaml
     ```
 
-- #### for server two
+- #### for server two (requests and statistics)
     ``` bash
     toolforge-jobs load $HOME/repos/toolforge/cronjobs2.yaml
     ```
