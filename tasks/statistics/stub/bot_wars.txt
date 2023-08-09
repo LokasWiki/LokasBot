@@ -1,6 +1,6 @@
 <center>
 <div style="background: #E5E4E2; padding: 0.5em; font-family: Traditional Arabic; font-size: 130%; -moz-border-radius: 0.3em; border-radius: 0.3em;">
-'''تعرض هذه الصفحة قائمة ضربات المرشحات المفعلة غير المحذوفة في آخر أسبوع. ([https://quarry.wmcloud.org/query/75454 الاستعلام المستخدم]) '''
+'''تعرض هذه الصفحة قائمة حروب البوت في آخر يومان. ([https://quarry.wmcloud.org/query/71458 الاستعلام المستخدم]) '''
 
 '''حَدَّث [[مستخدم:LokasBot|LokasBot]] هذه القائمة في : 16:18، 26 يوليو 2023 (ت ع م) '''
 </div>
