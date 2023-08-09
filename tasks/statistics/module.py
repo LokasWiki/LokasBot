@@ -55,7 +55,7 @@ class Page:
         self.site = pywikibot.Site()
         self._page_name = ""
         self.contents = ""
-        self._summary = "بوت:إحصاءات V2.2.3"
+        self._summary = "بوت:إحصاءات V2.3.1"
 
     @property
     def page_name(self):
