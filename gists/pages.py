@@ -1,11 +1,8 @@
 import re
 
-import pywikibot
 import pymysql
-from pywikibot import config as _config
-import os
-import datetime
 import pywikibot.flow
+from pywikibot import config as _config
 
 
 class Database():
@@ -105,7 +102,7 @@ list_of_namespace = [
         "namespace_text": "ملف",
         "header_text": "ملف (نطاق NAMESPACE) (COUNT صفحة)"
     },
-    {
+        {
         "namespace": 10,
         "namespace_text": "قالب",
         "header_text": "قالب (نطاق NAMESPACE) (COUNT صفحة)"
@@ -122,14 +119,9 @@ for item in list_of_namespace:
     db.query = """select page_title
     from page
     where page_namespace in ({}) and
-    (
-    page_title like "%توغولية%"
-    or page_title like "%توغولي%"
-    or page_title like "%كونغولية%"
-    or page_title like "%كونغولي%"
-    or page_title like "%بيروفية%"
-    or page_title like "%بيروفي%"
-    )
+    
+    page_title like "%فلكلور%"
+      
     and page_is_redirect = 0
     order by page_id;""".format(item['namespace'])
 
@@ -151,11 +143,11 @@ for item in list_of_namespace:
     for row in db.result:
         o_title = str(row['page_title'], 'utf-8')
         list_of_replacement = [
-            ["بيروفي", "بيروي"],
+            ["فلكلور", "تراث شعبي"],
             # ["بيروفية", "بيروية"],
-            ["كونغولي", "كونغوي"],
+            # ["كونغولي", "كونغوي"],
             # ["كونغولية", "كونغوية"],
-            ["توغولي", "توغوي"],
+            # ["توغولي", "توغوي"],
             # ["توغولية", "توغوية"],
         ]
 
@@ -174,6 +166,7 @@ for item in list_of_namespace:
             # text += "|- \n|[[" + o_title + "|" + o_title + "]] \n| ~ \n|"
         else:
             text += "|- \n|[[:"+item['namespace_text']+":" + o_title + "|"+item['namespace_text']+":" + oo_title + "]] \n|"+item['namespace_text']+":" + n_title + " \n|"
+            # text += "|- \n|[[:"+item['namespace_text']+":" + o_title + "|"+item['namespace_text']+":" + oo_title + "]] \n|"
             # text += "|- \n|[[:" + item['namespace_text'] + ":" + o_title + "|" + item[
             #     'namespace_text'] + ":" + o_title + "]] \n|~ \n|"
 
@@ -184,6 +177,6 @@ for item in list_of_namespace:
 
 site = pywikibot.Site()
 # print(main_text)
-page = pywikibot.Page(site, "مستخدم:لوقا/ملعب 24")
+page = pywikibot.Page(site, "مستخدم:لوقا/ملعب 42")
 page.text = main_text
 page.save("انشاء")
