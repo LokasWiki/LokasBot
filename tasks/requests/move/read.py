@@ -1,9 +1,12 @@
 import logging
 
 import pywikibot
+from sqlalchemy.orm import Session
 
+from tasks.requests.core.database.engine import engine
+from tasks.requests.core.database.models import Request_Move_Page
 from tasks.requests.move.bot.models import TaskDescription, TaskOption, BotRunner, WikipediaTaskReader, \
-    LastUserEditRoleChecker
+    LastUserEditRoleChecker, WikiListFormatChecker
 
 # Create an instance of the RequestsPage class
 site = pywikibot.Site()
@@ -31,15 +34,35 @@ try:
 
     last_user_edit_role = LastUserEditRoleChecker(page=task_page, role="editor")
 
+    wiki_text_list = WikiListFormatChecker()
+    wiki_text_list.set_wiki_text(task_page.text)
+
     wikipediataskreader = WikipediaTaskReader(
         site=site,
         description=task_description,
         option=task_option,
         task_stats=bot_runner,
-        last_user_edit_role=last_user_edit_role
+        last_user_edit_role=last_user_edit_role,
+        wiki_text_list=wiki_text_list
     )
-    if wikipediataskreader.can_bot_run() and wikipediataskreader.check_user_role():
-        print("can run page status has true value")
+
+    if wikipediataskreader.can_read():
+        try:
+            with Session(engine) as session:
+                for order in wikipediataskreader.get_list():
+                    request_model = Request_Move_Page(
+                        from_title=order.source,
+                        from_namespace=order.from_ns,
+                        to_title=order.description,
+                        to_namespace=order.to_ns,
+                        task_description=order.description,
+                        task_options=str(order.options)
+                    )
+                    session.add(request_model)
+                session.commit()
+        except Exception as e:
+            session.rollback()
+            print("An error occurred while committing the changes:", e)
 
 
 except Exception as e:

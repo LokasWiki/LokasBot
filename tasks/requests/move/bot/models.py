@@ -1,5 +1,6 @@
 import copy
 import logging
+import re
 from abc import ABC, abstractmethod
 
 import pywikibot
@@ -277,6 +278,201 @@ class LastUserEditRoleChecker(LastUserEditRoleInterface):
         return self.role in self.get_last_user_role()
 
 
+class WikiListFormatInterface(ABC):
+    """
+    Represents an interface for checking the format of a wiki list and performing operations on it.
+    """
+
+    @abstractmethod
+    def set_wiki_text(self, wiki_text):
+        """
+        Set the wiki text.
+
+        Args:
+            wiki_text (str): The wiki text to set.
+        """
+        pass
+
+    @abstractmethod
+    def check_format(self):
+        """
+        Check the format of the wiki list.
+
+        Returns:
+            bool: True if the wiki list has the correct format, False otherwise.
+        """
+        pass
+
+    @abstractmethod
+    def get_list(self):
+        """
+        Get the wiki list.
+
+        Returns:
+            list: The wiki list.
+        """
+        pass
+
+
+class WikiListFormatChecker(WikiListFormatInterface):
+    """
+    Represents a class for checking the format of a wiki list and performing operations on it.
+
+    Methods:
+        set_wiki_text: Set the wiki text.
+        check_format: Check the format of the wiki list.
+        get_list: Get the wiki list.
+
+    Example:
+        # Create a WikiListFormatChecker object
+        format_checker = WikiListFormatChecker()
+
+        # Set the wiki text
+        format_checker.set_wiki_text("1. Item 1\n2. Item 2\n3. Item 3")
+
+        # Check the format of the wiki list
+        is_format_correct = format_checker.check_format()
+
+        if is_format_correct:
+            print("The wiki list format is correct!")
+        else:
+            print("The wiki list format is incorrect.")
+
+        # Get the wiki list
+        wiki_list = format_checker.get_list()
+        print("The wiki list is:", wiki_list)
+    """
+
+    def __init__(self):
+        self.list = []
+        self.wiki_text = ""
+
+    def set_wiki_text(self, wiki_text):
+        """
+        Set the wiki text.
+
+        Args:
+            wiki_text (str): The wiki text to set.
+        """
+        self.wiki_text = wiki_text
+
+    def check_format(self):
+        """
+        Check the format of the wiki list.
+
+        Returns:
+            bool: True if the wiki list has the correct format, False otherwise.
+        """
+        tem_wiki_text = self.wiki_text.replace("{{/مقدمة}}", "").strip()
+        status = True
+        # loop line by line
+        for line in tem_wiki_text.split("\n"):
+            regex = re.compile(
+                r"\*\s*\[\[(?P<from_ns>.*):(?P<source>.*)\]\](?P<extra>.*\>.*)\[\[(?P<to_ns>.*):(?P<destination>.*)\]\]")
+
+            # to skip empty lines
+            if line.strip() == "":
+                continue
+
+            if regex.match(line.strip()):
+                # print from_ns, source, to_ns, destination
+                from_ns = regex.match(line).group("from_ns")
+                source = regex.match(line).group("source")
+                to_ns = regex.match(line).group("to_ns")
+                destination = regex.match(line).group("destination")
+                self.list.append({
+                    "from_ns": from_ns,
+                    "source": source,
+                    "to_ns": to_ns,
+                    "destination": destination
+                })
+            else:
+                status = False
+                break
+        return status
+
+    def get_list(self):
+        """
+        Get the wiki list.
+
+        Returns:
+            list: The wiki list.
+        """
+        return self.list
+
+
+class Order:
+    """
+    Represents an order.
+
+    Attributes:
+        from_ns (str): The source namespace of the order.
+        source (str): The source of the order.
+        to_ns (str): The destination namespace of the order.
+        destination (str): The destination of the order.
+        description (str): The description of the order.
+        options (str): The options of the order.
+
+    Methods:
+        __init__: Initialize a new instance of the Order class.
+        set_description: Set the description of the order.
+        set_options: Set the options of the order.
+
+    Example:
+        # Create a new order
+        order = Order("NS1", "Source1", "NS2", "Destination1")
+
+        # Set the description of the order
+        order.set_description("This is a sample order.")
+
+        # Set the options of the order
+        order.set_options("Option 1, Option 2, Option 3")
+
+        # Access the attributes of the order
+        print("From Namespace:", order.from_ns)
+        print("Source:", order.source)
+        print("To Namespace:", order.to_ns)
+        print("Destination:", order.destination)
+        print("Description:", order.description)
+        print("Options:", order.options)
+    """
+
+    def __init__(self, from_ns, source, to_ns, destination):
+        """
+        Initialize a new instance of the Order class.
+
+        Args:
+            from_ns (str): The source namespace of the order.
+            source (str): The source of the order.
+            to_ns (str): The destination namespace of the order.
+            destination (str): The destination of the order.
+        """
+        self.from_ns = from_ns
+        self.source = source
+        self.to_ns = to_ns
+        self.destination = destination
+        self.description = ""
+        self.options = ""
+
+    def set_description(self, description):
+        """
+        Set the description of the order.
+
+        Args:
+            description (str): The description to set.
+        """
+        self.description = description
+
+    def set_options(self, options):
+        """
+        Set the options of the order.
+
+        Args:
+            options (str): The options to set.
+        """
+        self.options = options
+
+
 class WikipediaTaskReader:
     """
         Represents a task reader for Wikipedia.
@@ -308,12 +504,15 @@ class WikipediaTaskReader:
     """
 
     def __init__(self, site: pywikibot.Site, description: TaskDescriptionInterface, option: TaskOptionInterface,
-                 task_stats: BotRunnerInterface, last_user_edit_role: LastUserEditRoleInterface):
+                 task_stats: BotRunnerInterface, last_user_edit_role: LastUserEditRoleInterface,
+                 wiki_text_list: WikiListFormatInterface):
         self.description = description
         self.option = option
         self.task_stats = task_stats
         self.site = site
         self.last_user_edit_role = last_user_edit_role
+        self.wiki_text_list = wiki_text_list
+        self.orders_list = []
 
     def can_bot_run(self):
         """
@@ -337,11 +536,23 @@ class WikipediaTaskReader:
             print("can run page status has false value")
             return False
 
-    def read(self):
-        """
-        Reads and returns the task.
+    def check_format(self):
+        if self.wiki_text_list.check_format():
+            print("can run page status has true value")
+            return True
+        else:
+            print("can run page status has false value")
+            return False
 
-        Returns:
-            TaskDescription: The task description.
-        """
-        return self.task
+    def get_list(self):
+        temp_list = self.wiki_text_list.get_list()
+        self.orders_list = []
+        for item in temp_list:
+            order = Order(item["from_ns"], item["source"], item["to_ns"], item["destination"])
+            order.set_description(self.description.get_description())
+            order.set_options(self.option.get_options())
+            self.orders_list.append(order)
+        return self.orders_list
+
+    def can_read(self):
+        return self.can_bot_run() and self.check_user_role() and self.check_format()
