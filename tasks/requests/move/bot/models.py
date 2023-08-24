@@ -562,13 +562,17 @@ class WikipediaTaskReader:
         # titles
         page_name = "ويكيبيديا:طلبات نقل عبر البوت"
         talk_name = "ويكيبيديا:طلبات نقل عبر البوت/أرشيف 10"
+        turn_on_name = "ويكيبيديا:طلبات نقل عبر البوت/تشغيل البوت"
         # objects
         page = pywikibot.Page(self.site, page_name)
         archive_page = pywikibot.Page(self.site, talk_name)
+        turn_on_name = pywikibot.Page(self.site, turn_on_name)
         # set texts
         template = "{{/مقدمة}}"
         archive_page.text = archive_page.text + "\n" + page.text.replace(template, "")
         page.text = template
+        turn_on_name.text = "لا"
         # start save
         page.save("جاري النقل")
         archive_page.save("اضافة الي الارشيف")
+        turn_on_name.save("تم تشغيل البوت")

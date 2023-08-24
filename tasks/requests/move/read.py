@@ -27,12 +27,14 @@ try:
     print(task_option.get_options())
 
     bot_runner_page_name = "ويكيبيديا:طلبات نقل عبر البوت/تشغيل البوت"
+
     bot_runner = BotRunner(site=site, page_title=bot_runner_page_name)
     print(bot_runner.can_run())
 
     task_page = pywikibot.Page(site, "ويكيبيديا:طلبات نقل عبر البوت")
 
-    last_user_edit_role = LastUserEditRoleChecker(page=task_page, role="editor")
+    last_user_edit_role_page = pywikibot.Page(site, bot_runner_page_name)
+    last_user_edit_role = LastUserEditRoleChecker(page=last_user_edit_role_page, role="editor")
 
     wiki_text_list = WikiListFormatChecker()
     wiki_text_list.set_wiki_text(task_page.text)
