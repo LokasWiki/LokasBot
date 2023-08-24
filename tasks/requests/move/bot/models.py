@@ -92,7 +92,7 @@ class TaskOptionInterface(ABC):
         pass
 
 
-class TaskOption:
+class TaskOption(TaskOptionInterface):
     """
     Represents a task option object.
 
@@ -217,25 +217,125 @@ class BotRunner(BotRunnerInterface):
         return self.status
 
 
+class LastUserEditRoleInterface(ABC):
+    """
+    Represents an interface for checking the role of the last user who edited a page.
+    """
+
+    def __init__(self, page: pywikibot.Page, role: str):
+        self.page = page
+        self.role = role
+
+    @abstractmethod
+    def get_last_user_role(self) -> list:
+        """
+        Get the role of the last user who edited the page.
+        Returns:
+            list: The role of the last user who edited the page.
+        """
+        pass
+
+    @abstractmethod
+    def check_user_role(self) -> bool:
+        """
+        Checks if the user has the role of the last user who edited the page.
+        Returns:
+            bool: True if the user has the role of the last user who edited the page, False otherwise.
+        """
+        pass
+
+
+class LastUserEditRoleChecker(LastUserEditRoleInterface):
+    """
+    Represents a class for checking the role of the last user who edited a page.
+    """
+
+    def __init__(self, page: pywikibot.Page, role: str):
+        super().__init__(page=page, role=role)
+
+    def get_last_user_role(self) -> list:
+        """
+        Get the role of the last user who edited the page.
+        Returns:
+            list: The role of the last user who edited the page.
+        """
+        try:
+            last_user = self.page.lastNonBotUser()
+            user = pywikibot.User(self.page.site, last_user)
+            return user.groups()
+        except Exception as e:
+            print(e)
+            logging.error(e)
+            return []
+
+    def check_user_role(self) -> bool:
+        """
+        Checks if the user has the role of the last user who edited the page.
+        Returns:
+            bool: True if the user has the role of the last user who edited the page, False otherwise.
+        """
+        return self.role in self.get_last_user_role()
+
+
 class WikipediaTaskReader:
     """
-    Reads tasks from Wikipedia.
-
-    Attributes:
-        task (TaskDescription): The task description.
-
-    Methods:
-        read: Reads and returns the task.
-    """
-
-    def __init__(self, task_description):
-        """
-        Initializes a new instance of the WikipediaTaskReader class.
+        Represents a task reader for Wikipedia.
 
         Args:
-            task_description (TaskDescription): The task description.
+            description (DescriptionInterface): The description object.
+            option (OptionInterface): The option object.
+            task (TaskInterface): The task object.
+            last_user_edit_role (LastUserEditRoleInterface): The last user edit role object.
+        Methods:
+            can_run: Checks if the bot can be run based on the description, option, and task.
+
+        Example:
+            # Create description, option, and task objects
+            description = DescriptionImpl()
+            option = OptionImpl()
+            task = TaskImpl()
+
+            # Create a WikipediaTaskReader object
+            task_reader = WikipediaTaskReader(description, option, task)
+
+            # Check if the bot can be run
+            can_run = task_reader.can_run()
+
+            if can_run:
+                print("The bot can be run!")
+            else:
+                print("The bot cannot be run.")
+    """
+
+    def __init__(self, site: pywikibot.Site, description: TaskDescriptionInterface, option: TaskOptionInterface,
+                 task_stats: BotRunnerInterface, last_user_edit_role: LastUserEditRoleInterface):
+        self.description = description
+        self.option = option
+        self.task_stats = task_stats
+        self.site = site
+        self.last_user_edit_role = last_user_edit_role
+
+    def can_bot_run(self):
         """
-        self.task = task_description
+        Check if the bot can run based on the status of the page.
+
+        Returns:
+            bool: True if the bot can run, False otherwise.
+        """
+        if self.task_stats.can_run():
+            print("can run page status has true value")
+            return True
+        else:
+            print("can run page status has false value")
+            return False
+
+    def check_user_role(self) -> bool:
+        if self.last_user_edit_role.check_user_role():
+            print("can run page status has true value")
+            return True
+        else:
+            print("can run page status has false value")
+            return False
 
     def read(self):
         """
@@ -245,19 +345,3 @@ class WikipediaTaskReader:
             TaskDescription: The task description.
         """
         return self.task
-
-
-page_name = "ويكيبيديا:طلبات نقل عبر البوت/ملخص التعديل"
-site = pywikibot.Site("ar", "wikipedia")
-default_description = "بوت:نقل ([[ويكيبيديا:طلبات نقل عبر البوت]])"
-task_description = TaskDescription(site=site, page_title=page_name, default_description=default_description)
-print(task_description.get_description())
-
-option_page_name = "ويكيبيديا:طلبات نقل عبر البوت/خيارات البوت"
-default_template_name = "ويكيبيديا:طلبات نقل عبر البوت/خيارات البوت/قالب"
-task_option = TaskOption(site=site, page_title=option_page_name, template_name=default_template_name)
-print(task_option.get_options())
-
-bot_runner_page_name = "ويكيبيديا:طلبات نقل عبر البوت/تشغيل البوت"
-bot_runner = BotRunner(site=site, page_title=bot_runner_page_name)
-print(bot_runner.can_run())
