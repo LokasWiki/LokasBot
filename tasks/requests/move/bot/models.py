@@ -365,21 +365,20 @@ class WikiListFormatChecker(WikiListFormatInterface):
         """
         tem_wiki_text = self.wiki_text.replace("{{/مقدمة}}", "").strip()
         status = True
+        regex = re.compile(
+            r"\*\s*\[\[(?P<from_ns>.*):(?P<source>.*)\]\](?P<extra>.*\>.*)\[\[(?P<to_ns>.*):(?P<destination>.*)\]\]")
         # loop line by line
         for line in tem_wiki_text.split("\n"):
-            regex = re.compile(
-                r"\*\s*\[\[(?P<from_ns>.*):(?P<source>.*)\]\](?P<extra>.*\>.*)\[\[(?P<to_ns>.*):(?P<destination>.*)\]\]")
-
             # to skip empty lines
             if line.strip() == "":
                 continue
-
-            if regex.match(line.strip()):
+            line_regex = regex.match(line.strip())
+            if line_regex:
                 # print from_ns, source, to_ns, destination
-                from_ns = regex.match(line).group("from_ns")
-                source = regex.match(line).group("source")
-                to_ns = regex.match(line).group("to_ns")
-                destination = regex.match(line).group("destination")
+                from_ns = line_regex.group("from_ns")
+                source = line_regex.group("source")
+                to_ns = line_regex.group("to_ns")
+                destination = line_regex.group("destination")
                 # todo: add list of namespaces that only allowed to move
                 self.list.append({
                     "from_ns": from_ns,
