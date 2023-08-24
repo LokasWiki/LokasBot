@@ -45,7 +45,7 @@ try:
         last_user_edit_role=last_user_edit_role,
         wiki_text_list=wiki_text_list
     )
-
+    emptry_page = False
     if wikipediataskreader.can_read():
         try:
             with Session(engine) as session:
@@ -60,10 +60,15 @@ try:
                     )
                     session.add(request_model)
                 session.commit()
+                emptry_page = True
         except Exception as e:
             session.rollback()
             print("An error occurred while committing the changes:", e)
 
+    if emptry_page:
+        wikipediataskreader.move_to_talk_page()
+    else:
+        print("no reqtest found")
 
 except Exception as e:
     print(f"An error occurred: {e}")

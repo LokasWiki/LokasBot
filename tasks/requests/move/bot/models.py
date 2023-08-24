@@ -380,6 +380,7 @@ class WikiListFormatChecker(WikiListFormatInterface):
                 source = regex.match(line).group("source")
                 to_ns = regex.match(line).group("to_ns")
                 destination = regex.match(line).group("destination")
+                # todo: add list of namespaces that only allowed to move
                 self.list.append({
                     "from_ns": from_ns,
                     "source": source,
@@ -447,9 +448,9 @@ class Order:
             to_ns (str): The destination namespace of the order.
             destination (str): The destination of the order.
         """
-        self.from_ns = from_ns
+        self.from_ns = from_ns.replace(":", "")
         self.source = source
-        self.to_ns = to_ns
+        self.to_ns = to_ns.replace(":", "")
         self.destination = destination
         self.description = ""
         self.options = ""
@@ -556,3 +557,18 @@ class WikipediaTaskReader:
 
     def can_read(self):
         return self.can_bot_run() and self.check_user_role() and self.check_format()
+
+    def move_to_talk_page(self):
+        # titles
+        page_name = "ويكيبيديا:طلبات نقل عبر البوت"
+        talk_name = "ويكيبيديا:طلبات نقل عبر البوت/أرشيف 10"
+        # objects
+        page = pywikibot.Page(self.site, page_name)
+        archive_page = pywikibot.Page(self.site, talk_name)
+        # set texts
+        template = "{{/مقدمة}}"
+        archive_page.text = archive_page.text + "\n" + page.text.replace(template, "")
+        page.text = template
+        # start save
+        page.save("جاري النقل")
+        archive_page.save("اضافة الي الارشيف")
