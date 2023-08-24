@@ -146,6 +146,77 @@ class TaskOption:
         return options
 
 
+class BotRunnerInterface(ABC):
+    """
+    Represents an interface for a bot runner object.
+    """
+
+    @abstractmethod
+    def can_run(self):
+        """
+        Checks if the bot can be run.
+
+        Returns:
+            bool: True if the bot can be run, False otherwise.
+        """
+        pass
+
+
+class BotRunner(BotRunnerInterface):
+    """
+    Represents a bot runner object.
+
+    Args:
+        site (str): The site of the page.
+        page_title (str): The title of the page.
+
+    Attributes:
+        site (str): The site of the page.
+        page_title (str): The title of the page.
+
+    Methods:
+        can_run: Checks if the bot can be run based on the description and option of the page.
+
+    Example:
+        # Create a BotRunner object
+        bot_runner = BotRunner(site='example.com', page_title='Page 1')
+
+        # Check if the bot can be run
+        can_run = bot_runner.can_run()
+
+        if can_run:
+            print("The bot can be run!")
+        else:
+            print("The bot cannot be run.")
+
+    """
+
+    def __init__(self, site, page_title):
+        self.site = site
+        self.page_title = page_title
+        self.status = False
+        self.yes_word = "نعم"
+
+    def can_run(self):
+        """
+        Checks if the bot can be run based on the description and option of the page.
+
+        Returns:
+            bool: True if the bot can be run, False otherwise.
+        """
+
+        try:
+            page = pywikibot.Page(self.site, self.page_title)
+            if page.exists():
+                text = page.text
+                self.status = prepare_str(text) == prepare_str(self.yes_word)
+        except Exception as e:
+            print(e)
+            logging.error(e)
+
+        return self.status
+
+
 class WikipediaTaskReader:
     """
     Reads tasks from Wikipedia.
@@ -186,3 +257,7 @@ option_page_name = "ويكيبيديا:طلبات نقل عبر البوت/خي�
 default_template_name = "ويكيبيديا:طلبات نقل عبر البوت/خيارات البوت/قالب"
 task_option = TaskOption(site=site, page_title=option_page_name, template_name=default_template_name)
 print(task_option.get_options())
+
+bot_runner_page_name = "ويكيبيديا:طلبات نقل عبر البوت/تشغيل البوت"
+bot_runner = BotRunner(site=site, page_title=bot_runner_page_name)
+print(bot_runner.can_run())
