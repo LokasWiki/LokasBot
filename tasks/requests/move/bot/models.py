@@ -558,6 +558,7 @@ class WikipediaTaskReader:
         return self.can_bot_run() and self.check_user_role() and self.check_format()
 
     def move_to_talk_page(self):
+        # todo: use Command Pattern
         # titles
         page_name = "ويكيبيديا:طلبات نقل عبر البوت"
         talk_name = "ويكيبيديا:طلبات نقل عبر البوت/أرشيف 10"
