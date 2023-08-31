@@ -38,7 +38,11 @@ myArrayFiles=( "$HOME"/repos/tasks/statistics/activity_of_bureaucrats.py \
   "$HOME"/repos/tasks/statistics/categories_not_found_by_number_of_language_links.py \
   "$HOME"/repos/tasks/statistics/latest_arabic_files_on_commons.py \
   "$HOME"/repos/tasks/statistics/templates_not_found_by_number_of_language_links.py \
-  "$HOME"/repos/tasks/statistics/abuse_filter/filters_blow_in_the_last_week.py \
+  "$HOME"/repos/tasks/statistics/Articles_by_size.py \
+  "$HOME"/repos/tasks/statistics/featured_articles_by_size.py \
+  "$HOME"/repos/tasks/statistics/good_articles_by_size.py \
+  "$HOME"/repos/tasks/statistics/pages_with_most_revisions.py \
+  "$HOME"/repos/tasks/statistics/talk_pages_by_size.py \
 
 )
 
