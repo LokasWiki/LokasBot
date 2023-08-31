@@ -43,6 +43,8 @@ myArrayFiles=( "$HOME"/repos/tasks/statistics/activity_of_bureaucrats.py \
   "$HOME"/repos/tasks/statistics/good_articles_by_size.py \
   "$HOME"/repos/tasks/statistics/pages_with_most_revisions.py \
   "$HOME"/repos/tasks/statistics/talk_pages_by_size.py \
+  "$HOME"/repos/tasks/statistics/bot_wars.py \
+  "$HOME"/repos/tasks/statistics/abuse_filter/filters_blow_in_the_last_week.py \
 
 )
 
