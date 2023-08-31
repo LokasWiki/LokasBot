@@ -12,11 +12,11 @@ WHERE ug_group IN ('bot')
   AND actor_id NOT IN (
     SELECT rev_actor
     FROM revision
-    WHERE rev_timestamp > DATE_SUB(NOW(), INTERVAL 1 YEAR)
+    WHERE rev_timestamp > DATE_SUB(NOW(), INTERVAL 3 MONTH)
 )
 GROUP BY actor_name, user_groups"""
 file_path = 'stub/inactive_bots.txt'
-page_name = "ويكيبيديا:إحصاءات/بوتات غير نشطة"
+page_name = "ويكيبيديا:تقارير قاعدة البيانات/بوتات غير نشطة"
 
 
 def username(row, result, index):

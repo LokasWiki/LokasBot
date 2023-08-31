@@ -2,6 +2,7 @@ import time
 
 import pymysql
 from pywikibot import config as _config
+
 from tasks.statistics.module import UpdatePage, ArticleTables, index
 
 # Set the parameters for the update
@@ -58,7 +59,7 @@ query = """SELECT  cl_to, COUNT(cl_from) as editcount
   ORDER BY COUNT(cl_from) DESC
   LIMIT 500;"""
 file_path = 'stub/categories_not_found_by_number_of_language_links.txt'
-page_name = f'ويكيبيديا:إحصاءات/التصانيف غير الموجودة'
+page_name = f'ويكيبيديا:تقارير قاعدة البيانات/التصانيف غير الموجودة'
 
 # Get the current time and day of the week
 current_time = time.localtime()
