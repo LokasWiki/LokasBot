@@ -23,7 +23,7 @@ having count(*) > 10
 ORDER BY edits DESC;
   """
 file_path = 'stub/bot_wars.txt'
-page_name = "مستخدم:LokasBot/حروب البوت"
+page_name = "ويكيبيديا:تقارير قاعدة البيانات/حروب البوت"
 
 
 def page_name_with_namespace(row, result, index):

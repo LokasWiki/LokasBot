@@ -19,7 +19,7 @@ def main(*args: str) -> int:
     languages = ['en', 'fr', 'de', 'es', 'fa', 'he', 'pt', 'tr']
     for language in languages:
         file_path = 'stub/articles_not_found_by_number_of_language_links.txt'
-        page_name = f'ويكيبيديا:إحصاءات/المقالات غير الموجودة حسب عدد وصلات اللغات/{language}'
+        page_name = f'ويكيبيديا:تقارير قاعدة البيانات/المقالات غير الموجودة حسب عدد وصلات اللغات/{language}'
         prefix = f'{language}wiki'
 
         connection = pymysql.connect(
