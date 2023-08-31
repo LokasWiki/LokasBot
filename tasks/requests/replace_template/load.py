@@ -14,14 +14,14 @@ type_of_request = 6
 template_query = """select page.page_title as "prt_title",page.page_namespace as "prt_namespace" from templatelinks 
 inner join page on page.page_id = templatelinks.tl_from
 inner join linktarget on linktarget.lt_id = templatelinks.tl_target_id 
-where linktarget.lt_title in (select page_title from page where page_id in (FROM_ID)) and linktarget.lt_namespace = 10 and page.page_namespace in (0,14,6,10,4,2,100) 
+where linktarget.lt_title in ('FROM_TITLE') and linktarget.lt_namespace = 10 and page.page_namespace in (0,14,6,10,4,2,100) 
 and page.page_is_redirect = 0
 """
 
 category_query = """select page.page_title as "prt_title",page.page_namespace as "prt_namespace" from templatelinks 
 inner join page on page.page_id = templatelinks.tl_from
 inner join linktarget on linktarget.lt_id = templatelinks.tl_target_id 
-where linktarget.lt_title in (select page_title from page where page_id in (FROM_ID)) and linktarget.lt_namespace = 10 and page.page_namespace in (0,14,6,10,4,2,100) 
+where linktarget.lt_title in ('FROM_TITLE') and linktarget.lt_namespace = 10 and page.page_namespace in (0,14,6,10,4,2,100) 
 and page.page_id in (	
     select cl_from from categorylinks
     where cl_to in (select page_title from page where page_id in (CAT_ID) and page_namespace in (14)) and cl_type = "page"
@@ -39,23 +39,24 @@ try:
             gen = []
             database = Database()
             try:
-                from_page = pywikibot.Page(site, title=request.from_name)
-                to_page = pywikibot.Page(site, title=request.to_name)
-                if to_page.exists():
-                    from_id = from_page.pageid
-                    # template
-                    if request.extra is None:
-                        database.query = template_query.replace("FROM_ID", str(from_id))
+                # from_page = pywikibot.Page(site, title=request.from_name)
+                # to_page = pywikibot.Page(site, title=request.to_name)
+                # if to_page.exists():
+                #     from_id = from_page.pageid
+                #     # template
+                from_title = str(request.from_title).replace("  ", "__").replace(" ", "_")
+                if request.extra is None:
+                    database.query = template_query.replace("FROM_TITLE", from_title)
+                    database.get_content_from_database()
+                    gen = database.result
+                else:
+                    cat_obj = pywikibot.Category(site, request.extra)
+                    if cat_obj.exists():
+                        cat_id = cat_obj.pageid
+                        database.query = category_query.replace("FROM_TITLE", from_title).replace("CAT_ID",
+                                                                                                  str(cat_id))
                         database.get_content_from_database()
                         gen = database.result
-                    else:
-                        cat_obj = pywikibot.Category(site, request.extra)
-                        if cat_obj.exists():
-                            cat_id = cat_obj.pageid
-                            database.query = category_query.replace("FROM_ID", str(from_id)).replace("CAT_ID",
-                                                                                                     str(cat_id))
-                            database.get_content_from_database()
-                            gen = database.result
             except Exception as e:
                 # todo:add some code like log or alert send to wiki
                 print(e)
