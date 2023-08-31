@@ -1,6 +1,6 @@
 <center>
 <div style="background: #E5E4E2; padding: 0.5em; font-family: Traditional Arabic; font-size: 130%; -moz-border-radius: 0.3em; border-radius: 0.3em;">
-'''تعرض هذه الصفحة قائمة الإحصاءات المتعلقة بنشاط البيروقراطيين.'''
+'''تعرض هذه الصفحة قائمة الصفحات مرتبة حسب عدد المراجعات.'''
 
 '''حَدَّث BOT_USER_NAME هذه القائمة في : BOT_TIME_NOW (ت ع م) '''
 </div>
@@ -9,8 +9,6 @@
 <div style="background: #E5E4E2; padding: 0.5em; -moz-border-radius: 0.3em; border-radius: 0.3em;">
 __NOTOC__
 BOT_TABLE_BODY
-
-<small>('''وب:طصب''': التعديلات في صفحة طلبات صلاحية البوت'''+''': منح الصلاحية، '''-''': إزالة الصلاحية. '''خ.ب''': خلاصة بيروقراط)</small>
 </div>
 </center>
 

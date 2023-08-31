@@ -63,7 +63,7 @@ inner join user_groups
 on ug_user = user_id
 where ug_group = "bureaucrat";"""
 file_path = 'stub/activity_of_bureaucrats.txt'
-page_name = "ويكيبيديا:إحصاءات/نشاط البيروقراطيين"
+page_name = "ويكيبيديا:تقارير قاعدة البيانات/نشاط البيروقراطيين"
 
 
 def create_category_page_for_every_user():

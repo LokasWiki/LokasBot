@@ -12,7 +12,7 @@ WHERE
 LIMIT
     1000;"""
 file_path = 'stub/articles_containing_linked_email_addresses.txt'
-page_name = "ويكيبيديا:إحصاءات/مقالات بها وصلات بريد إلكتروني"
+page_name = "ويكيبيديا:تقارير قاعدة البيانات/مقالات بها وصلات بريد إلكتروني"
 
 
 def page_title(row, result, index):

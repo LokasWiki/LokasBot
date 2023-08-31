@@ -43,7 +43,7 @@ WHERE ug_group = "sysop" and user_name not in ("مرشح الإساءة")
 ORDER BY user_name ASC , delete_count DESC, restore_count DESC, revision_count DESC, event_count DESC, protect_count DESC, unprotect_count DESC, modify_count DESC, block_count DESC, unblock_count DESC, reblock_count DESC, rights_count DESC;"""
 
 file_path = 'stub/administrators_activity.txt'
-page_name = "ويكيبيديا:إحصاءات/نشاط الإداريين"
+page_name = "ويكيبيديا:تقارير قاعدة البيانات/نشاط الإداريين"
 
 
 def start_table(result):
