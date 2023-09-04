@@ -16,7 +16,7 @@ WHERE rev_page = page_id
 GROUP BY InnerQuery.page_id, InnerQuery.page_title
 ORDER BY lastedit ASC, editcount ASC;"""
 file_path = 'stub/forgotten_articles.txt'
-page_name = "ويكيبيديا:إحصاءات/مقالات منسية"
+page_name = "ويكيبيديا:تقارير قاعدة البيانات/مقالات منسية"
 
 
 def page_title(row, result, index):

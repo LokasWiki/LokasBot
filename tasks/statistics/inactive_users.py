@@ -35,7 +35,7 @@ GROUP BY
   user_groups;
 """
 file_path = 'stub/inactive_users.txt'
-page_name = "ويكيبيديا:إحصاءات/المستخدمين غير النشطين"
+page_name = "ويكيبيديا:تقارير قاعدة البيانات/المستخدمين غير النشطين"
 
 def username(row, result,index):
     user_name = str(row['ll_actor_name'], 'utf-8')
