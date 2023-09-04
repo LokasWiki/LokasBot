@@ -82,7 +82,7 @@ LIMIT 10;"""
         "summary": "بوت:تحديث [[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مشروع مستخدمو الأسبوع الأكثر نشاطًا]] (V1.1.0)",
         "activity": "أفعال إدارية",
         "team": "الإداريون الذين أجروا أكبر عدد من الأعمال الإدارية",
-        "template_stub": "{{وسام إداري الأسبوع|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد الأعمال الإدارية يدويا|USER_NAMEً}}",
+        "template_stub": "{{وسام إداري الأسبوع|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد الأعمال الإدارية يدوياً|USER_NAME}}",
         'query': """select actor_name as name, COUNT(*) as score
 from logging
 INNER JOIN actor on logging.log_actor = actor_id
