@@ -47,7 +47,7 @@ inner join actor on actor.actor_id = ipblocks.ipb_by_actor
 inner join comment on comment.comment_id = ipblocks.ipb_reason_id
 WHERE ipb_address LIKE '%/%';"""
 file_path = 'stub/range_blocks.txt'
-page_name = "ويكيبيديا:إحصاءات/نطاقات الأيبيهات الممنوعة"
+page_name = "ويكيبيديا:تقارير قاعدة البيانات/نطاقات الأيبيهات الممنوعة"
 
 
 def username(row, result, index):

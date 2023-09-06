@@ -1,5 +1,6 @@
 import pymysql
 from pywikibot import config as _config
+
 from tasks.statistics.module import UpdatePage, ArticleTables, index
 
 # Set the parameters for the update
@@ -58,7 +59,7 @@ AND page_namespace = 6
 LIMIT 500;
 """
 file_path = 'stub/latest_arabic_files_on_commons.txt'
-page_name = f'ويكيبيديا:أحدث الملفات العربية على كومنز'
+page_name = f'ويكيبيديا:تقارير قاعدة البيانات/أحدث الملفات العربية على كومنز'
 prefix = f'commonswiki'
 
 connection = pymysql.connect(

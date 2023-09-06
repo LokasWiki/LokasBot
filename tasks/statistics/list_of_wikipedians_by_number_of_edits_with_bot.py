@@ -7,7 +7,7 @@ where user_id not in (137877)
 ORDER BY user_editcount DESC
 LIMIT 500;"""
 file_path = 'stub/list_of_wikipedians_by_number_of_edits_with_bot.txt'
-page_name = "ويكيبيديا:قائمة الويكيبيديين حسب عدد التعديلات (متضمنة البوتات)"
+page_name = "ويكيبيديا:تقارير قاعدة البيانات/قائمة الويكيبيديين حسب عدد التعديلات (متضمنة البوتات)"
 
 
 def username(row, result, index):

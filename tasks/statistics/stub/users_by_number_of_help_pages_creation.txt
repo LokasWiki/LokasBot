@@ -1,4 +1,4 @@
-{{إحصاء}}
+
 <div style="background: #E5E4E2; padding: 0.5em; font-family: Traditional Arabic; font-size: 130%; -moz-border-radius: 0.3em; border-radius: 0.3em;">
 <center>
 تعرض هذه الصفحة قائمة الـ500 [[ويكيبيديا:ويكيبيديون|ويكيبيدي]] الأوائل حسب عدد إنشاء صفحات المساعدة (بدون احتساب [[ويكيبيديا:بوت|البوتات]]).

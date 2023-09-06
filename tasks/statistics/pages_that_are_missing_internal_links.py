@@ -9,7 +9,7 @@ FROM page p
 WHERE pl.pl_from IS NULL AND p.page_is_redirect = 0 AND p.page_namespace = 0
   AND r.rev_id = (SELECT MIN(rev_id) FROM revision WHERE rev_page = p.page_id)"""
 file_path = 'stub/pages_that_are_missing_internal_links.txt'
-page_name = "ويكيبيديا:إحصاءات/مقالات بدون وصلات داخلية"
+page_name = "ويكيبيديا:تقارير قاعدة البيانات/مقالات بدون وصلات داخلية"
 
 
 def username(row, result, index):
