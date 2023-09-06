@@ -26,7 +26,7 @@ ORDER BY
     afl_filter_id;
 """
 file_path = 'stub/filters_blow_in_the_last_week.txt'
-page_name = "مستخدم:LokasBot/ضربات المرشحات في آخر أسبوع"
+page_name = "ويكيبيديا:تقارير قاعدة البيانات/ضربات المرشحات في آخر أسبوع"
 
 
 def afl_filter_id(row, result, index):
