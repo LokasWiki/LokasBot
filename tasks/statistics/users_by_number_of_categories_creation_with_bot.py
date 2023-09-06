@@ -15,7 +15,7 @@ query = """SELECT actor_name, COUNT(*) as q_user_editcount
     ORDER BY COUNT(*) DESC
     LIMIT 500;"""
 file_path = 'stub/users_by_number_of_categories_creation_with_bot.txt'
-page_name = "ويكيبيديا:إحصاءات/المستخدمين حسب عدد إنشاء التصانيف (متضمنة البوتات)"
+page_name = "ويكيبيديا:تقارير قاعدة البيانات/المستخدمين حسب عدد إنشاء التصانيف (متضمنة البوتات)"
 
 
 def username(row, result, index):

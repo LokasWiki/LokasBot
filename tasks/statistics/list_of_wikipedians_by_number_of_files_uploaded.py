@@ -9,7 +9,7 @@ GROUP BY log_actor
 order by count(log_id) desc
 limit 500;"""
 file_path = 'stub/list_of_wikipedians_by_number_of_files_uploaded.txt'
-page_name = "ويكيبيديا:قائمة الويكيبيديين حسب عدد الملفات المرفوعة"
+page_name = "ويكيبيديا:تقارير قاعدة البيانات/قائمة الويكيبيديين حسب عدد الملفات المرفوعة"
 
 
 def username(row, result, index):

@@ -1,4 +1,4 @@
-{{إحصاء}}
+
 <center>
 <div style="background: #E5E4E2; padding: 0.5em;   -moz-border-radius: 0.3em; border-radius: 0.3em;">
 ''' تعرض هذه الصفحة قائمة القوالب غير الموجودة في ويكيبديا العربية حسب عدد وصلات اللغات . '''

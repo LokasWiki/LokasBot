@@ -35,7 +35,7 @@ def main(*args: str) -> int:
     languages = ['en']
     for language in languages:
         file_path = 'stub/templates_not_found_by_number_of_language_links.txt'
-        page_name = f'ويكيبيديا:إحصاءات/القوالب غير الموجودة حسب عدد وصلات اللغات/{language}'
+        page_name = f'ويكيبيديا:تقارير قاعدة البيانات/القوالب غير الموجودة حسب عدد وصلات اللغات/{language}'
         prefix = f'{language}wiki'
 
         connection = pymysql.connect(

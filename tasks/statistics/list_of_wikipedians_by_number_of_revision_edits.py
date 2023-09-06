@@ -21,7 +21,7 @@ GROUP BY actor_name
 ORDER BY score desc,actor_name
 limit 100"""
 file_path = 'stub/list_of_wikipedians_by_number_of_revision_edits.txt'
-page_name = "ويكيبيديا:قائمة الويكيبيديين حسب عدد مراجعة التعديلات"
+page_name = "ويكيبيديا:تقارير قاعدة البيانات/قائمة الويكيبيديين حسب عدد مراجعة التعديلات"
 
 
 def username(row, result, index):

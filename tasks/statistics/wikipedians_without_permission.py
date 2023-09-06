@@ -13,7 +13,7 @@ WHERE ipb_user IS NULL AND ug_user IS NULL
 HAVING live_edits >= 400
        AND edits_last_month >= 10;"""
 file_path = 'stub/wikipedians_without_permission.txt'
-page_name = "ويكيبيديا:قائمة الويكيبيديين بلا صلاحيات"
+page_name = "ويكيبيديا:تقارير قاعدة البيانات/قائمة الويكيبيديين بلا صلاحيات"
 
 
 def username(row, result, index):

@@ -15,7 +15,7 @@ GROUP BY portal_name
 ORDER BY links_count DESC;
 """
 file_path = 'stub/list_of_portals_by_number_of_articles.txt'
-page_name = "ويكيبيديا:إحصاءات/قائمة البوابات حسب عدد المقالات"
+page_name = "ويكيبيديا:تقارير قاعدة البيانات/قائمة البوابات حسب عدد المقالات"
 
 
 def portal_name(row, result, index):
