@@ -45,6 +45,7 @@ myArrayFiles=( "$HOME"/repos/tasks/statistics/activity_of_bureaucrats.py \
   "$HOME"/repos/tasks/statistics/talk_pages_by_size.py \
   "$HOME"/repos/tasks/statistics/bot_wars.py \
   "$HOME"/repos/tasks/statistics/abuse_filter/filters_blow_in_the_last_week.py \
+  "$HOME"/repos/tasks/statistics/list_of_wikipedians_by_number_of_files_uploaded.py \
 
 )
 
