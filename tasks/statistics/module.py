@@ -56,6 +56,7 @@ class Page:
         self._page_name = ""
         self.contents = ""
         self._summary = "بوت:إحصاءات V2.4.3"
+        self._summary = "بوت:إحصاءات V2.4.2"
 
     @property
     def page_name(self):

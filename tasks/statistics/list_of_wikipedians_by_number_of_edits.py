@@ -16,7 +16,7 @@ WHERE
 ORDER BY user_editcount DESC
 LIMIT 500;"""
 file_path = 'stub/list_of_wikipedians_by_number_of_edits.txt'
-page_name = "ويكيبيديا:قائمة الويكيبيديين حسب عدد التعديلات"
+page_name = "ويكيبيديا:تقارير قاعدة البيانات/قائمة الويكيبيديين حسب عدد التعديلات"
 
 
 def username(row, result, index):

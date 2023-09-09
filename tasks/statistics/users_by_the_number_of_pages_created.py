@@ -81,7 +81,7 @@ FROM user u
 ORDER BY pages_created DESC
 LIMIT 500;"""
 file_path = 'stub/users_by_the_number_of_pages_created.txt'
-page_name = "ويكيبيديا:إحصاءات/المستخدمين حسب عدد إنشاء الصفحات"
+page_name = "ويكيبيديا:تقارير قاعدة البيانات/المستخدمين حسب عدد إنشاء الصفحات"
 
 
 def username(row, result, index):

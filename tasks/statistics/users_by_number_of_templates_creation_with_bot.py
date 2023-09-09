@@ -15,7 +15,7 @@ having COUNT(*) > 1
 ORDER BY COUNT(*) DESC
 LIMIT 500;"""
 file_path = 'stub/users_by_number_of_templates_creation_with_bot.txt'
-page_name = "ويكيبيديا:إحصاءات/المستخدمين حسب عدد إنشاء القوالب (متضمنة البوتات)"
+page_name = "ويكيبيديا:تقارير قاعدة البيانات/المستخدمين حسب عدد إنشاء القوالب (متضمنة البوتات)"
 
 
 def username(row, result, index):

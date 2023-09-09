@@ -21,7 +21,7 @@ GROUP BY article.page_id
 ORDER BY MIN(revision.rev_id) DESC;
 """
 file_path = 'stub/sandboxs_users_need_to_review.txt'
-page_name = f'ويكيبيديا:ملاعب مستخدمين تحتاج لمراجعة'
+page_name = f'ويكيبيديا:تقارير قاعدة البيانات/ملاعب مستخدمين تحتاج لمراجعة'
 
 
 def page_sandbox_name(row, result, index):
