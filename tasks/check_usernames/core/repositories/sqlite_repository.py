@@ -14,7 +14,14 @@ class SQLiteRepository(BaseRepository, ABC):
         pass
 
     def createUserTable(self):
-        query = "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, user_name TEXT NOT NULL UNIQUE)"
+        query = """
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT, 
+            user_name TEXT NOT NULL UNIQUE,
+            created_at DATETIME NOT NULL,
+            status INTEGER
+        )
+        """
         self.persistence.execute(query=query)
 
     def deleteAllUsers(self):
@@ -23,5 +30,9 @@ class SQLiteRepository(BaseRepository, ABC):
 
     def saveUsers(self, users: List[User]):
         for user in users:
-            query = "INSERT INTO users (user_name) VALUES ('{}')".format(user.user_name)
+            query = """ INSERT INTO users 
+            (user_name, created_at, status)
+             VALUES 
+             ('{}', '{}', {})
+            """.format(user.user_name, user.created_at, user.status)
             self.persistence.execute(query=query)
