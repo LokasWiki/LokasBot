@@ -2,6 +2,23 @@ from abc import ABC, abstractmethod
 
 
 class BasePersistence(ABC):
+
+    @abstractmethod
+    def execute(self, query: str, params=None):
+        """
+        Executes a custom SQL query.
+
+        :param query: The SQL query to execute.
+
+        :type query: str
+
+        :param params: Optional parameters to be substituted in the query.
+
+        :type params: Union[None, tuple]
+
+        """
+        pass
+
     @abstractmethod
     def select(self, query: str, params=None):
         """

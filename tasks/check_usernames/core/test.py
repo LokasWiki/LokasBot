@@ -51,4 +51,7 @@ for row in raw_users:
         )
     )
 
-print(users_models)
+sqlite_repository = factory.create_sqlite_memory_repository()
+sqlite_repository.createUserTable()
+sqlite_repository.deleteAllUsers()
+sqlite_repository.saveUsers(users_models)

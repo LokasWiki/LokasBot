@@ -10,3 +10,9 @@ class MySQLRepository(BaseRepository, ABC):
 
     def selectAllUsers(self, query: str, params=None):
         return self.persistence.select(query, params)
+
+    def createUserTable(self):
+        pass
+
+    def deleteAllUsers(self):
+        pass

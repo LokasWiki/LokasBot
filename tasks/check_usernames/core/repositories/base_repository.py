@@ -2,6 +2,11 @@ from abc import ABC, abstractmethod
 
 
 class BaseRepository(ABC):
+
+    @abstractmethod
+    def createUserTable(self):
+        pass
+
     @abstractmethod
     def selectAllUsers(self, query: str, params=None):
         """
@@ -14,5 +19,12 @@ class BaseRepository(ABC):
 
         :return: The results of the query.
         :rtype: Any
+        """
+        pass
+
+    @abstractmethod
+    def deleteAllUsers(self):
+        """
+        Deletes all users from the database.
         """
         pass

@@ -1,5 +1,5 @@
-from base_persistence import BasePersistence
 from tasks.check_usernames.core.connection.base_connection import BaseConnection
+from tasks.check_usernames.core.persistence.base_persistence import BasePersistence
 
 
 class SQLitePersistence(BasePersistence):
@@ -23,7 +23,14 @@ class SQLitePersistence(BasePersistence):
         """
         self.connection.connect()
         cursor = self.connection.connection.cursor()
-        cursor.execute(query, params)
+        if params is None:
+            cursor.execute(query)
+        elif isinstance(params, tuple):
+            cursor.execute(query, params)
+        elif isinstance(params, dict):
+            cursor.execute(query, params)
+        else:
+            raise ValueError("Unsupported type for 'params' argument")
         self.connection.connection.commit()
         self.connection.disconnect()
 
@@ -38,7 +45,14 @@ class SQLitePersistence(BasePersistence):
         """
         self.connection.connect()
         cursor = self.connection.connection.cursor()
-        cursor.execute(query, params)
+        if params is None:
+            cursor.execute(query)
+        elif isinstance(params, tuple):
+            cursor.execute(query, params)
+        elif isinstance(params, dict):
+            cursor.execute(query, params)
+        else:
+            raise ValueError("Unsupported type for 'params' argument")
         self.connection.connection.commit()
         self.connection.disconnect()
 
@@ -53,7 +67,14 @@ class SQLitePersistence(BasePersistence):
         """
         self.connection.connect()
         cursor = self.connection.connection.cursor()
-        cursor.execute(query, params)
+        if params is None:
+            cursor.execute(query)
+        elif isinstance(params, tuple):
+            cursor.execute(query, params)
+        elif isinstance(params, dict):
+            cursor.execute(query, params)
+        else:
+            raise ValueError("Unsupported type for 'params' argument")
         self.connection.connection.commit()
         self.connection.disconnect()
 
@@ -71,7 +92,14 @@ class SQLitePersistence(BasePersistence):
         """
         self.connection.connect()
         cursor = self.connection.connection.cursor()
-        cursor.execute(query, params)
+        if params is None:
+            cursor.execute(query)
+        elif isinstance(params, tuple):
+            cursor.execute(query, params)
+        elif isinstance(params, dict):
+            cursor.execute(query, params)
+        else:
+            raise ValueError("Unsupported type for 'params' argument")
         result = cursor.fetchall()
         self.connection.disconnect()
         return result
@@ -90,7 +118,14 @@ class SQLitePersistence(BasePersistence):
         """
         self.connection.connect()
         cursor = self.connection.connection.cursor()
-        cursor.execute(query, params)
+        if params is None:
+            cursor.execute(query)
+        elif isinstance(params, tuple):
+            cursor.execute(query, params)
+        elif isinstance(params, dict):
+            cursor.execute(query, params)
+        else:
+            raise ValueError("Unsupported type for 'params' argument")
         result = cursor.fetchone()
         self.connection.disconnect()
         return result
