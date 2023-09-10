@@ -47,6 +47,8 @@ myArrayFiles=( "$HOME"/repos/tasks/statistics/activity_of_bureaucrats.py \
   "$HOME"/repos/tasks/statistics/abuse_filter/filters_blow_in_the_last_week.py \
   "$HOME"/repos/tasks/statistics/abuse_filter/indefinitely_blocked_ips.pys \
   "$HOME"/repos/tasks/statistics/list_of_wikipedians_by_number_of_files_uploaded.py \
+  "$HOME"/repos/tasks/statistics/unusually_long_ip_blocks.py \
+  "$HOME"/repos/tasks/statistics/unusually_long_user_blocks.py \
 
 )
 
