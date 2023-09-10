@@ -1,16 +1,16 @@
-import pymysql
-from base_persistence import BasePersistence
+from tasks.check_usernames.core.connection.base_connection import BaseConnection
+from tasks.check_usernames.core.persistence.base_persistence import BasePersistence
 
 
 class MySQLPersistence(BasePersistence):
-    def __init__(self, connection=None):
+    def __init__(self, connection: BaseConnection):
         """
         Initializes a new instance of the MySQLPersistence class.
 
         :param connection: The connection object to use for database operations.
-        :type connection: pymysql.connections.Connection | None
+        :type connection: BaseConnection
         """
-        self.connection = connection or self.create_connection()
+        self.connection = connection
 
     def delete(self, query, params=None):
         """
@@ -21,10 +21,9 @@ class MySQLPersistence(BasePersistence):
         :param params: Optional parameters to be substituted in the query.
         :type params: Union[None, tuple]
         """
-        with self.connection as conn:
-            cursor = conn.cursor()
+        with self.connection.connection.cursor() as cursor:
             cursor.execute(query, params)
-            conn.commit()
+            self.connection.connection.commit()
 
     def execute(self, query, params=None):
         """
@@ -35,10 +34,9 @@ class MySQLPersistence(BasePersistence):
         :param params: Optional parameters to be substituted in the query.
         :type params: Union[None, tuple]
         """
-        with self.connection as conn:
-            cursor = conn.cursor()
+        with self.connection.connection.cursor() as cursor:
             cursor.execute(query, params)
-            conn.commit()
+            self.connection.connection.commit()
 
     def update(self, query, params=None):
         """
@@ -49,10 +47,9 @@ class MySQLPersistence(BasePersistence):
         :param params: Optional parameters to be substituted in the query.
         :type params: Union[None, tuple]
         """
-        with self.connection as conn:
-            cursor = conn.cursor()
+        with self.connection.connection.cursor() as cursor:
             cursor.execute(query, params)
-            conn.commit()
+            self.connection.connection.commit()
 
     def select(self, query, params=None):
         """
@@ -66,8 +63,8 @@ class MySQLPersistence(BasePersistence):
         :return: A list of rows returned by the query.
         :rtype: list
         """
-        with self.connection as conn:
-            cursor = conn.cursor()
+        with self.connection.connection.cursor() as cursor:
+            print(query, params)
             cursor.execute(query, params)
             result = cursor.fetchall()
         return result
@@ -84,8 +81,7 @@ class MySQLPersistence(BasePersistence):
         :return: A single row returned by the query, or None if no rows are found.
         :rtype: Union[tuple, None]
         """
-        with self.connection as conn:
-            cursor = conn.cursor()
+        with self.connection.connection.cursor() as cursor:
             cursor.execute(query, params)
             result = cursor.fetchone()
         return result

@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 class BasePersistence(ABC):
     @abstractmethod
-    def select(self, query, params=None):
+    def select(self, query: str, params=None):
         """
         Executes a SELECT query and returns the result as a list of rows.
 
@@ -17,7 +17,7 @@ class BasePersistence(ABC):
         pass
 
     @abstractmethod
-    def select_one(self, query, params=None):
+    def select_one(self, query: str, params=None):
         """
         Executes a SELECT query and returns a single row.
 
@@ -30,9 +30,8 @@ class BasePersistence(ABC):
         """
         pass
 
-
     @abstractmethod
-    def delete(self, query, params=None):
+    def delete(self, query: str, params=None):
         """
         Executes a DELETE query.
 
@@ -43,7 +42,7 @@ class BasePersistence(ABC):
         pass
 
     @abstractmethod
-    def update(self, query, params=None):
+    def update(self, query: str, params=None):
         """
         Executes an UPDATE query.
 

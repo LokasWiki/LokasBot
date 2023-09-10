@@ -1,17 +1,16 @@
-from abc import ABC, abstractmethod
-
-from tasks.check_usernames.core.connection.base_connection import Connection
 import sqlite3
 
+from tasks.check_usernames.core.connection.base_connection import BaseConnection
 
-class SQLiteConnection(Connection):
+
+class SQLiteBaseConnection(BaseConnection):
     """
-    Implementation of the Connection interface for SQLite databases using the sqlite3 library.
+    Implementation of the BaseConnection interface for SQLite databases using the sqlite3 library.
     """
 
-    def __init__(self, database_file):
+    def __init__(self, database_file: str):
         """
-        Initializes a SQLiteConnection object with the path to the SQLite database file.
+        Initializes a SQLiteBaseConnection object with the path to the SQLite database file.
 
         Parameters:
             database_file (str): The path to the SQLite database file.

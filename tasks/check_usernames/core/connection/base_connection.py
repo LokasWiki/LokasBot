@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class Connection(ABC):
+class BaseConnection(ABC):
     """
     Abstract base class for connection operations with databases and APIs.
     This interface provides methods for connecting, disconnecting, and checking the connection status.
