@@ -1,7 +1,7 @@
-from tasks.infobox_football_biography.core.logger.abstract_logger import AbstractLogger
-from tasks.infobox_football_biography.core.logger.console_logger import ConsoleLogger
-from tasks.infobox_football_biography.core.logger.error_logger import ErrorLogger
-from tasks.infobox_football_biography.core.logger.file_logger import FileLogger
+from tasks.infobox_football_biography.src.logger.abstract_logger import AbstractLogger
+from tasks.infobox_football_biography.src.logger.console_logger import ConsoleLogger
+from tasks.infobox_football_biography.src.logger.error_logger import ErrorLogger
+from tasks.infobox_football_biography.src.logger.file_logger import FileLogger
 
 
 class FootballPlayerBot:

@@ -2,13 +2,13 @@ from abc import ABC, abstractmethod
 
 
 class AbstractLogger(ABC):
-    INFO = 1
-    DEBUG = 2
-    WARNING = 3
-    ERROR = 4
-    FATAL = 5
+    INFO: int = 1
+    DEBUG: int = 2
+    WARNING: int = 3
+    ERROR: int = 4
+    FATAL: int = 5
 
-    _level = None
+    _level: int = None
     # next element in chain or responsibility
     _nextLogger = None
 

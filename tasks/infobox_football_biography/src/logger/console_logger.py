@@ -1,6 +1,6 @@
 from abc import ABC
 
-from tasks.infobox_football_biography.core.logger.abstract_logger import AbstractLogger
+from tasks.infobox_football_biography.src.logger.abstract_logger import AbstractLogger
 
 
 class ConsoleLogger(AbstractLogger, ABC):

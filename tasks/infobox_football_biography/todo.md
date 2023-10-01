@@ -8,10 +8,10 @@
 
 ## Pipeline Pattern: Structured Data Processing
 
-- [ ] Data Extraction Stage from English Wikipedia:
-  - [ ] Identify English Wikipedia articles with Infobox football biography templates.
-  - [ ] Configure the wikitext parsing library for English.
-  - [ ] Extract data from the English Infobox template and organize it.
+- [X] Data Extraction Stage from English Wikipedia:
+  - [X] Identify English Wikipedia articles with Infobox football biography templates.
+  - [X] Configure the wikitext parsing library for English.
+  - [X] Extract data from the English Infobox template and organize it.
 
 - [ ] Translation Stage (Using Custom Array):
   - [ ] Create a custom translation array mapping English keys to Arabic keys.
