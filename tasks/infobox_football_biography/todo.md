@@ -2,9 +2,9 @@
 
 ## Observer Pattern: Monitoring and Error Handling
 
-- [ ] Implement an observer pattern to monitor the bot's progress and detect errors.
-- [ ] Set up error handling mechanisms for each stage of the bot's operation.
-- [ ] Create a logging system to record errors and progress.
+- [x] Implement an Chain of Responsibility Pattern to monitor the bot's progress and detect errors.
+- [x] Set up error handling mechanisms for each stage of the bot's operation.
+- [x] Create a logging system to record errors and progress.
 
 ## Pipeline Pattern: Structured Data Processing
 
