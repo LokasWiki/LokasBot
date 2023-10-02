@@ -123,6 +123,7 @@ class BotFactory:
 
         for item in self.data_extractor_list:
             translated_value = translation_chain.translate(item)
+            print(translated_value)
             item.translated_value = translated_value
 
         self.data_extractor_list = updated_data_extractor_list

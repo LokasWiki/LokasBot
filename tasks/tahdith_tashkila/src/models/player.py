@@ -51,7 +51,7 @@ class Player:
 
     @number.setter
     def number(self, value):
-        self._number = int(value) if type(value) is int else None
+        self._number = int(value) if type(value) is str else value
 
     @is_manager.setter
     def is_manager(self, value):
