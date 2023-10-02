@@ -1,10 +1,10 @@
 class ClassificationContext:
     def __init__(self):
         self.strategies = []
+        self.logger = None
 
     def add_strategy(self, strategy):
         self.strategies.append(strategy)
-
     def classify(self, value):
         for strategy in self.strategies:
             result = strategy.classify(value)

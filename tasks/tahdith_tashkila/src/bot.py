@@ -1,6 +1,16 @@
 import pywikibot
 
 from tasks.tahdith_tashkila.src.data_extraction.templates.football_squad import FootballSquad
+from tasks.tahdith_tashkila.src.data_translator.classification_context import ClassificationContext
+from tasks.tahdith_tashkila.src.data_translator.data_classification.has_ar_post_classification_strategy import \
+    HasArPostClassificationStrategy
+from tasks.tahdith_tashkila.src.data_translator.data_classification.not_has_ar_post_classification_strategy import \
+    NotHasArPostClassificationStrategy
+from tasks.tahdith_tashkila.src.data_translator.data_translation.has_ar_post_classification_strategy import \
+    HasArPostTranslationHandler
+from tasks.tahdith_tashkila.src.data_translator.data_translation.not_has_ar_post_classification_strategy import \
+    NotHasArPostTranslationHandler
+from tasks.tahdith_tashkila.src.data_translator.translation_chain import TranslationChain
 from tasks.tahdith_tashkila.src.logger.abstract_logger import AbstractLogger
 from tasks.tahdith_tashkila.src.logger.console_logger import ConsoleLogger
 from tasks.tahdith_tashkila.src.logger.error_logger import ErrorLogger
@@ -11,7 +21,7 @@ class BotFactory:
     BOT_STATUS_STARTED = 0
     BOT_STATUS_LOADING_PAGE = 1
     BOT_STATUS_DATA_EXTRACTED = 2
-
+    BOT_STATUS_DATA_TRANSLATED = 3
     def getChainOfLoggers(self) -> AbstractLogger:
         errorLogger = ErrorLogger(AbstractLogger.ERROR)
         fileLogger = FileLogger(AbstractLogger.DEBUG)
@@ -26,6 +36,7 @@ class BotFactory:
         self.logger.logMessage(AbstractLogger.INFO, "Bot started")
         self.load_page(page_title=page_title)
         self.data_extractor()
+        self.data_translator()
         self.logger.logMessage(AbstractLogger.INFO, "Bot finished")
 
     def __init__(self):
@@ -86,3 +97,34 @@ class BotFactory:
 
         self.data_extractor_list = extractor.list
         self.status = self.BOT_STATUS_DATA_EXTRACTED
+
+    def data_translator(self):
+        # Create classification context and add classification strategies
+
+        classification_context = ClassificationContext()
+        classification_context.add_strategy(HasArPostClassificationStrategy())
+        classification_context.add_strategy(NotHasArPostClassificationStrategy())
+
+        # Create translation chain and add translation handlers
+
+        translation_chain = TranslationChain()
+        translation_chain.add_handler(HasArPostTranslationHandler())
+        translation_chain.add_handler(NotHasArPostTranslationHandler())
+
+        updated_data_extractor_list = []
+
+        for item in self.data_extractor_list:
+            classification = classification_context.classify(item)
+            item.classification = classification
+            updated_data_extractor_list.append(item)
+
+        self.data_extractor_list = updated_data_extractor_list
+        updated_data_extractor_list = []
+
+        for item in self.data_extractor_list:
+            translated_value = translation_chain.translate(item)
+            item.translated_value = translated_value
+
+        self.data_extractor_list = updated_data_extractor_list
+        updated_data_extractor_list = []
+        self.status = self.BOT_STATUS_DATA_TRANSLATED

@@ -4,4 +4,4 @@ from tasks.tahdith_tashkila.src.data_translator.data_translation_handler import 
 class NotHasArPostTranslationHandler(DataTranslationHandler):
     def translate(self, value):
         # Translate the wiki link to Arabic (implement this logic)
-        return value
+        return "{{لاعب تشكيلة فريق كرة قدم|الرقم=2|الاسم=[[ميتش آباو]]}}"
