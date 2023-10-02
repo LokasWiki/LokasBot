@@ -5,6 +5,7 @@ import wikitextparser as wtp
 from core.utils.helpers import prepare_str
 from tasks.tahdith_tashkila.src.data_extraction.data_extractor import DataExtractor
 from tasks.tahdith_tashkila.src.logger.abstract_logger import AbstractLogger
+from tasks.tahdith_tashkila.src.models.player import Player
 
 
 class FootballSquad(DataExtractor, ABC):
@@ -52,10 +53,28 @@ class FootballSquad(DataExtractor, ABC):
                 if have_list_argument:
                     for sub_template in parsed.templates:
                         if prepare_str(sub_template.name) == prepare_str("football squad2 player"):
-                            self.list.append(sub_template.arguments)
+                            temp_dic = {}
+                            for temp_arg in sub_template.arguments:
+                                temp_dic[temp_arg.name] = temp_arg.value
+                            print("==========")
+                            print(temp_dic["no"])
+                            player = Player()
+                            player.title = None
+                            player.name = temp_dic["name"] if 'name' in temp_dic else None
+                            player.number = temp_dic["no"] if 'no' in temp_dic else None
+                            player.is_manager = False
+                            self.list.append(player)
 
                         if prepare_str(sub_template.name) == prepare_str("football squad manager"):
-                            self.list.append(sub_template.arguments)
+                            temp_dic = {}
+                            for temp_arg in sub_template.arguments:
+                                temp_dic[temp_arg.name] = temp_arg.value
+                            player = Player()
+                            player.title = temp_dic['title'] if 'title' in temp_dic else None
+                            player.name = temp_dic["name"] if 'name' in temp_dic else None
+                            player.number = None
+                            player.is_manager = True
+                            self.list.append(player)
 
                 # if not have_list_argument:
                 #     for param in template.arguments:

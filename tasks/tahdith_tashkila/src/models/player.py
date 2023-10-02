@@ -13,7 +13,7 @@ class Player:
         return self._number
 
     @property
-    def is_manger(self) -> bool:
+    def is_manager(self) -> bool:
         return self._is_manager
 
     @property
@@ -34,9 +34,9 @@ class Player:
 
     @number.setter
     def number(self, value):
-        self._number = int(value)
+        self._number = int(value) if type(value) is int else None
 
-    @is_manger.setter
+    @is_manager.setter
     def is_manager(self, value):
         self._is_manager = bool(value)
 
