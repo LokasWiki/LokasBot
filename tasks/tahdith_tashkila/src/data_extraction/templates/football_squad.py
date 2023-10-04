@@ -56,8 +56,7 @@ class FootballSquad(DataExtractor, ABC):
                             temp_dic = {}
                             for temp_arg in sub_template.arguments:
                                 temp_dic[temp_arg.name] = temp_arg.value
-                            print("==========")
-                            print(temp_dic["no"])
+
                             player = Player()
                             player.title = None
                             player.name = temp_dic["name"] if 'name' in temp_dic else None

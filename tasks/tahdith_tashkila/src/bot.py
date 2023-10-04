@@ -15,6 +15,8 @@ from tasks.tahdith_tashkila.src.logger.abstract_logger import AbstractLogger
 from tasks.tahdith_tashkila.src.logger.console_logger import ConsoleLogger
 from tasks.tahdith_tashkila.src.logger.error_logger import ErrorLogger
 from tasks.tahdith_tashkila.src.logger.file_logger import FileLogger
+from tasks.tahdith_tashkila.src.template_integration.templates.football_squad import \
+    FootballSquad as FootballSquadIntegration
 
 
 class BotFactory:
@@ -37,6 +39,8 @@ class BotFactory:
         self.load_page(page_title=page_title)
         self.data_extractor()
         self.data_translator()
+        self.template_integrator()
+        self.save()
         self.logger.logMessage(AbstractLogger.INFO, "Bot finished")
 
     def __init__(self):
@@ -79,7 +83,7 @@ class BotFactory:
 
         self.en_text = self.en_page.text
 
-        self.ar_text = self.ar_text
+        self.ar_text = self.ar_page.text
 
         self.logger.logMessage(AbstractLogger.INFO, "end fill page")
 
@@ -123,9 +127,27 @@ class BotFactory:
 
         for item in self.data_extractor_list:
             translated_value = translation_chain.translate(item)
-            print(translated_value)
             item.translated_value = translated_value
+            updated_data_extractor_list.append(item)
 
         self.data_extractor_list = updated_data_extractor_list
         updated_data_extractor_list = []
         self.status = self.BOT_STATUS_DATA_TRANSLATED
+
+    def template_integrator(self):
+        temp_text = self.ar_text
+        template_integrator = FootballSquadIntegration(
+            text_page=temp_text,
+            logger=self.logger
+        )
+        template_integrator.new_data = self.data_extractor_list
+        temp_text = template_integrator.parse()
+        self.ar_text = temp_text
+
+    def save(self):
+        temp_title_page = str(self.ar_page.title()).replace("قالب:", "مستخدم:LokasBot/تحديث تشكيلة/")
+        self.temp_page = pywikibot.Page(self.ar_site, temp_title_page)
+        self.temp_page.text = self.ar_text
+        self.temp_page.save(
+            "بوت:تحديث تشكيلة v0.0.1-beta"
+        )
