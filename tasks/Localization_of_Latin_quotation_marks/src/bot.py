@@ -51,4 +51,4 @@ class BotFactory:
 
     def save(self):
         self.page.text = self.page_text
-        self.page.save("بوت:تعريب علامات التنصيص اللاتينية")
+        self.page.save("بوت:تعريب علامات التنصيص اللاتينية v0.0.1-beta")
