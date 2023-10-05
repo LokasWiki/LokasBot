@@ -4,7 +4,9 @@
 
 انظر أيضا: [[ويكيبيديا:إحصاءات/المستخدمين حسب عدد إنشاء الصفحات (متضمنة البوتات)|هذه الإحصاءات متضمنة البوتات]]
 
+<onlyinclude>
 '''حَدَّث BOT_USER_NAME هذه القائمة في : BOT_TIME_NOW (ت ع م) '''
+</onlyinclude>
 </div>
 <center>
 <div style="background: #E5E4E2; padding: 0.5em; -moz-border-radius: 0.3em; border-radius: 0.3em;">

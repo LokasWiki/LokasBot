@@ -2,7 +2,9 @@
 <center>
 عناوين IP المحظورة لمدة طويلة بشكل غير عادي (أكثر من شهر) وهذة العناوين لا تحتوي أسباب حظرها على 'proxy' أو 'webhost' أو 'بروكسيات مفتوحة'؛
 
+<onlyinclude>
 '''حَدَّث BOT_USER_NAME هذه القائمة في : BOT_TIME_NOW (ت ع م) '''
+</onlyinclude>
 </center>
 </div>
 <center>

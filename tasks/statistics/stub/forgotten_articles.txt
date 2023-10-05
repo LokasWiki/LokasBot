@@ -2,7 +2,9 @@
 <center>
 تعرض هذه الصفحة قائمة تضم 1000 مقال لم يجري أي تعديل فيها خلال السنتين الماضيتين.
 
+<onlyinclude>
 '''حَدَّث BOT_USER_NAME هذه القائمة في : BOT_TIME_NOW (ت ع م) '''
+</onlyinclude>
 </center>
 </div>
 <center>
