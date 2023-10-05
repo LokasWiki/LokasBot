@@ -4,7 +4,9 @@
 
 كود الاستعلام موجود [https://github.com/LokasWiki/LokasBot/blob/main/tasks/statistics/categories_not_found_by_number_of_language_links.py هنا].
 
+<onlyinclude>
 '''حَدَّث BOT_USER_NAME هذه القائمة في : BOT_TIME_NOW (ت ع م) '''
+</onlyinclude>
 </center>
 </div>
 <center>

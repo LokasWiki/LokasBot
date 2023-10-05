@@ -4,7 +4,9 @@
 
 {{ويكيبيديا:تقارير قاعدة البيانات/المقالات غير الموجودة حسب عدد وصلات اللغات/لغات}}
 
+<onlyinclude>
 '''حَدَّث BOT_USER_NAME هذه القائمة في : BOT_TIME_NOW (ت ع م) '''
+</onlyinclude>
 
 BOT_TABLE_BODY
 </center>

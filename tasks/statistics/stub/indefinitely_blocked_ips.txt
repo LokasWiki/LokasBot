@@ -2,7 +2,9 @@
 <center>
 عناوين IP المحظورة إلى أجل غير مسمى والتي لا تحتوي أسباب حظرها على '(proxies|proxy|checkuser)'
 
+<onlyinclude>
 '''حَدَّث BOT_USER_NAME هذه القائمة في : BOT_TIME_NOW (ت ع م) '''
+</onlyinclude>
 </center>
 </div>
 <center>

@@ -4,7 +4,9 @@
 
 انظر أيضا: [[ويكيبيديا:قائمة الويكيبيديين حسب عدد التعديلات (متضمنة البوتات)|قائمة الويكيبيديين حسب عدد التعديلات (متضمنة البوتات)]]
 
+<onlyinclude>
 '''حَدَّث BOT_USER_NAME هذه القائمة في : BOT_TIME_NOW (ت ع م) '''
+</onlyinclude>
 </div>
 <center>
 <div style="background: #E5E4E2; padding: 0.5em; -moz-border-radius: 0.3em; border-radius: 0.3em;">

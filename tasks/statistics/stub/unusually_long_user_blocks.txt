@@ -1,7 +1,9 @@
 <div style="background: #E5E4E2; padding: 0.5em; font-family: Traditional Arabic; font-size: 130%; -moz-border-radius: 0.3em; border-radius: 0.3em;">
 <center>
 مستخدمين محظورين لمدة طويلة بشكل غير عادي (أكثر من شهر)
+<onlyinclude>
 '''حَدَّث BOT_USER_NAME هذه القائمة في : BOT_TIME_NOW (ت ع م) '''
+</onlyinclude>
 </center>
 </div>
 <center>
