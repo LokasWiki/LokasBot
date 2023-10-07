@@ -18,7 +18,7 @@ and page.page_namespace = 0 and  lt_namespace = 10
 GROUP BY q_iwl_title
 order by count_of_cites desc;"""
 file_path = 'stub/cite_q.txt'
-page_name = "ويكيبيديا:مصادر موثوقة/معاجم وقواميس وأطالس/إحصائيات"
+page_name = "ويكيبيديا:مصادر موثوق بها/معاجم وقواميس وأطالس/إحصائيات"
 # page_name = "مستخدم:لوقا/ملعب 25"
 
 
