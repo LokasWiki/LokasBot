@@ -9,7 +9,7 @@ from tasks.statistics.module import UpdatePage, ArticleTables, index
 """
 w:ar:User:Elph, 2023, https://quarry.wmcloud.org/query/6317
 """
-query = """SELECT  cl_to, COUNT(cl_from) as editcount
+query = """SELECT cl_to, COUNT(cl_from) as editcount
   FROM categorylinks
   WHERE cl_from IN (
           SELECT DISTINCT ll_from
@@ -57,7 +57,7 @@ query = """SELECT  cl_to, COUNT(cl_from) as editcount
   ORDER BY COUNT(cl_from) DESC
   LIMIT 500;"""
 file_path = 'stub/categories_not_found_by_number_of_language_links.txt'
-page_name = f'ويكيبيديا:تقارير قاعدة البيانات/التصانيف غير الموجودة'
+page_name = 'ويكيبيديا:تقارير قاعدة البيانات/التصانيف غير الموجودة'
 
 # Get the current time and day of the week
 current_time = time.localtime()
