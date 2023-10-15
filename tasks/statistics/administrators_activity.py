@@ -1,46 +1,46 @@
 from tasks.statistics.module import UpdatePage, ArticleTables, index
-
+'''
+w:ar:User:Mr. Ibrahem, 2023, https://quarry.wmcloud.org/query/77309
+'''
 # Set the parameters for the update
-query = """SELECT user_name,
-
-           (select count(*) from logging
-                    inner join actor on actor_id = log_actor
-                    where actor_user = user_id and log_type = "delete"  and log_action not in ("delete_redir","restore") ) as "delete_count",
-           (select count(*) from logging
-                    inner join actor on actor_id = log_actor
-                    where actor_user = user_id and log_type = "delete" and log_action = "restore" ) as "restore_count",
-
-           (select count(*) from logging
-                    inner join actor on actor_id = log_actor
-                    where actor_user = user_id and log_type = "delete" and log_action = "revision" ) as "revision_count",
-           (select count(*) from logging
-                    inner join actor on actor_id = log_actor
-                    where actor_user = user_id and log_type = "delete" and log_action = "event"  ) as "event_count",
-           (select count(*) from logging
-                    inner join actor on actor_id = log_actor
-                    where actor_user = user_id and log_type = "protect" and log_action in("modify","protect")) as "protect_count",
-       (select count(*) from logging
-                                 inner join actor on actor_id = log_actor
-        where actor_user = user_id and log_type = "protect" and log_action = "unprotect") as "unprotect_count",
-       (select count(*) from logging
-                                 inner join actor on actor_id = log_actor
-        where actor_user = user_id and log_type = "protect" and log_action = "modify") as "modify_count",
-       (select count(*) from logging
-                                 inner join actor on actor_id = log_actor
-        where actor_user = user_id and log_type = "block" ) as "block_count",
-       (select count(*) from logging
-                                 inner join actor on actor_id = log_actor
-        where actor_user = user_id and log_type = "block" and log_action = "unblock") as "unblock_count",
-       (select count(*) from logging
-                                 inner join actor on actor_id = log_actor
-        where actor_user = user_id and log_type = "block" and log_action = "reblock") as "reblock_count",
-       (select count(*) from logging
-                                 inner join actor on actor_id = log_actor
-        where actor_user = user_id and log_type = "rights" ) as "rights_count"
-FROM user
-         JOIN user_groups ON user_id = ug_user
-WHERE ug_group = "sysop" and user_name not in ("مرشح الإساءة")
-ORDER BY user_name ASC , delete_count DESC, restore_count DESC, revision_count DESC, event_count DESC, protect_count DESC, unprotect_count DESC, modify_count DESC, block_count DESC, unblock_count DESC, reblock_count DESC, rights_count DESC;"""
+query = """
+SELECT
+    user_name,
+    SUM(CASE WHEN log_type = "delete" AND log_action NOT IN ("delete_redir", "restore") THEN 1 ELSE 0 END) AS delete_count,
+    SUM(CASE WHEN log_type = "delete" AND log_action = "restore" THEN 1 ELSE 0 END) AS restore_count,
+    SUM(CASE WHEN log_type = "delete" AND log_action = "revision" THEN 1 ELSE 0 END) AS revision_count,
+    SUM(CASE WHEN log_type = "delete" AND log_action = "event" THEN 1 ELSE 0 END) AS event_count,
+    SUM(CASE WHEN log_type = "protect" AND log_action IN ("modify", "protect") THEN 1 ELSE 0 END) AS protect_count,
+    SUM(CASE WHEN log_type = "protect" AND log_action = "unprotect" THEN 1 ELSE 0 END) AS unprotect_count,
+    SUM(CASE WHEN log_type = "protect" AND log_action = "modify" THEN 1 ELSE 0 END) AS modify_count,
+    SUM(CASE WHEN log_type = "block" THEN 1 ELSE 0 END) AS block_count,
+    SUM(CASE WHEN log_type = "block" AND log_action = "unblock" THEN 1 ELSE 0 END) AS unblock_count,
+    SUM(CASE WHEN log_type = "block" AND log_action = "reblock" THEN 1 ELSE 0 END) AS reblock_count,
+    SUM(CASE WHEN log_type = "rights" THEN 1 ELSE 0 END) AS rights_count
+FROM
+    logging, user, actor, user_groups
+    where actor_id = log_actor 
+    and user_id = ug_user
+    AND actor_user = user_id
+	AND ug_group = "sysop"
+	AND user_name NOT IN ("مرشح الإساءة")
+GROUP BY
+    user_name
+ORDER BY
+    user_name ASC,
+    delete_count DESC,
+    restore_count DESC,
+    revision_count DESC,
+    event_count DESC,
+    protect_count DESC,
+    unprotect_count DESC,
+    modify_count DESC,
+    block_count DESC,
+    unblock_count DESC,
+    reblock_count DESC,
+    rights_count DESC
+    ;
+"""
 
 file_path = 'stub/administrators_activity.txt'
 page_name = "ويكيبيديا:تقارير قاعدة البيانات/نشاط الإداريين"
