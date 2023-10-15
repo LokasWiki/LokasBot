@@ -1,85 +1,32 @@
 from tasks.statistics.module import UpdatePage, ArticleTables, index
 
+# https://quarry.wmcloud.org/query/77311#
 # Set the parameters for the update
-query = """SELECT u.user_name as user_name,
-       (
-           SELECT MIN(rev_timestamp)
-           FROM revision
-           WHERE rev_actor = a.actor_id
-       ) AS first_edit_date,
-       (
-           SELECT COUNT(*)
-           FROM revision
-                    INNER JOIN actor ON rev_actor = actor.actor_id
-                    INNER JOIN page  on rev_page = page.page_id
-           WHERE page_namespace = 0
-             AND page_is_redirect = 0
-             AND rev_parent_id = 0
-             AND rev_actor = a.actor_id
-       ) AS pages_created,
-       (
-            select COUNT(*)
-            FROM revision
-                     INNER JOIN actor ON rev_actor = actor.actor_id
-                     INNER JOIN page p on rev_page = page_id
-            WHERE page_namespace = 10
-              and page_is_redirect = 0
-              and rev_parent_id = 0
-              AND rev_actor = a.actor_id
-       ) AS template_created,
-       (
-            select COUNT(*)
-            FROM revision
-                     INNER JOIN actor ON rev_actor = actor.actor_id
-                     INNER JOIN page p on rev_page = page_id
-            WHERE page_namespace = 12
-              and page_is_redirect = 0
-              and rev_parent_id = 0
-              AND rev_actor = a.actor_id
-       ) AS help_created,
-       (
-            select COUNT(*)
-            FROM revision
-                     INNER JOIN actor ON rev_actor = actor.actor_id
-                     INNER JOIN page p on rev_page = page_id
-            WHERE page_namespace = 14
-              and page_is_redirect = 0
-              and rev_parent_id = 0
-              AND rev_actor = a.actor_id
-       ) AS category_created,
-       (
-            select COUNT(*)
-            FROM revision
-                     INNER JOIN actor ON rev_actor = actor.actor_id
-                     INNER JOIN page p on rev_page = page_id
-            WHERE page_namespace = 100
-              and page_is_redirect = 0
-              and rev_parent_id = 0
-              and page_title not like "%/%"
-              AND rev_actor = a.actor_id
-       ) AS portals_created,
-       (
-            select COUNT(*)
-            FROM revision
-                     INNER JOIN actor ON rev_actor = actor.actor_id
-                     INNER JOIN page p on rev_page = page_id
-            WHERE page_namespace=0
-              and page_is_redirect=1
-              and rev_parent_id=0
-              AND rev_actor = a.actor_id
-       ) AS redirect_created
+query = """
+SELECT distinct
+    u.user_name AS user_name,
+    MIN(rev.rev_timestamp) AS first_edit_date,
+    SUM(CASE WHEN p.page_namespace = 0 AND p.page_is_redirect = 0 THEN 1 ELSE 0 END) AS pages_created,
+    SUM(CASE WHEN p.page_namespace = 10 AND p.page_is_redirect = 0 THEN 1 ELSE 0 END) AS template_created,
+    SUM(CASE WHEN p.page_namespace = 12 AND p.page_is_redirect = 0 THEN 1 ELSE 0 END) AS help_created,
+    SUM(CASE WHEN p.page_namespace = 14 AND p.page_is_redirect = 0 THEN 1 ELSE 0 END) AS category_created,
+    SUM(CASE WHEN p.page_namespace = 100 AND p.page_is_redirect = 0 AND p.page_title NOT LIKE '%/%' THEN 1 ELSE 0 END) AS portals_created,
+    SUM(CASE WHEN p.page_namespace = 0 AND p.page_is_redirect = 1 THEN 1 ELSE 0 END) AS redirect_created
 FROM user u
-         JOIN actor a ON a.actor_user = u.user_id
-    AND ucase(actor_name) NOT LIKE ucase("%BOT") COLLATE utf8mb4_general_ci
-    AND actor_name NOT LIKE "%بوت%" COLLATE utf8mb4_general_ci
-    AND actor_name NOT IN (SELECT user_name
-                           FROM user_groups
-                                    INNER JOIN user ON user_id = ug_user
-                           WHERE ug_group = "bot")
-    AND actor_id NOT IN ("2579643")
-    and actor_user not in (137877)
+JOIN actor a ON a.actor_user = u.user_id
+JOIN revision rev ON rev.rev_actor = a.actor_id
+JOIN page p ON rev.rev_page = p.page_id
+WHERE
+    ucase(a.actor_name) NOT LIKE ucase('%BOT') COLLATE utf8mb4_general_ci
+    AND a.actor_name NOT LIKE '%بوت%' COLLATE utf8mb4_general_ci
+    AND a.actor_name NOT IN (SELECT u2.user_name FROM user_groups ug JOIN user u2 ON ug.ug_user = u2.user_id WHERE ug.ug_group = 'bot')
+    AND a.actor_id NOT IN ('2579643')
+    AND rev.rev_parent_id = 0
+    AND a.actor_user NOT IN (137877)
+GROUP BY u.user_name
 ORDER BY pages_created DESC
-LIMIT 500;"""
+LIMIT 500;
+"""
 file_path = 'stub/users_by_the_number_of_pages_created.txt'
 page_name = "ويكيبيديا:تقارير قاعدة البيانات/المستخدمين حسب عدد إنشاء الصفحات"
 
