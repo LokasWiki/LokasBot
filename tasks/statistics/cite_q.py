@@ -68,7 +68,7 @@ def header_page(result):
 
     # number of ref in page
     site = pywikibot.Site()
-    page = pywikibot.Page(site, "ويكيبيديا:مصادر_موثوقة/معاجم_وقواميس_وأطالس")
+    page = pywikibot.Page(site, "ويكيبيديا:مصادر موثوق بها/معاجم وقواميس وأطالس")
     html_page = page.get_parsed_page()
     count_of_ref = html_page.count("↑")
 
