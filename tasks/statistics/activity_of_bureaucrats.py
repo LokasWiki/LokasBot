@@ -2,6 +2,7 @@ import pywikibot
 
 from tasks.statistics.module import UpdatePage, ArticleTables, index, Database
 
+# https://quarry.wmcloud.org/query/77307
 # Set the parameters for the update
 query = """ SELECT 
 	user_name,
