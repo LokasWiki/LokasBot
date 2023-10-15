@@ -1,18 +1,28 @@
 from tasks.statistics.module import UpdatePage, ArticleTables, index
-
+# https://quarry.wmcloud.org/query/77305
 # Set the parameters for the update
-query = """select page.page_title as ll_page_title,pagelinks.pl_title as ll_page_to_title,pagelinks.pl_namespace as ll_pl_namespace
-from page
-         inner join pagelinks
-                    on pagelinks.pl_from = page.page_id
-where pagelinks.pl_from_namespace = 0
-  and (pagelinks.pl_namespace = 2 or pagelinks.pl_namespace = 3)
-  and page.page_namespace = 0
-  and page.page_is_redirect = 0
-  and page.page_id not in (select templatelinks.tl_from  from templatelinks
-                                                             join linktarget on linktarget.lt_id = templatelinks.tl_target_id
-                      where linktarget.lt_title in (select pl_title from pagelinks where  pl_from = 9043549) and templatelinks.tl_from_namespace = 0  )
-  and page.page_title not in (select pl_title from pagelinks where  pl_from = 9043549);"""
+query = """select p.page_title as ll_page_title, pl.pl_title as ll_page_to_title, pl.pl_namespace as ll_pl_namespace
+from page p
+inner join pagelinks pl on pl.pl_from = p.page_id
+where pl.pl_from_namespace = 0
+and pl.pl_namespace in (2, 3)
+and p.page_namespace = 0
+and p.page_is_redirect = 0
+and not exists (
+    select 1
+    from templatelinks tl
+    join linktarget lt on lt.lt_id = tl.tl_target_id
+    where lt.lt_title in (select pl_title from pagelinks where pl_from = 9043549)
+    and tl.tl_from = p.page_id
+    and tl.tl_from_namespace = 0
+)
+and not exists (
+    select 1
+    from pagelinks pl2
+    where pl2.pl_title = p.page_title
+    and pl2.pl_from = 9043549
+);
+"""
 file_path = 'stub/articles_in_which_there_is_a_link_to_user_pages.txt'
 page_name = "ويكيبيديا:تقارير قاعدة البيانات/مقالات يوجد فيها وصلة إلى صفحات المستخدمين"
 
