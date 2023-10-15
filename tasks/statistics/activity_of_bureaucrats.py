@@ -3,65 +3,28 @@ import pywikibot
 from tasks.statistics.module import UpdatePage, ArticleTables, index, Database
 
 # Set the parameters for the update
-query = """select user_name,
-				  (select count(*) from logging
-                    inner join actor on actor_id = log_actor
-                    where actor_user = user_id and log_type = "rights" and
-                    log_params like '%5::newgroups%"bot"%'
-                    and log_params not like '%::oldgroups"%"sysop"%5::newgroups%'
-                    and log_params not like '%::oldgroups"%"bot"%5::newgroups%') as "+بوت",
-
-                  (select count(*) from logging
-                   inner join actor on actor_id = log_actor
-                   where actor_user = user_id and log_type = "rights" and
-                  log_params like '%5::newgroups%"sysop"%'
-                  and log_params not like '%::oldgroups"%"sysop"%5::newgroups%') as "+إداري",
-
-                  (select count(*) from logging
-                   inner join actor on actor_id = log_actor
-                   where actor_user = user_id and log_type = "rights"  and
-                  log_params like '%5::newgroups%"bureaucrat"%'
-                  and log_params not like '%::oldgroups"%"bureaucrat"%5::newgroups%') as "+بيروقراط",
-
-                  (select count(*) from logging
-                   inner join actor on actor_id = log_actor
-                   where actor_user = user_id and log_type = "rights"  and
-                  log_params like '%5::newgroups%"accountcreator"%'
-                  and log_params not like '%::oldgroups"%"accountcreator"%5::newgroups%') as "+منشئ حسابات",
-
-                  (select count(*) from logging
-                   inner join actor on actor_id = log_actor
-                   where actor_user = user_id and log_type = "rights"  and
-                  log_params like '%5::newgroups%"import"%'
-                  and log_params not like '%::oldgroups"%"import"%5::newgroups%') as "+مستورد",
-
-                  (select count(*) from logging
-                   inner join actor on actor_id = log_actor
-                   where actor_user = user_id and log_type = "rights"  and
-                  log_params like '%::oldgroups"%"import"%5::newgroups%'
-                  and log_params not like '%5::newgroups%"import"%' ) as "-مستورد",
-
-                  (select count(*) from logging
-                   inner join actor on actor_id = log_actor
-                   where actor_user = user_id and log_type = "rights"  and
-                  log_params like '%::oldgroups"%"accountcreator"%5::newgroups%'
-                  and log_params not like '%5::newgroups%"accountcreator"%') as "-منشئ حسابات",
-
-                  (select count(*) from logging
-                   inner join actor on actor_id = log_actor
-                   where actor_user = user_id and log_type = "rights"  and
-                  log_params like '%::oldgroups"%"bot"%5::newgroups%'
-                  and log_params not like '%::oldgroups"%"sysop"%5::newgroups%'
-                  and log_params not like '%5::newgroups%"bot"%') as "-بوت",
-
-                  (select count(*) from revision
-                   inner join actor on actor_id = rev_actor
-                   where actor_user = user_id and rev_page = 213729 and
-                  rev_minor_edit = 0) as "وب:طصب"
-from user
-inner join user_groups
-on ug_user = user_id
-where ug_group = "bureaucrat";"""
+query = """ SELECT 
+	user_name,
+	SUM(CASE WHEN log_type = "rights" AND log_params LIKE '%5::newgroups%"bot"%' AND log_params NOT LIKE '%::oldgroups"%"sysop"%5::newgroups%' AND log_params NOT LIKE '%::oldgroups"%"bot"%5::newgroups%' THEN 1 ELSE 0 END) AS "+بوت",
+	SUM(CASE WHEN log_type = "rights" AND log_params LIKE '%5::newgroups%"sysop"%' AND log_params NOT LIKE '%::oldgroups"%"sysop"%5::newgroups%' THEN 1 ELSE 0 END) AS "+إداري",
+	SUM(CASE WHEN log_type = "rights" AND log_params LIKE '%5::newgroups%"bureaucrat"%' AND log_params NOT LIKE '%::oldgroups"%"bureaucrat"%5::newgroups%' THEN 1 ELSE 0 END) AS "+بيروقراط",
+	SUM(CASE WHEN log_type = "rights" AND log_params LIKE '%5::newgroups%"accountcreator"%' AND log_params NOT LIKE '%::oldgroups"%"accountcreator"%5::newgroups%' THEN 1 ELSE 0 END) AS "+منشئ حسابات",
+	SUM(CASE WHEN log_type = "rights" AND log_params LIKE '%5::newgroups%"import"%' AND log_params NOT LIKE '%::oldgroups"%"import"%5::newgroups%' THEN 1 ELSE 0 END) AS "+مستورد",
+	SUM(CASE WHEN log_type = "rights" AND log_params LIKE '%::oldgroups"%"import"%5::newgroups%' AND log_params NOT LIKE '%5::newgroups%"import"%' THEN 1 ELSE 0 END) AS "-مستورد",
+	SUM(CASE WHEN log_type = "rights" AND log_params LIKE '%::oldgroups"%"accountcreator"%5::newgroups%' AND log_params NOT LIKE '%5::newgroups%"accountcreator"%' THEN 1 ELSE 0 END) AS "-منشئ حسابات",
+	SUM(CASE WHEN log_type = "rights" AND log_params LIKE '%::oldgroups"%"bot"%5::newgroups%' AND log_params NOT LIKE '%::oldgroups"%"sysop"%5::newgroups%' AND log_params NOT LIKE '%5::newgroups%"bot"%' THEN 1 ELSE 0 END) AS "-بوت",
+	
+	(SELECT COUNT(*) FROM revision
+    INNER JOIN actor ON actor_id = rev_actor
+    WHERE actor_user = user_id AND rev_page = 213729 AND rev_minor_edit = 0) AS "وب:طصب"
+FROM
+    logging, user, actor, user_groups
+    where actor_id = log_actor 
+    and user_id = ug_user
+    AND actor_user = user_id
+	AND ug_group = "bureaucrat"
+GROUP BY user_name;
+"""
 file_path = 'stub/activity_of_bureaucrats.txt'
 page_name = "ويكيبيديا:تقارير قاعدة البيانات/نشاط البيروقراطيين"
 
