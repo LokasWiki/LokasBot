@@ -1,0 +1,101 @@
+## خطوات تنفيذ مهمه جلب الفصحات التي تتواجد في النسخه العربيه ولها مقابل في النسخه الانجليزيه وتم خذقه هنا
+
+هدف من هذه المهمه حذف هذه الصفحات او مراجعتها لانها غالبا تكون عبارة عن صفحات لا تحتوي علي الملحوظيه الازمه او انها من
+انشاء مخرب او دميه جواب
+
+## الاستعلام
+
+في البدايه تقوم بتغشيل استعلام يجب الصفحات التي تم حذفها من ويكي الانجليزيه ولها مقابل في العربيه عبر ويكي بيانات
+
+```
+SELECT
+comment.comment_text AS "deleted_page",
+revision_userindex.rev_timestamp AS "date_of_delete",
+wb_items_per_site.ips_site_page AS "name_of_page"
+FROM
+(SELECT page_id, page_title FROM page WHERE page_namespace = 0) AS page
+JOIN revision_userindex ON page.page_id = revision_userindex.rev_page
+JOIN comment ON comment.comment_id = revision_userindex.rev_comment_id
+JOIN wb_items_per_site ON wb_items_per_site.ips_item_id = REPLACE(page.page_title, "Q", "")
+WHERE
+comment.comment_text LIKE "%clientsitelink-remove%"
+AND comment.comment_text LIKE "%enwiki%"
+#AND rev_timestamp > (NOW() - INTERVAL 1 MONTH)
+AND year(rev_timestamp) in (2023)
+AND wb_items_per_site.ips_site_id = "arwiki"
+AND comment.comment_text LIKE "%Template%"
+#AND comment.comment_text NOT LIKE "%Template%"
+AND comment.comment_text NOT LIKE "%Category%"
+```
+
+هذا هو الاستعلام الاساسي وتم تعديله حتي تجلب نوع معين حسب المطلوب مثل ان تجلب المقالات والتصنيفات فقط او المقالات
+والتصنيفات والقوالب الخ...
+
+```
+AND comment.comment_text LIKE "%Template%"
+#AND comment.comment_text NOT LIKE "%Template%"
+AND comment.comment_text NOT LIKE "%Category%"
+```
+
+ملاحظه: الافضل ان تبدا بالمقالات ثم تقوم بتشغيل استعلام اخر حتي تجلب التصفيات والقوالب بالاعتماد علي تغير الشروح الثلاثه
+التي في الاعلي
+
+# تجهيز البيانات وحفظها في قاعده بيانات من نوع sql
+
+بعد ان تقوم بتشغيل الاستعلام تقوم بحفظ البيانات علي جهازك الشخصي في شكل .csv حتي يتم التعامل معها في الخطوات التاليه
+وهذا شكل البيانات المفترض ان تحصل عليها من الاستعلام الذي في الاعلي
+
+```
+deleted_page,date_of_delete,name_of_page
+/* clientsitelink-remove:1||enwiki */ Template:Mobile view problem,20231004042649,قالب:Mobile view problem
+/* clientsitelink-remove:1||enwiki */ Template:Men's Olympic water polo tournament statistics – best performances of confederations (by tournament),20230215000053,قالب:إحصائيات بطولة كرة الماء الأولمبية للرجال - أفضل أداء للاتحادات القارية
+/* clientsitelink-remove:1||enwiki */ Template:Men's Olympic water polo tournament statistics – participating teams,20230215000053,قالب:احصائيات منافسة كرة الماء الأولمبية رجال - الفرق المشاركة
+/* clientsitelink-remove:1||enwiki */ Template:Men's Olympic water polo tournament statistics – finishes in top four,20230215000053,قالب:إحصائيات بطولة كرة الماء الأولمبية للرجال - المراكز الأربعة الأولى
+/* clientsitelink-remove:1||enwiki */ Template:Men's Olympic water polo tournament statistics – medal table,20230215000053,قالب:إحصائيات بطولة كرة الماء الأولمبية للرجال - جدول الميداليات
+```
+
+الان نحتاج اضافه بعض البيانات الاخري مثل
+
+### id
+
+وهو معرف مميز يستخدم في عمليه البحث والتحليل يبدا من واحد ثم يزاد بعد ذلك
+
+### en_page
+
+اسم الصفحة في النسخه الاجنبيه مع النطاق
+
+### date
+
+تاريخ الحذف
+
+### ar_page
+
+اسم الصفحة في النسخه العربيه
+
+### namespace
+
+النطاق فقط
+
+### exites_in_en
+
+هل تم اعاده اضافه المقال مرة اخري الي النسخه الانجليزيه بعد الحذف
+
+### comment
+
+سبب الحذف في النسخ الانجليزيه
+
+### year
+
+سنه الحذف
+
+### en_page_without_namespace
+
+اسم الصفحه في النسخه الانجليزيه بدون النطاق
+
+### en_first_latter
+
+اول حرف من اسم الصفحة في النسخه الانجليزيه
+
+### ar_first_latter
+
+اول حرف من اسم الصفحة في النسخه العربيه
