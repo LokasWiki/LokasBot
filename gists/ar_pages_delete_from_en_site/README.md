@@ -80,7 +80,7 @@ deleted_page,date_of_delete,name_of_page
 
 ## get_logs.py
 
-ثم هذا الملف حتي يجلب سبب الخطا
+ثم هذا الملف حتي يجلب سبب الحذف
 
 ## save_page.py
 
