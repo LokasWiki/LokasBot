@@ -49,6 +49,7 @@ myArrayFiles=( "$HOME"/repos/tasks/statistics/activity_of_bureaucrats.py \
   "$HOME"/repos/tasks/statistics/list_of_wikipedians_by_number_of_files_uploaded.py \
   "$HOME"/repos/tasks/statistics/unusually_long_ip_blocks.py \
   "$HOME"/repos/tasks/statistics/unusually_long_user_blocks.py \
+  "$HOME"/repos/tasks/statistics/wikidata/current_events_recent_obituaries.py \
 
 )
 

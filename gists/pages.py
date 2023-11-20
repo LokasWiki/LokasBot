@@ -119,8 +119,12 @@ for item in list_of_namespace:
     db.query = """select page_title
     from page
     where page_namespace in ({}) and
-    
-    page_title like "%فلكلور%"
+    page_title like "%حقوق%"  and 
+    (
+        page_title like "%مجتمع_الميم%"
+        or page_title like "%مجتمع_ميم%"
+        or page_title like "%إل_جي_بي_تي%"
+    )
       
     and page_is_redirect = 0
     order by page_id;""".format(item['namespace'])
@@ -143,7 +147,9 @@ for item in list_of_namespace:
     for row in db.result:
         o_title = str(row['page_title'], 'utf-8')
         list_of_replacement = [
-            ["فلكلور", "تراث شعبي"],
+            ["مجتمع_الميم", "معاملة_المثليين"],
+            ["مجتمع_ميم", "معاملة_المثليين"],
+            ["إل_جي_بي_تي", "معاملة_المثليين"],
             # ["بيروفية", "بيروية"],
             # ["كونغولي", "كونغوي"],
             # ["كونغولية", "كونغوية"],
@@ -177,6 +183,6 @@ for item in list_of_namespace:
 
 site = pywikibot.Site()
 # print(main_text)
-page = pywikibot.Page(site, "مستخدم:لوقا/ملعب 42")
+page = pywikibot.Page(site, "مستخدم:لوقا/ملعب 52")
 page.text = main_text
 page.save("انشاء")
