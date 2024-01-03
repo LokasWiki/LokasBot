@@ -289,6 +289,9 @@ class SubPage(Base):
             team=input_dict['team'],
             members=self.database.result
         )
+        self.week_number = str(self.week)
+        if self.week < 10:
+            self.week_number = '0' + self.week_number
 
     def save_page(self):
         """
@@ -298,8 +301,8 @@ class SubPage(Base):
         table = self.table_generator.generate_table()
         # Set the site you want to use
         site = pywikibot.Site()
-        title = str(self.input_dict['title_of_page']).replace("WEEK_NUMBER", str(self.week)).replace("YEAR_NUMBER",
-                                                                                                     str(self.year)).replace(
+        title = str(self.input_dict['title_of_page']).replace("WEEK_NUMBER", self.week_number).replace("YEAR_NUMBER",
+                                                                                                       str(self.year)).replace(
             "DOMAIN_NAME", str(self.domain_name))
         # Set the page you want to edit
         page = pywikibot.Page(site, title)
@@ -379,7 +382,7 @@ class SendTemplate(Base):
 
                     # Save the page
                     talk_page.save(
-                        "بوت: توزيع أوسمة [[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مشروع مستخدمو الأسبوع الأكثر نشاطًا]] (V1.1.1)",
+                        "بوت: توزيع أوسمة [[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مشروع مستخدمو الأسبوع الأكثر نشاطًا]] (V1.1.2)",
                         minor=False
                     )
                 except Exception as error:
@@ -404,8 +407,12 @@ class MainPage(Base):
 
         super().__init__()
         self.summary = summary
+        self.week_number = str(self.week)
+        if self.week < 10:
+            self.week_number = '0' + self.week_number
+
         self.title_of_page = str(title_of_page).replace('YEAR_NUMBER', str(self.year)).replace("WEEK_NUMBER",
-                                                                                               str(self.week)).replace(
+                                                                                               self.week_number).replace(
             "DOMAIN_NAME", self.domain_name)
         self.stub = stub
         self.text = ""
@@ -433,7 +440,7 @@ class MainPage(Base):
 
         # Set the text of the page
         page.text = str(self.text).replace('YEAR_NUMBER', str(self.year)).replace("WEEK_NUMBER",
-                                                                                  str(self.week)).replace(
+                                                                                  self.week_number).replace(
             "DOMAIN_NAME", self.domain_name).replace("ARCHIVE_INTO_TEXT_TEXT", self.archive_into_text_text)
 
         # Save the page
