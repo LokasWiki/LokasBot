@@ -58,7 +58,6 @@ class DeadEnd:
         for needed_template in self.templates:
             for template in self.parsed.templates:
                 if prepare_str(template.name) == prepare_str(needed_template):
-                    new_text = str(new_text).replace(str(template) + "\n", "")
                     new_text = str(new_text).replace(str(template), "")
 
         if new_text != self.text:
