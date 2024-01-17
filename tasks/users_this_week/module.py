@@ -290,8 +290,6 @@ class SubPage(Base):
             members=self.database.result
         )
         self.week_number = str(self.week)
-        if self.week < 10:
-            self.week_number = '0' + self.week_number
 
     def save_page(self):
         """
@@ -408,8 +406,6 @@ class MainPage(Base):
         super().__init__()
         self.summary = summary
         self.week_number = str(self.week)
-        if self.week < 10:
-            self.week_number = '0' + self.week_number
 
         self.title_of_page = str(title_of_page).replace('YEAR_NUMBER', str(self.year)).replace("WEEK_NUMBER",
                                                                                                self.week_number).replace(
