@@ -7,9 +7,11 @@
 </onlyinclude>
 </div>
 </center>
+<center>
 <div style="background: #E5E4E2; padding: 0.5em; -moz-border-radius: 0.3em; border-radius: 0.3em;">
 BOT_TABLE_BODY
 </div>
+</center>
 
 [[تصنيف:إحصاءات ويكيبيديا]]
 [[تصنيف:إحصاءات يحدثها LokasBot]]
