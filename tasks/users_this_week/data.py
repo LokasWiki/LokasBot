@@ -32,11 +32,10 @@ list_page_sub_pages = [
                          FROM user_groups
                                   INNER JOIN user ON user_id = ug_user
                          WHERE ug_group = "bot")
-                         and actor_name not in (SELECT replace(lt_title, "_", " ")
-     FROM pagelinks
-     inner join linktarget ON lt_id = pl_target_id
-     WHERE pagelinks.pl_from = 7352181
-       AND lt_namespace = 2)
+                         and actor_name not in (SELECT replace(pl_title,"_"," ")
+FROM pagelinks
+where pagelinks.pl_from = 7352181
+and pl_namespace = 2)
     GROUP BY actor_name
     having COUNT(*) > 1
     ORDER BY score DESC,name
