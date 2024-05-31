@@ -1,18 +1,33 @@
 from tasks.statistics.module import UpdatePage, ArticleTables, index
 
 # Set the parameters for the update
-query = """select page.page_title as ll_page_title,pagelinks.pl_title as ll_page_to_title,pagelinks.pl_namespace as ll_pl_namespace
-from page
-         inner join pagelinks
-                    on pagelinks.pl_from = page.page_id
-where pagelinks.pl_from_namespace = 0
-  and (pagelinks.pl_namespace = 2 or pagelinks.pl_namespace = 3)
-  and page.page_namespace = 0
-  and page.page_is_redirect = 0
-  and page.page_id not in (select templatelinks.tl_from  from templatelinks
-                                                             join linktarget on linktarget.lt_id = templatelinks.tl_target_id
-                      where linktarget.lt_title in (select pl_title from pagelinks where  pl_from = 9043549) and templatelinks.tl_from_namespace = 0  )
-  and page.page_title not in (select pl_title from pagelinks where  pl_from = 9043549);"""
+query = """SELECT page.page_title AS ll_page_title,
+       linktarget.lt_title AS ll_page_to_title,
+       linktarget.lt_namespace AS ll_pl_namespace
+FROM page
+INNER JOIN pagelinks ON pagelinks.pl_from = page.page_id
+inner join linktarget ON lt_id = pl_target_id
+WHERE pagelinks.pl_from_namespace = 0
+  AND (linktarget.lt_namespace = 2
+       OR linktarget.lt_namespace = 3)
+  AND page.page_namespace = 0
+  AND page.page_is_redirect = 0
+  AND page.page_id not in
+    (SELECT templatelinks.tl_from
+     FROM templatelinks
+     JOIN linktarget ON linktarget.lt_id = templatelinks.tl_target_id
+     WHERE linktarget.lt_title in
+         (SELECT lt_title
+          FROM pagelinks
+          inner join linktarget ON lt_id = pl_target_id
+          WHERE pl_from = 9043549)
+       AND templatelinks.tl_from_namespace = 0 )
+  AND page.page_title not in
+    (SELECT lt_title
+     FROM pagelinks
+     inner join linktarget ON lt_id = pl_target_id
+     WHERE pl_from = 9043549
+    );"""
 file_path = 'stub/articles_in_which_there_is_a_link_to_user_pages.txt'
 page_name = "ويكيبيديا:تقارير قاعدة البيانات/مقالات يوجد فيها وصلة إلى صفحات المستخدمين"
 
