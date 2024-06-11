@@ -2,7 +2,11 @@ from tasks.statistics.module import UpdatePage, ArticleTables, index
 
 # Set the parameters for the update
 query = """SELECT main.page_title as portal_name, COUNT(*) - 1 as sub_page_count,
-    (SELECT COUNT(*) FROM pagelinks WHERE pl_title = main.page_title and pl_from_namespace = 0 and pl_namespace = 100) as links_count
+    (
+      SELECT COUNT(*) FROM pagelinks
+      inner join linktarget ON lt_id = pl_target_id
+      WHERE lt_title = main.page_title and pl_from_namespace = 0 and lt_namespace = 100
+    ) as links_count
 FROM page AS p
 INNER JOIN (
     SELECT page_title
