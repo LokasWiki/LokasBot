@@ -7,7 +7,7 @@ list_of_distribute_medals = [
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp <= END_DATE) >= NUMBER_COUNT
-and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882);""",
+and actor_name not in (select REPLACE(lt_title as "pl_title, '_', ' ') from pagelinks inner join linktarget ON lt_id = pl_target_idwhere  pl_from = 7519882);""",
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE  {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)|USERNAME}}"
     },
     {
@@ -18,7 +18,7 @@ and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp <= END_DATE) >= NUMBER_COUNT
-and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882);""",
+and actor_name not in (select REPLACE(lt_title as "pl_title, '_', ' ') from pagelinks inner join linktarget ON lt_id = pl_target_idwhere  pl_from = 7519882);""",
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE  {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)|USERNAME}}"
     },
     {
@@ -29,7 +29,7 @@ and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp <= END_DATE) >= NUMBER_COUNT
-and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882);""",
+and actor_name not in (select REPLACE(lt_title as "pl_title, '_', ' ') from pagelinks inner join linktarget ON lt_id = pl_target_idwhere  pl_from = 7519882);""",
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE  {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)|USERNAME}}"
     },
     {
@@ -40,7 +40,7 @@ and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp <= END_DATE) >= NUMBER_COUNT
-and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882);""",
+and actor_name not in (select REPLACE(lt_title as "pl_title, '_', ' ') from pagelinks inner join linktarget ON lt_id = pl_target_idwhere  pl_from = 7519882);""",
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE  {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)|USERNAME}}"
     },
     {
@@ -51,7 +51,7 @@ and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp <= END_DATE) >= NUMBER_COUNT
-and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882);""",
+and actor_name not in (select REPLACE(lt_title as "pl_title, '_', ' ') from pagelinks inner join linktarget ON lt_id = pl_target_idwhere  pl_from = 7519882);""",
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE  {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)|USERNAME}}"
     },
     {
@@ -62,7 +62,7 @@ and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp <= END_DATE) >= NUMBER_COUNT
-and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882);""",
+and actor_name not in (select REPLACE(lt_title as "pl_title, '_', ' ') from pagelinks inner join linktarget ON lt_id = pl_target_idwhere  pl_from = 7519882);""",
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE  {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)|USERNAME}}"
     },
     {
@@ -73,7 +73,7 @@ and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp <= END_DATE) >= NUMBER_COUNT
-and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882);""",
+and actor_name not in (select REPLACE(lt_title as "pl_title, '_', ' ') from pagelinks inner join linktarget ON lt_id = pl_target_idwhere  pl_from = 7519882);""",
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE  {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)|USERNAME}}"
     },
     {
@@ -84,7 +84,7 @@ and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp <= END_DATE) >= NUMBER_COUNT
-and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882);""",
+and actor_name not in (select REPLACE(lt_title as "pl_title, '_', ' ') from pagelinks inner join linktarget ON lt_id = pl_target_idwhere  pl_from = 7519882);""",
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE  {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)|USERNAME}}"
     },
     {
@@ -95,7 +95,7 @@ and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp <= END_DATE) >= NUMBER_COUNT
-and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882);""",
+and actor_name not in (select REPLACE(lt_title as "pl_title, '_', ' ') from pagelinks inner join linktarget ON lt_id = pl_target_idwhere  pl_from = 7519882);""",
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE  {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)|USERNAME}}"
     },
     {
@@ -106,7 +106,7 @@ and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp <= END_DATE) >= NUMBER_COUNT
-and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882);""",
+and actor_name not in (select REPLACE(lt_title as "pl_title, '_', ' ') from pagelinks inner join linktarget ON lt_id = pl_target_idwhere  pl_from = 7519882);""",
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE  {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)|USERNAME}}"
     },
     {
@@ -117,7 +117,7 @@ and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp <= END_DATE) >= NUMBER_COUNT
-and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882);""",
+and actor_name not in (select REPLACE(lt_title as "pl_title, '_', ' ') from pagelinks inner join linktarget ON lt_id = pl_target_idwhere  pl_from = 7519882);""",
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE  {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)|USERNAME}}"
     },
     {
@@ -128,7 +128,7 @@ and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp <= END_DATE) >= NUMBER_COUNT
-and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882);""",
+and actor_name not in (select REPLACE(lt_title as "pl_title, '_', ' ') from pagelinks inner join linktarget ON lt_id = pl_target_idwhere  pl_from = 7519882);""",
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE  {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)|USERNAME}}"
     },
     {
@@ -139,7 +139,7 @@ and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp <= END_DATE) >= NUMBER_COUNT
-and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882);""",
+and actor_name not in (select REPLACE(lt_title as "pl_title, '_', ' ') from pagelinks inner join linktarget ON lt_id = pl_target_idwhere  pl_from = 7519882);""",
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE  {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)|USERNAME}}"
     },
     {
@@ -150,7 +150,7 @@ and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp <= END_DATE) >= NUMBER_COUNT
-and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882);""",
+and actor_name not in (select REPLACE(lt_title as "pl_title, '_', ' ') from pagelinks inner join linktarget ON lt_id = pl_target_idwhere  pl_from = 7519882);""",
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE  {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)|USERNAME}}"
     },
     {
@@ -161,7 +161,7 @@ and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp <= END_DATE) >= NUMBER_COUNT
-and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882);""",
+and actor_name not in (select REPLACE(lt_title as "pl_title, '_', ' ') from pagelinks inner join linktarget ON lt_id = pl_target_idwhere  pl_from = 7519882);""",
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE  {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)|USERNAME}}"
     },
     {
@@ -172,7 +172,7 @@ and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp <= END_DATE) >= NUMBER_COUNT
-and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882);""",
+and actor_name not in (select REPLACE(lt_title as "pl_title, '_', ' ') from pagelinks inner join linktarget ON lt_id = pl_target_idwhere  pl_from = 7519882);""",
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE  {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)|USERNAME}}"
     },
     {
@@ -183,7 +183,7 @@ and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp <= END_DATE) >= NUMBER_COUNT
-and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882);""",
+and actor_name not in (select REPLACE(lt_title as "pl_title, '_', ' ') from pagelinks inner join linktarget ON lt_id = pl_target_idwhere  pl_from = 7519882);""",
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE  {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)|USERNAME}}"
     },
     {
@@ -194,7 +194,7 @@ and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp <= END_DATE) >= NUMBER_COUNT
-and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882);""",
+and actor_name not in (select REPLACE(lt_title as "pl_title, '_', ' ') from pagelinks inner join linktarget ON lt_id = pl_target_idwhere  pl_from = 7519882);""",
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE  {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)|USERNAME}}"
     },
     {
@@ -205,7 +205,7 @@ and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp <= END_DATE) >= NUMBER_COUNT
-and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882);""",
+and actor_name not in (select REPLACE(lt_title as "pl_title, '_', ' ') from pagelinks inner join linktarget ON lt_id = pl_target_idwhere  pl_from = 7519882);""",
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE  {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)|USERNAME}}"
     },
     {
@@ -216,7 +216,7 @@ and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp <= END_DATE) >= NUMBER_COUNT
-and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882);""",
+and actor_name not in (select REPLACE(lt_title as "pl_title, '_', ' ') from pagelinks inner join linktarget ON lt_id = pl_target_idwhere  pl_from = 7519882);""",
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE  {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)|USERNAME}}"
     },
     {
@@ -227,7 +227,7 @@ and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp <= END_DATE) >= NUMBER_COUNT
-and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882);""",
+and actor_name not in (select REPLACE(lt_title as "pl_title, '_', ' ') from pagelinks inner join linktarget ON lt_id = pl_target_idwhere  pl_from = 7519882);""",
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE  {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)|USERNAME}}"
     },
     {
@@ -238,7 +238,7 @@ and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp <= END_DATE) >= NUMBER_COUNT
-and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882);""",
+and actor_name not in (select REPLACE(lt_title as "pl_title, '_', ' ') from pagelinks inner join linktarget ON lt_id = pl_target_idwhere  pl_from = 7519882);""",
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE  {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)|USERNAME}}"
     },
     {
@@ -249,7 +249,7 @@ and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  
 FROM actor
 WHERE (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp < START_DATE) < NUMBER_COUNT
 AND (SELECT COUNT(*) FROM revision_userindex WHERE rev_actor = actor_id AND rev_timestamp <= END_DATE) >= NUMBER_COUNT
-and actor_name not in (select REPLACE(pl_title, '_', ' ') from pagelinks where  pl_from = 7519882);""",
+and actor_name not in (select REPLACE(lt_title as "pl_title, '_', ' ') from pagelinks inner join linktarget ON lt_id = pl_target_idwhere  pl_from = 7519882);""",
         "template_stub": "{{وسام تعديلات|NUMBER|-- SIGNATURE  {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)|USERNAME}}"
     },
 ]
