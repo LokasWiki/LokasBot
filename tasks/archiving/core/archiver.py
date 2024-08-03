@@ -132,7 +132,7 @@ class Archiver:
             print("No sections to archive.")
 
     def get_last_comment_timestamps(self):
-        history = self.talk_page.revisions(reverse=False, total=500, content=True)  # Fetch last 500 revisions
+        history = self.talk_page.revisions(reverse=False, total=20, content=True)  # Fetch last 500 revisions
         section_last_edit = {}
         seen_sections = set()
 
@@ -151,7 +151,7 @@ class Archiver:
                     if section.id not in section_last_edit:
                         section_last_edit[section.id] = timestamp
                     else:
-                        section_last_edit[section.id] = max(section_last_edit[section.id], timestamp)
+                        section_last_edit[section.id] = min(section_last_edit[section.id], timestamp)
 
                 removed_sections = seen_sections - current_sections
                 for section_id in removed_sections:
