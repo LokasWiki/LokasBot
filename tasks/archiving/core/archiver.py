@@ -3,6 +3,7 @@ from datetime import datetime
 import wikitextparser as wtp
 import pywikibot
 import hashlib
+from core.utils.helpers import prepare_str
 
 
 class Options:
@@ -54,17 +55,23 @@ class Options:
 
 
 
-
 class Section:
     def __init__(self, title, content):
         self.title = title.strip()
         self.content = content
         self.id = self._generate_id()
-
+        self.skip = False
+        self.skip_templates = [prepare_str("لا للأرشفة")]
+        self._skip()
     def _generate_id(self):
         content_hash = hashlib.sha1(self.content.encode('utf-8')).hexdigest()
         return f"{self.title}_{content_hash}"
-
+    def _skip(self):
+        parse = wtp.parse(self.content)
+        for template in parse.templates:
+            if prepare_str(template.normal_name()) in self.skip_templates:
+                self.skip = True
+                break
 
 class Archiver:
     def __init__(self, page: pywikibot.Page):
@@ -92,6 +99,10 @@ class Archiver:
 
         for section_title, section_content in sections:
             section = Section(section_title, section_content)
+
+            if section.skip:
+                remaining_text += section_title + section_content
+                continue
 
             if section.id in last_comment_timestamps:
                 last_comment_time = last_comment_timestamps[section.id]
@@ -170,8 +181,6 @@ page = pywikibot.Page(site, page_name)
 archive_obj = Archiver(page)
 archive_obj.archive_talk_page()
 """
-read options from template
 create class to archive sections
-skip sections that have no archive template
 customez archive summary
 """
