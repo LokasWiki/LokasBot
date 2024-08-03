@@ -64,8 +64,8 @@ class Section:
         self.skip_templates = [prepare_str("لا للأرشفة")]
         self._skip()
     def _generate_id(self):
-        content_hash = hashlib.sha1(self.content.encode('utf-8')).hexdigest()
-        return f"{self.title}_{content_hash}"
+        content_hash = hashlib.sha1(self.content.encode('utf-8', 'ignore')).hexdigest().encode('utf-8', 'ignore')
+        return f"{prepare_str(self.title)}_{content_hash}"
     def _skip(self):
         parse = wtp.parse(self.content)
         for template in parse.templates:
@@ -84,18 +84,21 @@ class Archiver:
         self.talk_page = page
         self.options = (Options(self.talk_page)).option
 
-    def archive_talk_page(self, ARCHIVE_THRESHOLD_DAYS=3):
+    def archive_talk_page(self):
         """
         Archives the talk page of the user.
         """
-        last_comment_timestamps = self.get_last_comment_timestamps()
         text = self.talk_page.get()
-
-        sections = self._split_sections(text)
         header = self._extract_header(text)
         current_time = datetime.utcnow()
         archive_text = ''
         remaining_text = ''
+
+        sections = self._split_sections(text)
+
+        last_comment_timestamps = self.get_last_comment_timestamps()
+
+
 
         for section_title, section_content in sections:
             section = Section(section_title, section_content)
@@ -106,12 +109,16 @@ class Archiver:
 
             if section.id in last_comment_timestamps:
                 last_comment_time = last_comment_timestamps[section.id]
-                if (current_time - last_comment_time).days > ARCHIVE_THRESHOLD_DAYS:
+                if (current_time - last_comment_time).days > int(self.options[1]):
                     archive_text += section_title + section_content
                 else:
                     remaining_text += section_title + section_content
             else:
                 remaining_text += section_title + section_content
+
+        if self.options[0] != 'قسم':
+            if len(self.talk_page.text) < int(self.options[1]) * 1000:
+               archive_text = ''
 
         if archive_text:
             print("test")
@@ -125,32 +132,35 @@ class Archiver:
             print("No sections to archive.")
 
     def get_last_comment_timestamps(self):
-        history = self.talk_page.revisions(reverse=True, total=500, content=True)  # Fetch last 500 revisions
+        history = self.talk_page.revisions(reverse=False, total=500, content=True)  # Fetch last 500 revisions
         section_last_edit = {}
         seen_sections = set()
 
         for revision in history:
-            timestamp = revision.timestamp
-            content = revision.text
+            try:
+                timestamp = revision.timestamp
+                content = revision.text
 
-            sections = self._split_sections(content)
-            current_sections = set()
+                sections = self._split_sections(content)
+                current_sections = set()
 
-            for section_title, section_content in sections:
-                section = Section(section_title, section_content)
-                current_sections.add(section.id)
+                for section_title, section_content in sections:
+                    section = Section(section_title, section_content)
+                    current_sections.add(section.id)
 
-                if section.id not in section_last_edit:
-                    section_last_edit[section.id] = timestamp
-                else:
-                    section_last_edit[section.id] = max(section_last_edit[section.id], timestamp)
+                    if section.id not in section_last_edit:
+                        section_last_edit[section.id] = timestamp
+                    else:
+                        section_last_edit[section.id] = max(section_last_edit[section.id], timestamp)
 
-            removed_sections = seen_sections - current_sections
-            for section_id in removed_sections:
-                if section_id not in section_last_edit:
-                    section_last_edit[section_id] = timestamp
+                removed_sections = seen_sections - current_sections
+                for section_id in removed_sections:
+                    if section_id not in section_last_edit:
+                        section_last_edit[section_id] = timestamp
 
-            seen_sections = current_sections
+                seen_sections = current_sections
+            except Exception as e:
+                print(f"Error processing revision {revision.revid}: {e}")
 
         return section_last_edit
 
