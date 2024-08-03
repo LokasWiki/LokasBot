@@ -24,19 +24,13 @@ class ActionJob(Job):
         logging.info(f"Performing action on page: {page.title()}")
 
 
-class LoggingJob(Job):
-    def perform(self, page):
-        # Log the page title or other information
-        print(f"Logging information for page: {page.title()}")
-        logging.info(f"Logging information for page: {page.title()}")
-
 
 # Define a HookManager for dynamic hooks
 class HookManager:
     def __init__(self):
         self.hooks: Dict[str, List[Callable]] = {
             'before': [],
-            'main': [],
+            # 'main': [],
             'after': []
         }
 
@@ -94,23 +88,6 @@ class Processor(ABC):
             self.job.perform(item)  # Delegate action to the injected Job strategy
 
 
-# Concrete implementation for WikiPage processing
-class WikiPageProcessor(Processor):
-    def __init__(self, job: Job):
-        super().__init__(job)
-        self.site = pywikibot.Site('ar', 'wikipedia')
-        self.template_name = USER_CONFIG.get(TEMPLATE_NAME_KEY)
-        self.template_page = pywikibot.Page(self.site, self.template_name)
-
-    def get_items(self):
-        pages = self.template_page.embeddedin()
-        filtered_pages = [
-            page for page in pages
-            if page.depth == 0 and not ('edit' in page.protection() and 'sysop' in page.protection()['edit'])
-        ]
-        return filtered_pages
-
-
 # Example hook functions
 def before_hook(item):
     print(f"Before processing item: {item.title()}")
@@ -119,18 +96,3 @@ def before_hook(item):
 def after_hook(item):
     print(f"After processing item: {item.title()}")
 
-
-# Usage
-# Create the HookManager
-hook_manager = HookManager()
-hook_manager.add_hook('before', before_hook)
-hook_manager.add_hook('after', after_hook)
-
-# Create and configure the composite job
-composite_job = CompositeJob(hook_manager=hook_manager)
-composite_job.add_job(ActionJob())
-composite_job.add_job(LoggingJob())
-
-# Create the processor with the composite job
-processor = WikiPageProcessor(job=composite_job)
-processor.process_items()
