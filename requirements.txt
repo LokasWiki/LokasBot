@@ -7,4 +7,4 @@ requests~=2.32.3
 SQLAlchemy == 2.0.32
 typing-extensions == 4.12.2
 waybackpy~=3.0.6
-wikitextparser~=0.56.1
+wikitextparser~=0.56.2
