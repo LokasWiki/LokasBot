@@ -18,5 +18,8 @@ jobs:
           key: ${{ secrets.KEY }}
           # script: whoami
           script: |
-            become lokasbot 
+            whoami
+            ls
+            become lokasbot
+            whoami
             ls
