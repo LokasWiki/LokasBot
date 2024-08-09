@@ -16,7 +16,7 @@ def main_page():
         # Create a MainPage object for the main page
         temp = MainPage(
             title_of_page="DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا",
-            summary="بوت:تحديث [[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مشروع مستخدمو الأسبوع الأكثر نشاطًا]] (V1.2.0)",
+            summary="بوت:تحديث [[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مشروع مستخدمو الأسبوع الأكثر نشاطًا]] (V1.3.0)",
             stub="stub/main_page.txt",
         )
         # Read the file for the main page
@@ -32,7 +32,7 @@ def archive_page():
         # Create a MainPage object for the archive page
         temp = MainPage(
             title_of_page="DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER",
-            summary="بوت:تحديث [[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مشروع مستخدمو الأسبوع الأكثر نشاطًا]] (V1.2.0)",
+            summary="بوت:تحديث [[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مشروع مستخدمو الأسبوع الأكثر نشاطًا]] (V1.3.0)",
             stub="stub/archive.txt",
         )
         # Read the file for the archive page
