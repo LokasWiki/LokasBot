@@ -4,6 +4,12 @@
   emails: onfailure
   image: tf-python39
   no-filelog: false
+- name: test-pull
+  no-filelog: false
+  command: $HOME/repos/toolforge/jobs/ci_cd_log_task.sh
+  image: tf-python39
+  emails: onfailure
+  <<: *defaults
 - name: maintenance-check-10
   no-filelog: false
   command: $HOME/repos/toolforge/jobs/maintenance_check.sh
