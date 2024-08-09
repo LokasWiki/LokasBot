@@ -9,13 +9,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Deploy to server (lokasbot)
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
-          # password: ${{ secrets.PASSWORD }}
-          key: ${{ secrets.SSHKEY }}
+          #password: ${{ secrets.PASSWORD }}
+          key: ${{ secrets.KEY }}
           # script: whoami
           script: |
             become lokasbot 
