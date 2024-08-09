@@ -20,4 +20,4 @@ jobs:
           script: |
             become lokasbot 
             cd $Home 
-            actions/lokasbot/pull.sh
+            sh $Home/actions/lokasbot/pull.sh
