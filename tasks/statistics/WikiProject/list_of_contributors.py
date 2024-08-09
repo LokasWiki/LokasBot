@@ -5,11 +5,12 @@ from tasks.statistics.module import UpdatePage, ArticleTables, index
 query = """select  actor_name as "username", count(rev_actor) as "edit_count",
 IF(actor_name in (
 
-  select replace(pl_title,"_"," ") from pagelinks
+  select replace(lt_title,"_"," ") from pagelinks
   join page on page.page_id = pagelinks.pl_from 
+  inner join linktarget ON lt_id = pl_target_id
   where page.page_namespace in (4) 
   and page_title like "مشروع_ويكي_العراق/المساهمون"
-  and pl_namespace in (2)
+  and lt_namespace in (2)
   and pl_from_namespace in (4)
 
 ), "YES", "NO") as "in_WikiProject"
