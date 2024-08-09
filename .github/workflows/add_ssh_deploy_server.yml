@@ -16,8 +16,7 @@ jobs:
           port: ${{ secrets.PORT }}
           #password: ${{ secrets.PASSWORD }}
           key: ${{ secrets.KEY }}
-          script: whoami
-          # script: |
-          #   become lokasbot 
-          #   cd $Home 
-          #   sh $Home/actions/lokasbot/pull.sh
+          # script: whoami
+          script: |
+            become lokasbot 
+            ls
