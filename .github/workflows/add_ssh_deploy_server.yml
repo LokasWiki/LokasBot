@@ -14,12 +14,10 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
+          request_pty: true
+          script_stop: true
           #password: ${{ secrets.PASSWORD }}
           key: ${{ secrets.KEY }}
           # script: whoami
           script: |
-            whoami
-            ls
-            become lokasbot
-            whoami
-            ls
+             become lokasbot sh -c "chmod +x actions/lokasbot/pull.sh; actions/lokasbot/pull.sh"
