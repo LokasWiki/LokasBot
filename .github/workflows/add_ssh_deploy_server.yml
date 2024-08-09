@@ -20,4 +20,4 @@ jobs:
           key: ${{ secrets.KEY }}
           # script: whoami
           script: |
-             become lokasbot sh -c "rm -rf action_temp; git clone https://github.com/LokasWiki/actions.git action_temp; chmod +x action_temp/lokasbot/pull.sh; action_temp/lokasbot/pull.sh"
+             become lokasbot sh -c "rm -rfd action_temp; git clone https://github.com/LokasWiki/actions.git action_temp; chmod +x action_temp/lokasbot/pull.sh; action_temp/lokasbot/pull.sh"
