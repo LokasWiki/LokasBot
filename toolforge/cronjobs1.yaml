@@ -40,3 +40,9 @@
   image: tf-python39
   emails: onfailure
   <<: *defaults
+- name: php-archive-bot
+  no-filelog: false
+  command: $HOME/repos/toolforge/jobs/php_archive_bot.sh
+  schedule: '0 6 * * *'
+  image: php7.4
+  emails: onfailure
