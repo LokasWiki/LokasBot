@@ -9,7 +9,7 @@ export PYTHONPATH="${PYTHONPATH}:$HOME/repos"
 
 
 python3  "$HOME"/repos/tasks/sandbox/clear.py
-python3  "$HOME"/repos/tasks/copypatrol/update.py
+python3  "$HOME"/repos/tasks/copypatrol/main.py
 
 # Exit the script after running all the Python files
 exit 0
