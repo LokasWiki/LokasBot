@@ -14,7 +14,7 @@ list_page_sub_pages = [
         "competition_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER",
         "send_alert": True,
         "title_of_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER/مقالات",
-        "summary": "بوت:تحديث [[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مشروع مستخدمو الأسبوع الأكثر نشاطًا]] (V1.2.0)",
+        "summary": "بوت:تحديث [[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مشروع مستخدمو الأسبوع الأكثر نشاطًا]] (V1.3.0)",
         "team": "المستخدمون الـ5 الأوائل في إنشاء المقالات",
         "activity": "مقالات",
         "template_stub": "{{وسام كاتب الأسبوع|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد إنشاء المقالات|USER_NAME}}",
@@ -32,10 +32,11 @@ list_page_sub_pages = [
                          FROM user_groups
                                   INNER JOIN user ON user_id = ug_user
                          WHERE ug_group = "bot")
-                         and actor_name not in (SELECT replace(pl_title,"_"," ")
-FROM pagelinks
-where pagelinks.pl_from = 7352181
-and pl_namespace = 2)
+                         and actor_name not in (SELECT replace(lt_title, "_", " ")
+     FROM pagelinks
+     inner join linktarget ON lt_id = pl_target_id
+     WHERE pagelinks.pl_from = 7352181
+       AND lt_namespace = 2)
     GROUP BY actor_name
     having COUNT(*) > 1
     ORDER BY score DESC,name
@@ -45,7 +46,7 @@ and pl_namespace = 2)
         "competition_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER",
         "send_alert": True,
         "title_of_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER/مراجعة المقالات",
-        "summary": "بوت:تحديث [[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مشروع مستخدمو الأسبوع الأكثر نشاطًا]] (V1.2.0)",
+        "summary": "بوت:تحديث [[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مشروع مستخدمو الأسبوع الأكثر نشاطًا]] (V1.3.0)",
         "activity": "مراجعة للمقالات",
         "team": "أكثر 5 مستخدمين مراجعة للمقالات",
         "template_stub": "{{وسام مراجع مقالات الأسبوع|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد مراجعة المقالات|USER_NAME}}",
@@ -79,7 +80,7 @@ LIMIT 10;"""
         "competition_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER",
         "send_alert": True,
         "title_of_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER/إدارة",
-        "summary": "بوت:تحديث [[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مشروع مستخدمو الأسبوع الأكثر نشاطًا]] (V1.2.0)",
+        "summary": "بوت:تحديث [[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مشروع مستخدمو الأسبوع الأكثر نشاطًا]] (V1.3.0)",
         "activity": "أفعال إدارية",
         "team": "الإداريون الذين أجروا أكبر عدد من الأعمال الإدارية",
         "template_stub": "{{وسام إداري الأسبوع|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد الأعمال الإدارية يدوياً|USER_NAME}}",
@@ -103,7 +104,7 @@ LIMIT 10;"""
         "competition_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER",
         "send_alert": True,
         "title_of_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER/إضافة نصوص",
-        "summary": "بوت:تحديث [[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مشروع مستخدمو الأسبوع الأكثر نشاطًا]] (V1.2.0)",
+        "summary": "بوت:تحديث [[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مشروع مستخدمو الأسبوع الأكثر نشاطًا]] (V1.3.0)",
         "team": "المستخدمون الـ 5 الأوائل في إضافة نصوص",
         "template_stub": "{{وسام الأسبوع 2|WEEK_NUMBER YEAR_NUMBER|RANK|بإضافة النصوص|USER_NAME}}",
         "activity": "إضافة نصوص",
@@ -141,7 +142,7 @@ LIMIT 10;"""
         "competition_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER",
         "send_alert": True,
         "title_of_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER/مراجعة التعديلات",
-        "summary": "بوت:تحديث [[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مشروع مستخدمو الأسبوع الأكثر نشاطًا]] (V1.2.0)",
+        "summary": "بوت:تحديث [[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مشروع مستخدمو الأسبوع الأكثر نشاطًا]] (V1.3.0)",
         "activity": "مراجعة للتعديلات",
         "team": "أكثر 5 مستخدمين مراجعة للتعديلات",
         "template_stub": "{{وسام مراجع تعديلات الأسبوع|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد مراجعة التعديلات المعلقة|USER_NAME}}",
@@ -169,7 +170,7 @@ and pl_namespace = 2)
         "competition_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER",
         "send_alert": True,
         "title_of_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER/تعديلات",
-        "summary": "بوت:تحديث [[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مشروع مستخدمو الأسبوع الأكثر نشاطًا]] (V1.2.0)",
+        "summary": "بوت:تحديث [[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مشروع مستخدمو الأسبوع الأكثر نشاطًا]] (V1.3.0)",
         "team": "المستخدمون الـ5 الأوائل بعدد التعديلات",
         "template_stub": "{{وسام الأسبوع 1|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد التعديلات هذا الأسبوع|USER_NAME}}",
         "activity": "تعديلات",
@@ -198,7 +199,7 @@ LIMIT 10;"""
         "competition_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER",
         "send_alert": True,
         "title_of_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER/جدد",
-        "summary": "بوت:تحديث [[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مشروع مستخدمو الأسبوع الأكثر نشاطًا]] (V1.2.0)",
+        "summary": "بوت:تحديث [[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مشروع مستخدمو الأسبوع الأكثر نشاطًا]] (V1.3.0)",
         "activity": "تعديلات",
         "team": "أنشط 5 مستخدمين بين المستخدمين الواعدين",
         "template_stub": "{{وسام الأسبوع 3|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد التعديلات لحديثي التسجيل|USER_NAME}}",
@@ -228,7 +229,7 @@ LIMIT 10;
         "competition_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER",
         "send_alert": False,
         "title_of_page": "DOMAIN_NAMEمستخدمو الأسبوع الأكثر نشاطا/الأسبوع الWEEK_NUMBER YEAR_NUMBER/بوتات",
-        "summary": "بوت:تحديث [[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مشروع مستخدمو الأسبوع الأكثر نشاطًا]] (V1.2.0)",
+        "summary": "بوت:تحديث [[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مشروع مستخدمو الأسبوع الأكثر نشاطًا]] (V1.3.0)",
         "team": "البوتات الـ5 الأوائل بعدد التعديلات",
         "template_stub": "{{وسام الأسبوع 1|WEEK_NUMBER YEAR_NUMBER|RANK|بعدد التعديلات هذا الأسبوع|USER_NAME}}",
         "activity": "تعديلات",

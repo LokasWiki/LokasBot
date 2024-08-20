@@ -43,6 +43,7 @@ my_pages_list = [
     {"name": "تصنيف:تصنيفات تهذيب منذ MONTH YEAR", "template": "{{تصنيف تهذيب شهري}}"},
     {"name": "تصنيف:تصنيفات تهذيب منذ MONTH YEAR", "template": "{{تصنيف تهذيب شهري}}"},
     {"name": "تصنيف:مقالات غير مصنفة منذ MONTH YEAR", "template": "{{تصنيف تهذيب شهري}}"},
+    {"name": "تصنيف:مراجعات الزملاء MONTH YEAR", "template": "{{تصنيف مخفي}}"},
 ]
 
 
@@ -121,7 +122,7 @@ class Create:
             page = pywikibot.Page(self.site, page_title)
             if not self.page_exists(page_title):
                 page.text = item['template']
-                page.save("بوت:إنشاء صفحات مطلوبة V2.0.0")
+                page.save("بوت:إنشاء صفحات مطلوبة V2.1.0")
             else:
                 print("Page " + page_title + " is exists")
                 logging.info("Page " + page_title + " is exists")

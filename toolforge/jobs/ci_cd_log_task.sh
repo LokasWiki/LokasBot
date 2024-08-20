@@ -7,8 +7,8 @@ export PYWIKIBOT_DIR="$HOME/repos"
 
 export PYTHONPATH="${PYTHONPATH}:$HOME/repos"
 
-python3  "$HOME"/repos/tasks/sandbox/main.py
-python3  "$HOME"/repos/tasks/copypatrol/main.py
+
+python3  "$HOME"/repos/tasks/ci_cd_log_task/bot.py
 
 # Exit the script after running all the Python files
 exit 0
