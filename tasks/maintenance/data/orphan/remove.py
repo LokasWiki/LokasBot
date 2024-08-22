@@ -9,49 +9,54 @@ from database.models import Page, TaskName
 from tasks.maintenance.module import get_pages
 
 # https://quarry.wmcloud.org/query/72148 @ASammour
-custom_query = """SELECT page_title AS "pl_2_title",(select count(distinct pl_from) 
-from pagelinks 
-where pl_from_namespace = 0 
-and pl_title in (
-       select page_title from redirect inner join page on rd_from = page_id where page_namespace = 0 and rd_title = p.page_title
-and rd_namespace = 0)
-and pl_namespace = 0
-and pl_from in (select page_id
-                from page
-                where page_id = pl_from
-                and page_namespace = 0
-                and page_is_redirect = 0)
-and pl_from not in (select (pl_from)
-from pagelinks 
-where pl_from_namespace = 0 
-and pl_title = page_title
-and pl_namespace = 0
-and pl_from in (select page_id
-                from page
-                where page_id = pl_from
-                and page_namespace = 0
-                and page_is_redirect = 0))
-and pl_from <> page_id   
-)
-+
-(select count(distinct pl_from)
-from pagelinks 
-where pl_from_namespace = 0 
-and pl_title = page_title
-and pl_namespace = 0
-and pl_from in (select page_id
-                from page
-                where page_id = pl_from
-                and page_namespace = 0
-                and page_is_redirect = 0)
- and pl_from <> page_id 
-)
-as counts
+custom_query = """SELECT page_title AS "pl_2_title",
+       (select count(distinct pl_from)
+        from pagelinks
+                 inner join linktarget ON lt_id = pl_target_id
+        where pl_from_namespace = 0
+          and pl_title in (select page_title
+                           from redirect
+                                    inner join page on rd_from = page_id
+                           where page_namespace = 0
+                             and rd_title = p.page_title
+                             and rd_namespace = 0)
+          and lt_namespace = 0
+          and pl_from in (select page_id
+                          from page
+                          where page_id = pl_from
+                            and page_namespace = 0
+                            and page_is_redirect = 0)
+          and pl_from not in (select (pl_from)
+                              from pagelinks
+                                       inner join linktarget ON lt_id = pl_target_id
+                              where pl_from_namespace = 0
+                                and pl_title = page_title
+                                and lt_namespace = 0
+                                and pl_from in (select page_id
+                                                from page
+                                                where page_id = pl_from
+                                                  and page_namespace = 0
+                                                  and page_is_redirect = 0))
+          and pl_from <> page_id)
+           +
+       (select count(distinct pl_from)
+        from pagelinks
+                 inner join linktarget ON lt_id = pl_target_id
+        where pl_from_namespace = 0
+          and pl_title = page_title
+          and lt_namespace = 0
+          and pl_from in (select page_id
+                          from page
+                          where page_id = pl_from
+                            and page_namespace = 0
+                            and page_is_redirect = 0)
+          and pl_from <> page_id)
+                  as counts
 FROM page p
 where page_namespace = 0
-and page_is_redirect = 0
-and page_id  in (select cl_from from categorylinks where cl_to like "%جميع_المقالات_اليتيمة%" and cl_from = page_id)
-and page_id not in (select cl_from from categorylinks where cl_to like "%صفحات_توضيح%" and cl_from = page_id)
+  and page_is_redirect = 0
+  and page_id in (select cl_from from categorylinks where cl_to like "%جميع_المقالات_اليتيمة%" and cl_from = page_id)
+  and page_id not in (select cl_from from categorylinks where cl_to like "%صفحات_توضيح%" and cl_from = page_id)
 having counts >= 3;"""
 
 
