@@ -66,10 +66,11 @@ where
                          WHERE ug_group = "bot")
   and log_action = "approve-i"
   and log_namespace = 0
-  and actor_name not in (SELECT replace(pl_title,"_"," ")
-FROM pagelinks
-where pagelinks.pl_from = 7352181
-and pl_namespace = 2)
+  and actor_name not in (SELECT replace(lt_title, "_", " ")
+     FROM pagelinks
+     inner join linktarget ON lt_id = pl_target_id
+     WHERE pagelinks.pl_from = 7352181
+       AND lt_namespace = 2)
 group by actor_name
 having COUNT(*) > 1
 ORDER BY score DESC,name
@@ -90,10 +91,11 @@ INNER JOIN actor on logging.log_actor = actor_id
 where log_timestamp BETWEEN START_WEEK_DATE AND END_WEEK_DATE
 and log_type in ("block", "protect", "delete", "rights")
 and actor_name IN (SELECT user_name FROM user_groups INNER JOIN user ON user_id = ug_user WHERE ug_group = 'sysop')
-and actor_name not in (SELECT replace(pl_title,"_"," ")
-FROM pagelinks
-where pagelinks.pl_from = 7352181
-and pl_namespace = 2)
+and actor_name not in (SELECT replace(lt_title, "_", " ")
+     FROM pagelinks
+     inner join linktarget ON lt_id = pl_target_id
+     WHERE pagelinks.pl_from = 7352181
+       AND lt_namespace = 2)
 group by logging.log_actor
 having COUNT(*)>1
 ORDER BY score DESC,name
@@ -128,10 +130,11 @@ AND parent.rev_timestamp BETWEEN START_WEEK_DATE AND END_WEEK_DATE
                                   INNER JOIN user ON user_id = ug_user
                          WHERE ug_group = "bot")
 and actor_name IN (SELECT user_name FROM user_groups INNER JOIN user ON user_id = ug_user WHERE ug_group = 'editor' or 'autoreview')
-and actor_name not in (SELECT replace(pl_title,"_"," ")
-FROM pagelinks
-where pagelinks.pl_from = 7352181
-and pl_namespace = 2)
+and actor_name not in (SELECT replace(lt_title, "_", " ")
+     FROM pagelinks
+     inner join linktarget ON lt_id = pl_target_id
+     WHERE pagelinks.pl_from = 7352181
+       AND lt_namespace = 2)
 GROUP BY actor_name
 having score > 0
 ORDER BY score DESC,name
@@ -156,10 +159,11 @@ LIMIT 10;"""
     and actor_name Not IN (SELECT user_name FROM user_groups INNER JOIN user ON user_id = ug_user WHERE ug_group = 'bot')
      and ucase(actor_name) not like ucase("%BOT") COLLATE utf8mb4_general_ci
   and actor_name not like "%بوت%" collate utf8mb4_general_ci
-and actor_name not in (SELECT replace(pl_title,"_"," ")
-FROM pagelinks
-where pagelinks.pl_from = 7352181
-and pl_namespace = 2)
+and actor_name not in (SELECT replace(lt_title, "_", " ")
+     FROM pagelinks
+     inner join linktarget ON lt_id = pl_target_id
+     WHERE pagelinks.pl_from = 7352181
+       AND lt_namespace = 2)
     group by logging.log_actor
     having COUNT(*)>1
     ORDER BY score DESC,name
@@ -186,10 +190,11 @@ AND rev.rev_timestamp BETWEEN START_WEEK_DATE AND END_WEEK_DATE
 AND ucase(actor_name) NOT LIKE ucase("%BOT") COLLATE utf8mb4_general_ci
 AND actor_name NOT LIKE "%بوت%" collate utf8mb4_general_ci
 AND actor_name NOT IN (SELECT user_name FROM user_groups INNER JOIN user ON user_id = ug_user WHERE ug_group = "bot")
-and actor_name not in (SELECT replace(pl_title,"_"," ")
-FROM pagelinks
-where pagelinks.pl_from = 7352181
-and pl_namespace = 2)
+and actor_name not in (SELECT replace(lt_title, "_", " ")
+     FROM pagelinks
+     inner join linktarget ON lt_id = pl_target_id
+     WHERE pagelinks.pl_from = 7352181
+       AND lt_namespace = 2)
 GROUP BY actor_name
 HAVING score > 0
 ORDER BY score DESC,name
@@ -216,10 +221,11 @@ AND ipb_user IS NULL
 AND ucase(actor_name) NOT LIKE ucase("%BOT") COLLATE utf8mb4_general_ci
 AND actor_name NOT LIKE "%بوت%" collate utf8mb4_general_ci
 and actor_name NOT IN (SELECT user_name FROM user_groups INNER JOIN user ON user_id = ug_user WHERE ug_group = 'editor' or 'autoreview' or 'bot')
-and actor_name not in (SELECT replace(pl_title,"_"," ")
-FROM pagelinks
-where pagelinks.pl_from = 7352181
-and pl_namespace = 2)
+and actor_name not in (SELECT replace(lt_title, "_", " ")
+     FROM pagelinks
+     inner join linktarget ON lt_id = pl_target_id
+     WHERE pagelinks.pl_from = 7352181
+       AND lt_namespace = 2)
 GROUP BY actor_name
 ORDER BY score DESC,name
 LIMIT 10;
@@ -238,7 +244,11 @@ FROM revision rev
 INNER JOIN actor on rev.rev_actor = actor_id
 WHERE rev_timestamp BETWEEN START_WEEK_DATE AND END_WEEK_DATE
 AND actor_name  IN (SELECT user_name FROM user_groups INNER JOIN user ON user_id = ug_user WHERE ug_group = "bot")
-and actor_name not in (SELECT replace(pl_title,"_"," ") FROM pagelinks where pagelinks.pl_from = 7352181 and pl_namespace = 2)
+and actor_name not in (SELECT replace(lt_title, "_", " ")
+     FROM pagelinks
+     inner join linktarget ON lt_id = pl_target_id
+     WHERE pagelinks.pl_from = 7352181
+       AND lt_namespace = 2)
 and actor_name not in (
 	"New user message",
   	"MediaWiki message delivery",
