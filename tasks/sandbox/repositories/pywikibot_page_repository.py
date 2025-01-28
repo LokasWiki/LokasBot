@@ -1,7 +1,7 @@
 import pywikibot
 
 from tasks.sandbox.entities.page_entity import PageEntity
-from tasks.sandbox.use_cases.update_page_use_case import PageRepository
+from tasks.sandbox.use_cases.page_repository import PageRepository
 
 
 class PywikibotPageRepository(PageRepository):
@@ -21,7 +21,7 @@ class PywikibotPageRepository(PageRepository):
 
     def save_page(self, page: PageEntity) -> None:
         """
-        Saves a page using the Pywikibot library.
+        Saves or updates a page using the Pywikibot library.
 
         Args:
             page (PageEntity): The page entity to be saved.
@@ -41,3 +41,20 @@ class PywikibotPageRepository(PageRepository):
         pywikibot_page = pywikibot.Page(self.site, page.title)
         pywikibot_page.text = page.text
         pywikibot_page.save(summary=page.summary)
+
+    def get_page(self, title: str) -> PageEntity:
+        """
+        Gets a page by its title.
+
+        Args:
+            title (str): The title of the page to get.
+
+        Returns:
+            PageEntity: The page entity with the current content.
+        """
+        pywikibot_page = pywikibot.Page(self.site, title)
+        return PageEntity(
+            title=pywikibot_page.title(),
+            text=pywikibot_page.text,
+            summary=""
+        )
