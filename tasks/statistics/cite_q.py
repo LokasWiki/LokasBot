@@ -3,20 +3,29 @@ import pywikibot.page
 from tasks.statistics.module import UpdatePage, ArticleTables, index
 
 # Set the parameters for the update
-query = """select count(page.page_id) as "count_of_cites",iwlinks.iwl_title as "q_iwl_title" from page
-
-inner join templatelinks on page.page_id = templatelinks.tl_from
-inner join linktarget on lt_id = tl_target_id
-
-inner join iwlinks on page.page_id = iwlinks.iwl_from
-where iwlinks.iwl_title in  (select iwl_title from iwlinks  where iwl_from = 9120840) and lt_title in (
-  "استشهاد_بويكي_بيانات",
-  "Citeq",
-  "Cite_Q"
+query = """
+SELECT
+    COUNT(page.page_id) AS count_of_cites,
+    REPLACE(iwlinks.iwl_title, 'Special:EntityPage/', '') AS q_iwl_title
+FROM page
+INNER JOIN templatelinks ON page.page_id = templatelinks.tl_from
+INNER JOIN linktarget ON linktarget.lt_id = templatelinks.tl_target_id
+INNER JOIN iwlinks ON page.page_id = iwlinks.iwl_from
+WHERE REPLACE(iwlinks.iwl_title, 'Special:EntityPage/', '') IN (
+    SELECT REPLACE(iwl_title, 'Special:EntityPage/', '') 
+    FROM iwlinks  
+    WHERE iwl_from = 9120840
+) 
+AND lt_title IN (
+    'استشهاد_بويكي_بيانات',
+    'Citeq',
+    'Cite_Q'
 )
-and page.page_namespace = 0 and  lt_namespace = 10
+AND page.page_namespace = 0 
+AND lt_namespace = 10
 GROUP BY q_iwl_title
-order by count_of_cites desc;"""
+ORDER BY count_of_cites DESC;
+"""
 file_path = 'stub/cite_q.txt'
 page_name = "ويكيبيديا:مصادر موثوق بها/معاجم وقواميس وأطالس/إحصائيات"
 # page_name = "مستخدم:لوقا/ملعب 25"
