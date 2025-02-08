@@ -114,7 +114,7 @@ class WikiArticleRepository(ArticleRepository):
             read_default_file=_config.db_connect_file,
             db=_config.db_name_format.format("arwiki"),
             charset='utf8mb4',
-            port=_config.port,
+            port=_config.db_port,
             cursorclass=pymysql.cursors.DictCursor,
         )
         return en_db
