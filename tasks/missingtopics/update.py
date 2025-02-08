@@ -50,12 +50,13 @@ TABLE_BODY
    """
 
 db = Database()
-db.query = """select replace(pl_title,"مقالات_مطلوبة_حسب_الاختصاص/","") as page_title from pagelinks 
+db.query = """select replace(lt_title,"مقالات_مطلوبة_حسب_الاختصاص/","") as page_title from pagelinks 
+inner join linktarget on linktarget.lt_id = pagelinks.pl_target_id
 where pl_from in (676775)
-and pl_namespace in (4)
+and lt_namespace in (4)
 and pl_from_namespace in (4)
-and pl_title not like "%وصلة_حمراء%"
-order by pl_title
+and lt_title not like "%وصلة_حمراء%"
+order by lt_title
 """
 db.get_content_from_database()
 
