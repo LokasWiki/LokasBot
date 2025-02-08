@@ -29,6 +29,35 @@ def mock_db_result():
     ]
 
 @pytest.fixture
+def mock_wikidata_response():
+    return {
+        "query": {
+            "pages": {
+                "123": {
+                    "title": "Test Article 1",
+                    "pageprops": {
+                        "wikibase_item": "Q123"
+                    }
+                }
+            }
+        }
+    }
+
+@pytest.fixture
+def mock_wikidata_entities_response():
+    return {
+        "entities": {
+            "Q123": {
+                "descriptions": {
+                    "en": {
+                        "value": "Test description"
+                    }
+                }
+            }
+        }
+    }
+
+@pytest.fixture
 def default_config():
     return MissingTopicsConfig(
         base_url="https://test.toolforge.org",
@@ -145,4 +174,74 @@ class TestWikiArticleRepository:
             charset=default_db_config.charset,
             port=default_db_config.db_port,
             cursorclass=pytest.approx(type(Mock()))
-        ) 
+        )
+
+    @patch('requests.get')
+    def test_get_wikidata_descriptions_success(
+        self,
+        mock_get,
+        article_repository,
+        mock_wikidata_response,
+        mock_wikidata_entities_response
+    ):
+        # Arrange
+        mock_get.side_effect = [
+            Mock(
+                status_code=200,
+                json=lambda: mock_wikidata_response
+            ),
+            Mock(
+                status_code=200,
+                json=lambda: mock_wikidata_entities_response
+            )
+        ]
+
+        # Act
+        descriptions = article_repository.get_wikidata_descriptions(["Test Article 1"])
+
+        # Assert
+        assert "Test Article 1" in descriptions
+        assert descriptions["Test Article 1"] == "Test description"
+        assert len(mock_get.call_args_list) == 2  # Two API calls made
+
+    @patch('requests.get')
+    def test_get_wikidata_descriptions_empty_titles(self, mock_get, article_repository):
+        # Act
+        descriptions = article_repository.get_wikidata_descriptions([])
+
+        # Assert
+        assert descriptions == {}
+        mock_get.assert_not_called()
+
+    @patch('requests.get')
+    def test_get_wikidata_descriptions_api_error(self, mock_get, article_repository):
+        # Arrange
+        mock_get.return_value = Mock(status_code=404)
+
+        # Act
+        descriptions = article_repository.get_wikidata_descriptions(["Test Article"])
+
+        # Assert
+        assert descriptions == {}
+
+    @patch('requests.get')
+    def test_get_wikidata_descriptions_batch_processing(
+        self,
+        mock_get,
+        article_repository,
+        mock_wikidata_response,
+        mock_wikidata_entities_response
+    ):
+        # Arrange
+        titles = [f"Article {i}" for i in range(100)]  # Create 100 titles
+        mock_get.side_effect = [
+            Mock(status_code=200, json=lambda: mock_wikidata_response),
+            Mock(status_code=200, json=lambda: mock_wikidata_entities_response)
+        ] * 2  # Repeat for each batch
+
+        # Act
+        article_repository.get_wikidata_descriptions(titles)
+
+        # Assert
+        # Should make API calls in batches of 50
+        assert len(mock_get.call_args_list) == 4  # 2 calls per batch * 2 batches 

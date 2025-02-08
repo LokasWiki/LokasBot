@@ -12,6 +12,7 @@ class Article:
     title: str
     link_count: int
     en_title: str = ""
+    description: str = ""
 
     @property
     def has_english_version(self) -> bool:
@@ -21,4 +22,7 @@ class Article:
         return f"{self.title}"
 
     def format_en_wiki_link(self) -> str:
-        return f"[[:en:{self.en_title}]]" if self.has_english_version else "\n" 
+        return f"[[:en:{self.en_title}]]" if self.has_english_version else "\n"
+
+    def format_description(self) -> str:
+        return self.description if self.description else "\n" 

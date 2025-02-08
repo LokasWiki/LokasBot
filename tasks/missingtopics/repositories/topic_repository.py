@@ -45,4 +45,4 @@ class WikiTopicRepository(TopicRepository):
     def save_topic_page(self, topic: Topic, content: str):
         page = pywikibot.Page(self.site, topic.page_name)
         page.text = content
-        page.save("بوت:تحديث مقالات مطلوبة حسب الاختصاص v3.1.0") 
+        page.save("بوت:تحديث مقالات مطلوبة حسب الاختصاص v3.2.0") 
