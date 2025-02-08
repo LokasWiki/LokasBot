@@ -100,7 +100,7 @@ class UpdateMissingTopicsUseCase:
         return f"""<center>
 <div style="background: #E5E4E2; padding: 0.5em; font-family: Traditional Arabic; font-size: 130%;  -moz-border-radius: 0.3em; border-radius: 0.3em;">
 تعرض هذه الصفحة قائمة وصلات حمراء مطلوبة حسب الموضوع ([[{topic.name}]]).<br/>
-'''حَدَّث [[مستخدم:{self.bot_name}|{self.bot_name}]] هذه القائمة في: {{نسخ:#time:H:i، j F Y}} (ت ع م)'''
+'''حَدَّث [[مستخدم:{self.bot_name}|{self.bot_name}]] هذه القائمة في: {{{{نسخ:#time:H:i، j F Y}}}} (ت ع م)'''
 </div>
 </center>
 <center>

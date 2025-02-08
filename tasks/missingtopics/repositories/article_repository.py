@@ -8,6 +8,7 @@ import requests
 import wikitextparser as wtp
 from pywikibot import config as _config
 from pymysql.converters import escape_string
+from pymysql.err import Error as PyMySQLError
 
 from core.utils.wikidb import Database
 from entities.topic_entity import Article
@@ -23,6 +24,15 @@ class MissingTopicsConfig:
     nosingles: int = 1
     limitnum: int = 1
 
+@dataclass
+class DatabaseConfig:
+    """Configuration for database connection"""
+    host: str = _config.db_hostname_format.format("enwiki")
+    db_name: str = _config.db_name_format.format("enwiki")
+    db_port: int = _config.db_port
+    charset: str = 'utf8mb4'
+    read_default_file: str = _config.db_connect_file
+
 class ArticleRepository(ABC):
     @abstractmethod
     def get_missing_articles(self, topic_name: str) -> List[Article]:
@@ -33,8 +43,13 @@ class ArticleRepository(ABC):
         pass
 
 class WikiArticleRepository(ArticleRepository):
-    def __init__(self, config: Optional[MissingTopicsConfig] = None):
+    def __init__(
+        self, 
+        config: Optional[MissingTopicsConfig] = None,
+        db_config: Optional[DatabaseConfig] = None
+    ):
         self.config = config or MissingTopicsConfig()
+        self.db_config = db_config or DatabaseConfig()
         self.headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
         }
@@ -64,12 +79,15 @@ class WikiArticleRepository(ArticleRepository):
             
         Returns:
             Dictionary mapping article titles to their English versions
+            
+        Raises:
+            PyMySQLError: If there's a database connection error
         """
         if not titles:
             return {}
-            
-        with self._get_enwiki_db_connection() as en_db:
-            return self._query_english_titles(en_db, titles)
+
+        db = self._get_db_connection()
+        return self._query_english_titles(db, titles)
 
     def _fetch_missing_topics_data(self, topic_name: str) -> str:
         """Makes HTTP request to MissingTopics API"""
@@ -106,18 +124,18 @@ class WikiArticleRepository(ArticleRepository):
             for row in data
         ]
 
-    def _get_enwiki_db_connection(self) -> Database:
-        """Creates connection to English Wikipedia database"""
-        en_db = Database()
-        en_db.connection = pymysql.connect(
-            host=_config.db_hostname_format.format("arwiki"),
-            read_default_file=_config.db_connect_file,
-            db=_config.db_name_format.format("arwiki"),
-            charset='utf8mb4',
-            port=_config.db_port,
+    def _get_db_connection(self) -> Database:
+        """Creates database connection with custom configuration"""
+        db = Database()
+        db.connection = pymysql.connect(
+            host=self.db_config.host,
+            read_default_file=self.db_config.read_default_file,
+            db=self.db_config.db_name,
+            charset=self.db_config.charset,
+            port=self.db_config.db_port,
             cursorclass=pymysql.cursors.DictCursor,
         )
-        return en_db
+        return db
 
     def _query_english_titles(self, db: Database, titles: List[str]) -> Dict[str, str]:
         """Queries database for English article titles"""
@@ -130,7 +148,7 @@ class WikiArticleRepository(ArticleRepository):
         WHERE page.page_title IN ({titles_string}) 
         AND page.page_namespace = 0
         """
-        db.get_content_from_database()
+        db.get_content_from_database()  # This method handles connection closing
         
         return {
             title: str(row['p_title'], 'utf-8')
