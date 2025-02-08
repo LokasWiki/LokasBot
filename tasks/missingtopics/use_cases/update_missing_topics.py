@@ -21,11 +21,13 @@ class UpdateMissingTopicsUseCase:
         self,
         topic_repository: TopicRepository,
         article_repository: ArticleRepository,
+        bot_name: str = "LokasBot",
         batch_size: int = 50,
         delay_seconds: int = 3
     ):
         self.topic_repository = topic_repository
         self.article_repository = article_repository
+        self.bot_name = bot_name
         self.batch_size = batch_size
         self.delay_seconds = delay_seconds
         self.observers: List[UpdateObserver] = []
@@ -86,15 +88,19 @@ class UpdateMissingTopicsUseCase:
     def _generate_page_content(self, topic: Topic) -> str:
         table_rows = []
         for i, article in enumerate(topic.missing_articles, 1):
-            table_rows.append(f"""|-
+            table_rows.append(f"""
+            |-
             |{i}
             |{article.link_count}
             |{article.format_wiki_link()}
-            |{article.format_en_wiki_link()}""")
+            |{article.format_en_wiki_link()}
+            
+            """)
             
         return f"""<center>
 <div style="background: #E5E4E2; padding: 0.5em; font-family: Traditional Arabic; font-size: 130%;  -moz-border-radius: 0.3em; border-radius: 0.3em;">
 تعرض هذه الصفحة قائمة وصلات حمراء مطلوبة حسب الموضوع ([[{topic.name}]]).<br/>
+'''حَدَّث [[مستخدم:{self.bot_name}|{self.bot_name}]] هذه القائمة في: {{نسخ:#time:H:i، j F Y}} (ت ع م)'''
 </div>
 </center>
 <center>
