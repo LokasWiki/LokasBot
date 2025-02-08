@@ -346,4 +346,102 @@ The test suite follows these principles:
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🔍 Logging System
+
+The project includes a comprehensive logging system that provides detailed insights into the application's operation:
+
+### Log Levels
+
+- **INFO**: Important operational events
+  - Topic processing start/completion
+  - Batch processing updates
+  - Article statistics
+  - Wikidata lookup results
+
+- **DEBUG**: Detailed operational data
+  - API requests and responses
+  - Database queries and results
+  - Performance metrics
+
+- **WARNING**: Potential issues
+  - Failed API responses
+  - Rate limiting events
+  - Data inconsistencies
+
+- **ERROR**: Critical issues
+  - Processing failures
+  - API errors
+  - Database connection issues
+
+### Configuration
+
+Logging can be configured in `main.py`:
+
+```python
+def setup_logging():
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        handlers=[
+            logging.StreamHandler()  # Console output
+        ]
+    )
+```
+
+### Observer Pattern
+
+The logging system uses the Observer pattern through `LoggingObserver`:
+
+- Monitors all major operations
+- Provides real-time feedback
+- Supports multiple observers
+- Configurable log levels
+- Structured logging format
+
+### Log Events
+
+1. **Topic Processing**
+   - Start and completion of topic updates
+   - Error handling and recovery
+   - Statistics and summaries
+
+2. **Batch Operations**
+   - Batch processing progress
+   - Success/failure rates
+   - Performance metrics
+
+3. **API Interactions**
+   - Request details
+   - Response status
+   - Error handling
+
+4. **Database Operations**
+   - Query execution
+   - Result statistics
+   - Performance metrics
+
+### Usage Example
+
+```python
+from tasks.missingtopics.observers.logging_observer import LoggingObserver
+
+# Create and configure observer
+observer = LoggingObserver()
+
+# Add to use case
+use_case = UpdateMissingTopicsUseCase(...)
+use_case.add_observer(observer)
+```
+
+### Testing
+
+The logging system includes comprehensive tests:
+
+```python
+def test_logging_capture(observer, log_capture):
+    observer.on_topic_start(topic)
+    log_output = log_capture.getvalue()
+    assert "Starting to process topic" in log_output
+``` 

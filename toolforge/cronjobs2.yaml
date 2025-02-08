@@ -23,6 +23,14 @@
   schedule: '0 2 * * 1'
   image: tf-python39
   emails: onfailure
+  <<: *defaults
+- name: missingtopics
+  no-filelog: false
+  command: $HOME/repos/toolforge/jobs/missingtopics.sh
+  schedule: '0 2 * * 1'
+  image: tf-python39
+  emails: onfailure
+  <<: *defaults
 - name: utw-daily
   no-filelog: false
   command: $HOME/repos/toolforge/jobs/users_this_week-daily.sh

@@ -1,20 +1,11 @@
 import re
 import time
-from typing import List, Protocol
+from typing import List
 
-from entities.topic_entity import Topic, Article
-from repositories.article_repository import ArticleRepository
-from repositories.topic_repository import TopicRepository
-
-class UpdateObserver(Protocol):
-    def on_topic_start(self, topic: Topic):
-        pass
-        
-    def on_topic_complete(self, topic: Topic):
-        pass
-        
-    def on_topic_error(self, topic: Topic, error: Exception):
-        pass
+from tasks.missingtopics.entities.topic_entity import Topic, Article
+from tasks.missingtopics.repositories.article_repository import ArticleRepository
+from tasks.missingtopics.repositories.topic_repository import TopicRepository
+from tasks.missingtopics.observers.observer_protocol import UpdateObserver
 
 class UpdateMissingTopicsUseCase:
     def __init__(
@@ -49,9 +40,31 @@ class UpdateMissingTopicsUseCase:
             articles = self.article_repository.get_missing_articles(topic.name)
             
             # Process articles in batches
+            batch_number = 1
             for i in range(0, len(articles), self.batch_size):
                 batch = articles[i:i + self.batch_size]
+                
+                for observer in self.observers:
+                    observer.on_batch_start(topic, batch_number, len(batch))
+                
+                initial_en_count = len([a for a in batch if a.has_english_version])
+                initial_desc_count = len([a for a in batch if a.description])
+                
                 self._process_article_batch(batch)
+                
+                final_en_count = len([a for a in batch if a.has_english_version])
+                final_desc_count = len([a for a in batch if a.description])
+                
+                for observer in self.observers:
+                    observer.on_batch_complete(
+                        topic,
+                        batch_number,
+                        len(batch),
+                        final_en_count - initial_en_count,
+                        final_desc_count - initial_desc_count
+                    )
+                
+                batch_number += 1
                 time.sleep(self.delay_seconds)
                 
             topic.missing_articles = articles
@@ -80,6 +93,26 @@ class UpdateMissingTopicsUseCase:
             title = article.title.replace(" ", "_").replace("[[", "").replace("]]", "")
             if title in en_titles:
                 article.en_title = en_titles[title]
+
+        # Get Wikidata descriptions for articles with English versions
+        articles_with_en = [article for article in articles if article.has_english_version]
+        if articles_with_en:
+            en_titles = [article.en_title for article in articles_with_en]
+            
+            for observer in self.observers:
+                observer.on_wikidata_lookup(en_titles)
+                
+            descriptions = self.article_repository.get_wikidata_descriptions(en_titles)
+            
+            # Update articles with descriptions
+            desc_count = 0
+            for article in articles_with_en:
+                if article.en_title in descriptions:
+                    article.description = descriptions[article.en_title]
+                    desc_count += 1
+                    
+            for observer in self.observers:
+                observer.on_wikidata_result(desc_count, len(en_titles))
     
     def _update_topic_page(self, topic: Topic):
         content = self._generate_page_content(topic)
@@ -94,6 +127,7 @@ class UpdateMissingTopicsUseCase:
             |{article.link_count}
             |{article.format_wiki_link()}
             |{article.format_en_wiki_link()}
+            |{article.format_description()}
             
             """)
             
@@ -110,6 +144,7 @@ class UpdateMissingTopicsUseCase:
 !style="background-color:#808080" align="center"|عدد الوصلات
 !style="background-color:#808080" align="center"|اسم المقال
 !style="background-color:#808080" align="center"|المقالة المقابلة في لغة أخرى
+!style="background-color:#808080" align="center"|الوصف من ويكي بيانات
 {''.join(table_rows)}
 |}}
 </div>

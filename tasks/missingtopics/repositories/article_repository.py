@@ -11,7 +11,8 @@ from pymysql.converters import escape_string
 from pymysql.err import Error as PyMySQLError
 
 from core.utils.wikidb import Database
-from entities.topic_entity import Article
+from tasks.missingtopics.entities.topic_entity import Article
+from tasks.missingtopics.observers.observer_protocol import UpdateObserver
 
 @dataclass
 class MissingTopicsConfig:
@@ -42,6 +43,10 @@ class ArticleRepository(ABC):
     def get_english_versions(self, titles: List[str]) -> Dict[str, str]:
         pass
 
+    @abstractmethod
+    def get_wikidata_descriptions(self, en_titles: List[str]) -> Dict[str, str]:
+        pass
+
 class WikiArticleRepository(ArticleRepository):
     def __init__(
         self, 
@@ -53,6 +58,10 @@ class WikiArticleRepository(ArticleRepository):
         self.headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
         }
+        self.observers: List[UpdateObserver] = []
+
+    def add_observer(self, observer: UpdateObserver):
+        self.observers.append(observer)
 
     def get_missing_articles(self, topic_name: str) -> List[Article]:
         """
@@ -89,6 +98,115 @@ class WikiArticleRepository(ArticleRepository):
         db = self._get_db_connection()
         return self._query_english_titles(db, titles)
 
+    def get_wikidata_descriptions(self, en_titles: List[str]) -> Dict[str, str]:
+        """
+        Fetches Wikidata descriptions for English articles.
+        
+        Args:
+            en_titles: List of English article titles
+            
+        Returns:
+            Dictionary mapping English titles to their Wikidata descriptions
+            
+        Raises:
+            Exception: If the Wikidata API request fails
+        """
+        if not en_titles:
+            return {}
+
+        descriptions = {}
+        # Process in batches of 50 to avoid API limits
+        batch_size = 50
+        for i in range(0, len(en_titles), batch_size):
+            batch = en_titles[i:i + batch_size]
+            titles_str = "|".join(batch)
+            
+            # First get Wikidata IDs
+            params = {
+                "action": "query",
+                "format": "json",
+                "prop": "pageprops",
+                "titles": titles_str,
+                "ppprop": "wikibase_item"
+            }
+            
+            for observer in self.observers:
+                observer.on_api_request("en.wikipedia.org", params)
+            
+            response = requests.get(
+                "https://en.wikipedia.org/w/api.php",
+                params=params,
+                headers=self.headers
+            )
+            
+            for observer in self.observers:
+                observer.on_api_response(
+                    "en.wikipedia.org",
+                    response.status_code,
+                    response.status_code == 200
+                )
+            
+            if response.status_code != 200:
+                continue
+                
+            data = response.json()
+            if "query" not in data or "pages" not in data["query"]:
+                continue
+                
+            # Collect Wikidata IDs
+            wikidata_ids = []
+            title_to_qid = {}
+            for page in data["query"]["pages"].values():
+                if "pageprops" in page and "wikibase_item" in page["pageprops"]:
+                    qid = page["pageprops"]["wikibase_item"]
+                    wikidata_ids.append(qid)
+                    if "title" in page:
+                        title_to_qid[page["title"]] = qid
+            
+            if not wikidata_ids:
+                continue
+                
+            # Now get descriptions for these Wikidata IDs
+            params = {
+                "action": "wbgetentities",
+                "format": "json",
+                "ids": "|".join(wikidata_ids),
+                "props": "descriptions",
+                "languages": "en"
+            }
+            
+            for observer in self.observers:
+                observer.on_api_request("www.wikidata.org", params)
+            
+            response = requests.get(
+                "https://www.wikidata.org/w/api.php",
+                params=params,
+                headers=self.headers
+            )
+            
+            for observer in self.observers:
+                observer.on_api_response(
+                    "www.wikidata.org",
+                    response.status_code,
+                    response.status_code == 200
+                )
+            
+            if response.status_code != 200:
+                continue
+                
+            data = response.json()
+            if "entities" not in data:
+                continue
+                
+            # Map descriptions back to titles
+            for title, qid in title_to_qid.items():
+                if qid in data["entities"]:
+                    entity = data["entities"][qid]
+                    if "descriptions" in entity and "en" in entity["descriptions"]:
+                        descriptions[title] = entity["descriptions"]["en"]["value"]
+
+        return descriptions
+
     def _fetch_missing_topics_data(self, topic_name: str) -> str:
         """Makes HTTP request to MissingTopics API"""
         params = {
@@ -103,8 +221,18 @@ class WikiArticleRepository(ArticleRepository):
             "doit": "Run"
         }
         
+        for observer in self.observers:
+            observer.on_api_request("missingtopics.toolforge.org", params)
+        
         url = f"{self.config.base_url}?{urlencode(params)}"
         response = requests.get(url, headers=self.headers)
+        
+        for observer in self.observers:
+            observer.on_api_response(
+                "missingtopics.toolforge.org",
+                response.status_code,
+                response.status_code == 200
+            )
         
         if response.status_code != 200:
             raise Exception(f"Failed to fetch data for topic {topic_name}")
@@ -142,13 +270,21 @@ class WikiArticleRepository(ArticleRepository):
         escaped_titles = [escape_string(title) for title in titles]
         titles_string = ','.join(["'" + title + "'" for title in escaped_titles])
         
-        db.query = f"""
+        query = f"""
         SELECT page.page_title as 'p_title' 
         FROM page 
         WHERE page.page_title IN ({titles_string}) 
         AND page.page_namespace = 0
         """
-        db.get_content_from_database()  # This method handles connection closing
+        
+        for observer in self.observers:
+            observer.on_db_query(query)
+            
+        db.query = query
+        db.get_content_from_database()
+        
+        for observer in self.observers:
+            observer.on_db_result(len(db.result))
         
         return {
             title: str(row['p_title'], 'utf-8')
