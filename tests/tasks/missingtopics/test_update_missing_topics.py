@@ -30,6 +30,7 @@ def use_case(mock_observer):
     use_case = UpdateMissingTopicsUseCase(
         topic_repository=topic_repo,
         article_repository=article_repo,
+        bot_name="TestBot",
         batch_size=1,
         delay_seconds=0
     )
@@ -94,4 +95,41 @@ class TestUpdateMissingTopicsUseCase:
         assert "[[Article 1]]" in content
         assert "[[Article 2]]" in content
         assert "[[:en:English_Article_1]]" in content
-        assert "class=\"wikitable sortable\"" in content 
+        assert "class=\"wikitable sortable\"" in content
+        assert "TestBot" in content  # Check bot name is included
+        assert "{{نسخ:#time:H:i، j F Y}}" in content  # Check timestamp template
+
+    def test_custom_bot_name(self):
+        # Arrange
+        topic_repo = Mock()
+        article_repo = Mock()
+        custom_bot = "CustomTestBot"
+
+        # Act
+        use_case = UpdateMissingTopicsUseCase(
+            topic_repository=topic_repo,
+            article_repository=article_repo,
+            bot_name=custom_bot
+        )
+
+        # Assert
+        assert use_case.bot_name == custom_bot
+
+    def test_generate_page_content_with_custom_bot(self, mock_topic, mock_articles):
+        # Arrange
+        topic_repo = Mock()
+        article_repo = Mock()
+        custom_bot = "CustomTestBot"
+        use_case = UpdateMissingTopicsUseCase(
+            topic_repository=topic_repo,
+            article_repository=article_repo,
+            bot_name=custom_bot
+        )
+        mock_topic.missing_articles = mock_articles
+
+        # Act
+        content = use_case._generate_page_content(mock_topic)
+
+        # Assert
+        assert custom_bot in content
+        assert f"[[مستخدم:{custom_bot}|{custom_bot}]]" in content 

@@ -12,12 +12,15 @@ The project follows Clean Architecture principles and is organized into the foll
 
 ### 2. Use Cases
 - `UpdateMissingTopicsUseCase`: Contains the business logic for updating missing topics pages
-- Implements batch processing and rate limiting
-- Uses observer pattern for progress monitoring
+  - Supports dynamic bot name configuration
+  - Implements batch processing and rate limiting
+  - Uses observer pattern for progress monitoring
+  - Includes dynamic timestamp updates
 
 ### 3. Repositories
 - `ArticleRepository`: Abstract interface for article operations
   - `WikiArticleRepository`: Concrete implementation for fetching missing articles
+  - Configurable database connections for different wikis
 - `TopicRepository`: Abstract interface for topic operations
   - `WikiTopicRepository`: Concrete implementation using Pywikibot
 
@@ -33,6 +36,7 @@ The project implements several design patterns to achieve flexibility and mainta
    - Abstracts data access layer
    - Makes it easy to change data sources
    - Provides clean interfaces for data operations
+   - Supports configurable database connections
 
 2. **Observer Pattern**
    - Monitors update progress
@@ -49,25 +53,32 @@ The project implements several design patterns to achieve flexibility and mainta
    - Centralizes API configuration
    - Makes it easy to modify API parameters
    - Supports different environments
+   - Configurable database settings
 
 ## 🚀 Usage
 
 ### Basic Usage
 
 ```python
-from tasks.missingtopics.repositories.article_repository import WikiArticleRepository, MissingTopicsConfig
+from tasks.missingtopics.repositories.article_repository import WikiArticleRepository, MissingTopicsConfig, DatabaseConfig
 from tasks.missingtopics.repositories.topic_repository import WikiTopicRepository
 from tasks.missingtopics.use_cases.update_missing_topics import UpdateMissingTopicsUseCase
 from tasks.missingtopics.observers.logging_observer import LoggingObserver
 
-# Initialize repositories
-topic_repository = WikiTopicRepository()
-article_repository = WikiArticleRepository()
+# Initialize repositories with custom configurations
+db_config = DatabaseConfig(
+    host="enwiki.analytics.db.svc.wikimedia.cloud",
+    db_name="enwiki_p"
+)
 
-# Create use case
+article_repository = WikiArticleRepository(db_config=db_config)
+topic_repository = WikiTopicRepository()
+
+# Create use case with custom settings
 use_case = UpdateMissingTopicsUseCase(
     topic_repository=topic_repository,
     article_repository=article_repository,
+    bot_name="CustomBot",  # Configure custom bot name
     batch_size=50,
     delay_seconds=3
 )
@@ -93,7 +104,18 @@ config = MissingTopicsConfig(
     limitnum=1
 )
 
-article_repository = WikiArticleRepository(config=config)
+# Configure database settings
+db_config = DatabaseConfig(
+    host="custom.host",
+    db_name="custom_wiki",
+    db_port=3306,
+    charset='utf8mb4'
+)
+
+article_repository = WikiArticleRepository(
+    config=config,
+    db_config=db_config
+)
 ```
 
 ## 📋 Requirements
@@ -124,12 +146,23 @@ The system can be configured through various components:
    - Project
    - Depth and other parameters
 
-2. **Performance Settings**:
+2. **Database Configuration**:
+   - Host and port
+   - Database name
+   - Character set
+   - Connection settings
+
+3. **Performance Settings**:
    - Batch size for processing
    - Delay between requests
    - Rate limiting
 
-3. **Logging**:
+4. **Bot Configuration**:
+   - Custom bot name
+   - Dynamic timestamps
+   - Update messages
+
+5. **Logging**:
    - Configurable logging levels
    - Multiple observers support
    - Detailed error tracking
@@ -169,10 +202,13 @@ tasks/missingtopics/
 - Type hints for better IDE support
 - Configurable API settings
 - Detailed logging system
+- Dynamic bot name configuration
+- Real-time timestamp updates
+- Configurable database connections
 
 ## 🧪 Testing
 
-The project includes a comprehensive test suite:
+The project includes a comprehensive test suite covering all components:
 
 ### Running Tests
 
@@ -180,27 +216,120 @@ The project includes a comprehensive test suite:
 # Run all tests
 pytest tests/tasks/missingtopics/
 
+# Run specific test file
+pytest tests/tasks/missingtopics/test_article_repository.py
+
 # Run with coverage
 pytest tests/tasks/missingtopics/ --cov=tasks.missingtopics
+
+# Run with verbose output
+pytest -v tests/tasks/missingtopics/
 ```
 
 ### Test Structure
 
-1. **Unit Tests**:
-   - Repository tests
-   - Use case tests
-   - Entity tests
-   - Observer tests
+1. **Entity Tests** (`test_topic_entity.py`):
+   - Article class tests
+     - Creation and properties
+     - English version handling
+     - Wiki link formatting
+   - Topic class tests
+     - Creation and properties
+     - Article management
+     - Edge cases
 
-2. **Mock Objects**:
-   - API responses
+2. **Repository Tests**:
+   - Article Repository (`test_article_repository.py`)
+     - Missing articles retrieval
+     - English version lookups
+     - Database configuration
+     - Error handling
+     - Connection management
+   - Topic Repository (`test_topic_repository.py`)
+     - Topic retrieval
+     - Page saving
+     - Query formatting
+     - Error scenarios
+
+3. **Use Case Tests** (`test_update_missing_topics.py`):
+   - Update process
+   - Batch processing
+   - Bot name configuration
+   - Content generation
+   - Error handling
+   - Observer notifications
+
+4. **Observer Tests** (`test_logging_observer.py`):
+   - Event handling
+   - Log message formatting
+   - Error logging
+   - Integration with logging system
+
+### Test Coverage
+
+Each component is tested for:
+
+1. **Happy Path**:
+   - Normal operation scenarios
+   - Expected inputs and outputs
+   - Successful operations
+
+2. **Error Handling**:
+   - Invalid inputs
+   - Network failures
+   - Database errors
+   - API errors
+
+3. **Edge Cases**:
+   - Empty collections
+   - Boundary conditions
+   - Special characters
+   - Resource cleanup
+
+4. **Integration Points**:
+   - Database interactions
+   - API calls
+   - File operations
+   - External services
+
+### Mocking Strategy
+
+The test suite uses mocking to isolate components:
+
+1. **External Services**:
+   - Database connections
+   - API endpoints
+   - File systems
+   - Wiki interactions
+
+2. **Internal Components**:
+   - Repositories
+   - Observers
+   - Configuration
+
+### Test Fixtures
+
+Common test fixtures provide:
+
+1. **Mock Data**:
+   - Sample topics
+   - Test articles
    - Database results
-   - Wiki pages
+   - API responses
 
-3. **Test Coverage**:
-   - Aims for high coverage
-   - Covers error cases
-   - Tests edge conditions
+2. **Configuration**:
+   - Database settings
+   - API parameters
+   - Test environment setup
+
+### Best Practices
+
+The test suite follows these principles:
+
+1. **Isolation**: Each test is independent
+2. **Readability**: Clear arrange-act-assert pattern
+3. **Maintainability**: DRY principles with fixtures
+4. **Coverage**: Comprehensive testing of all features
 
 ## 🔮 Future Improvements
 
@@ -212,6 +341,8 @@ pytest tests/tasks/missingtopics/ --cov=tasks.missingtopics
 6. Support more languages
 7. Add metrics collection
 8. Implement rate limiting strategies
+9. Add database connection pooling
+10. Enhance timestamp formatting options
 
 ## 📝 License
 

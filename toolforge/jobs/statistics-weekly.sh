@@ -8,7 +8,7 @@ export PYWIKIBOT_DIR="$HOME/repos"
 export PYTHONPATH="${PYTHONPATH}:$HOME/repos"
 
 
-python3 "$HOME"/repos/tasks/missingtopics/update.py
+python3 "$HOME"/repos/tasks/missingtopics/main.py
 python3 "$HOME"/repos/tasks/distribute_medals/run.py
 
 
