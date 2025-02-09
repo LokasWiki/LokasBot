@@ -5,7 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.5.0] - 2023-03-30
+## [1.17.2] - 2025-02-09
+
+### Added
+- Full code implementation of Missing Topics Task (originally added in v1.0.0)
+  - Added clean architecture implementation with complete test coverage
+  - Implemented all planned features with proper documentation
+  - Added comprehensive logging system
+  - Integrated with required external services
+
+### Changed
+- Implemented Repository Pattern for flexible data source management
+- Added Configuration Pattern for centralized API and database settings
+- Introduced Command Pattern for operation encapsulation
+- Enhanced logging system with structured format and multiple handlers
+
+### Technical
+- Added support for Python 3.6+
+- Integrated with pywikibot for wiki operations
+- Implemented pymysql for database connections
+- Added requests library for API interactions
+- Integrated wikitextparser for text processing
 
 ### Fixed
 - إصلاح الأخطاء الإملائية
@@ -66,9 +86,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - تحسين أكواد مهام بوت الصيانة عبر حذف أكواد regex واستخدام wikitextparser
 - إضافة الترتيب الصحيح للقوالب في حالة وجود قوالب البذور
 ### Fixed
-- إصلاح مشكلة فحص أكثر من مقال عبر أكثر من thread
-- إلغاء استخدام دالة urllib. parse. unquote في المسار ومسار الأرشيف (مهمة أرشفة الروابط)
-- حل مشكلة تجاهل بعض قوالب الاستشهاد
+- إصلاح مشكلة تجاهل بعض قوالب الاستشهاد
 - تجاهل الصفحات التي تم إنشاؤها قبل ثلاث ساعات من الآن لتحسين النتائج
 - دمج الأكواد المكررة بين مهمة أرشفة المصادر ومهمة الصيانة
 
@@ -92,3 +110,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2023-02-27
 ### Added
 - تم إضافة الإصدار الأول من بوت (ويكيبيديا:إخطار الإداريين/أسماء مستخدمين للفحص)  ([#92](https://github.com/LokasWiki/LokasBot/pull/92))
+- Missing Topics Task: Initial design and planning
+  - Clean Architecture design with Entities, Use Cases, Repositories, and Observers
+  - Support for identifying articles missing in Arabic Wikipedia that exist in English Wikipedia
+  - Dynamic bot name configuration and batch processing capabilities
+  - Rate limiting and performance optimization features
+  - Comprehensive logging system with multiple levels
+  - Multiple observer pattern support for progress monitoring
+  - Configurable database connections for different wikis
+  - Type hints for better IDE support
+  - Real-time timestamp updates
+  - Extensive test suite planning
+
+### Technical (Planned)
+- Python 3.6+ support
+- Integration with pywikibot for wiki operations
+- Database connections via pymysql
+- HTTP requests via requests library
+- Text processing with wikitextparser
