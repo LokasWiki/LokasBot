@@ -5,7 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.17.2] - 2025-02-09
+## [1.17.2] - 2025-02-21
+
+### Changed
+- Improved database performance:
+  - Updated queries to use `linktarget` table for better link resolution (#415)
+  - Enhanced database queries in add_category task
+  - Optimized portal distribution queries
+  - Improved remove request query performance
+- Re-enabled multiple Python scripts in toolforge job configuration (#415)
+
+
+## [1.17.1] - 2025-02-09
 
 ### Added
 - Full code implementation of Missing Topics Task (originally added in v1.0.0)
