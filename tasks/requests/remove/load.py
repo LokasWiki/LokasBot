@@ -26,9 +26,10 @@ and categorylinks.cl_to in (select page_title from page where page_id in (FROM_I
 """
 portal_query = """select page_from.page_title as "prt_title",page_from.page_namespace as "prt_namespace"  from pagelinks
 inner join page page_from on page_from.page_id = pagelinks.pl_from
+inner join linktarget ON linktarget.lt_id = pagelinks.pl_target_id
 where pagelinks.pl_from_namespace in (0,14) 
-and pagelinks.pl_namespace in (100)
-and  pagelinks.pl_title in (select page_title from page where page_id in (FROM_ID) and page_namespace = 100)"""
+and linktarget.lt_namespace in (100)
+and  linktarget.lt_title in (select page_title from page where page_id in (FROM_ID) and page_namespace = 100)"""
 
 try:
     session = Session(engine)

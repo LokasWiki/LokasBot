@@ -25,8 +25,9 @@ try:
             if request.to_namespace == 10:
                 to_page = pywikibot.Page(site, request.to_name)
                 if to_page.exists():
-                    database.query = """select pl_title as prt_title from pagelinks
-where pl_from = {} and pl_from_namespace = 10 and pl_namespace = 0;""".format(to_page.pageid)
+                    database.query = """select lt_title as prt_title from pagelinks
+inner join linktarget ON linktarget.lt_id = pagelinks.pl_target_id
+where pl_from = {} and pagelinks.pl_from_namespace = 10 and linktarget.lt_namespace = 0;""".format(to_page.pageid)
                     database.get_content_from_database()
                     gen = database.result
             else:
