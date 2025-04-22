@@ -46,6 +46,9 @@ try:
 
                 p.text = text
                 # print(text)
+                if not p.exists():
+                    print(f"Page '{page.page_name}' does not exist. Skipping...")
+                    continue
                 p.save(
                     summary="بوت:[[ويكيبيديا:طلبات استبدال الوصلات]] استبدال [[" + page_title + "]] ب [[" + page_new_title + "]]")
 
