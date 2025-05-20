@@ -15,7 +15,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
           request_pty: true
-          script_stop: true
+          #script_stop: true
           #password: ${{ secrets.PASSWORD }}
           key: ${{ secrets.KEY }}
           # script: whoami
