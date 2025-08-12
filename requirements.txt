@@ -1,7 +1,7 @@
 mwparserfromhell == 0.7.2
 pymysql == 1.1.1
 python-dateutil == 2.9.0.post0
-pywikibot [mysql,mwoauth] == 10.3.0
+pywikibot [mysql,mwoauth] == 10.3.1
 
 requests~=2.32.4
 SQLAlchemy == 2.0.43
