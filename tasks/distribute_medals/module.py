@@ -6,7 +6,6 @@ import re
 
 import pymysql
 import pywikibot
-import pywikibot.flow
 from pywikibot import config as _config
 
 
@@ -276,35 +275,22 @@ class SendTemplate(Base):
             signature_manager = SignatureManager(self.signature_list)
             random_signature = signature_manager.get_random_signature(name)
 
-            if talk_page.is_flow_page():
-                board = pywikibot.flow.Board(talk_page)
 
-                # Add a new section to the page
-                title = 'وسام NUMBER تعديل!'.replace('NUMBER', str(self.input_dict['number']))
-                content = self.input_dict['template_stub'].replace('NUMBER', str(self.input_dict['number'])).replace(
-                    "SIGNATURE", random_signature).replace("USERNAME", name)
+            # Add a new section to the page
+            text = talk_page.text
+            text += '\n\n== وسام NUMBER تعديل! ==\n\n'.replace('NUMBER', str(self.input_dict['number']))
+            text += self.input_dict['template_stub'].replace('NUMBER', str(self.input_dict['number'])).replace(
+                "SIGNATURE", random_signature).replace("USERNAME", name)
 
-                try:
-                    print("start send to " + name)
-                    topic = board.new_topic(title, content)
-                except Exception as error:
-                    print(f'Error saving page: {error}')
+            try:
+                # Save the edited page
+                print("start send to " + name)
+                talk_page.text = text
+                summary = str("بوت:[[ويكيبيديا:توزيع أوسمة|توزيع أوسمة]] (NUMBER_COUNT تعديل) (v2.1.0)").replace(
+                    'NUMBER_COUNT', str(self.input_dict['number']))
+                # Save the page
+                talk_page.save(summary=summary,minor=False)
+            except Exception as error:
+                print(f'Error saving page: {error}')
+            
 
-            else:
-                pass
-                # Add a new section to the page
-                text = talk_page.text
-                text += '\n\n== وسام NUMBER تعديل! ==\n\n'.replace('NUMBER', str(self.input_dict['number']))
-                text += self.input_dict['template_stub'].replace('NUMBER', str(self.input_dict['number'])).replace(
-                    "SIGNATURE", random_signature).replace("USERNAME", name)
-
-                try:
-                    # Save the edited page
-                    print("start send to " + name)
-                    talk_page.text = text
-                    summary = str("بوت:[[ويكيبيديا:توزيع أوسمة|توزيع أوسمة]] (NUMBER_COUNT تعديل) (v2.0.0)").replace(
-                        'NUMBER_COUNT', str(self.input_dict['number']))
-                    # Save the page
-                    talk_page.save(summary=summary,minor=False)
-                except Exception as error:
-                    print(f'Error saving page: {error}')
