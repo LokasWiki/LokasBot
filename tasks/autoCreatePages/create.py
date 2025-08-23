@@ -122,7 +122,7 @@ class Create:
             page = pywikibot.Page(self.site, page_title)
             if not self.page_exists(page_title):
                 page.text = item['template']
-                page.save("بوت:إنشاء صفحات مطلوبة V2.1.0")
+                page.save("بوت:إنشاء صفحات مطلوبة V2.2.0")
             else:
                 print("Page " + page_title + " is exists")
                 logging.info("Page " + page_title + " is exists")

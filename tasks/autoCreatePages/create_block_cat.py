@@ -1,6 +1,5 @@
 from datetime import datetime
 
-import pywikibot.flow
 
 from tasks.check_usernames.check.modules import DateFormatter
 
@@ -15,6 +14,6 @@ try:
     if not cat.exists():
         if not cat.isEmptyCategory():
             cat.text = "{{تصنيف تهذيب شهري}}"
-            cat.save("بوت:إنشاء صفحات مطلوبة V1.1.0")
+            cat.save("بوت:إنشاء صفحات مطلوبة V1.2.0")
 except:
     print("failed to create category")
