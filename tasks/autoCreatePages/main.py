@@ -135,11 +135,6 @@ def get_page_configurations() -> List[Dict[str, Any]]:
             "template": "{{تصنيف تهذيب شهري}}",
             "creation_message": "بوت:إنشاء صفحات مطلوبة V2.2.0"
         },
-         {
-            "name_template": "تصنيف:مقالات غير test منذ MONTH YEAR",
-            "template": "{{تصنيف تهذيب شهري}}",
-            "creation_message": "بوت:إنشاء صفحات مطلوبة V2.2.0"
-        },
         {
             "name_template": "تصنيف:مراجعات الزملاء MONTH YEAR",
             "template": "{{تصنيف مخفي}}",

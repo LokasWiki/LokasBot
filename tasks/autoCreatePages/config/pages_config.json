@@ -1,0 +1,102 @@
+[
+  {
+    "name_template": "تصنيف:صفحات تحتاج إلى مراجعة الترجمة منذ MONTH YEAR",
+    "template": "{{تصنيف تهذيب شهري}}",
+    "creation_message": "بوت:إنشاء صفحات مطلوبة V2.2.0"
+  },
+  {
+    "name_template": "تصنيف:صفحات للحذف منذ MONTH YEAR",
+    "template": "{{تصنيف تهذيب شهري}}",
+    "creation_message": "بوت:إنشاء صفحات مطلوبة V2.2.0"
+  },
+  {
+    "name_template": "تصنيف:صفحات نقاش حذف غير مغلقة منذ MONTH YEAR",
+    "template": "{{تصنيف تهذيب شهري}}",
+    "creation_message": "بوت:إنشاء صفحات مطلوبة V2.2.0"
+  },
+  {
+    "name_template": "تصنيف:مقالات بحاجة لتدقيق خبير منذ MONTH YEAR",
+    "template": "{{تصنيف تهذيب شهري}}",
+    "creation_message": "بوت:إنشاء صفحات مطلوبة V2.2.0"
+  },
+  {
+    "name_template": "تصنيف:مقالات بحاجة للتحديث منذ MONTH YEAR",
+    "template": "{{تصنيف تهذيب شهري}}",
+    "creation_message": "بوت:إنشاء صفحات مطلوبة V2.2.0"
+  },
+  {
+    "name_template": "تصنيف:مقالات بحاجة للتقسيم منذ MONTH YEAR",
+    "template": "{{تصنيف تهذيب شهري}}",
+    "creation_message": "بوت:إنشاء صفحات مطلوبة V2.2.0"
+  },
+  {
+    "name_template": "تصنيف:مقالات بحاجة للتنسيق منذ MONTH YEAR",
+    "template": "{{تصنيف تهذيب شهري}}",
+    "creation_message": "بوت:إنشاء صفحات مطلوبة V2.2.0"
+  },
+  {
+    "name_template": "تصنيف:مقالات بدون مصدر منذ MONTH YEAR",
+    "template": "{{تصنيف تهذيب شهري}}",
+    "creation_message": "بوت:إنشاء صفحات مطلوبة V2.2.0"
+  },
+  {
+    "name_template": "تصنيف:مقالات بها وصلات داخلية قليلة منذ MONTH YEAR",
+    "template": "{{تصنيف تهذيب شهري}}",
+    "creation_message": "بوت:إنشاء صفحات مطلوبة V2.2.0"
+  },
+  {
+    "name_template": "تصنيف:مقالات ذات عبارات بحاجة لمصادر منذ MONTH YEAR",
+    "template": "{{تصنيف تهذيب شهري}}",
+    "creation_message": "بوت:إنشاء صفحات مطلوبة V2.2.0"
+  },
+  {
+    "name_template": "تصنيف:مقالات غير مراجعة منذ MONTH YEAR",
+    "template": "{{تصنيف تهذيب شهري}}",
+    "creation_message": "بوت:إنشاء صفحات مطلوبة V2.2.0"
+  },
+  {
+    "name_template": "تصنيف:مقالات فيها عبارات متقادمة منذ MONTH YEAR",
+    "template": "{{تصنيف تهذيب شهري}}",
+    "creation_message": "بوت:إنشاء صفحات مطلوبة V2.2.0"
+  },
+  {
+    "name_template": "تصنيف:مقالات للتدقيق اللغوي منذ MONTH YEAR",
+    "template": "{{تصنيف تهذيب شهري}}",
+    "creation_message": "بوت:إنشاء صفحات مطلوبة V2.2.0"
+  },
+  {
+    "name_template": "تصنيف:مقالات مترجمة آليا منذ MONTH YEAR",
+    "template": "{{تصنيف تهذيب شهري}}",
+    "creation_message": "بوت:إنشاء صفحات مطلوبة V2.2.0"
+  },
+  {
+    "name_template": "تصنيف:مقالات مطلوب توسيعها منذ MONTH YEAR",
+    "template": "{{تصنيف تهذيب شهري}}",
+    "creation_message": "بوت:إنشاء صفحات مطلوبة V2.2.0"
+  },
+  {
+    "name_template": "تصنيف:مقالات يتيمة منذ MONTH YEAR",
+    "template": "{{تصنيف تهذيب شهري}}",
+    "creation_message": "بوت:إنشاء صفحات مطلوبة V2.2.0"
+  },
+  {
+    "name_template": "تصنيف:تصنيفات تهذيب منذ MONTH YEAR",
+    "template": "{{تصنيف تهذيب شهري}}",
+    "creation_message": "بوت:إنشاء صفحات مطلوبة V2.2.0"
+  },
+  {
+    "name_template": "تصنيف:مقالات غير مصنفة منذ MONTH YEAR",
+    "template": "{{تصنيف تهذيب شهري}}",
+    "creation_message": "بوت:إنشاء صفحات مطلوبة V2.2.0"
+  },
+   {
+    "name_template": "تصنيف:مقالات غير مصنفة منذ MONTH YEAR",
+    "template": "{{تصنيف تهذيب شهري}}",
+    "creation_message": "بوت:إنشاء صفحات مطلوبة V2.2.0"
+  },
+  {
+    "name_template": "تصنيف:مراجعات الزملاء MONTH YEAR",
+    "template": "{{تصنيف مخفي}}",
+    "creation_message": "بوت:إنشاء صفحات مطلوبة V2.2.0"
+  }
+]
