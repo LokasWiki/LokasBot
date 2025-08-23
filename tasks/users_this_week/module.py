@@ -3,7 +3,6 @@ import os
 
 import pymysql
 import pywikibot
-import pywikibot.flow
 from pywikibot import config as _config
 
 
@@ -25,11 +24,14 @@ class Translator:
                                'October', 'November', 'December']
         self.arabic_months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر',
                               'نوفمبر', 'ديسمبر']
-        self.english_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-        self.arabic_days = ['الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت', 'الأحد']
+        self.english_days = ['Monday', 'Tuesday', 'Wednesday',
+                             'Thursday', 'Friday', 'Saturday', 'Sunday']
+        self.arabic_days = ['الإثنين', 'الثلاثاء',
+                            'الأربعاء', 'الخميس', 'الجمعة', 'السبت', 'الأحد']
 
         self.english_rank = ['1', '2', '3', '4', '5', '6', '7']
-        self.arabic_rank = ['الأول', 'الثاني', 'الثالث', 'الرابع', 'الخامس', 'السادس', 'السابع']
+        self.arabic_rank = ['الأول', 'الثاني', 'الثالث',
+                            'الرابع', 'الخامس', 'السادس', 'السابع']
 
     def translate_month(self, month):
         """Translates an English month name to Arabic.
@@ -94,15 +96,18 @@ class Base:
             # Get the ISO year, week number, and day of the week
             self.year, self.week, self.day = self.now.isocalendar()
             # Get the first day of the week as Monday
-            self.first_day_of_week = self.now - datetime.timedelta(days=self.now.weekday())
+            self.first_day_of_week = self.now - \
+                datetime.timedelta(days=self.now.weekday())
             # if self.now.weekday() == 6:
             #     self.first_day_of_week -= datetime.timedelta(days=6)
             # Get the last day of the week
-            self.last_day_of_week = self.first_day_of_week + datetime.timedelta(days=6)
+            self.last_day_of_week = self.first_day_of_week + \
+                datetime.timedelta(days=6)
         else:
             self.first_day_of_week = first_day
             # self.last_day_of_week = last_day
-            self.last_day_of_week = self.first_day_of_week + datetime.timedelta(days=6)
+            self.last_day_of_week = self.first_day_of_week + \
+                datetime.timedelta(days=6)
             self.year, self.week, self.day = first_day.isocalendar()
 
         # Get the directory of the script
@@ -111,7 +116,8 @@ class Base:
         # self.domain_name = "مستخدم:لوقا/"
 
         # Format the first and last day of the week in the desired format
-        self.date_before_30_days = self.first_day_of_week - datetime.timedelta(days=30)
+        self.date_before_30_days = self.first_day_of_week - \
+            datetime.timedelta(days=30)
 
         self.date_before_30_days_formatted = self.date_before_30_days.replace(hour=0, minute=0, second=0).strftime(
             "%Y%m%d%H%M%S")
@@ -127,7 +133,7 @@ class Base:
             self.first_day_of_week.strftime(
                 "%A")) + " " + self.first_day_of_week.strftime(
             "%d ") + self.translator.translate_month(self.first_day_of_week.strftime(
-            "%B")) + self.first_day_of_week.strftime(
+                "%B")) + self.first_day_of_week.strftime(
             " %Y") + " الساعة 00:00 بالتوقيت العالمي وانتهاء " + self.translator.translate_day(
             self.last_day_of_week.strftime(
                 "%A")) + " " + self.last_day_of_week.strftime("%d") + " " + self.translator.translate_month(
@@ -242,7 +248,8 @@ class TableGenerator(Base):
         Returns:
             str: The generated table as a string.
         """
-        table = "{{النشاط في مستخدمو الأسبوع\n|صفحة المسابقة = " + self.competition_page + "\n|الفريق= " + self.team + "\n\n|النشاط=" + self.activity + "\n\n|الأعضاء=\n"
+        table = "{{النشاط في مستخدمو الأسبوع\n|صفحة المسابقة = " + self.competition_page + \
+            "\n|الفريق= " + self.team + "\n\n|النشاط=" + self.activity + "\n\n|الأعضاء=\n"
         rank = 1
         current_score = None
         for member in self.members:
@@ -349,42 +356,62 @@ class SendTemplate(Base):
             # Get the user page for the user
             talk_page = user.getUserTalkPage()
 
-            if talk_page.is_flow_page():
-                board = pywikibot.flow.Board(talk_page)
+            # if talk_page.is_flow_page():
+            #     board = pywikibot.flow.Board(talk_page)
 
-                # Add a new section to the page
-                title = 'تهانينا'
-                content = self.input_dict['template_stub'].replace('YEAR_NUMBER', str(self.year)).replace("WEEK_NUMBER",
-                                                                                                          str(self.week)).replace(
-                    "RANK", self.translator.translate_rank(str(rank - 1))).replace("USER_NAME", name)
+            #     # Add a new section to the page
+            #     title = 'تهانينا'
+            #     content = self.input_dict['template_stub'].replace('YEAR_NUMBER', str(self.year)).replace("WEEK_NUMBER",
+            #                                                                                               str(self.week)).replace(
+            #         "RANK", self.translator.translate_rank(str(rank - 1))).replace("USER_NAME", name)
 
-                try:
-                    topic = board.new_topic(title, content)
-                except Exception as error:
-                    print(f'Error saving page: {error}')
+            #     try:
+            #         topic = board.new_topic(title, content)
+            #     except Exception as error:
+            #         print(f'Error saving page: {error}')
 
-            else:
-                pass
-                # Add a new section to the page
-                text = talk_page.text
-                text += '\n\n== تهانينا ==\n\n'
-                text += self.input_dict['template_stub'].replace('YEAR_NUMBER', str(self.year)).replace("WEEK_NUMBER",
-                                                                                                        str(self.week)).replace(
-                    "RANK", self.translator.translate_rank(str(rank - 1))).replace("USER_NAME", name)
+            # else:
+            #     pass
+            #     # Add a new section to the page
+            #     text = talk_page.text
+            #     text += '\n\n== تهانينا ==\n\n'
+            #     text += self.input_dict['template_stub'].replace('YEAR_NUMBER', str(self.year)).replace("WEEK_NUMBER",
+            #                                                                                             str(self.week)).replace(
+            #         "RANK", self.translator.translate_rank(str(rank - 1))).replace("USER_NAME", name)
 
-                text += "\n~~~~"
-                try:
-                    # Save the edited page
+            #     text += "\n~~~~"
+            #     try:
+            #         # Save the edited page
 
-                    talk_page.text = text
+            #         talk_page.text = text
 
-                    # Save the page
-                    talk_page.save(
-                        "بوت: توزيع أوسمة [[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مشروع مستخدمو الأسبوع الأكثر نشاطًا]] (V1.2.0)",
-                        minor=False
-                    )
-                except Exception as error:
-                    print(f'Error saving page: {error}')
+            #         # Save the page
+            #         talk_page.save(
+            #             "بوت: توزيع أوسمة [[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مشروع مستخدمو الأسبوع الأكثر نشاطًا]] (V1.2.0)",
+            #             minor=False
+            #         )
+            #     except Exception as error:
+            #         print(f'Error saving page: {error}')
+            # Add a new section to the page
+            text = talk_page.text
+            text += '\n\n== تهانينا ==\n\n'
+            text += self.input_dict['template_stub'].replace('YEAR_NUMBER', str(self.year)).replace("WEEK_NUMBER",
+                                                                                                    str(self.week)).replace(
+                "RANK", self.translator.translate_rank(str(rank - 1))).replace("USER_NAME", name)
+
+            text += "\n~~~~"
+            try:
+                # Save the edited page
+
+                talk_page.text = text
+
+                # Save the page
+                talk_page.save(
+                    "بوت: توزيع أوسمة [[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مشروع مستخدمو الأسبوع الأكثر نشاطًا]] (V1.3.0)",
+                    minor=False
+                )
+            except Exception as error:
+                print(f'Error saving page: {error}')
 
 
 class MainPage(Base):
