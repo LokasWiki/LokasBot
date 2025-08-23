@@ -1,4 +1,3 @@
-import pywikibot.flow
 
 import wikitextparser as wtp
 
@@ -94,39 +93,23 @@ for score, user in enumerate(users_template):
     # Get the user page for the user
     talk_page = user.getUserTalkPage()
 
-    if talk_page.is_flow_page():
-        board = pywikibot.flow.Board(talk_page)
+    # Add a new section to the page
+    text = talk_page.text
+    text += '\n\n== تهانينا ==\n\n'
+    text += template_stub.replace('YEAR_NUMBER', str(2023)).replace("WEEK_NUMBER",
+                                                                    str(21)).replace(
+        "RANK", translator.translate_rank(str(rank - 1))).replace("USER_NAME", name)
 
-        # Add a new section to the page
-        title = 'تهانينا'
-        content = template_stub.replace('YEAR_NUMBER', str(2023)).replace("WEEK_NUMBER",
-                                                                          str(21)).replace(
-            "RANK", translator.translate_rank(str(rank - 1))).replace("USER_NAME", name)
+    text += "\n~~~~"
+    try:
+        # Save the edited page
 
-        try:
-            topic = board.new_topic(title, content)
-        except Exception as error:
-            print(f'Error saving page: {error}')
+        talk_page.text = text
 
-    else:
-        pass
-        # Add a new section to the page
-        text = talk_page.text
-        text += '\n\n== تهانينا ==\n\n'
-        text += template_stub.replace('YEAR_NUMBER', str(2023)).replace("WEEK_NUMBER",
-                                                                        str(21)).replace(
-            "RANK", translator.translate_rank(str(rank - 1))).replace("USER_NAME", name)
-
-        text += "\n~~~~"
-        try:
-            # Save the edited page
-
-            talk_page.text = text
-
-            # Save the page
-            talk_page.save(
-                "بوت:[[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مستخدمو الأسبوع الأكثر نشاطا]]",
-                minor=False
-            )
-        except Exception as error:
-            print(f'Error saving page: {error}')
+        # Save the page
+        talk_page.save(
+            "بوت:[[ويكيبيديا:مستخدمو الأسبوع الأكثر نشاطا|مستخدمو الأسبوع الأكثر نشاطا]]",
+            minor=False
+        )
+    except Exception as error:
+        print(f'Error saving page: {error}')
