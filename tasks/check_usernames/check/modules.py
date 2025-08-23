@@ -1,7 +1,6 @@
 from datetime import datetime
 
 import pywikibot
-import pywikibot.flow
 import wikitextparser as wtp
 from pywikibot.data.api import Request
 
@@ -96,53 +95,30 @@ class SendAlert:
         # Get the user page for the user
         talk_page = user.getUserTalkPage()
         self.page_title = talk_page.title(with_ns=True)
-        if talk_page.is_flow_page():
-            board = pywikibot.flow.Board(talk_page)
-
+    
+        cat_name = "تصنيف:أسماء مستخدمين مخالفة مرشحة للمنع"
+        found = False
+        for cat in talk_page.categories():
+            if prepare_str(cat.title(with_ns=True)) == prepare_str(cat_name):
+                found = True
+                break
+        if not found:
             # Add a new section to the page
-            title = 'اسم المستخدم مخالف'
+            text = talk_page.text
+            text += '\n'
             if self.has_reason:
-                content = "{{نسخ:تنبيه اسم مخالف|REASON|with_title=no}}".replace("REASON", str(self.reason).strip())
+                text += "{{نسخ:تنبيه اسم مخالف|REASON}}----[[مستخدم:Dr-Taher|Dr-Taher]] ([[نقاش المستخدم:Dr-Taher|نقاش]]) {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)".replace(
+                    "REASON", str(self.reason).strip())
             else:
-                content = "{{نسخ:تنبيه اسم مخالف|with_title=no}}"
+                text += "{{نسخ:تنبيه اسم مخالف}}----[[مستخدم:Dr-Taher|Dr-Taher]] ([[نقاش المستخدم:Dr-Taher|نقاش]]) {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)"
 
             try:
-                topic = board.new_topic(title, content)
-                # add category to header
-                self.get_header_text()
-
-                self.header += """\n[[تصنيف:أسماء مستخدمين مخالفة مرشحة للمنع]]\n[[CAT_NAME|{{اسم_الصفحة_الأساسي}}]]\n""".replace(
-                    "CAT_NAME", self.cat_name)
-                self.token = self.site.tokens["csrf"]
-                self.save_flow_header()
-
+                # Save the edited page
+                talk_page.text = text
+                # Save the page
+                talk_page.save(summary="بوت:تنبيه اسم مخالف", minor=False)
             except Exception as error:
                 print(f'Error saving page: {error}')
-
-        else:
-            cat_name = "تصنيف:أسماء مستخدمين مخالفة مرشحة للمنع"
-            found = False
-            for cat in talk_page.categories():
-                if prepare_str(cat.title(with_ns=True)) == prepare_str(cat_name):
-                    found = True
-                    break
-            if not found:
-                # Add a new section to the page
-                text = talk_page.text
-                text += '\n'
-                if self.has_reason:
-                    text += "{{نسخ:تنبيه اسم مخالف|REASON}}----[[مستخدم:Dr-Taher|Dr-Taher]] ([[نقاش المستخدم:Dr-Taher|نقاش]]) {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)".replace(
-                        "REASON", str(self.reason).strip())
-                else:
-                    text += "{{نسخ:تنبيه اسم مخالف}}----[[مستخدم:Dr-Taher|Dr-Taher]] ([[نقاش المستخدم:Dr-Taher|نقاش]]) {{safesubst:#وقت:G:i، j F Y}}  (ت ع م)"
-
-                try:
-                    # Save the edited page
-                    talk_page.text = text
-                    # Save the page
-                    talk_page.save(summary="بوت:تنبيه اسم مخالف", minor=False)
-                except Exception as error:
-                    print(f'Error saving page: {error}')
 
     def get_header_text(self):
 

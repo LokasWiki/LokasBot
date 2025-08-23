@@ -1,7 +1,6 @@
 import re
 
 import pymysql
-import pywikibot.flow
 from pywikibot import config as _config
 
 
