@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run pwb.py with test.py",
+            "type": "python",
+            "request": "launch",
+            "program": "/home/lokas/PycharmProjects/pythonProject3/core_stable/pwb.py",
+            "args": [
+                "-dir:/home/lokas/PycharmProjects/pythonProject3/core_stable",
+                "/home/lokas/PycharmProjects/pythonProject3/code/tasks/InfoboxSync/test.py"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "python": "/usr/bin/python3.9"
+        }
+    ]
+}

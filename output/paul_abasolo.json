@@ -1,0 +1,800 @@
+{
+  "page_title": "Paul Abasolo",
+  "template_type": "football_biography",
+  "arabic_fields": {
+    "أندية_الشباب": {
+      "value": [
+        "Lauaxeta Ikastola",
+        "[[Athletic Bilbao]]"
+      ],
+      "type": "numbered",
+      "item_type": "raw",
+      "count": 2,
+      "original_keys": [
+        "youthclubs1",
+        "youthclubs2"
+      ]
+    },
+    "سنوات_الشباب": {
+      "value": [
+        "1995–1996",
+        "1996–2002"
+      ],
+      "type": "numbered",
+      "item_type": "raw",
+      "count": 2,
+      "original_keys": [
+        "youthyears1",
+        "youthyears2"
+      ]
+    },
+    "أندية": {
+      "value": [
+        "[[CD Basconia|Basconia]]",
+        "[[Barakaldo CF|Barakaldo]]",
+        "[[SD Eibar|Eibar]]",
+        "→ [[SD Lemona|Lemona]] (loan)",
+        "→ [[Logroñés CF|Logroñés]] (loan)",
+        "[[Logroñés CF|Logroñés]]",
+        "[[Real Unión]]",
+        "Iurretako",
+        "[[SD Lemona|Lemona]]",
+        "[[Real Oviedo|Oviedo]]",
+        "[[Sestao River Club|Sestao]]",
+        "[[Amurrio Club|Amurrio]]",
+        "[[Zamudio SD|Zamudio]]",
+        "[[Club Portugalete|Portugalete]]",
+        "Batea"
+      ],
+      "type": "numbered",
+      "item_type": "raw",
+      "count": 15,
+      "original_keys": [
+        "clubs1",
+        "clubs2",
+        "clubs3",
+        "clubs4",
+        "clubs5",
+        "clubs6",
+        "clubs7",
+        "clubs8",
+        "clubs9",
+        "clubs10",
+        "clubs11",
+        "clubs12",
+        "clubs13",
+        "clubs14",
+        "clubs15"
+      ]
+    },
+    "سنوات": {
+      "value": [
+        "2002–2003",
+        "2003–2004",
+        "2004–2006",
+        "2005",
+        "2005–2006",
+        "2006–2007",
+        "2007–2010",
+        "2010",
+        "2011",
+        "2011–2012",
+        "2012–2013",
+        "2014",
+        "2015–2016",
+        "2016–2017",
+        "2018–2021"
+      ],
+      "type": "numbered",
+      "item_type": "raw",
+      "count": 15,
+      "original_keys": [
+        "years1",
+        "years2",
+        "years3",
+        "years4",
+        "years5",
+        "years6",
+        "years7",
+        "years8",
+        "years9",
+        "years10",
+        "years11",
+        "years12",
+        "years13",
+        "years14",
+        "years15"
+      ]
+    },
+    "مباريات": {
+      "value": [
+        "35",
+        "24",
+        "2",
+        "16",
+        "24",
+        "29",
+        "82",
+        "11",
+        "21",
+        "26",
+        "13",
+        "45",
+        "12",
+        "41"
+      ],
+      "type": "numbered",
+      "item_type": "number",
+      "count": 14,
+      "original_keys": [
+        "caps1",
+        "caps2",
+        "caps3",
+        "caps4",
+        "caps5",
+        "caps6",
+        "caps7",
+        "caps9",
+        "caps10",
+        "caps11",
+        "caps12",
+        "caps13",
+        "caps14",
+        "caps15"
+      ]
+    },
+    "أهداف": {
+      "value": [
+        "5",
+        "1",
+        "0",
+        "4",
+        "2",
+        "8",
+        "12",
+        "1",
+        "2",
+        "0",
+        "5",
+        "17",
+        "8",
+        "10"
+      ],
+      "type": "numbered",
+      "item_type": "number",
+      "count": 14,
+      "original_keys": [
+        "goals1",
+        "goals2",
+        "goals3",
+        "goals4",
+        "goals5",
+        "goals6",
+        "goals7",
+        "goals9",
+        "goals10",
+        "goals11",
+        "goals12",
+        "goals13",
+        "goals14",
+        "goals15"
+      ]
+    },
+    "منتخب_وطني": {
+      "value": [],
+      "type": "numbered",
+      "item_type": "raw",
+      "count": 0,
+      "original_keys": []
+    },
+    "سنوات_وطنية": {
+      "value": [],
+      "type": "numbered",
+      "item_type": "raw",
+      "count": 0,
+      "original_keys": []
+    },
+    "مباريات_وطنية": {
+      "value": [],
+      "type": "numbered",
+      "item_type": "number",
+      "count": 0,
+      "original_keys": []
+    },
+    "أهداف_وطنية": {
+      "value": [],
+      "type": "numbered",
+      "item_type": "number",
+      "count": 0,
+      "original_keys": []
+    },
+    "أندية_مدرب": {
+      "value": [],
+      "type": "numbered",
+      "item_type": "raw",
+      "count": 0,
+      "original_keys": []
+    },
+    "سنوات_مدرب": {
+      "value": [],
+      "type": "numbered",
+      "item_type": "raw",
+      "count": 0,
+      "original_keys": []
+    },
+    "اسم": {
+      "value": "Paul Abasolo",
+      "type": "text",
+      "original_key": "name",
+      "validation": {
+        "is_valid": true,
+        "length": 12,
+        "has_special_chars": false
+      }
+    },
+    "الاسم الكامل": {
+      "value": "Paul Abasolo Amantegi",
+      "type": "text",
+      "original_key": "fullname",
+      "validation": {
+        "is_valid": true,
+        "length": 21,
+        "has_special_chars": false
+      }
+    },
+    "تاريخ الولادة": {
+      "value": "{{birth date and age|1984|6|29|df=yes}}",
+      "type": "raw",
+      "original_key": "birth_date",
+      "validation": {
+        "is_valid": true
+      }
+    },
+    "مكان الولادة": {
+      "value": "[[Durango, Spain]]",
+      "type": "raw",
+      "original_key": "birth_place",
+      "validation": {
+        "is_valid": true
+      }
+    },
+    "الطول": {
+      "value": 1.84,
+      "type": "number",
+      "original_key": "height",
+      "validation": {
+        "is_valid": true,
+        "numeric_value": 1.84,
+        "has_units": true
+      },
+      "numeric_value": 1.84
+    },
+    "المركز": {
+      "value": "[[Forward (association football)|Forward]]",
+      "type": "raw",
+      "original_key": "position",
+      "validation": {
+        "is_valid": true
+      }
+    },
+    "مجموع_مباريات": {
+      "value": 381.0,
+      "type": "number",
+      "original_key": "totalcaps",
+      "validation": {
+        "is_valid": true,
+        "numeric_value": 381.0,
+        "has_units": true
+      },
+      "numeric_value": 381.0
+    },
+    "إجمالي الأهداف": {
+      "value": 75.0,
+      "type": "number",
+      "original_key": "totalgoals",
+      "validation": {
+        "is_valid": true,
+        "numeric_value": 75.0,
+        "has_units": true
+      },
+      "numeric_value": 75.0
+    }
+  },
+  "metadata": {
+    "categories": [
+      "1984 births",
+      "Living people",
+      "Footballers from Durango, Biscay",
+      "Spanish men's footballers",
+      "Men's association football forwards",
+      "Segunda División players",
+      "Segunda División B players",
+      "Tercera División players",
+      "Divisiones Regionales de Fútbol players",
+      "CD Basconia footballers",
+      "Athletic Bilbao footballers",
+      "Barakaldo CF footballers",
+      "SD Eibar footballers",
+      "SD Lemona footballers",
+      "Logroñés CF footballers",
+      "Real Unión footballers",
+      "Real Oviedo players",
+      "Sestao River Club footballers",
+      "Amurrio Club footballers",
+      "Zamudio SD players",
+      "Club Portugalete players",
+      "People convicted of sexual assault",
+      "21st-century Spanish sportsmen"
+    ],
+    "links": [
+      "Durango, Spain",
+      "Forward (association football)",
+      "Athletic Bilbao",
+      "CD Basconia",
+      "Barakaldo CF",
+      "SD Eibar",
+      "SD Lemona",
+      "Logroñés CF",
+      "Logroñés CF",
+      "Real Unión",
+      "SD Lemona",
+      "Real Oviedo",
+      "Sestao River Club",
+      "Amurrio Club",
+      "Zamudio SD",
+      "Club Portugalete",
+      "Association football",
+      "Forward (association football)",
+      "Durango, Spain",
+      "Biscay",
+      "Athletic Bilbao",
+      "farm team",
+      "CD Basconia",
+      "Mundo Deportivo",
+      "Segunda División B",
+      "Basque Country (autonomous community)",
+      "SD Eibar",
+      "2004–05 Segunda División",
+      "Segunda División",
+      "SD Lemona",
+      "Logroñés CF",
+      "El Correo",
+      "2009–10 Segunda División",
+      "Football in Spain",
+      "Marca (newspaper)",
+      "El Mundo (Spain)",
+      "Real Unión",
+      "2008–09 Segunda División B",
+      "ABC (newspaper)",
+      "Real Oviedo",
+      "Sestao River Club",
+      "sexual assault",
+      "Government of Spain",
+      "La Nueva España",
+      "Argia (magazine)"
+    ],
+    "template_name": "football_biography",
+    "total_mapped_fields": 20,
+    "original_field_count": 70
+  },
+  "raw_content": "{{short description|Spanish footballer}}\n{{family name hatnote|Abasolo|Amantegi|lang=Spanish}}\n{{Use dmy dates|date=January 2024}}\n{{Infobox football biography\n| name = Paul Abasolo\n| image = \n| fullname = Paul Abasolo Amantegi\n| birth_date = {{birth date and age|1984|6|29|df=yes}} \n| birth_place = [[Durango, Spain]]\n| height = {{height|m=1.84}}\n| position = [[Forward (association football)|Forward]]\n| currentclub = \n| clubnumber = \n| youthyears1 = 1995–1996 | youthclubs1 = Lauaxeta Ikastola\n| youthyears2 = 1996–2002 | youthclubs2 = [[Athletic Bilbao]]\n| years1 = 2002–2003 | clubs1 = [[CD Basconia|Basconia]] | caps1 = 35 | goals1 = 5\n| years2 = 2003–2004 | clubs2 = [[Barakaldo CF|Barakaldo]] | caps2 = 24 | goals2 = 1\n| years3 = 2004–2006 | clubs3 = [[SD Eibar|Eibar]] | caps3 = 2 | goals3 = 0\n| years4 = 2005 | clubs4 = → [[SD Lemona|Lemona]] (loan) | caps4 = 16 | goals4 = 4\n| years5 = 2005–2006 | clubs5 = → [[Logroñés CF|Logroñés]] (loan) | caps5 = 24 | goals5 = 2\n| years6 = 2006–2007 | clubs6 = [[Logroñés CF|Logroñés]] | caps6 = 29 | goals6 = 8\n| years7 = 2007–2010 | clubs7 = [[Real Unión]] | caps7 = 82 | goals7 = 12\n| years8 = 2010 | clubs8 = Iurretako | caps8 = | goals8 =\n| years9 = 2011 | clubs9 = [[SD Lemona|Lemona]] | caps9 = 11 | goals9 = 1\n| years10 = 2011–2012 | clubs10 = [[Real Oviedo|Oviedo]] | caps10 = 21 | goals10 = 2\n| years11 = 2012–2013 | clubs11 = [[Sestao River Club|Sestao]] | caps11 = 26 | goals11 = 0\n| years12 = 2014 | clubs12 = [[Amurrio Club|Amurrio]] | caps12 = 13 | goals12 = 5 \n| years13 = 2015–2016 | clubs13 = [[Zamudio SD|Zamudio]] | caps13 = 45 | goals13 = 17\n| years14 = 2016–2017 | clubs14 = [[Club Portugalete|Portugalete]] | caps14 = 12 | goals14 = 8\n| years15 = 2018–2021 | clubs15 = Batea | caps15 = 41 | goals15 = 10\n| totalcaps = 381 | totalgoals = 75\n| club-update =\n| nationalteam-update =\n}}\n'''Paul Abasolo Amantegi''' ({{IPA|es|pawl aβaˈsolo amanˈtexi}}; born 29 June 1984) is a Spanish former [[Association football|footballer]] who played as a [[Forward (association football)|forward]].\n\n==Club career==\nBorn in [[Durango, Spain|Durango]], [[Biscay]], Abasolo spent seven years connected with [[Athletic Bilbao]], six in the youth system and one with the [[farm team]], [[CD Basconia]].<ref>[https://www.mundodeportivo.com/20111207/athletic-bilbao/entrevista-abasolo-gozada-jugar-athletic_54239906805.html Abasolo: \"Para mí es una gozada ver jugar a este Athletic\" (Abasolo: \"I'm having a blast watching this Athletic play\")]; [[Mundo Deportivo]], 7 December 2011 (in Spanish)</ref> Released in 2003, he played the better part of the following six years in the [[Segunda División B]] and in his native [[Basque Country (autonomous community)|Basque Country]], the sole exception being [[SD Eibar]] in the first part of the [[2004–05 Segunda División|2004–05 season]] in the [[Segunda División]], with that club loaning him consecutively to two other teams in division three, [[SD Lemona]]<ref>[http://hemeroteca.mundodeportivo.com/preview/2005/02/01/pagina-28/1348145/pdf.html#&mode=fullScreen Cuatro fichajes sobre la bocina (Four signings at the buzzer)]; Mundo Deportivo, 1 February 2005 (in Spanish)</ref> and [[Logroñés CF]].<ref>[https://www.elcorreo.com/vizcaya/20070716/deportes/la-rioja/logrones-inicia-trabajo-jugadores-20070716.html El Logroñés CF inicia hoy el trabajo con 20 jugadores (Logroñés CF start working today with 20 players)]; [[El Correo]], 23 July 2007 (in Spanish)</ref>\n\nIn the [[2009–10 Segunda División|2009–10 campaign]], Abasolo competed for the second time in the second tier of [[Football in Spain|Spanish football]], scoring four goals<ref>[http://www.marca.com/2009/10/03/futbol/2adivision/1254596582.html El Real Unión se aprovecha de un Castellón que no levanta cabeza (Real Unión take advantage of sunken Castellón)] {{Webarchive|url=https://web.archive.org/web/20140821065415/http://www.marca.com/2009/10/03/futbol/2adivision/1254596582.html|date=21 August 2014}}; [[Marca (newspaper)|Marca]], 3 October 2009 (in Spanish)</ref><ref>[http://www.marca.com/2009/10/11/futbol/2adivision/1255290535.html Un gran Real Unión dejó sin dos puntos al Betis (Great Real Unión rob Betis of two points)] {{Webarchive|url=https://web.archive.org/web/20140821065450/http://www.marca.com/2009/10/11/futbol/2adivision/1255290535.html|date=21 August 2014}}; Marca, 11 October 2009 (in Spanish)</ref><ref>[http://www.elmundo.es/elmundo/2009/10/25/paisvasco/1256496810.html El Real Unión cae 2–1 ante el Cádiz en el Carranza con un gol de Ogbeche (Real Unión fall 2–1 against Cádiz at the Carranza with Ogbeche goal)] {{Webarchive|url=https://web.archive.org/web/20160609194820/http://www.elmundo.es/elmundo/2009/10/25/paisvasco/1256496810.html|date=9 June 2016}}; [[El Mundo (Spain)|El Mundo]], 25 October 2009 (in Spanish)</ref><ref>[http://www.marca.com/2010/05/22/futbol/2adivision/1274555627.html El Real Unión cree en la salvación ante un 'novato' Numancia (Real Unión believe in survival against 'rookie' Numancia)] {{Webarchive|url=https://web.archive.org/web/20171118222012/http://www.marca.com/2010/05/22/futbol/2adivision/1274555627.html|date=18 November 2017}}; Marca, 22 May 2010 (in Spanish)</ref> in 34 games for [[Real Unión]]<ref>[http://www.marca.com/2009/07/15/futbol/equipos/real_union/1247674204.html Paul Abasolo no jugará con el Athletic (Paul Abasolo will not play for Athletic)] {{Webarchive|url=https://web.archive.org/web/20120110114532/http://www.marca.com/2009/07/15/futbol/equipos/real_union/1247674204.html|date=10 January 2012}}; Marca, 15 July 2009 (in Spanish)</ref> as they suffered relegation one year after [[2008–09 Segunda División B|being promoted]].<ref>[https://www.abc.es/deportes/futbol/hercules-primera-201006190000_noticia.html El Hércules vuelve a Primera catorce años después (Hércules return to ''Primera'' fourteen years later)]; [[ABC (newspaper)|ABC]], 19 June 2010 (in Spanish)</ref> After a few months playing with a regional league side, he resumed his career in the third division with Lemona, [[Real Oviedo]] and [[Sestao River Club]].<ref>[https://www.eldesmarque.com/noticias/pais-vasco/20160602/neira-abasolo-y-zarrabeitia-mas-calidad-para-el-portugalete_60053537.html Neira, Abasolo y Zarrabeitia, más calidad para el Portugalete (Neira, Abasolo and Zarrabeitia, more skill for Portugalete)]; El Desmarque, 2 June 2016 (in Spanish)</ref>\n\n==Conviction==\nConvicted of [[sexual assault]] in July 2010 for having attacked three young women, Abasolo was acquitted on a fourth charge due to doubts of the alleged victim.<ref>[http://www.elmundo.es/elmundo/2010/07/06/paisvasco/1278430901.html Condenan a un ex futbolista del Real Unión a 3 años de cárcel por abusos sexuales (Real Unión footballer sentenced to 3 years in jail for sexual assault)] {{Webarchive|url=https://web.archive.org/web/20180620153200/http://www.elmundo.es/elmundo/2010/07/06/paisvasco/1278430901.html|date=20 June 2018}}; El Mundo, 6 July 2010 (in Spanish)</ref> He was eventually pardoned by the [[Government of Spain]], but this fact prevented him from being hired by his former club Athletic Bilbao.<ref>[http://www.lne.es/deportes/2012/01/21/abasolo-indultado-tres-delitos-agresion-sexual/1187384.html Abasolo, indultado de tres delitos de agresión sexual (Abasolo, pardoned on three sexual assault charges)] {{Webarchive|url=https://web.archive.org/web/20160602031215/http://www.lne.es/deportes/2012/01/21/abasolo-indultado-tres-delitos-agresion-sexual/1187384.html|date=2 June 2016}}; [[La Nueva España]], 21 January 2012 (in Spanish)</ref><ref>[http://www.argia.com/argia-astekaria/2317/abasolo-auzia Abasolo auzia: Indultuak zabaldutako zauriak (The Abasolo case: the wounds opened by the pardon)] {{Webarchive|url=https://web.archive.org/web/20130514161758/http://www.argia.com/argia-astekaria/2317/abasolo-auzia|date=14 May 2013}}; [[Argia (magazine)|Argia]], 1 April 2012 (in Basque)</ref>\n\n==References==\n{{Reflist}}\n\n==External links==\n*{{BDFutbol|5033}}\n*{{Futbolme|37}}\n*{{Athletic Bilbao profile|id=461/abasolo}}\n*{{LaPreferente|37445}}\n*{{Soccerway|paul-abasolo-amantegi/61737}}\n\n{{DEFAULTSORT:Abasolo, Paul}}\n[[Category:1984 births]]\n[[Category:Living people]]\n[[Category:Footballers from Durango, Biscay]]\n[[Category:Spanish men's footballers]]\n[[Category:Men's association football forwards]]\n[[Category:Segunda División players]]\n[[Category:Segunda División B players]]\n[[Category:Tercera División players]]\n[[Category:Divisiones Regionales de Fútbol players]]\n[[Category:CD Basconia footballers]]\n[[Category:Athletic Bilbao footballers]]\n[[Category:Barakaldo CF footballers]]\n[[Category:SD Eibar footballers]]\n[[Category:SD Lemona footballers]]\n[[Category:Logroñés CF footballers]]\n[[Category:Real Unión footballers]]\n[[Category:Real Oviedo players]]\n[[Category:Sestao River Club footballers]]\n[[Category:Amurrio Club footballers]]\n[[Category:Zamudio SD players]]\n[[Category:Club Portugalete players]]\n[[Category:People convicted of sexual assault]]\n[[Category:21st-century Spanish sportsmen]]",
+  "arabic_title": "بول أباسولو",
+  "translated_fields": {
+    "أندية_الشباب": {
+      "value": [
+        "Lauaxeta Ikastola",
+        "[[Athletic Bilbao]]"
+      ],
+      "type": "numbered",
+      "item_type": "raw",
+      "count": 2,
+      "original_keys": [
+        "youthclubs1",
+        "youthclubs2"
+      ],
+      "translated_value": [
+        "لاوكسيتا إيكاستولا",
+        "[[Athletic Bilbao|أتلتيك بلباو]]"
+      ],
+      "translation_confidence": 0.9
+    },
+    "سنوات_الشباب": {
+      "value": [
+        "1995–1996",
+        "1996–2002"
+      ],
+      "type": "numbered",
+      "item_type": "raw",
+      "count": 2,
+      "original_keys": [
+        "youthyears1",
+        "youthyears2"
+      ],
+      "translated_value": [
+        "1995–1996",
+        "1996–2002"
+      ],
+      "translation_confidence": 0.9
+    },
+    "أندية": {
+      "value": [
+        "[[CD Basconia|Basconia]]",
+        "[[Barakaldo CF|Barakaldo]]",
+        "[[SD Eibar|Eibar]]",
+        "→ [[SD Lemona|Lemona]] (loan)",
+        "→ [[Logroñés CF|Logroñés]] (loan)",
+        "[[Logroñés CF|Logroñés]]",
+        "[[Real Unión]]",
+        "Iurretako",
+        "[[SD Lemona|Lemona]]",
+        "[[Real Oviedo|Oviedo]]",
+        "[[Sestao River Club|Sestao]]",
+        "[[Amurrio Club|Amurrio]]",
+        "[[Zamudio SD|Zamudio]]",
+        "[[Club Portugalete|Portugalete]]",
+        "Batea"
+      ],
+      "type": "numbered",
+      "item_type": "raw",
+      "count": 15,
+      "original_keys": [
+        "clubs1",
+        "clubs2",
+        "clubs3",
+        "clubs4",
+        "clubs5",
+        "clubs6",
+        "clubs7",
+        "clubs8",
+        "clubs9",
+        "clubs10",
+        "clubs11",
+        "clubs12",
+        "clubs13",
+        "clubs14",
+        "clubs15"
+      ],
+      "translated_value": [
+        "[[CD Basconia|باسكونيا]]",
+        "[[Barakaldo CF|باراكالدو]]",
+        "[[SD Eibar|إيبار]]",
+        "→ [[SD Lemona|ليمونا]] (إعارة)",
+        "→ [[Logroñés CF|لوغروينيس]] (إعارة)",
+        "[[Logroñés CF|لوغروينيس]]",
+        "[[Real Unión|ريال يونيون]]",
+        "إيوريتاكو",
+        "[[SD Lemona|ليمونا]]",
+        "[[Real Oviedo|أوفييدو]]",
+        "[[Sestao River Club|سستاو]]",
+        "[[Amurrio Club|أموريو]]",
+        "[[Zamudio SD|زاموديو]]",
+        "[[Club Portugalete|بورتوغاليتي]]",
+        "باتيا"
+      ],
+      "translation_confidence": 0.9
+    },
+    "سنوات": {
+      "value": [
+        "2002–2003",
+        "2003–2004",
+        "2004–2006",
+        "2005",
+        "2005–2006",
+        "2006–2007",
+        "2007–2010",
+        "2010",
+        "2011",
+        "2011–2012",
+        "2012–2013",
+        "2014",
+        "2015–2016",
+        "2016–2017",
+        "2018–2021"
+      ],
+      "type": "numbered",
+      "item_type": "raw",
+      "count": 15,
+      "original_keys": [
+        "years1",
+        "years2",
+        "years3",
+        "years4",
+        "years5",
+        "years6",
+        "years7",
+        "years8",
+        "years9",
+        "years10",
+        "years11",
+        "years12",
+        "years13",
+        "years14",
+        "years15"
+      ],
+      "translated_value": [
+        "2002–2003",
+        "2003–2004",
+        "2004–2006",
+        "2005",
+        "2005–2006",
+        "2006–2007",
+        "2007–2010",
+        "2010",
+        "2011",
+        "2011–2012",
+        "2012–2013",
+        "2014",
+        "2015–2016",
+        "2016–2017",
+        "2018–2021"
+      ],
+      "translation_confidence": 0.9
+    },
+    "مباريات": {
+      "value": [
+        "35",
+        "24",
+        "2",
+        "16",
+        "24",
+        "29",
+        "82",
+        "11",
+        "21",
+        "26",
+        "13",
+        "45",
+        "12",
+        "41"
+      ],
+      "type": "numbered",
+      "item_type": "number",
+      "count": 14,
+      "original_keys": [
+        "caps1",
+        "caps2",
+        "caps3",
+        "caps4",
+        "caps5",
+        "caps6",
+        "caps7",
+        "caps9",
+        "caps10",
+        "caps11",
+        "caps12",
+        "caps13",
+        "caps14",
+        "caps15"
+      ],
+      "translated_value": [
+        "35",
+        "24",
+        "2",
+        "16",
+        "24",
+        "29",
+        "82",
+        "11",
+        "21",
+        "26",
+        "13",
+        "45",
+        "12",
+        "41"
+      ],
+      "translation_confidence": 0.9
+    },
+    "أهداف": {
+      "value": [
+        "5",
+        "1",
+        "0",
+        "4",
+        "2",
+        "8",
+        "12",
+        "1",
+        "2",
+        "0",
+        "5",
+        "17",
+        "8",
+        "10"
+      ],
+      "type": "numbered",
+      "item_type": "number",
+      "count": 14,
+      "original_keys": [
+        "goals1",
+        "goals2",
+        "goals3",
+        "goals4",
+        "goals5",
+        "goals6",
+        "goals7",
+        "goals9",
+        "goals10",
+        "goals11",
+        "goals12",
+        "goals13",
+        "goals14",
+        "goals15"
+      ],
+      "translated_value": [
+        "5",
+        "1",
+        "0",
+        "4",
+        "2",
+        "8",
+        "12",
+        "1",
+        "2",
+        "0",
+        "5",
+        "17",
+        "8",
+        "10"
+      ],
+      "translation_confidence": 0.9
+    },
+    "منتخب_وطني": {
+      "value": [],
+      "type": "numbered",
+      "item_type": "raw",
+      "count": 0,
+      "original_keys": []
+    },
+    "سنوات_وطنية": {
+      "value": [],
+      "type": "numbered",
+      "item_type": "raw",
+      "count": 0,
+      "original_keys": []
+    },
+    "مباريات_وطنية": {
+      "value": [],
+      "type": "numbered",
+      "item_type": "number",
+      "count": 0,
+      "original_keys": []
+    },
+    "أهداف_وطنية": {
+      "value": [],
+      "type": "numbered",
+      "item_type": "number",
+      "count": 0,
+      "original_keys": []
+    },
+    "أندية_مدرب": {
+      "value": [],
+      "type": "numbered",
+      "item_type": "raw",
+      "count": 0,
+      "original_keys": []
+    },
+    "سنوات_مدرب": {
+      "value": [],
+      "type": "numbered",
+      "item_type": "raw",
+      "count": 0,
+      "original_keys": []
+    },
+    "اسم": {
+      "value": "Paul Abasolo",
+      "type": "text",
+      "original_key": "name",
+      "validation": {
+        "is_valid": true,
+        "length": 12,
+        "has_special_chars": false
+      },
+      "translated_value": "بول أباسولو",
+      "translation_confidence": 0.9
+    },
+    "الاسم الكامل": {
+      "value": "Paul Abasolo Amantegi",
+      "type": "text",
+      "original_key": "fullname",
+      "validation": {
+        "is_valid": true,
+        "length": 21,
+        "has_special_chars": false
+      },
+      "translated_value": "بول أباسولو أمانتيغي",
+      "translation_confidence": 0.9
+    },
+    "تاريخ الولادة": {
+      "value": "{{birth date and age|1984|6|29|df=yes}}",
+      "type": "raw",
+      "original_key": "birth_date",
+      "validation": {
+        "is_valid": true
+      },
+      "translated_value": "{{birth date and age|1984|6|29|df=yes}}",
+      "translation_confidence": 0.9
+    },
+    "مكان الولادة": {
+      "value": "[[Durango, Spain]]",
+      "type": "raw",
+      "original_key": "birth_place",
+      "validation": {
+        "is_valid": true
+      },
+      "translated_value": "[[Durango, Spain|دورانجو، إسبانيا]]",
+      "translation_confidence": 0.9
+    },
+    "الطول": {
+      "value": 1.84,
+      "type": "number",
+      "original_key": "height",
+      "validation": {
+        "is_valid": true,
+        "numeric_value": 1.84,
+        "has_units": true
+      },
+      "numeric_value": 1.84
+    },
+    "المركز": {
+      "value": "[[Forward (association football)|Forward]]",
+      "type": "raw",
+      "original_key": "position",
+      "validation": {
+        "is_valid": true
+      },
+      "translated_value": "[[Forward (association football)|مهاجم]]",
+      "translation_confidence": 0.9
+    },
+    "مجموع_مباريات": {
+      "value": 381.0,
+      "type": "number",
+      "original_key": "totalcaps",
+      "validation": {
+        "is_valid": true,
+        "numeric_value": 381.0,
+        "has_units": true
+      },
+      "numeric_value": 381.0
+    },
+    "إجمالي الأهداف": {
+      "value": 75.0,
+      "type": "number",
+      "original_key": "totalgoals",
+      "validation": {
+        "is_valid": true,
+        "numeric_value": 75.0,
+        "has_units": true
+      },
+      "numeric_value": 75.0
+    }
+  },
+  "translation_metadata": {
+    "service": "Google Gemini AI",
+    "target_language": "ar",
+    "translation_method": "single_request",
+    "total_fields": 20,
+    "translated_fields": 11,
+    "success": true
+  },
+  "translated_title": "بول أباسولو",
+  "arabic_template": "{{واو|صندوق معلومات سيرة كرة قدم\n|\n| أندية_الشباب1 = لاوكسيتا إيكاستولا\n| أندية_الشباب2 = [[Athletic Bilbao|أتلتيك بلباو]]\n| سنوات_الشباب1 = 1995–1996\n| سنوات_الشباب2 = 1996–2002\n| أندية1 = [[نادي باسكونيا|باسكونيا]]\n| أندية2 = [[نادي باراكالدو|باراكالدو]]\n| أندية3 = [[SD Eibar|إيبار]]\n| أندية4 = → [[SD Lemona|ليمونا]] (إعارة)\n| أندية5 = → [[Logroñés CF|لوغروينيس]] (إعارة)\n| أندية6 = [[Logroñés CF|لوغروينيس]]\n| أندية7 = [[Real Unión|ريال يونيون]]\n| أندية8 = إيوريتاكو\n| أندية9 = [[SD Lemona|ليمونا]]\n| أندية10 = [[Real Oviedo|أوفييدو]]\n| أندية11 = [[نادي سيستاو ريفر|سستاو]]\n| أندية12 = [[Amurrio Club|أموريو]]\n| أندية13 = [[Zamudio SD|زاموديو]]\n| أندية14 = [[Club Portugalete|بورتوغاليتي]]\n| أندية15 = باتيا\n| سنوات1 = 2002–2003\n| سنوات2 = 2003–2004\n| سنوات3 = 2004–2006\n| سنوات4 = 2005\n| سنوات5 = 2005–2006\n| سنوات6 = 2006–2007\n| سنوات7 = 2007–2010\n| سنوات8 = 2010\n| سنوات9 = 2011\n| سنوات10 = 2011–2012\n| سنوات11 = 2012–2013\n| سنوات12 = 2014\n| سنوات13 = 2015–2016\n| سنوات14 = 2016–2017\n| سنوات15 = 2018–2021\n| مباريات1 = 35\n| مباريات2 = 24\n| مباريات3 = 2\n| مباريات4 = 16\n| مباريات5 = 24\n| مباريات6 = 29\n| مباريات7 = 82\n| مباريات8 = 11\n| مباريات9 = 21\n| مباريات10 = 26\n| مباريات11 = 13\n| مباريات12 = 45\n| مباريات13 = 12\n| مباريات14 = 41\n| أهداف1 = 5\n| أهداف2 = 1\n| أهداف3 = 0\n| أهداف4 = 4\n| أهداف5 = 2\n| أهداف6 = 8\n| أهداف7 = 12\n| أهداف8 = 1\n| أهداف9 = 2\n| أهداف10 = 0\n| أهداف11 = 5\n| أهداف12 = 17\n| أهداف13 = 8\n| أهداف14 = 10\n| اسم = بول أباسولو\n| الاسم الكامل = بول أباسولو أمانتيغي\n| تاريخ الولادة = {{واو|birth date and age|1984|6|29|df=yes}}\n| مكان الولادة = [[دورانغو (بسكاي)|دورانجو، إسبانيا]]\n| الطول = 1.84\n| المركز = [[Forward (association football)|مهاجم]]\n| مجموع_مباريات = 381.0\n| إجمالي الأهداف = 75.0\n}}",
+  "construct_metadata": {
+    "template_type": "football_biography",
+    "field_count": 14,
+    "builder_name": "Arabic Football_Biography Builder",
+    "template_name": "صندوق معلومات سيرة كرة قدم"
+  },
+  "localization_metadata": {
+    "links_replaced": 4,
+    "templates_localized": 2,
+    "waou_templates_inserted": 2,
+    "localization_errors": []
+  },
+  "publish_metadata": {
+    "page_title": "بول أباسولو",
+    "edit_summary": "تحديث قالب السيرة الذاتية باستخدام InfoboxSync - football_biography",
+    "revision_id": 71876884,
+    "publish_success": true,
+    "published_at": "2025-08-28T10:34:26Z"
+  }
+}

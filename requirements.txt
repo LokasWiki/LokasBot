@@ -8,3 +8,4 @@ SQLAlchemy == 2.0.43
 typing-extensions == 4.14.1
 waybackpy~=3.0.6
 wikitextparser~=0.56.4
+litellm~=1.40.0
