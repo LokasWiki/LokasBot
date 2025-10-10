@@ -1,0 +1,1 @@
+# Publish stage for publishing Arabic templates to Wikipedia
