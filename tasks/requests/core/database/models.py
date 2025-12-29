@@ -1,19 +1,17 @@
+import enum
+from datetime import datetime
 from typing import List as typing_list
 
-from sqlalchemy import String, INTEGER, TIMESTAMP,func,ForeignKey,Text
+from sqlalchemy import String, INTEGER, func, ForeignKey, Text
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
-from datetime import datetime
-from sqlalchemy.ext.hybrid import hybrid_property
-
-import enum
-
-
 
 from .engine import engine
 from .hellper import get_namespace
+
 
 class Base(DeclarativeBase):
     pass
@@ -72,6 +70,24 @@ class Page(Base):
 
     def __repr__(self) -> str:
         return f"pages(id={self.id!r}, title={self.title!r})"
+
+
+class Request_Move_Page(Base):
+    __tablename__ = "request_move_page"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    from_title: Mapped[str] = mapped_column(String(255))
+    from_namespace: Mapped[int] = mapped_column(INTEGER)
+    to_title: Mapped[str] = mapped_column(String(255))
+    to_namespace: Mapped[int] = mapped_column(INTEGER)
+    status: Mapped[Status] = mapped_column(insert_default=Status.PENDING)
+    create_date: Mapped[datetime] = mapped_column(insert_default=func.now())
+    update_date: Mapped[datetime] = mapped_column(server_default=func.now(), onupdate=func.current_timestamp())
+    task_description: Mapped[str] = mapped_column(Text, nullable=True)
+    task_options: Mapped[str] = mapped_column(Text, nullable=True)
+
+    def __repr__(self) -> str:
+        return f"pages(id={self.id!r}, title={self.from_title!r})"
 
 
 Base.metadata.create_all(engine)
