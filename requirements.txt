@@ -4,7 +4,7 @@ python-dateutil == 2.9.0.post0
 pywikibot [mysql,mwoauth] == 10.7.4
 
 requests~=2.32.5
-SQLAlchemy == 2.0.45
+SQLAlchemy == 2.0.46
 typing-extensions == 4.15.0
 waybackpy~=3.0.6
 wikitextparser~=0.56.4
