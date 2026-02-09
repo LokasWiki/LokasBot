@@ -46,3 +46,11 @@
   schedule: '0 6 * * *'
   image: php7.4
   emails: onfailure
+  
+- name: photo-lab
+  no-filelog: false
+  command: $HOME/repos/toolforge/jobs/photo_lab.sh
+  schedule: '0 6 * * *'
+  image: tf-python39
+  emails: onfailure
+  <<: *defaults
