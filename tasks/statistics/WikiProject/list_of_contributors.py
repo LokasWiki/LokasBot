@@ -6,14 +6,14 @@ query = """select  actor_name as "username", count(rev_actor) as "edit_count",
 IF(actor_name in (
 
   select replace(pl_title,"_"," ") from pagelinks
-  join page on page.page_id = pagelinks.pl_from 
-  where page.page_namespace in (4) 
+  join page on page.page_id = pagelinks.pl_from
+  where page.page_namespace in (4)
   and page_title like "مشروع_ويكي_العراق/المساهمون"
   and pl_namespace in (2)
   and pl_from_namespace in (4)
 
 ), "YES", "NO") as "in_WikiProject"
-from revision 
+from revision
 JOIN actor ON actor_id = rev_actor
 JOIN user ON user_id = actor_user
 where rev_timestamp > DATE_SUB(NOW(), INTERVAL 3 MONTH)
@@ -23,10 +23,11 @@ AND actor_name NOT IN (SELECT user_name FROM user_groups JOIN user ON user_id = 
 and rev_page in (
   select page.page_id from page where page.page_namespace in (0)
     and page.page_title in (
-         select p0.page_title from categorylinks
-         inner join page p0 on p0.page_id = categorylinks.cl_from
-         where categorylinks.cl_to like "مقالات_مشروع_ويكي_العراق" and categorylinks.cl_type = "page" and p0.page_namespace in (1) 
-    ) 
+         select p0.page_title from categorylinks cla
+         inner join page p0 on p0.page_id = cla.cl_from
+         inner join linktarget lt ON cla.cl_target_id = lt.lt_id
+         where lt.lt_title like "مقالات_مشروع_ويكي_العراق" and lt.lt_namespace = 14 and cla.cl_type = "page" and p0.page_namespace in (1)
+    )
 )
 GROUP BY rev_actor
 HAVING count(rev_actor) > 20

@@ -11,20 +11,21 @@ site = pywikibot.Site()
 
 type_of_request = 6
 
-template_query = """select page.page_title as "prt_title",page.page_namespace as "prt_namespace" from templatelinks 
+template_query = """select page.page_title as "prt_title",page.page_namespace as "prt_namespace" from templatelinks
 inner join page on page.page_id = templatelinks.tl_from
-inner join linktarget on linktarget.lt_id = templatelinks.tl_target_id 
-where linktarget.lt_title in (select page_title from page where page_id in (FROM_ID)) and linktarget.lt_namespace = 10 and page.page_namespace in (0,14,6,10,4,2,100) 
+inner join linktarget on linktarget.lt_id = templatelinks.tl_target_id
+where linktarget.lt_title in (select page_title from page where page_id in (FROM_ID)) and linktarget.lt_namespace = 10 and page.page_namespace in (0,14,6,10,4,2,100)
 and page.page_is_redirect = 0
 """
 
-category_query = """select page.page_title as "prt_title",page.page_namespace as "prt_namespace" from templatelinks 
+category_query = """select page.page_title as "prt_title",page.page_namespace as "prt_namespace" from templatelinks
 inner join page on page.page_id = templatelinks.tl_from
-inner join linktarget on linktarget.lt_id = templatelinks.tl_target_id 
-where linktarget.lt_title in (select page_title from page where page_id in (FROM_ID)) and linktarget.lt_namespace = 10 and page.page_namespace in (0,14,6,10,4,2,100) 
-and page.page_id in (	
-    select cl_from from categorylinks
-    where cl_to in (select page_title from page where page_id in (CAT_ID) and page_namespace in (14)) and cl_type = "page"
+inner join linktarget on linktarget.lt_id = templatelinks.tl_target_id
+where linktarget.lt_title in (select page_title from page where page_id in (FROM_ID)) and linktarget.lt_namespace = 10 and page.page_namespace in (0,14,6,10,4,2,100)
+and page.page_id in (
+    select cla.cl_from from categorylinks cla
+    inner join linktarget lt ON cla.cl_target_id = lt.lt_id
+    where lt.lt_title in (select page_title from page where page_id in (CAT_ID) and page_namespace in (14)) and cla.cl_type = "page"
 )
 and page.page_is_redirect = 0
 """

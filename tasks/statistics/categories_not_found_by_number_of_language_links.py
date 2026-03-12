@@ -9,21 +9,22 @@ from tasks.statistics.module import UpdatePage, ArticleTables, index
 """
 w:ar:User:Elph, 2023, https://quarry.wmcloud.org/query/6317
 """
-query = """SELECT  cl_to, COUNT(cl_from) as editcount
-  FROM categorylinks
-  WHERE cl_from IN (
+query = """SELECT  lt.lt_title, COUNT(cla.cl_from) as editcount
+  FROM categorylinks cla
+  INNER JOIN linktarget lt ON cla.cl_target_id = lt.lt_id
+  WHERE cla.cl_from IN (
           SELECT DISTINCT ll_from
           FROM langlinks
           WHERE ll_lang = "ar"
           )
-      AND cl_to NOT IN (
+      AND lt.lt_title NOT IN (
           SELECT DISTINCT page_title
           FROM langlinks
           LEFT JOIN page ON page_id = ll_from
           WHERE ll_lang = "ar"
               AND page_namespace = 14
           )
-       AND cl_to NOT IN
+       AND lt.lt_title NOT IN
          (SELECT DISTINCT page_title FROM page
          WHERE page_title LIKE "%rticle%"
            OR  page_title LIKE "%ages%"
@@ -54,9 +55,9 @@ query = """SELECT  cl_to, COUNT(cl_from) as editcount
            OR  page_title LIKE "%Engvar%"
            OR  page_title LIKE "%ommon%"
          )
-
-  GROUP BY cl_to
-  ORDER BY COUNT(cl_from) DESC
+      AND lt.lt_namespace = 14
+  GROUP BY lt.lt_title
+  ORDER BY COUNT(cla.cl_from) DESC
   LIMIT 500;"""
 file_path = 'stub/categories_not_found_by_number_of_language_links.txt'
 page_name = f'ويكيبيديا:تقارير قاعدة البيانات/التصانيف غير الموجودة'
@@ -67,7 +68,7 @@ day_of_week = current_time.tm_wday
 
 
 def page_title(row, result, index):
-    cat_name = str(row['cl_to'], 'utf-8')
+    cat_name = str(row['lt_title'], 'utf-8')
     name = cat_name.replace("__", "[LOKA]").replace("_", " ").replace("[LOKA]", "_")
     return "[[:en:category:" + cat_name + "|" + name + "]]"
 

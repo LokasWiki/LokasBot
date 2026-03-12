@@ -5,18 +5,20 @@ from tasks.statistics.module import UpdatePage, ArticleTables, index
 site = pywikibot.Site()
 
 # Set the parameters for the update
-query = """select 
-  page.page_id, 
-  page.page_title, 
-  page.page_namespace, 
-  page.page_len, 
-  IF(page.page_len < 1000, 'YES', 'NO') as "needed_to_check" 
-from 
-  categorylinks 
-  inner join page on page.page_id = categorylinks.cl_from 
-where 
-  cl_to like 'إحصاءات_يحدثها_LokasBot' 
-  and cl_type like 'page'
+query = """select
+  page.page_id,
+  page.page_title,
+  page.page_namespace,
+  page.page_len,
+  IF(page.page_len < 1000, 'YES', 'NO') as "needed_to_check"
+from
+  categorylinks cla
+  inner join page on page.page_id = cla.cl_from
+  inner join linktarget lt ON cla.cl_target_id = lt.lt_id
+where
+  lt.lt_title like 'إحصاءات_يحدثها_LokasBot'
+  and lt.lt_namespace = 14
+  and cla.cl_type like 'page'
   order by page.page_len asc,needed_to_check desc;
   """
 file_path = 'stub/ٍstatistics_pages_may_be_down_that_need_to_be_checked.txt'

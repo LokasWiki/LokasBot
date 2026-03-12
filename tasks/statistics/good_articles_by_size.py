@@ -1,10 +1,12 @@
 from tasks.statistics.module import UpdatePage, ArticleTables, index
 
 # Set the parameters for the update
-query = """select page_namespace,page_title,page_len from categorylinks
-inner join page on page.page_id = categorylinks.cl_from
-where cl_to like "مقالات_جيدة"
-and cl_type like "page"
+query = """select page_namespace,page_title,page_len from categorylinks cla
+inner join page on page.page_id = cla.cl_from
+inner join linktarget lt ON cla.cl_target_id = lt.lt_id
+where lt.lt_title like "مقالات_جيدة"
+and lt.lt_namespace = 14
+and cla.cl_type like "page"
 order by page_len desc"""
 file_path = 'stub/good_articles_by_size.txt'
 page_name = "ويكيبيديا:تقارير قاعدة البيانات/المقالات الجيدة مرتبة حسب الحجم"

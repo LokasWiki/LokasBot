@@ -14,20 +14,22 @@ type_of_request = 7
 template_query = """select page_from.page_title as "prt_title",page_from.page_namespace as "prt_namespace" from templatelinks
 inner join linktarget on linktarget.lt_id = templatelinks.tl_target_id
 inner join page page_from on page_from.page_id = templatelinks.tl_from
-where templatelinks.tl_from_namespace in (0,14) 
+where templatelinks.tl_from_namespace in (0,14)
 and  linktarget.lt_title in (select page_title from page where page_id in (FROM_ID) and page_namespace = 10)
 """
 
-category_query = """SELECT  page_from.page_title as "prt_title",page_from.page_namespace as "prt_namespace"  FROM  categorylinks 
-inner join page page_from on page_from.page_id = categorylinks.cl_from
-where cl_type  like "page"
-and page_from.page_namespace in (0,14) 
-and categorylinks.cl_to in (select page_title from page where page_id in (FROM_ID) and page_namespace = 14)
+category_query = """SELECT  page_from.page_title as "prt_title",page_from.page_namespace as "prt_namespace"  FROM  categorylinks cla
+inner join page page_from on page_from.page_id = cla.cl_from
+inner join linktarget lt ON cla.cl_target_id = lt.lt_id
+where cla.cl_type  like "page"
+and page_from.page_namespace in (0,14)
+and lt.lt_title in (select page_title from page where page_id in (FROM_ID) and page_namespace = 14)
+and lt.lt_namespace = 14
 """
 portal_query = """select page_from.page_title as "prt_title",page_from.page_namespace as "prt_namespace"  from pagelinks
 inner join page page_from on page_from.page_id = pagelinks.pl_from
 inner join linktarget ON linktarget.lt_id = pagelinks.pl_target_id
-where pagelinks.pl_from_namespace in (0,14) 
+where pagelinks.pl_from_namespace in (0,14)
 and linktarget.lt_namespace in (100)
 and  linktarget.lt_title in (select page_title from page where page_id in (FROM_ID) and page_namespace = 100)"""
 

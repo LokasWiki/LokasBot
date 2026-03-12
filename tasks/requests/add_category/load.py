@@ -33,11 +33,13 @@ where pl_from = {} and pagelinks.pl_from_namespace = 10 and linktarget.lt_namesp
             else:
                 to_page = pywikibot.Page(site, request.to_name)
                 if to_page.exists():
-                    database.query = """select page.page_title as prt_title from categorylinks
-inner join page on page.page_id = categorylinks.cl_from
-where cl_to in (select page.page_title from page where page_id = {})
-and cl_type = "page"
-and page.page_namespace = 0""".format(to_page.pageid)
+                    database.query = """select page.page_title as prt_title from categorylinks cla
+                    inner join page on page.page_id = cla.cl_from
+                    inner join linktarget lt ON cla.cl_target_id = lt.lt_id
+                    where lt.lt_title in (select page.page_title from page where page_id = {})
+                    and lt.lt_namespace = 14
+                    and cla.cl_type = "page"
+                    and page.page_namespace = 0""".format(to_page.pageid)
                     database.get_content_from_database()
                     gen = database.result
 
