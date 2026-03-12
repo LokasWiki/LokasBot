@@ -12,7 +12,7 @@ custom_query = """select page_title AS "pl_2_title" from page
 where page.page_is_redirect = 0
 and page.page_namespace = 0
 and page_id not in (select fp_page_id from flaggedpages where fp_page_id = page_id)
-and page_id not in (select cl_from from categorylinks where cl_to like "جميع_المقالات_غير_المراجعة");"""
+and page_id not in (select cla.cl_from from categorylinks cla inner join linktarget lt ON cla.cl_target_id = lt.lt_id where lt.lt_title like "جميع_المقالات_غير_المراجعة" and lt.lt_namespace = 14);"""
 
 
 def main(*args: str) -> int:

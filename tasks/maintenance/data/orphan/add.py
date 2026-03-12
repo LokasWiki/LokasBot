@@ -62,10 +62,10 @@ FROM page p
 where page_namespace = 0
   and page_is_redirect = 0
   and
-    page_id not in (select cl_from from categorylinks where cl_to like "%جميع_المقالات_اليتيمة%" and cl_from = page_id)
-  and page_id not in (select cl_from from categorylinks where cl_to like "%صفحات_توضيح%" and cl_from = page_id)
-  and page_id not in
-      (select cl_from from categorylinks where cl_to like "%جميع_مقالات_المجموعات_المفهرسة%" and cl_from = page_id)
+    page_id not in (select cla.cl_from from categorylinks cla inner join linktarget lt ON cla.cl_target_id = lt.lt_id where lt.lt_title like "%جميع_المقالات_اليتيمة%" and lt.lt_namespace = 14 and cla.cl_from = page_id)
+      and page_id not in (select cla.cl_from from categorylinks cla inner join linktarget lt ON cla.cl_target_id = lt.lt_id where lt.lt_title like "%صفحات_توضيح%" and lt.lt_namespace = 14 and cla.cl_from = page_id)
+      and page_id not in
+          (select cla.cl_from from categorylinks cla inner join linktarget lt ON cla.cl_target_id = lt.lt_id where lt.lt_title like "%جميع_مقالات_المجموعات_المفهرسة%" and lt.lt_namespace = 14 and cla.cl_from = page_id)
 having counts < 3;"""
         pages = get_pages(time_before_start,custom_query=custom_query)
 

@@ -22,9 +22,10 @@ AND (p1.page_id, p1.page_title) NOT IN (
     where pl_from_namespace = 0 and lt_namespace = 100 and lt_title in (select page_title from page where page_id in (TO_ID))
 )"""
 
-category_query = """select  p1.page_id,p1.page_title  as "prt_title" from categorylinks
-        inner join page p1 on p1.page_id = categorylinks.cl_from
-        where cl_to in (select page_title from page where page_id in (FROM_ID)) and cl_type in ("page") and p1.page_namespace = 0
+category_query = """select  p1.page_id,p1.page_title  as "prt_title" from categorylinks cla
+        inner join page p1 on p1.page_id = cla.cl_from
+        inner join linktarget lt ON cla.cl_target_id = lt.lt_id
+        where lt.lt_title in (select page_title from page where page_id in (FROM_ID)) and lt.lt_namespace = 14 and cla.cl_type in ("page") and p1.page_namespace = 0
         AND (p1.page_id, p1.page_title) NOT IN (
           select p1.page_id,p1.page_title from pagelinks
           inner join page p1 on p1.page_id = pagelinks.pl_from

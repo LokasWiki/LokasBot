@@ -208,14 +208,16 @@ def main(*args: str) -> int:
 
             db.query = """
             select log_title as "q_log_title"
-            from logging 
-            where log_type in ("newusers") 
+            from logging
+            where log_type in ("newusers")
             and log_timestamp BETWEEN {} AND {}
             and log_title not in (
-              select page.page_title from categorylinks 
-              inner join page on page.page_id = categorylinks.cl_from
-              where cl_to like "أسماء_مستخدمين_مخالفة_مرشحة_للمنع" 
-              and cl_type in ("page")
+              select page.page_title from categorylinks cla
+              inner join page on page.page_id = cla.cl_from
+              inner join linktarget lt ON cla.cl_target_id = lt.lt_id
+              where lt.lt_title like "أسماء_مستخدمين_مخالفة_مرشحة_للمنع"
+              and lt.lt_namespace = 14
+              and cla.cl_type in ("page")
             )
             and log_title not in (
                 select replace(user.user_name," ","_") as "user_name_temp" from ipblocks

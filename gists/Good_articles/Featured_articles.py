@@ -5,22 +5,24 @@ from pywikibot import config as _config
 from core.utils.wikidb import Database
 
 query = """
-select 
-  #concat("[[:en:", page.page_title, "\|",page.page_title,"]]") as "المقال الإنجليزية", 
-  page.page_title as "en_title", 
+select
+  #concat("[[:en:", page.page_title, "\|",page.page_title,"]]") as "المقال الإنجليزية",
+  page.page_title as "en_title",
   #page_len as "حجم المقال في النسخة الإنجليزية",
   page_len,
   #concat("[[", ll_title, "]]") as "المقال العربية"
   ll_title as "ar_title"
-from 
-  categorylinks 
-  inner join page on categorylinks.cl_from = page.page_id 
-  inner join langlinks on langlinks.ll_from = page.page_id 
-where 
-  cl_to in ("Featured_articles") 
-  and cl_type like "page" 
-  and page.page_namespace = 0 
-  and ll_lang like "ar" 
+from
+  categorylinks cla
+  inner join page on cla.cl_from = page.page_id
+  inner join langlinks on langlinks.ll_from = page.page_id
+  inner join linktarget lt ON cla.cl_target_id = lt.lt_id
+where
+  lt.lt_title in ("Featured_articles")
+  and lt.lt_namespace = 14
+  and cla.cl_type like "page"
+  and page.page_namespace = 0
+  and ll_lang like "ar"
   and trim(
     coalesce(ll_title, '')
   ) <> ''
