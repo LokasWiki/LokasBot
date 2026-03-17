@@ -1,24 +1,46 @@
-name: add_ssh_deploy_server.yml
+name: deploy
+
 on:
   push:
     branches:
       - main
+
 jobs:
-  build:
+  deploy-lokasbot:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - name: Deploy to server (lokasbot)
+      - uses: actions/checkout@v4
+      - name: Deploy to lokasbot
         uses: appleboy/ssh-action@v1.2.4
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
-          request_pty: true
-          #script_stop: true
-          #password: ${{ secrets.PASSWORD }}
           key: ${{ secrets.KEY }}
-          # script: whoami
           script: |
-             become lokasbot sh -c "rm -rfd action_temp; git clone https://github.com/LokasWiki/actions.git action_temp; chmod +x action_temp/lokasbot/pull.sh; action_temp/lokasbot/pull.sh"
-             become lokasbot2 sh -c "rm -rfd action_temp; git clone https://github.com/LokasWiki/actions.git action_temp; chmod +x action_temp/lokasbot2/pull.sh; action_temp/lokasbot2/pull.sh"
+            become lokasbot sh -c "
+              rm -rf action_temp &&
+              git clone https://github.com/LokasWiki/actions.git action_temp &&
+              chmod +x action_temp/lokasbot/pull.sh &&
+              action_temp/lokasbot/pull.sh
+            "
+
+  deploy-lokasbot2:
+    runs-on: ubuntu-latest
+    # needs: deploy-lokasbot # remove if you want parallel execution
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to lokasbot2
+        uses: appleboy/ssh-action@v1.2.4
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.KEY }}
+          script: |
+            become lokasbot2 sh -c "
+              rm -rf action_temp &&
+              git clone https://github.com/LokasWiki/actions.git action_temp &&
+              chmod +x action_temp/lokasbot2/pull.sh &&
+              action_temp/lokasbot2/pull.sh
+            "
