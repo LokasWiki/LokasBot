@@ -22,23 +22,28 @@ jobs:
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
           key: ${{ secrets.KEY }}
-          # Deploy (clone + venv setup + test job) can take well over 10 minutes;
-          # a too-short command_timeout killed the SSH session and orphaned the
-          # remote pull.sh (which then held NFS files open and broke the next run).
+          # A full deploy (clone + venv setup + test job) can take well over 10
+          # minutes; a too-short command_timeout killed the SSH session and
+          # orphaned the remote pull.sh (which then held NFS files open and
+          # broke every later deploy with "Device or resource busy").
           command_timeout: 30m
+          # NOTE: keep this in the proven double-quoted "become sh -c" form.
+          # No # comments and no single quotes inside the quoted block:
+          # Toolforge's `become` re-parses the argument string, so comments
+          # would swallow the rest of the command.
+          # $$ is expanded by the login shell to a unique per-run suffix, so
+          # each deploy uses its own dir/file and never deletes a dir that a
+          # previous (possibly still running) deploy holds open on NFS.
+          # pull.sh is copied out and run from home, never from inside the
+          # temp dir, so the temp dir is never held open by the running script.
           script: |
-            become lokasbot sh -c '
-              set -e
-              # Unique temp dir per run: never rm -rf a dir that a previous run may
-              # still hold open (NFS leaves .nfs* lock files -> "Device or resource busy").
-              DIR=action_temp.$$
-              git clone https://github.com/LokasWiki/actions.git "$DIR"
-              # Copy the script out first so it is not executed from inside a dir
-              # that gets deleted, and so deleting temp dirs never hits an open file.
-              cp "$DIR/lokasbot/pull.sh" pull.sh
-              sh pull.sh
-              rm -rf "$DIR" pull.sh
-            '
+            become lokasbot sh -c "
+              rm -rf action_temp.$$ pull.$$.sh &&
+              git clone https://github.com/LokasWiki/actions.git action_temp.$$ &&
+              cp action_temp.$$/lokasbot/pull.sh pull.$$.sh &&
+              sh pull.$$.sh &&
+              rm -rf action_temp.$$ pull.$$.sh
+            "
 
   deploy-lokasbot2:
     runs-on: ubuntu-latest
@@ -57,11 +62,10 @@ jobs:
           key: ${{ secrets.KEY }}
           command_timeout: 30m
           script: |
-            become lokasbot2 sh -c '
-              set -e
-              DIR=action_temp.$$
-              git clone https://github.com/LokasWiki/actions.git "$DIR"
-              cp "$DIR/lokasbot2/pull.sh" pull.sh
-              sh pull.sh
-              rm -rf "$DIR" pull.sh
-            '
+            become lokasbot2 sh -c "
+              rm -rf action_temp.$$ pull.$$.sh &&
+              git clone https://github.com/LokasWiki/actions.git action_temp.$$ &&
+              cp action_temp.$$/lokasbot2/pull.sh pull.$$.sh &&
+              sh pull.$$.sh &&
+              rm -rf action_temp.$$ pull.$$.sh
+            "
