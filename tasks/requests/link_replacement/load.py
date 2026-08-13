@@ -20,7 +20,7 @@ try:
     for request in session.scalars(stmt):
         try:
             page = pywikibot.Page(site, request.from_name)
-            gen = page.backlinks(follow_redirects=False, namespaces=[0, 14, 10, 6], content=True)
+            gen = page.backlinks(follow_redirects=False, namespaces=[0, 14, 10, 6])
             pages = []
             for p in gen:
                 pages.append(Page(

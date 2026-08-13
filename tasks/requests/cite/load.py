@@ -25,7 +25,7 @@ try:
         try:
             gen = []
             database = Database()
-            if request.to_namespace == 0:
+            if request.from_namespace == 0:
                 to_page = pywikibot.Page(site, request.from_name)
                 if to_page.exists():
                     try:
