@@ -132,31 +132,31 @@ Tests mirror this under `tests/tasks/archive_bot/`.
 ## 4. TODO checklist
 
 ### Phase A — Scaffolding
-- [ ] A1. Create `tasks/archive_bot/` package skeleton (`__init__.py` files, subpackages per §2).
-- [ ] A2. Add `tests/tasks/archive_bot/` skeleton with a first smoke test.
+- [x] A1. Create `tasks/archive_bot/` package skeleton (`__init__.py` files, subpackages per §2).
+- [x] A2. Add `tests/tasks/archive_bot/` skeleton with a first smoke test.
 
 ### Phase B — Pure domain logic (unit-testable, no network)
-- [ ] B1. `split_sections.py` — port `splitintosections()` to split wikitext into header + level-2 sections (handle `===`/`====` correctly, duplicate headers).
-- [ ] B2. `parse_archive_config.py` — parse `{{أرشفة آلية|...}}` (type/value/prefix/counter, strip `|عددي`), with validation and error reporting.
-- [ ] B3. `decide_archive.py` — port keep-vs-archive classification: `{{لا للأرشفة}}`, new-vs-unchanged, `minkeep`, `maxsects`/`maxbytes`, header transform.
-- [ ] B4. Entities: `ArchiveConfig`, `Section`, `ArchiveResult` dataclasses.
+- [x] B1. `split_sections.py` — port `splitintosections()` to split wikitext into header + level-2 sections (handle `===`/`====` correctly, duplicate headers).
+- [x] B2. `parse_archive_config.py` — parse `{{أرشفة آلية|...}}` (type/value/prefix/counter, strip `|عددي`), with validation and error reporting.
+- [x] B3. `decide_archive.py` — port keep-vs-archive classification: `{{لا للأرشفة}}`, new-vs-unchanged, `minkeep`, `maxsects`/`maxbytes`, header transform.
+- [x] B4. Entities: `ArchiveConfig`, `Section`, `ArchiveResult` dataclasses.
 
 ### Phase C — Infrastructure (pywikibot)
-- [ ] C1. `pywikibot_wiki_repository.py` implementing `WikiRepository` (embeddedin, text, length, revisions, protection, prefixindex, save).
-- [ ] C2. `wiki_operations.py` presentation wiring + site bootstrap + logging.
+- [x] C1. `pywikibot_wiki_repository.py` implementing `WikiRepository` (embeddedin, text, length, revisions, protection, prefixindex, save).
+- [x] C2. `wiki_operations.py` presentation wiring + site bootstrap + logging.
 
 ### Phase D — Orchestration
-- [ ] D1. `archive_page.py` use case — full `doarchive` flow: history walk, section diff, archive-page naming/counter, header injection, save order + rollback, counter update.
-- [ ] D2. `main.py` — scan namespace-3 pages, skip `/` subpages + sysop-protected, `sleep` throttle, `--dry-run` and `--page` flags, logging to file.
+- [x] D1. `archive_page.py` use case — full `doarchive` flow: history walk, section diff, archive-page naming/counter, header injection, save order + rollback, counter update.
+- [x] D2. `main.py` — scan namespace-3 pages, skip `/` subpages + sysop-protected, `sleep` throttle, `--dry-run` and `--page` flags, logging to file.
 
 ### Phase E — Tests
-- [ ] E1. Unit tests for B1–B3 with real Arabic wikitext fixtures (25+ tests).
-- [ ] E2. Repository fake (in-memory) for D1 use-case tests (no network).
+- [x] E1. Unit tests for B1–B3 with real Arabic wikitext fixtures (37 tests).
+- [x] E2. Repository fake (in-memory) for D1 use-case tests (no network).
 - [ ] E3. Integration smoke test: `--page` + `--dry-run` against a sandbox page.
 
 ### Phase F — Configuration & docs
-- [ ] F1. `config_loader.py` + `settings.json` (template name, summaries, header templates, site, throttle, limits).
-- [ ] F2. `README.md` for the task (usage, config, how it maps to the old PHP bot).
+- [x] F1. `config_loader.py` + `settings.json` (template name, summaries, header templates, site, throttle, limits).
+- [x] F2. `README.md` for the task (usage, config, how it maps to the old PHP bot).
 
 ### Phase G — Toolforge deployment (after local validation)
 - [ ] G1. `toolforge/jobs/archive_bot.sh` wrapper.
