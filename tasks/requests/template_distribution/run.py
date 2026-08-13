@@ -1,9 +1,10 @@
 import traceback
 
 import pywikibot
-from sqlalchemy import select, func, distinct
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from core.utils.helpers import prepare_str
 from tasks.requests.core.database.engine import engine
 from tasks.requests.core.database.models import Request, Status, Page
 
@@ -16,8 +17,7 @@ try:
     session = Session(engine)
 
     stmt = select(Request).join(Page).filter(Request.status == Status.RECEIVED, Page.status == Status.PENDING,
-                                             Request.request_type == type_of_request).group_by(Request).having(
-        func.count(Page.id) == func.count(distinct(Page.id))).limit(100)
+                                             Request.request_type == type_of_request).group_by(Request).limit(100)
 
     for request in session.scalars(stmt):
 
@@ -30,8 +30,8 @@ try:
                 if link.exists() and link.namespace() == 0:
                     template_found = False
                     for tpl in link.templates(content=False):
-                        tpl_title = str(tpl.title()).lower()
-                        page_title = str(request.from_name).lower()
+                        tpl_title = prepare_str(tpl.title())
+                        page_title = prepare_str(request.from_name)
                         if tpl_title == page_title:
                             template_found = True
                             break

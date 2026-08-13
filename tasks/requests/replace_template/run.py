@@ -3,7 +3,7 @@ import traceback
 
 import pywikibot
 import wikitextparser as wtp
-from sqlalchemy import select, func, distinct
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from core.utils.helpers import prepare_str, check_status
@@ -19,8 +19,7 @@ try:
     session = Session(engine)
 
     stmt = select(Request).join(Page).filter(Request.status == Status.RECEIVED, Page.status == Status.PENDING,
-                                             Request.request_type == type_of_request).group_by(Request).having(
-        func.count(Page.id) == func.count(distinct(Page.id))).limit(20)
+                                             Request.request_type == type_of_request).group_by(Request).limit(20)
 
     if check_status("ويكيبيديا:طلبات استبدال القوالب/إيقاف"):
 

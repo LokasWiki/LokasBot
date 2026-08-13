@@ -1,7 +1,7 @@
 import re
 
 import pywikibot
-from sqlalchemy import select, func, distinct
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from tasks.requests.core.database.engine import engine
@@ -16,8 +16,7 @@ try:
     session = Session(engine)
 
     stmt = select(Request).join(Page).filter(Request.status == Status.RECEIVED, Page.status == Status.PENDING,
-                                             Request.request_type == type_of_request).group_by(Request).having(
-        func.count(Page.id) == func.count(distinct(Page.id))).limit(100)
+                                             Request.request_type == type_of_request).group_by(Request).limit(100)
 
     for request in session.scalars(stmt):
 
