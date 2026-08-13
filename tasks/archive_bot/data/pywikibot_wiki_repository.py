@@ -14,9 +14,10 @@ class PywikibotWikiRepository(WikiRepository):
     """Wiki repository backed by pywikibot."""
 
     def __init__(self, site: Optional[pywikibot.Site] = None,
-                 max_history: int = 5000):
+                 max_history: int = 5000, minor_edit: bool = True):
         self.site = site or pywikibot.Site()
         self.max_history = max_history
+        self.minor_edit = minor_edit
         self.logger = logging.getLogger(__name__)
 
     def get_page_text(self, title: str) -> str:
@@ -32,7 +33,7 @@ class PywikibotWikiRepository(WikiRepository):
         try:
             page = pywikibot.Page(self.site, title)
             page.text = text
-            page.save(summary=summary, minor=False)
+            page.save(summary=summary, minor=self.minor_edit)
             return True
         except Exception as exc:  # noqa: BLE001 - pywikibot raises many types
             self.logger.error("Failed to save %s: %s", title, exc)

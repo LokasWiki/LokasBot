@@ -33,6 +33,8 @@ class ArchiveBotConfig:
     max_history: int = 5000
     #: Seconds to sleep between processed pages.
     sleep_between_pages: float = 3.0
+    #: Mark the bot's edits as minor (تعديل طفيف).
+    minor_edit: bool = True
 
 
 def load_config(path: Optional[str] = None) -> ArchiveBotConfig:

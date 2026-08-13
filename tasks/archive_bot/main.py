@@ -73,7 +73,8 @@ def main() -> None:
 
     config = load_config()
     site = pywikibot.Site(config.site_code, config.site_family)
-    repository = PywikibotWikiRepository(site, max_history=config.max_history)
+    repository = PywikibotWikiRepository(site, max_history=config.max_history,
+                                      minor_edit=config.minor_edit)
     use_case = ArchivePage(repository, config)
 
     sleep = args.sleep if args.sleep is not None else config.sleep_between_pages
