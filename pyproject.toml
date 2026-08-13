@@ -12,7 +12,7 @@ dependencies = [
     "SQLAlchemy==2.0.52",
     "typing-extensions==4.16.0",
     "waybackpy~=3.0.6",
-    "wikitextparser~=0.56.4",
+    "wikitextparser>=0.56.4,<1.1.0",
 ]
 
 [dependency-groups]
