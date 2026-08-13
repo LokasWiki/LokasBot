@@ -129,3 +129,9 @@ dmypy.json
 .pyre/
 
 .idea
+
+# pywikibot local credentials and API cache
+user-config.py
+user-password.py
+apicache/
+*.lwp

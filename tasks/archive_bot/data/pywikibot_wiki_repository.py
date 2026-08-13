@@ -42,12 +42,20 @@ class PywikibotWikiRepository(WikiRepository):
                      cutoff: datetime.datetime) -> Optional[str]:
         page = pywikibot.Page(self.site, title)
         try:
-            revisions = page.revisions(reverse=False, content=True,
+            # Walk metadata-only (fast) to locate the newest revision at or
+            # before the cutoff, matching the legacy PHP history walk.
+            target_revid = None
+            revisions = page.revisions(reverse=False, content=False,
                                        total=self.max_history)
             for revision in revisions:
                 timestamp = revision.get("timestamp")
                 if timestamp is not None and timestamp <= cutoff:
-                    return revision.get("text") or ""
+                    target_revid = revision.get("revid")
+                    break
+            if target_revid is None:
+                return None
+            # Fetch only the single snapshot's content.
+            return page.getOldVersion(target_revid) or ""
         except Exception as exc:  # noqa: BLE001
             self.logger.error("Failed to load history for %s: %s", title, exc)
         return None
