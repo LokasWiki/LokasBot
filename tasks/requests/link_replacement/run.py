@@ -30,6 +30,11 @@ try:
         for page in pages:
             try:
                 p = pywikibot.Page(site, page.page_name)
+                if not p.exists():
+                    print(f"Page '{page.page_name}' does not exist. Skipping...")
+                    page.status = Status.COMPLETED
+                    session.commit()
+                    continue
                 print(p.title())
                 text = str(p.text)
                 reg_str = r"\[\[(" + re.escape(page_title) + r")(\|(?:.*?))?\]\]"
@@ -45,10 +50,6 @@ try:
                     text = text.replace(old_link, new_link)
 
                 p.text = text
-                # print(text)
-                if not p.exists():
-                    print(f"Page '{page.page_name}' does not exist. Skipping...")
-                    continue
                 p.save(
                     summary="بوت:[[ويكيبيديا:طلبات استبدال الوصلات]] استبدال [[" + page_title + "]] ب [[" + page_new_title + "]]")
 

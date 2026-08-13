@@ -37,6 +37,7 @@ try:
             try:
                 p = pywikibot.Page(site, title=str(page.page_name), ns=page.namespace)
                 if p.exists():
+                    original_text = p.text
                     temp_text = p.text
                     parsed = wtp.parse(p.text)
                     # for remove template
@@ -72,9 +73,10 @@ try:
                     elif request.from_namespace == 100:
                         word = "بوابة"
 
-                    p.save(
-                        summary="بوت:[[ويكيبيديا:طلبات إزالة (بوابة، تصنيف، قالب)]] حذف [[" + word + ":" + template_from + "]] "
-                    )
+                    if temp_text != original_text:
+                        p.save(
+                            summary="بوت:[[ويكيبيديا:طلبات إزالة (بوابة، تصنيف، قالب)]] حذف [[" + word + ":" + template_from + "]] "
+                        )
                     page.status = Status.COMPLETED
                     session.commit()
             except Exception as e:
