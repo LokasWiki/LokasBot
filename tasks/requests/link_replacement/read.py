@@ -1,6 +1,7 @@
 import pywikibot
 from sqlalchemy.orm import Session
 
+from core.utils.helpers import is_valid_title
 from tasks.requests.core.database.engine import engine
 from tasks.requests.core.database.models import Request
 from tasks.requests.core.module import RequestsPage, RequestsScanner
@@ -31,6 +32,8 @@ try:
                         # source_page = pywikibot.Page(site, f"{request['source']}",ns=0)
                         # destination_page = pywikibot.Page(site, f"{request['destination']}",ns=0)
                         # if source_page.exists() and destination_page.exists() and source_page.namespace() == 0 and destination_page.namespace() == 0:
+                        if not is_valid_title(request.get("source")) or not is_valid_title(request.get("destination")):
+                            continue
 
                         request_model = Request(
                             from_title=request['source'],

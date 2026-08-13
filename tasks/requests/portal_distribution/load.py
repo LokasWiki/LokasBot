@@ -13,8 +13,8 @@ type_of_request = 5
 
 template_query = """select p1.page_id,p1.page_title as "prt_title" from pagelinks
 inner join linktarget ON linktarget.lt_id = pagelinks.pl_target_id
-inner join page on page.page_title = linktarget.lt_title
-where pl_from in (FROM_ID)  and lt_namespace = 0  and pl_from_namespace= 10 and page.page_namespace = 0
+inner join page p1 on p1.page_title = linktarget.lt_title
+where pl_from in (FROM_ID)  and lt_namespace = 0  and pl_from_namespace= 10 and p1.page_namespace = 0
 AND (p1.page_id, p1.page_title) NOT IN (
 	select p1.page_id,p1.page_title from pagelinks
   	inner join linktarget ON linktarget.lt_id = pagelinks.pl_target_id

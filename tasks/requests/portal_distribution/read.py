@@ -1,6 +1,7 @@
 import pywikibot
 from sqlalchemy.orm import Session
 
+from core.utils.helpers import is_valid_title
 from tasks.requests.core.database.engine import engine
 from tasks.requests.core.database.hellper import get_namespace_id
 from tasks.requests.core.database.models import Request
@@ -33,6 +34,8 @@ try:
                         # destination_page = pywikibot.Page(site, f"{request['destination']}",ns=0)
                         # if source_page.exists() and destination_page.exists() and source_page.namespace() == 0 and destination_page.namespace() == 0:
                         # todo:add check if template exists with send content to talk page
+                        if not is_valid_title(request.get("source")) or not is_valid_title(request.get("destination")):
+                            continue
 
                         from_namespace = 0
                         if request['namespace'] is not None:

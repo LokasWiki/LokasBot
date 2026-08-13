@@ -1,6 +1,7 @@
 import pywikibot
 from sqlalchemy.orm import Session
 
+from core.utils.helpers import is_valid_title
 from tasks.requests.core.database.engine import engine
 from tasks.requests.core.database.models import Request
 from tasks.requests.core.module import RequestsPage, RequestsScanner
@@ -28,6 +29,8 @@ try:
             try:
                 with Session(engine) as session:
                     for request in scanner.requests:
+                        if not is_valid_title(request.get("source")) or not is_valid_title(request.get("destination")):
+                            continue
                         to_namespace = 14
                         if request['namespace_destination'] == "قالب":
                             to_namespace = 10

@@ -38,8 +38,8 @@ try:
                                     thread_number=1,
                                     task_name=TaskName.WEBCITE
                                 )
-                            session_webcite.add(temp_model)
-                            session_webcite.commit()
+                                session_webcite.add(temp_model)
+                                session_webcite.commit()
 
                     except Exception as e:
                         print(f"An error occurred: {e}")
@@ -72,8 +72,8 @@ try:
                                         thread_number=1,
                                         task_name=TaskName.WEBCITE
                                     )
-                                session_webcite.add(temp_model)
-                                session_webcite.commit()
+                                    session_webcite.add(temp_model)
+                                    session_webcite.commit()
                         except Exception as e:
                             print(f"An error occurred: {e}")
 

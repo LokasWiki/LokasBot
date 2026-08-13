@@ -22,6 +22,18 @@ def prepare_str(string):
     return str(string).strip().lower().replace("  ", "_").replace(" ", "_")
 
 
+def is_valid_title(title):
+    """Return True if the given title is a valid MediaWiki title (no illegal characters)."""
+    if title is None:
+        return False
+    title = str(title).strip()
+    if not title:
+        return False
+    # MediaWiki illegal title characters: # < > [ ] | { }
+    illegal_chars = set("#<>[]|{}")
+    return not any(ch in title for ch in illegal_chars)
+
+
 def check_edit_age(page, number_of_hours=3):
     status = False
     try:
