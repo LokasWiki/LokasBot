@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select
 
 
+from core.utils.helpers import is_valid_title
 from tasks.requests.core.database.engine import engine
 from tasks.requests.core.database.models import Request, Status,Page
 from tasks.requests.template_distribution.models import WikiLinkExtractor
@@ -25,6 +26,8 @@ try:
             links = extractor.extract_links()
             pages = []
             for temlink in links:
+                if not is_valid_title(temlink):
+                    continue
                 link = pywikibot.Page(site, temlink)
                 if link.exists() and link.namespace() == 0:
                     pages.append(Page(
