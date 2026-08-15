@@ -6,13 +6,14 @@ query = """SELECT DISTINCT(actor_name) ll_actor_name, concat(ug_group) AS user_g
 FROM actor_revision
          JOIN user_groups ON actor_user = ug_user
          JOIN user ON actor_user = user.user_id
-         LEFT JOIN ipblocks ON actor_user = ipb_user
+         LEFT JOIN block_target bt ON bt.bt_user = actor_user
 WHERE ug_group IN ('bot')
-  AND ipb_user IS NULL
-  AND actor_id NOT IN (
-    SELECT rev_actor
+  AND bt.bt_user IS NULL
+  AND NOT EXISTS (
+    SELECT 1
     FROM revision
-    WHERE rev_timestamp > DATE_SUB(NOW(), INTERVAL 3 MONTH)
+    WHERE rev_actor = actor_id
+      AND rev_timestamp > DATE_SUB(NOW(), INTERVAL 3 MONTH)
 )
 GROUP BY actor_name, user_groups"""
 file_path = 'stub/inactive_bots.txt'

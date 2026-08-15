@@ -2,50 +2,33 @@ from tasks.statistics.module import UpdatePage, ArticleTables, index
 
 
 class IPRangeCalculator:
-    def __init__(self, ipb_address, ipb_range_start, ipb_range_end):
-        self.ipb_address = ipb_address
-        self.ipb_range_start = ipb_range_start
-        self.ipb_range_end = ipb_range_end
+    def __init__(self, bt_address, bt_range_start, bt_range_end):
+        self.bt_address = bt_address
+        self.bt_range_start = bt_range_start
+        self.bt_range_end = bt_range_end
 
     def get_ip_range(self):
-        # split the ipb_address into its parts
-        ipb_parts = self.ipb_address.split(":")
-        # check if the address is an IPv4 or IPv6 address
-        if len(ipb_parts) == 8:
-            # this is an IPv6 address, we need to convert the start and end range to IPv6 format
-            start_range = self.ipb_range_start.split("-")[1]
-            end_range = self.ipb_range_end.split("-")[1]
-            # convert the start and end range to integers
-            start_range_int = int(start_range, 16)
-            end_range_int = int(end_range, 16)
-            # return the number of IPs in the range
-            return end_range_int - start_range_int + 1
-        else:
-            # this is an IPv4 address, we need to convert the start and end range to IPv4 format
-            start_range = self.ipb_range_start.split(".")
-            end_range = self.ipb_range_end.split(".")
-            # convert the start and end range to integers
-            start_range_int = int(start_range[0])(2 ** 24) + int(start_range[1])(216) + int(start_range[2]) * (
-                28) + int(start_range[3])
-            end_range_int = int(end_range[0])(2 ** 24) + int(end_range[1])(216) + int(end_range[2]) * (28) + int(
-                end_range[3])
-            # return the number of IPs in the range
+        # bt_range_start/bt_range_end are hexadecimal:
+        # 8 chars for IPv4, 16 chars for IPv6
+        start_range_int = int(self.bt_range_start, 16)
+        end_range_int = int(self.bt_range_end, 16)
         return end_range_int - start_range_int + 1
 
 
 # Set the parameters for the update
 query = """SELECT
-  ipb_address,
-  ipb_range_start,
-  ipb_range_end,
+  bt_address,
+  bt_range_start,
+  bt_range_end,
   actor_name,
-  ipb_timestamp,
-  ipb_expiry,
+  bl_timestamp,
+  bl_expiry,
   comment_text
-FROM ipblocks
-inner join actor on actor.actor_id = ipblocks.ipb_by_actor
-inner join comment on comment.comment_id = ipblocks.ipb_reason_id
-WHERE ipb_address LIKE '%/%';"""
+FROM block
+inner join block_target bt on block.bl_target = bt.bt_id
+inner join actor on actor.actor_id = block.bl_by_actor
+inner join comment on comment.comment_id = block.bl_reason_id
+WHERE bt_address LIKE '%/%';"""
 file_path = 'stub/range_blocks.txt'
 page_name = "ويكيبيديا:تقارير قاعدة البيانات/نطاقات الأيبيهات الممنوعة"
 
@@ -56,19 +39,19 @@ def username(row, result, index):
 
 
 def ipb_address(row, result, index):
-    return "{{ipr | 1 = " + str(row['ipb_address'], 'utf-8') + "}}"
+    return "{{ipr | 1 = " + str(row['bt_address'], 'utf-8') + "}}"
 
 
 def get_ip_range(row, result, index):
-    ipb_address = str(row['ipb_address'], 'utf-8')
-    ipb_range_start = str(row['ipb_range_start'], 'utf-8')
-    ipb_range_end = str(row['ipb_range_end'], 'utf-8')
-    ip_range_calculator = IPRangeCalculator(ipb_address, ipb_range_start, ipb_range_end)
+    bt_address = str(row['bt_address'], 'utf-8')
+    bt_range_start = str(row['bt_range_start'], 'utf-8')
+    bt_range_end = str(row['bt_range_end'], 'utf-8')
+    ip_range_calculator = IPRangeCalculator(bt_address, bt_range_start, bt_range_end)
     return str(ip_range_calculator.get_ip_range())
 
 
 def ipb_timestamp(row, result, index):
-    return "{{نسخ:#time::H:i، j F Y|" + str(row['ipb_timestamp'], 'utf-8') + "}}"
+    return "{{نسخ:#time::H:i، j F Y|" + str(row['bl_timestamp'], 'utf-8') + "}}"
 
 
 columns = [
@@ -77,7 +60,7 @@ columns = [
     ("عدد الأيبيهات", None, get_ip_range),
     ("الإداري", None, username),
     ("تاريخ المنع", None, ipb_timestamp),
-    ("تاريخ نهاية المنع", "ipb_expiry"),
+    ("تاريخ نهاية المنع", "bl_expiry"),
     ("السبب", "comment_text"),
 ]
 

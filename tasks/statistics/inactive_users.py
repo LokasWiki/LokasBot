@@ -16,12 +16,12 @@ FROM
   actor_revision 
   JOIN user_groups ON actor_user = ug_user 
   JOIN user ON actor_user = user.user_id 
-  LEFT JOIN ipblocks ON actor_user = ipb_user 
+  LEFT JOIN block_target bt ON bt.bt_user = actor_user 
 WHERE 
   ug_group IN (
     'editor', 'autoreview', 'uploader'
   ) 
-  AND ipb_user IS NULL 
+  AND bt.bt_user IS NULL 
   AND actor_id NOT IN (
     SELECT 
       DISTINCT rev_actor 

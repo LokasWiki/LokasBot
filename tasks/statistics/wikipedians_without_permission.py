@@ -7,9 +7,9 @@ query = """SELECT actor_name AS user_name, date(user_registration) AS user_regis
        (SELECT COUNT(*) FROM revision WHERE rev_actor = actor_id AND rev_timestamp > DATE_SUB(NOW(), INTERVAL 1 MONTH)) AS edits_last_month
 FROM actor
          join user on actor_user = user_id
-         LEFT JOIN ipblocks ON actor_user = ipb_user
+         LEFT JOIN block_target bt ON bt.bt_user = actor_user
          LEFT JOIN user_groups ON actor_user = ug_user
-WHERE ipb_user IS NULL AND ug_user IS NULL
+WHERE bt.bt_user IS NULL AND ug_user IS NULL
 HAVING live_edits >= 400
        AND edits_last_month >= 10;"""
 file_path = 'stub/wikipedians_without_permission.txt'

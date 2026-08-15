@@ -2,26 +2,27 @@ from tasks.statistics.module import UpdatePage, ArticleTables, index
 
 # Set the parameters for the update
 query = """SELECT
-  ipb_address,
+  bt_address,
   actor_name,
-  ipb_timestamp,
+  bl_timestamp,
   comment_text
 FROM
-  ipblocks
-  INNER JOIN actor_ipblocks ON ipb_by_actor = actor_id
-  INNER JOIN comment_ipblocks ON ipb_reason_id = comment_id
+  block
+  INNER JOIN block_target bt ON block.bl_target = bt.bt_id
+  INNER JOIN actor ON actor.actor_id = block.bl_by_actor
+  INNER JOIN comment ON comment.comment_id = block.bl_reason_id
 WHERE
-  ipb_expiry = "infinity"
-  AND ipb_user = 0
-  /* filter out some non-IPs with ipb_user = 0 */
-  AND ipb_address REGEXP '^[0-9]'
+  bl_expiry = "infinity"
+  AND bt_user IS NULL
+  /* filter out some non-IPs with bt_user = NULL */
+  AND bt_address REGEXP '^[0-9]'
   AND comment_text NOT REGEXP '(proxies|proxy|checkuser)';"""
 file_path = 'stub/indefinitely_blocked_ips.txt'
 page_name = "ويكيبيديا:تقارير قاعدة البيانات/عناوين IP المحظورة إلى أجل غير مسمى"
 
 
 def ipb_addres(row, result, index):
-    ip = str(row['ipb_address'], 'utf-8')
+    ip = str(row['bt_address'], 'utf-8')
     return "{{IPvandal| 1 = " + ip + "}}"
 
 
@@ -32,7 +33,7 @@ def user_name(row, result, index):
 
 
 def ipb_timestamp(row, result, index):
-    return "{{نسخ:#time::H:i، j F Y|" + str(row['ipb_timestamp'], 'utf-8') + "}}"
+    return "{{نسخ:#time::H:i، j F Y|" + str(row['bl_timestamp'], 'utf-8') + "}}"
 
 
 columns = [
