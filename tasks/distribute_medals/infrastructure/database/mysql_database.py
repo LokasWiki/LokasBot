@@ -30,6 +30,22 @@ class MySQLDatabase(DatabaseRepository):
         self._connection = None
         self.logger = logging.getLogger(__name__)
 
+    def _get_week_dates(self):
+        """
+        Compute the current week's Monday-Sunday boundaries as MySQL binary(14)
+        timestamps (YYYYMMDDHHMMSS), matching the legacy module.py logic.
+
+        Returns:
+            tuple: (first_day_formatted, last_day_formatted)
+        """
+        import datetime
+        now = datetime.datetime.now() - datetime.timedelta(days=1)
+        first_day = now - datetime.timedelta(days=now.weekday())
+        last_day = first_day + datetime.timedelta(days=6)
+        first_formatted = first_day.replace(hour=0, minute=0, second=0).strftime("%Y%m%d%H%M%S")
+        last_formatted = last_day.replace(hour=23, minute=59, second=59).strftime("%Y%m%d%H%M%S")
+        return first_formatted, last_formatted
+
     @property
     def connection(self) -> Connection:
         """
@@ -76,10 +92,17 @@ class MySQLDatabase(DatabaseRepository):
         """
         try:
             # Replace placeholders in query
-            formatted_query = query.replace("NUMBER_COUNT", str(number_count))
+            first_day, last_day = self._get_week_dates()
+            formatted_query = (
+                query
+                .replace("START_DATE", first_day)
+                .replace("END_DATE", last_day)
+                .replace("NUMBER_COUNT", str(number_count))
+            )
 
             self.logger.info(
-                f"Executing query for {number_count} edits, "
+                f"Executing query for {number_count} edits "
+                f"(week {first_day} to {last_day}), "
                 f"query length: {len(formatted_query)}"
             )
 

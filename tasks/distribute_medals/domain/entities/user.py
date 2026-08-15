@@ -86,8 +86,13 @@ class User:
         Returns:
             User: A User instance
         """
+        # actor.actor_name is VARBINARY on the replicas: pymysql returns bytes,
+        # so decode them (the legacy module.py did str(name, 'utf-8')).
+        actor_name = row.get('actor_name', '')
+        if isinstance(actor_name, bytes):
+            actor_name = actor_name.decode('utf-8')
         return cls(
-            name=str(row.get('actor_name', '')),
+            name=actor_name,
             edits_before=int(row.get('sum_yc', 0)),
             edits_total=int(row.get('sum_tc', 0))
         )
