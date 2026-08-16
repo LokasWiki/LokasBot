@@ -2,12 +2,12 @@ from tasks.statistics.module import UpdatePage, ArticleTables, index
 
 # Set the parameters for the update
 query = """SELECT
-    DISTINCT page_title,el_index
+    DISTINCT page_title, el_to_domain_index
 FROM
     externallinks
         JOIN page ON el_from = page_id
 WHERE
-        el_index_60 LIKE 'mailto:%'
+        el_to_domain_index LIKE 'mailto:%'
   AND page_namespace = 0
 LIMIT
     1000;"""
@@ -24,7 +24,7 @@ def page_title(row, result, index):
 columns = [
     ("الرقم", None, index),
     ("المقالة", None, page_title),
-    ("الرابط المقصود", "el_index"),
+    ("الرابط المقصود", "el_to_domain_index"),
 ]
 
 def main(*args: str) -> int:

@@ -1,18 +1,23 @@
 from tasks.statistics.module import UpdatePage, ArticleTables, index
 
 # Set the parameters for the update
-query = """select page.page_title as ll_page_title,pagelinks.pl_title as ll_page_to_title,pagelinks.pl_namespace as ll_pl_namespace
+query = """select page.page_title as ll_page_title, lt.lt_title as ll_page_to_title, lt.lt_namespace as ll_pl_namespace
 from page
          inner join pagelinks
                     on pagelinks.pl_from = page.page_id
+         inner join linktarget lt on lt.lt_id = pagelinks.pl_target_id
 where pagelinks.pl_from_namespace = 0
-  and (pagelinks.pl_namespace = 2 or pagelinks.pl_namespace = 3)
+  and (lt.lt_namespace = 2 or lt.lt_namespace = 3)
   and page.page_namespace = 0
   and page.page_is_redirect = 0
   and page.page_id not in (select templatelinks.tl_from  from templatelinks
                                                              join linktarget on linktarget.lt_id = templatelinks.tl_target_id
-                      where linktarget.lt_title in (select pl_title from pagelinks where  pl_from = 9043549) and templatelinks.tl_from_namespace = 0  )
-  and page.page_title not in (select pl_title from pagelinks where  pl_from = 9043549);"""
+                      where linktarget.lt_title in (select lt3.lt_title from pagelinks pl2
+                                                             join linktarget lt3 on lt3.lt_id = pl2.pl_target_id
+                                                      where  pl2.pl_from = 9043549) and templatelinks.tl_from_namespace = 0  )
+  and page.page_title not in (select lt3.lt_title from pagelinks pl2
+                                                             join linktarget lt3 on lt3.lt_id = pl2.pl_target_id
+                                                      where  pl2.pl_from = 9043549);"""
 file_path = 'stub/articles_in_which_there_is_a_link_to_user_pages.txt'
 page_name = "ويكيبيديا:تقارير قاعدة البيانات/مقالات يوجد فيها وصلة إلى صفحات المستخدمين"
 
