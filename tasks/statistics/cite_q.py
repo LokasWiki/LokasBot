@@ -1,5 +1,9 @@
 import pywikibot.page
 
+from tasks.statistics.dictionaries_count import (
+    COUNT_PAGE_NAME,
+    update_dictionaries_count_page,
+)
 from tasks.statistics.module import UpdatePage, ArticleTables, index
 
 # Base page: ويكيبيديا:مصادر موثوق بها/معاجم وقواميس وأطالس/إحصائيات/data
@@ -84,18 +88,15 @@ def header_page(result):
         for key in total:
             total[key] += row[key]
 
-    # number of ref in page
-    site = pywikibot.Site()
-    page = pywikibot.Page(site, "ويكيبيديا:مصادر موثوق بها/معاجم وقواميس وأطالس")
-    html_page = page.get_parsed_page()
-    count_of_ref = html_page.count("↑")
-
     # top cite used
 
     top_cite_row = max(result, key=lambda x: x['count_of_cites'])
 
+    # Reusable count: transclusion of the count page, refreshed by
+    # update_dictionaries_count_page() on every run (see main). Any wiki page
+    # can reuse it with {{COUNT_PAGE_NAME}}.
     tem_header = """{{معاجم وقواميس وأطالس}}
-يوجد في صفحة المعاجم أكثر من COUNT_OF_REF معجماً متنوعاً تغطي قرابة 25 فرعاً من فروع المعرفة البشرية.
+يوجد في صفحة المعاجم أكثر من {{DICT_COUNT_PAGE}} معجماً متنوعاً تغطي قرابة 25 فرعاً من فروع المعرفة البشرية.
 
 بدأنا في عام 2023 بتتبع إحصاءات الاستشهادات التي تستعمل قالب {{قا|استشهاد بويكي بيانات}}، وبلغ عددها في {{نسخ:#time:j F Y}} أكثر من COUNT_OF_CITES استشهاد، وكان المعجم الذي اُستشهد به أكثر عدد من المرات هو {{وصلة ويكي بيانات|Q_IWL_TITLE}} بعدد إجمالي من الاستشهادات بلغ TOP_CITE_ROW_COUNT.
 
@@ -109,7 +110,7 @@ def header_page(result):
 </div>
 <center>
 <div style="background: #E5E4E2; padding: 0.5em; -moz-border-radius: 0.3em; border-radius: 0.3em;">
-""".replace("COUNT_OF_CITES", str(total['count_of_cites'])).replace("COUNT_OF_REF", str(count_of_ref)).replace(
+""".replace("COUNT_OF_CITES", str(total['count_of_cites'])).replace("DICT_COUNT_PAGE", COUNT_PAGE_NAME).replace(
         "TOP_CITE_ROW_COUNT", str(top_cite_row['count_of_cites'])).replace("Q_IWL_TITLE",
                                                                            str(top_cite_row['q_iwl_title'], 'utf-8'))
     return tem_header
@@ -124,6 +125,10 @@ columns = [
 
 
 def main(*args: str) -> int:
+    # Refresh the reusable dictionaries count page on every update, so the
+    # {{.../عدد المعاجم}} transclusion above (and on any other wiki page)
+    # always shows a fresh total.
+    update_dictionaries_count_page()
     # Create an instance of the ArticleTables class
     tables = ArticleTables()
     tables.add_table("main_table", columns, header_text=header_page, end_row_text=end_row_in_main)
