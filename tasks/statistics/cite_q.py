@@ -2,8 +2,17 @@ import pywikibot.page
 
 from tasks.statistics.module import UpdatePage, ArticleTables, index
 
+# Base page: ويكيبيديا:مصادر موثوق بها/معاجم وقواميس وأطالس/إحصائيات/data
+# Collect Q-items from ALL data/* subpages (e.g. data/1, data/2), except مقدمة (#507)
+DATA_SUBPAGES_SUBQUERY = """
+    SELECT page_id FROM page
+    WHERE page_namespace = 4
+    AND page_title LIKE 'مصادر\\_موثوق\\_بها/معاجم\\_وقواميس\\_وأطالس/إحصائيات/data/%'
+    AND page_title != 'مصادر_موثوق_بها/معاجم_وقواميس_وأطالس/إحصائيات/data/مقدمة'
+"""
+
 # Set the parameters for the update
-query = """
+query = f"""
 SELECT
     COUNT(page.page_id) AS count_of_cites,
     REPLACE(iwlinks.iwl_title, 'Special:EntityPage/', '') AS q_iwl_title
@@ -12,16 +21,16 @@ INNER JOIN templatelinks ON page.page_id = templatelinks.tl_from
 INNER JOIN linktarget ON linktarget.lt_id = templatelinks.tl_target_id
 INNER JOIN iwlinks ON page.page_id = iwlinks.iwl_from
 WHERE REPLACE(iwlinks.iwl_title, 'Special:EntityPage/', '') IN (
-    SELECT REPLACE(iwl_title, 'Special:EntityPage/', '') 
-    FROM iwlinks  
-    WHERE iwl_from = 9120840
-) 
+    SELECT REPLACE(iwl_title, 'Special:EntityPage/', '')
+    FROM iwlinks
+    WHERE iwl_from IN ({DATA_SUBPAGES_SUBQUERY})
+)
 AND lt_title IN (
     'استشهاد_بويكي_بيانات',
     'Citeq',
     'Cite_Q'
 )
-AND page.page_namespace = 0 
+AND page.page_namespace = 0
 AND lt_namespace = 10
 GROUP BY q_iwl_title
 ORDER BY count_of_cites DESC;
