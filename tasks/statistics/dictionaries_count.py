@@ -87,7 +87,7 @@ def update_dictionaries_count_page(site=None):
     _cached_total = total
     stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     lines = [
-        f"{total}",
+        f"<onlyinclude>{total}</onlyinclude>",
         "<!-- بوت: عدد المعاجم = مجموع أسهم ↑ في كل صفحات القائمة (التحويلات مستثناة).",
         f"آخر تحديث: {stamp}.",
     ]
