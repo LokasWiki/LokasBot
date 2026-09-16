@@ -2,18 +2,10 @@ import pywikibot.page
 
 from tasks.statistics.dictionaries_count import (
     COUNT_PAGE_NAME,
+    DATA_SUBPAGES_SUBQUERY,
     update_dictionaries_count_page,
 )
 from tasks.statistics.module import UpdatePage, ArticleTables, index
-
-# Base page: ويكيبيديا:مصادر موثوق بها/معاجم وقواميس وأطالس/إحصائيات/data
-# Collect Q-items from ALL data/* subpages (e.g. data/1, data/2), except مقدمة (#507)
-DATA_SUBPAGES_SUBQUERY = """
-    SELECT page_id FROM page
-    WHERE page_namespace = 4
-    AND page_title LIKE 'مصادر\\_موثوق\\_بها/معاجم\\_وقواميس\\_وأطالس/إحصائيات/data/%'
-    AND page_title != 'مصادر_موثوق_بها/معاجم_وقواميس_وأطالس/إحصائيات/data/مقدمة'
-"""
 
 # Set the parameters for the update
 query = f"""
