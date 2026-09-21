@@ -59,6 +59,13 @@
   image: python3.13
   emails: onfailure
   <<: *defaults
+- name: statistics-auto-update
+  no-filelog: false
+  command: $HOME/repos/toolforge/jobs/statistics_auto_update.sh
+  schedule: '*/5 * * * *'
+  image: python3.13
+  emails: onfailure
+  <<: *defaults
 - name: requests-raed
   no-filelog: false
   command: $HOME/repos/toolforge/jobs/requests_read.sh
