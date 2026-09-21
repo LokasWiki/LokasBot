@@ -1,4 +1,6 @@
+import requests
 import pywikibot.page
+from pywikibot.comms.http import user_agent
 
 from tasks.statistics.dictionaries_count import (
     COUNT_PAGE_NAME,
@@ -42,26 +44,64 @@ def item(row, result, index):
     return f"[[d:{name}|{name}]]"
 
 
+# Q-id -> Arabic label, filled in batches by _fetch_item_labels()
+_ITEM_LABELS = {}
+
+WIKIDATA_API_URL = "https://www.wikidata.org/w/api.php"
+
+
+def _fetch_item_labels(qids):
+    """Fill ``_ITEM_LABELS`` for qids using batched wbgetentities calls.
+
+    The old code created a fresh ``ItemPage`` and fetched each entity one by
+    one (~600 requests) through pywikibot. While the Wikidata replica lagged
+    (``X-Database-Lag`` > ``maxlag``), every request made pywikibot sleep up
+    to ``retry_max`` (120 s) per entity, so the update never finished. These
+    small read-only lookups are therefore done with plain HTTP, 50 ids per
+    request, so Wikidata lag cannot stall the whole statistics update.
+    """
+    unique_ids = []
+    for qid in qids:
+        if qid and qid not in _ITEM_LABELS and qid not in unique_ids:
+            unique_ids.append(qid)
+    if not unique_ids:
+        return
+
+    headers = {"User-Agent": user_agent()}
+    for start in range(0, len(unique_ids), 50):
+        batch = unique_ids[start:start + 50]
+        try:
+            response = requests.get(
+                WIKIDATA_API_URL,
+                params={
+                    "action": "wbgetentities",
+                    "ids": "|".join(batch),
+                    "props": "labels",
+                    "languages": "ar",
+                    "redirects": "yes",
+                    "format": "json",
+                },
+                headers=headers,
+                timeout=30,
+            )
+            response.raise_for_status()
+            data = response.json()
+        except Exception as exc:  # noqa: BLE001
+            print(f"error to get item from wikidata: {exc!r}")
+            continue
+        entities = data.get("entities", {})
+        redirects = {r["from"]: r["to"] for r in data.get("redirects", [])}
+        for qid in batch:
+            entity = entities.get(redirects.get(qid, qid), {})
+            labels = entity.get("labels", {})
+            _ITEM_LABELS[qid] = labels.get("ar", {}).get("value", "")
+
+
 def item_title(row, result, index):
     name = str(row['q_iwl_title'], 'utf-8')
-    name_of_itme = ""
-    try:
-        site = pywikibot.Site("wikidata")
-        page_item = pywikibot.page.ItemPage(site, name)
-        if page_item.isRedirectPage():
-            target_page = page_item.getRedirectTarget()
-            target_page.get()
-            if 'ar' in target_page.labels:
-                name_of_itme = target_page.labels['ar']
-        else:
-            page_item.get()
-            if 'ar' in page_item.labels:
-                name_of_itme = page_item.labels['ar']
-
-    except:
-        print("error to get item from wikdata")
-
-    return name_of_itme
+    if name not in _ITEM_LABELS:
+        _fetch_item_labels([str(r['q_iwl_title'], 'utf-8') for r in result])
+    return _ITEM_LABELS.get(name, "")
 
 
 def end_row_in_main(result):
